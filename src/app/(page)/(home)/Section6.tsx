@@ -1,5 +1,5 @@
 export default function Section6() {
-    const data: any = [
+    const data: string[] = [
         "/demo/banner-three-1.webp",
         "/demo/banner-three-2.webp",
         "/demo/banner-three-3.webp"
