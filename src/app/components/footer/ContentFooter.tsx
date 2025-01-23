@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { FaSquare } from "react-icons/fa6";
-import { GoDotFill } from "react-icons/go";
 
 export default function ContentFooter(props: { title: string }) {
     const { title = "" } = props;
