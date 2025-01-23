@@ -2,7 +2,6 @@
 
 import BlogItem from "@/app/components/Blog/BlogItem";
 import ButtonSeeAll from "@/app/components/Button/ButtonSeeAll";
-import CardItem from "@/app/components/Card/CartItem";
 import Title from "@/app/components/title/Title";
 import { useState } from "react";
 

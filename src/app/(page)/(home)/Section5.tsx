@@ -2,7 +2,7 @@
 
 import CardItem from "@/app/components/Card/CartItem";
 import Title from "@/app/components/title/Title";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 export default function Section5() {
     const dataTayTrang: any = [
