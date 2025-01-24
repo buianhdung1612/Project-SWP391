@@ -9,9 +9,11 @@ export default function Section1() {
         <>
             <div className="container mx-auto flex items-center py-[10px] ">
                 {/* Logo */}
-                <div className="mr-[23px]">
-                    <Image src="logo.svg" alt="" width={190} height={60} />
-                </div>
+                <Link href="/">
+                    <div className="mr-[23px]">
+                        <Image src="logo.svg" alt="" width={190} height={60} />
+                    </div>
+                </Link>
                 {/* Search */}
                 <form className="bg-[#F6F6F6] rounded-[40px] flex items-center px-[20px] w-[412px] mr-[120px]">
                     <input
@@ -31,23 +33,23 @@ export default function Section1() {
                     <Link href="#">
                         <div className="flex items-center">
                             <img src="testing.png" width={28} height={28} />
-                            <span className="text-[12px] font-[600] ml-[4px]">Loại Da Của Bạn</span>
+                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Loại Da Của Bạn</span>
                         </div>
                     </Link>
-                    <Link href="#">
+                    <Link href="/blog">
                         <div className="flex items-center ml-[15px]">
                             <img src="note-book 1.png" width={28} height={28} />
-                            <span className="text-[12px] font-[600] ml-[4px]">Tạp Chí Làm Đẹp</span>
+                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Tạp Chí Làm Đẹp</span>
                         </div>
                     </Link>
                     <button className="ml-[15px] flex items-center">
                         <img src="dots 1.png" width={28} height={28} />
                         <span className="ml-[15px]">|</span>
                     </button>
-                    <Link href="#">
+                    <Link href="/user/login">
                         <div className="flex items-center ml-[15px]">
                             <FaRegCircleUser className="text-[28px]" />
-                            <span className="text-[12px] font-[600] ml-[4px]">Đăng Nhập</span>
+                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Đăng Nhập</span>
                         </div>
                     </Link>
                     <Link href="#">
