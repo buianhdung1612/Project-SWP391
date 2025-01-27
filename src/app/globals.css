@@ -59,3 +59,17 @@
     transform: translateX(-50%);
     border-radius: 3px;
 }
+
+.checkbox::before {
+    content: "";
+    margin-right: 5px;
+    font-size: 18px;
+    border: solid 1px #ddd;
+    position: absolute;
+    top: 1.5px;
+    left: -20px;
+    display: inline-block;
+    width: 15px;
+    height: 15px;
+    border-radius: 3px;
+}
