@@ -4,7 +4,7 @@ import FormInput from "@/app/components/Form/FormInput";
 import { useState } from "react";
 import { FaSearch } from "react-icons/fa";
 
-export default function searchOrderPage() {
+export default function SearchOrderPage() {
     const [status, setStatus] = useState("phone");
 
     return (
