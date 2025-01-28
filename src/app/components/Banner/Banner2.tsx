@@ -1,3 +1,5 @@
+import Link from "next/link"
+
 export default function Banner2() {
     const data: string[] = [
         "/demo/banner-three-1.webp",
@@ -9,8 +11,10 @@ export default function Banner2() {
             <div className="container mx-auto flex justify-between mt-[20px]">
                 {data.map((item: string, index: number) => (
                     <div className="w-[412px] h-[196px]" key={index}>
-                        <img src={item} className="w-full h-full object-cover"/>
-                </div>
+                        <Link href="/products">
+                            <img src={item} className="w-full h-full object-cover" />
+                        </Link>
+                    </div>
                 ))}
 
             </div>

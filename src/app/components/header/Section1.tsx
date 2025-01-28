@@ -1,10 +1,15 @@
+"use client"
+
 import Image from "next/image";
 import Link from "next/link";
+import { useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import { FaMagnifyingGlass, FaRegCircleUser } from "react-icons/fa6";
 import { GrCart } from "react-icons/gr";
+import MenuMoreItem from "./MenuMoreItem";
 
 export default function Section1() {
+    const [openMore, setOpenMore] = useState(false);
     return (
         <>
             <div className="container mx-auto flex items-center py-[10px] ">
@@ -43,7 +48,36 @@ export default function Section1() {
                         </div>
                     </Link>
                     <button className="ml-[15px] flex items-center">
-                        <img src="dots 1.png" width={28} height={28} />
+                        {openMore == false && (
+                            <img
+                                src="dots 1.png"
+                                width={28}
+                                height={28}
+                                onClick={() => setOpenMore(!openMore)}
+                            />
+                        )}
+                        {openMore == true && (
+                            <div className="relative">
+                                <span
+                                    className="text-[14px] font-[600] flex justify-center items-center w-[28px] h-[28px] mb-[2px]"
+                                    onClick={() => setOpenMore(!openMore)}
+                                >
+                                    X
+                                </span>
+                                <ul className="menu-more p-0 m-0 bg-[#fff] rounded-[10px] w-[200px] absolute top-[35px] right-[5px] z-[999]">
+                                    <MenuMoreItem
+                                        text="Trung tâm hỗ trợ"
+                                        icon="/demo/phone-icon.webp"
+                                        link="/contact"
+                                    />
+                                    <MenuMoreItem
+                                        text="Tra cứu đơn hàng"
+                                        icon="/demo/tra-cuu-don-hang.webp"
+                                        link="search-order"
+                                    />
+                                </ul>
+                            </div>
+                        )}
                         <span className="ml-[15px]">|</span>
                     </button>
                     <Link href="/user/login">

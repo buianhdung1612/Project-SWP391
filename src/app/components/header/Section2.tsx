@@ -8,9 +8,9 @@ export default function Section2() {
                 <MenuUnShow text="Trang chủ" link="/"/>
                 <MenuShow text="Thương hiệu" link=""/>
                 <MenuShow text="Dưỡng da" link=""/>
-                <MenuUnShow text="Khuyến mãi HOT" image="fire 1.png" link=""/>  
-                <MenuUnShow text="Sản phẩm mới" link=""/>
-                <MenuUnShow text="Top bán chạy" link=""/>  
+                <MenuUnShow text="Khuyến mãi HOT" image="fire 1.png" link="/product-category/khuyen-mai-hot"/>  
+                <MenuUnShow text="Sản phẩm mới" link="/product-category/san-pham-moi"/>
+                <MenuUnShow text="Top bán chạy" link="/product-category/top-ban-chay"/>  
                 <MenuUnShow text="So sánh sản phẩm" link=""/>  
             </div>
         </>
