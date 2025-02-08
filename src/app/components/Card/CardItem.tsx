@@ -14,6 +14,7 @@ export default function CardItem(props: {
     link: string
 }) {
     const { image = "", category = "", title = "", priceOld = "", priceNew = "", discount = "", banner = "", deal = "", className = "", link = "" } = props;
+    
     return (
         <>
             <div className="bg-white rounded-[10px]">

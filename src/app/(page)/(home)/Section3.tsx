@@ -1,5 +1,5 @@
 import ButtonSeeAll from "@/app/components/Button/ButtonSeeAll";
-import CardItem from "@/app/components/Card/CartItem";
+import CardItem from "@/app/components/Card/CardItem";
 import Title from "@/app/components/title/Title";
 
 export default function Section3() {

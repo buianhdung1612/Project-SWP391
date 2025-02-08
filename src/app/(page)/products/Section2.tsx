@@ -1,5 +1,5 @@
 import Aside from "@/app/components/Aside/Aside"
-import CardItem from "@/app/components/Card/CartItem"
+import CardItem from "@/app/components/Card/CardItem"
 import { TbPlayerTrackNextFilled } from "react-icons/tb"
 
 const data: any = [

@@ -11,8 +11,8 @@ export default function Price() {
     return (
         <>
             <div className="flex items-center">
-                <div className="text-[32px] font-[500] text-[#cc2020] mr-[20px]">{currentVolume.priceNew.toLocaleString('vi-VN')}<sup className="underline">đ</sup></div>
-                <div className="text-[20px] font-[400] text-[#9f9f9f] mr-[15px] pt-[6px] line-through">{currentVolume.price.toLocaleString('vi-VN')}<sup className="underline">đ</sup></div>
+                <div className="text-[32px] font-[500] text-[#cc2020] mr-[20px]">{currentVolume.priceNew.toLocaleString('en-US')}<sup className="underline">đ</sup></div>
+                <div className="text-[20px] font-[400] text-[#9f9f9f] mr-[15px] pt-[6px] line-through">{currentVolume.price.toLocaleString('en-US')}<sup className="underline">đ</sup></div>
                 <div className="rounded-[3px] bg-primary px-[5px] py-[1px] text-[12px] min-w-[20px] text-white mt-[7px]">-{currentVolume.discount}%</div>
             </div>
 

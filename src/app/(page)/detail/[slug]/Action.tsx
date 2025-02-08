@@ -5,16 +5,16 @@ import { CiHeart, CiShoppingCart } from "react-icons/ci";
 
 export default function Action() {
     const [quantity, setQuantity] = useState(1);
-    
-        const handleChange = (event: any): void => {
-            setQuantity(parseInt(event.target.value));
+
+    const handleChange = (event: any): void => {
+        setQuantity(parseInt(event.target.value));
+    }
+
+    const handleClickDecrease = (): void => {
+        if (quantity - 1 >= 0) {
+            setQuantity(quantity - 1);
         }
-    
-        const handleClickDecrease = (): void => {
-            if (quantity - 1 >= 0) {
-                setQuantity(quantity - 1);
-            }
-        }
+    }
     return (
         <>
             <div className="text-[14px] font-[500] text-[#00090f] my-[10px]">Số lượng:</div>
@@ -22,7 +22,7 @@ export default function Action() {
                 <div className="mb-[10px] flex">
                     <button
                         className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tl-[40px] rounded-bl-[40px] border border-solid border-[#ddd]"
-                        onClick={handleClickDecrease}
+                        onClick={() => handleClickDecrease}
                     >
                         -
                     </button>

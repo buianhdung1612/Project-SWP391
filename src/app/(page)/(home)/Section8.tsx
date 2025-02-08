@@ -1,4 +1,4 @@
-import CardItem from "@/app/components/Card/CartItem"
+import CardItem from "@/app/components/Card/CardItem"
 
 export default function Section8() {
     const data: any = [

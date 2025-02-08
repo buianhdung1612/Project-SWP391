@@ -1,4 +1,4 @@
-import CardItem from "@/app/components/Card/CartItem";
+import CardItem from "@/app/components/Card/CardItem";
 import Link from "next/link";
 
 export default function Section2() {
