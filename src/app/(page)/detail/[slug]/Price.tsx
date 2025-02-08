@@ -3,7 +3,7 @@
 import { useContext, useState } from "react";
 import { Section1Context } from "./Section1";
 
-export default function Price(props: any) {
+export default function Price() {
     const { priceByVolume, uses } = useContext(Section1Context);
 
     const [currentVolume, setCurrentVolume] = useState(priceByVolume[0]);
