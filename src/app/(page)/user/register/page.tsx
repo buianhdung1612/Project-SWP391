@@ -19,9 +19,8 @@ export default function RegisterPage() {
                         name="lastname"
                     />
                     <FormInput
-                        type="email"
-                        placeholder="Email"
-                        name="email"
+                        placeholder="Tên tài khoản"
+                        name="account"
                     />
                     <FormInput
                         placeholder="Số điện thoại"

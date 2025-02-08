@@ -5,8 +5,8 @@ import Link from "next/link";
 import { useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import { FaMagnifyingGlass, FaRegCircleUser } from "react-icons/fa6";
-import { GrCart } from "react-icons/gr";
 import MenuMoreItem from "./MenuMoreItem";
+import Cart from "../Cart/Cart";
 
 export default function Section1() {
     const [openMore, setOpenMore] = useState(false);
@@ -92,12 +92,9 @@ export default function Section1() {
                             <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">0</span>
                         </div>
                     </Link>
-                    <Link href="#">
-                        <div className="flex items-center ml-[15px] relative">
-                            <GrCart className="text-[28px]" />
-                            <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[-2px] left-[18px]">0</span>
-                        </div>
-                    </Link>
+                    <div className="relative">
+                        <Cart />
+                    </div>
                 </div>
             </div>
         </>

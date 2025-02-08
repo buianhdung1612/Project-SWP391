@@ -12,7 +12,7 @@ export default function Section2() {
             discount: 38,
             banner: "/demo/banner-sale.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123"
         },
         {
             image: "/demo/danhmuc_1.webp",
@@ -23,7 +23,7 @@ export default function Section2() {
             discount: 38,
             banner: "/demo/banner-sale.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123"
         },
         {
             image: "/demo/danhmuc_1.webp",
@@ -34,7 +34,7 @@ export default function Section2() {
             discount: 38,
             banner: "/demo/banner-sale.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123"
         },
         {
             image: "/demo/danhmuc_1.webp",
@@ -45,7 +45,7 @@ export default function Section2() {
             discount: 38,
             banner: "/demo/banner-sale.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123"
         },
         {
             image: "/demo/danhmuc_1.webp",
@@ -56,7 +56,7 @@ export default function Section2() {
             discount: 38,
             banner: "/demo/banner-sale.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123"
         }
     ]
     return (

@@ -16,9 +16,8 @@ export default function LoginPage() {
                     <form action="" className=" mt-[15px] text-center rounded-[10px] relative">
                         <h1 className="text-primary text-[26px] font-[400] uppercase mb-[35px] mt-[10px] login">Đăng nhập</h1>
                         <FormInput
-                            type="email"
-                            placeholder="Email"
-                            name="email"
+                            placeholder="Tên tài khoản"
+                            name="account"
                         />
                         <FormInput
                             type="password"
