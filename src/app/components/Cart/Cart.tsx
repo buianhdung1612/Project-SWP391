@@ -35,11 +35,11 @@ export default function Cart() {
     ];
 
     // Price Total and Quantity Total
-    let priceInit: number = dataInit.reduce((sum: number, item: CartItem) => {
+    const priceInit: number = dataInit.reduce((sum: number, item: CartItem) => {
         return sum + item.priceNew * item.quantity
     }, 0);
 
-    let totalQuantityInit: number = dataInit.reduce((sum: number, item: CartItem) => {
+    const totalQuantityInit: number = dataInit.reduce((sum: number, item: CartItem) => {
         return sum + item.quantity
     }, 0);
 
@@ -64,11 +64,11 @@ export default function Cart() {
             updatedData[index].quantity = newQuantity;
             setData(updatedData);
 
-            let priceTotalUpdated: number = updatedData.reduce((sum: number, item: CartItem) => {
+            const priceTotalUpdated: number = updatedData.reduce((sum: number, item: CartItem) => {
                 return sum += item.priceNew * item.quantity
             }, 0);
 
-            let quantityTotalUpdated: number = updatedData.reduce((sum: number, item: CartItem) => {
+            const quantityTotalUpdated: number = updatedData.reduce((sum: number, item: CartItem) => {
                 return sum += item.quantity
             }, 0);
 
@@ -105,11 +105,11 @@ export default function Cart() {
         const updatedData = data.filter((item: CartItem, index: number) => index !== indexDelete);
         setData(updatedData);
 
-        let priceTotalUpdated: number = updatedData.reduce((sum: number, item: CartItem) => {
+        const priceTotalUpdated: number = updatedData.reduce((sum: number, item: CartItem) => {
             return sum += item.priceNew * item.quantity
         }, 0);
 
-        let quantityTotalUpdated: number = updatedData.reduce((sum: number, item: CartItem) => {
+        const quantityTotalUpdated: number = updatedData.reduce((sum: number, item: CartItem) => {
             return sum += item.quantity
         }, 0);
 
