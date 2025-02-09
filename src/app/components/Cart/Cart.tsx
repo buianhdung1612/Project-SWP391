@@ -6,7 +6,7 @@ import { useState } from "react";
 import { CiCircleRemove } from "react-icons/ci";
 import { GrCart } from "react-icons/gr";
 import ButtonPay from "../Button/ButtonPay";
-import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity,  } from "../../actions/cart";
+import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../actions/cart";
 
 interface CartItem {
     image: string,
@@ -34,8 +34,8 @@ export default function Cart() {
         dispatchCart(cartChangeQuantity(event, index))
     }
 
-    const handleClickDecrease = (event: any, index: number): void => {       
-        dispatchCart(cartDecreaseQuantity(event, index)) 
+    const handleClickDecrease = (event: any, index: number): void => {
+        dispatchCart(cartDecreaseQuantity(event, index))
     }
 
     const handleClickIncrease = (event: any, index: number): void => {
@@ -113,8 +113,8 @@ export default function Cart() {
                                         <div className="text-primary">{(item.priceNew * item.quantity).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                                     </div>
                                 </div>
-                                <div 
-                                    onClick={() => handleDeleteItem(index)} 
+                                <div
+                                    onClick={() => handleDeleteItem(index)}
                                 >
                                     <CiCircleRemove className="text-[22px] font-[400] text-textColor cursor-pointer hover:text-[#c90000]" />
                                 </div>
@@ -124,7 +124,9 @@ export default function Cart() {
                             <div className="text-[15px] font-[350]">Tổng tiền:</div>
                             <div className="text-[#c90000] text-[15px] font-[600]">{totalPriceInit.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                         </div>
-                        <ButtonPay className="text-[12px] py-[10px]"/>
+                        <Link href="/order">
+                            <ButtonPay className="text-[12px] py-[10px]" />
+                        </Link>
                     </form>
                 </div>
             )}

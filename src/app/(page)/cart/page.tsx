@@ -3,7 +3,7 @@
 import ButtonPay from "@/app/components/Button/ButtonPay";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity,  } from "../../actions/cart";
+import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../actions/cart";
 
 interface CartItem {
     image: string,
@@ -94,7 +94,9 @@ export default function CartPage() {
                                     <div className="uppercase font-[400]">Tổng tiền:</div>
                                     <div className="text-[#c90000] font-[600]">{totalPriceInit.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                                 </div>
-                                <ButtonPay className="text-[16px] py-[8px]" />
+                                <Link href="/order">
+                                    <ButtonPay className="text-[16px] py-[8px]" />
+                                </Link>
                             </div>
                         </div>
                     </form>

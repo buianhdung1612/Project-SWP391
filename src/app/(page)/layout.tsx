@@ -1,11 +1,12 @@
 "use client"
 
 import { Inter } from "next/font/google";
-import "./globals.css";
-import Header from "./components/header/Header";
-import Footer from "./components/footer/Footer";
+import "../globals.css";
 import { Provider } from "react-redux";
-import { store } from "./store";
+import { usePathname } from "next/navigation";
+import Header from "../components/header/Header";
+import Footer from "../components/footer/Footer";
+import { store } from "../store";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,15 +18,18 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
+  const pathname = usePathname();
+
   return (
     <html lang="en">
       <body
         className={`${inter.className} antialiased`}
       >
         <Provider store={store}>
-          <Header />
+          {pathname !== "/order" && <Header/>}
           {children}
-          <Footer />
+          {pathname !== "/order" && <Footer/>}
         </Provider>
       </body>
     </html>
