@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { FaArrowRightFromBracket } from "react-icons/fa6";
 
 export default function HeaderAdmin() {
     return (
@@ -11,7 +12,7 @@ export default function HeaderAdmin() {
                             <img src="/" alt="User Avatar" />
                         </Link>
                         <Link href="/admin/auth/logout">
-                            <i className="fa-solid fa-right-from-bracket header__out"></i>
+                            <FaArrowRightFromBracket className="text-[#6D7587] text-[20px] ml-[20px]"/>
                         </Link>
                     </div>
                 </div>
