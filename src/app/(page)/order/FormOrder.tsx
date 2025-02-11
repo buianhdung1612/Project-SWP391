@@ -5,9 +5,12 @@ import { FaCaretDown } from "react-icons/fa6";
 import FormInputCheckout from "@/app/components/Form/FormInputCheckout";
 import TitleCheckout from "@/app/components/title/TitleCheckout";
 import { FaMoneyBillAlt } from "react-icons/fa";
+import { useDispatch } from "react-redux";
+import { provinceChoosen } from "../../(actions)/order";
 
 export default function FormOrder() {
     const [dataProvince, setDataProvince] = useState([]);
+    const dispatchOrder = useDispatch();
 
     useEffect(() => {
         const fetchProvince = async () => {
@@ -23,13 +26,16 @@ export default function FormOrder() {
     const [dataWard, setDataWard] = useState([]);
 
     const handleChangeProvince = async (event: any) => {
-        const response = await fetch(`https://provinces.open-api.vn/api/p/${event.target.value}?depth=2`);
+        const url = (event.target.value.split('+'))[0];
+        const response = await fetch(`https://provinces.open-api.vn/api/p/${url}?depth=2`);
         const data = await response.json();
         setDataDistrict(data.districts);
+        dispatchOrder(provinceChoosen(true));
     }
 
     const handleChangeDistrict = async (event: any) => {
-        const response = await fetch(`https://provinces.open-api.vn/api/d/${event.target.value}?depth=2`);
+        const url = (event.target.value.split('+'))[0];
+        const response = await fetch(`https://provinces.open-api.vn/api/d/${url}?depth=2`);
         const data = await response.json();
         setDataWard(data.wards);
     }
@@ -70,7 +76,7 @@ export default function FormOrder() {
                         >
                             <option value="">---</option>
                             {dataProvince.length > 0 && dataProvince.map((item: any, index: number) => (
-                                <option key={index} value={item.code}>{item.name}</option>
+                                <option key={index} value={`${item.code}+${item.name}`}>{item.name}</option>
                             ))}
                         </select>
                         <label htmlFor="province">
@@ -88,7 +94,7 @@ export default function FormOrder() {
                         >
                             <option value="">---</option>
                             {dataDistrict.length > 0 && dataDistrict.map((item: any, index: number) => (
-                                <option key={index} value={item.code}>{item.name}</option>
+                                <option key={index} value={`${item.code}+${item.name}`}>{item.name}</option>
                             ))}
                         </select>
                         <label htmlFor="district">
@@ -105,7 +111,7 @@ export default function FormOrder() {
                         >
                             <option value="">---</option>
                             {dataWard.map((item: any, index: number) => (
-                                <option key={index} value={item.code}>{item.name}</option>
+                                <option key={index} value={`${item.code}+${item.name}`}>{item.name}</option>
                             ))}
                         </select>
                         <label htmlFor="ward">
@@ -136,7 +142,7 @@ export default function FormOrder() {
                             placeholder="Chuyển khoản"
                             className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-bl-none rounded-br-none border border-solid outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                         />
-                        <input type="radio" className="hidden" id="bank" name="method" value="bank" onChange={handleRadioBankChange} />
+                        <input type="radio" className="hidden" id="bank" name="method" value="bank" onChange={handleRadioBankChange} required/>
                         {bank ? (
                             <label htmlFor="bank" className="cursor-pointer absolute left-[15px] top-[22px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></label>
                         ) : (
@@ -149,7 +155,7 @@ export default function FormOrder() {
                             placeholder="Thanh toán khi nhận hàng"
                             className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-tl-none rounded-tr-none border border-solid border-t-0 outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                         />
-                        <input type="radio" className="hidden" id="meeting" name="method" value="meeting" onChange={handleRadioMeetingChange} />
+                        <input type="radio" className="hidden" id="meeting" name="method" value="meeting" onChange={handleRadioMeetingChange} required/>
                         {meeting ? (
                             <label htmlFor="meeting" className="cursor-pointer absolute left-[15px] top-[22px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></label>
                         ) : (

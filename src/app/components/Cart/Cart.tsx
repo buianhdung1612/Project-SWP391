@@ -6,7 +6,7 @@ import { useState } from "react";
 import { CiCircleRemove } from "react-icons/ci";
 import { GrCart } from "react-icons/gr";
 import ButtonPay from "../Button/ButtonPay";
-import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../actions/cart";
+import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../(actions)/cart";
 
 interface CartItem {
     image: string,
@@ -18,9 +18,9 @@ interface CartItem {
 }
 
 export default function Cart() {
-    const products = useSelector((state: any) => state.products);
-    const totalPriceInit = useSelector((state: any) => state.totalPriceInit);
-    const totalQuantityInit = useSelector((state: any) => state.totalQuantityInit);
+    const products = useSelector((state: any) => state.cartReducer.products);
+    const totalPriceInit = useSelector((state: any) => state.cartReducer.totalPriceInit);
+    const totalQuantityInit = useSelector((state: any) => state.cartReducer.totalQuantityInit);
     const dispatchCart = useDispatch();
 
     // Hover Item Cart

@@ -1,3 +1,5 @@
+"use client"
+
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
@@ -7,7 +9,7 @@ import TableProduct from "./TableProduct";
 export default async function ProductsAdminPage() {
     const response = await fetch('https://freshskinweb.onrender.com/admin/products');
     const data = await response.json();
-    const products = data.data.products
+    const products = data.data.products;
 
     return (
         <Box p={3}>
@@ -24,7 +26,7 @@ export default async function ProductsAdminPage() {
                 <Box display="flex" flexWrap="wrap">
                     <FormControl sx={{ width: '30%', marginRight: '20px' }} >
                         <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
-                        <Select labelId="filter-label" label="Bộ lọc" defaultValue="" displayEmpty>
+                        <Select labelId="filter-label" label="Bộ lọc" defaultValue="" displayEmpty >
                             <MenuItem value="">Tất cả</MenuItem>
                             <MenuItem value="active">Hoạt động</MenuItem>
                             <MenuItem value="inactive">Không hoạt động</MenuItem>
@@ -59,7 +61,6 @@ export default async function ProductsAdminPage() {
 
             {/* Table */}
             <TableProduct data={products}/>
-
             {/* Action Buttons */}
             <Box mt={2} display="flex" justifyContent="space-between">
                 <Box>

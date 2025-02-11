@@ -27,9 +27,9 @@ export default function RootLayout({
         className={`${inter.className} antialiased`}
       >
         <Provider store={store}>
-          {pathname !== "/order" && <Header/>}
+          {!pathname.startsWith("/order") && <Header/>}
           {children}
-          {pathname !== "/order" && <Footer/>}
+          {!pathname.startsWith("/order") && <Footer/>}
         </Provider>
       </body>
     </html>

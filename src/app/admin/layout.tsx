@@ -4,6 +4,8 @@ import { Inter } from "next/font/google";
 import "../globals.css";
 import HeaderAdmin from "../components/header/HeaderAdmin";
 import Sider from "../components/Sider/Sider";
+import { Provider } from "react-redux";
+import { store } from "../store";
 
 const inter = Inter({
   variable: "--font-inter",

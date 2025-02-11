@@ -3,7 +3,7 @@
 import ButtonPay from "@/app/components/Button/ButtonPay";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
-import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../actions/cart";
+import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../(actions)/cart";
 
 interface CartItem {
     image: string,
@@ -15,8 +15,8 @@ interface CartItem {
 }
 
 export default function CartPage() {
-    const products = useSelector((state: any) => state.products);
-    const totalPriceInit = useSelector((state: any) => state.totalPriceInit);
+    const products = useSelector((state: any) => state.cartReducer.products);
+    const totalPriceInit = useSelector((state: any) => state.cartReducer.totalPriceInit);
     const dispatchCart = useDispatch();
 
     const handleChange = (event: any, index: number): void => {
