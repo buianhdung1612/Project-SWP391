@@ -3,8 +3,6 @@
 import { useSelector } from "react-redux";
 import FormOrder from "./FormOrder";
 import FormInputCheckout from "@/app/components/Form/FormInputCheckout";
-import { useState } from "react";
-import { FcPrevious } from "react-icons/fc";
 import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 
