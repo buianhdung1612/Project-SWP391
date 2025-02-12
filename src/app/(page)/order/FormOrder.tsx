@@ -5,10 +5,11 @@ import { FaCaretDown } from "react-icons/fa6";
 import FormInputCheckout from "@/app/components/Form/FormInputCheckout";
 import TitleCheckout from "@/app/components/title/TitleCheckout";
 import { FaMoneyBillAlt } from "react-icons/fa";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { provinceChoosen } from "../../(actions)/order";
 
 export default function FormOrder() {
+    const methodChoosen = useSelector((state: any) => state.orderReducer.methodChoosen);
     const [dataProvince, setDataProvince] = useState([]);
     const dispatchOrder = useDispatch();
 
@@ -137,12 +138,19 @@ export default function FormOrder() {
                         </div>
                     )}
                     <TitleCheckout text="Thanh toán" />
+                    {methodChoosen == false && (
+                        <input
+                            placeholder="Bạn cần chọn phương thức thanh toán"
+                            className="py-[10px] px-[18px] w-full h-[44px] bg-[#f8d7da] placeholder:text-[#721c24] rounded-[4px] border border-solid border-[#f5c6cb]
+outline-none mb-[20px] text-[14px] font-[450]"
+                        />
+                    )}
                     <div className="relative">
                         <input
                             placeholder="Chuyển khoản"
                             className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-bl-none rounded-br-none border border-solid outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                         />
-                        <input type="radio" className="hidden" id="bank" name="method" value="bank" onChange={handleRadioBankChange} required/>
+                        <input type="radio" className="hidden" id="bank" name="method" value="bank" onChange={handleRadioBankChange} />
                         {bank ? (
                             <label htmlFor="bank" className="cursor-pointer absolute left-[15px] top-[22px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></label>
                         ) : (
@@ -155,7 +163,7 @@ export default function FormOrder() {
                             placeholder="Thanh toán khi nhận hàng"
                             className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-tl-none rounded-tr-none border border-solid border-t-0 outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                         />
-                        <input type="radio" className="hidden" id="meeting" name="method" value="meeting" onChange={handleRadioMeetingChange} required/>
+                        <input type="radio" className="hidden" id="meeting" name="method" value="meeting" onChange={handleRadioMeetingChange} />
                         {meeting ? (
                             <label htmlFor="meeting" className="cursor-pointer absolute left-[15px] top-[22px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></label>
                         ) : (

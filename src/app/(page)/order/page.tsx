@@ -4,7 +4,7 @@ import { useDispatch } from "react-redux";
 import FormOrder from "./FormOrder";
 import Section2 from "./Section2";
 import Link from "next/link";
-import { orderSubmit } from "@/app/(actions)/order";
+import { methodChoosen, orderSubmit } from "@/app/(actions)/order";
 import { useRouter } from "next/navigation";
 
 interface DataSubmit {
@@ -22,8 +22,13 @@ export default function OrderPage() {
     const dispatchOrder = useDispatch();
     const router = useRouter();
 
-    const handleSubmitForm = async (event: any) => {
+    const handleSubmitForm = (event: any) => {
         event.preventDefault();
+        
+        if(!event.target.method.value){
+            dispatchOrder(methodChoosen(false));
+            return;
+        }
 
         const data: DataSubmit = {
             email: event.target.email.value,
@@ -36,7 +41,7 @@ export default function OrderPage() {
             method: event.target.method.value
         }
 
-        await dispatchOrder(orderSubmit(data));
+        dispatchOrder(orderSubmit(data));
         router.push("/order/success/1");
     }
 

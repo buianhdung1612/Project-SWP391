@@ -7,7 +7,8 @@ interface initState {
     district: string,
     ward: string,
     method: string,
-    provinceChoosen: boolean
+    provinceChoosen: boolean,
+    methodChoosen: boolean
 }
 
 const initialState: initState = {
@@ -19,7 +20,8 @@ const initialState: initState = {
     district: "",
     ward: "",
     method: "",
-    provinceChoosen: false
+    provinceChoosen: false,
+    methodChoosen: true
 }
 
 export const orderReducer = (state = initialState, action: any) => {
@@ -40,6 +42,11 @@ export const orderReducer = (state = initialState, action: any) => {
                 ward: action.data.ward,
                 method: action.data.method,
                 provinceChoosen: state.provinceChoosen
+            };
+        case "METHOD_CHOOSEN":
+            return {
+                ...state,
+                methodChoosen: action.methodChoosen
             };
         default:
             return state;

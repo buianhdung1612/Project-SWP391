@@ -5,6 +5,13 @@ export const provinceChoosen = (provinceChoosen: boolean) => {
     }
 }
 
+export const methodChoosen = (methodChoosen: boolean) => {
+    return {
+        type: "METHOD_CHOOSEN",
+        methodChoosen: methodChoosen
+    }
+}
+
 export const orderSubmit = (data: {
     email: string,
     fullname: string,

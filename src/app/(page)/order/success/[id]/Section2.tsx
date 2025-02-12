@@ -3,7 +3,7 @@
 import { useSelector } from "react-redux";
 import Products from "../../Products";
 
-export default function Section2({}) {
+export default function Section2() {
     const totalPrice = useSelector((state: any) => state.cartReducer.totalPriceInit);
     const provinceChoosen = useSelector((state: any) => state.orderReducer.provinceChoosen);
 
