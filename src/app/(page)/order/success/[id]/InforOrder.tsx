@@ -1,6 +1,8 @@
 "use client"
 
 import { useSelector } from "react-redux";
+import InforOderText from "./InforOrderText";
+import InforOrderTitle from "./InforTitleText";
 
 export default function InforOrder() {
     const email = useSelector((state: any) => state.orderReducer.email);
@@ -22,27 +24,27 @@ export default function InforOrder() {
             <div className="w-full p-[16px] mx-[32px] mt-[16px] border border-solid border-[#dadada]">
                 <div className="w-full flex justify-between">
                     <div className="w-[50%] pr-[16px]">
-                        <div className="text-[20px] text-[#333]">Thông tin mua hàng</div>
-                        <div className="text-[14px] text-[#46484a] py-[4px]">{fullname}</div>
-                        <div className="text-[14px] text-[#46484a] py-[4px]">{email}</div>
-                        <div className="text-[14px] text-[#46484a] py-[4px]">{phone}</div>
+                        <InforOrderTitle title="Thông tin mua hàng" />
+                        <InforOderText info={fullname} />
+                        <InforOderText info={email} />
+                        <InforOderText info={phone} />
                     </div>
                     <div className="w-[50%] pl-[16px]">
-                        <div className="text-[20px] text-[#333]">Địa chỉ nhận hàng</div>
-                        <div className="text-[14px] text-[#46484a] py-[4px]">{fullname}</div>
-                        <div className="text-[14px] text-[#46484a] py-[4px]">{address}</div>
-                        <div className="text-[14px] text-[#46484a] py-[4px]">{dataAddress}</div>
-                        <div className="text-[14px] text-[#46484a] py-[4px]">{phone}</div>
+                        <InforOrderTitle title="Địa chỉ nhận hàng" />
+                        <InforOderText info={fullname} />
+                        <InforOderText info={address} />
+                        <InforOderText info={dataAddress} />
+                        <InforOderText info={phone} />
                     </div>
                 </div>
                 <div className="w-full flex justify-between mt-[10px]">
                     <div className="w-[50%] pr-[16px]">
-                        <div className="text-[20px] text-[#333]">Phương thức thanh toán</div>
-                        <div className="text-[14px] text-[#46484a] py-[4px]">{(method == "bank") ? "Chuyển khoản" : "Thanh toán khi nhận hàng"}</div>
+                        <InforOrderTitle title="Phương thức thanh toán" />
+                        <InforOderText info={(method == "bank") ? "Chuyển khoản" : "Thanh toán khi nhận hàng"} />
                     </div>
                     <div className="w-[50%] pl-[16px]">
-                        <div className="text-[20px] text-[#333]">Phương thức vận chuyển</div>
-                        <div className="text-[14px] text-[#46484a] py-[4px]">Giao hàng tận nơi</div>
+                        <InforOrderTitle title="Phương thức vận chuyển" />
+                        <InforOderText info="Giao hàng tận nơi" />
                     </div>
                 </div>
             </div>
