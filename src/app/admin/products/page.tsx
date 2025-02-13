@@ -14,15 +14,15 @@ export default function ProductsAdminPage() {
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
+    const [sort, setSort] = useState("position-desc");
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);
         const api = new URL(linkApi);
 
+        // Lọc theo trạng thái
         const statusCurrent = urlCurrent.searchParams.get('status');
         setFilterStatus(statusCurrent ?? "");
-        const keywordCurrent = urlCurrent.searchParams.get('keyword');
-        setKeyword(keywordCurrent ?? "");
 
         if (statusCurrent) {
             api.searchParams.set('status', statusCurrent);
@@ -30,6 +30,11 @@ export default function ProductsAdminPage() {
         else {
             api.searchParams.delete('status');
         }
+        // Hết Lọc theo trạng thái
+
+        // Tìm kiếm sản phẩm
+        const keywordCurrent = urlCurrent.searchParams.get('keyword');
+        setKeyword(keywordCurrent ?? "");
 
         if (keywordCurrent) {
             api.searchParams.set('keyword', keywordCurrent);
@@ -37,6 +42,27 @@ export default function ProductsAdminPage() {
         else {
             api.searchParams.delete('keyword');
         }
+        // Hết Tìm kiếm sản phẩm
+
+        // Sắp xếp theo tiêu chí
+        const sortKeyCurrent = urlCurrent.searchParams.get('sortKey');
+        const sortValueCurrent = urlCurrent.searchParams.get('sortValue');
+
+        if (sortKeyCurrent && sortValueCurrent) {
+            setSort(`${sortKeyCurrent}-${sortValueCurrent}`);
+        } else {
+            setSort("position-desc");
+        }
+
+        if(sortKeyCurrent && sortValueCurrent){
+            api.searchParams.set("sortKey", sortKeyCurrent);
+            api.searchParams.set("sortValue", sortValueCurrent);
+        }
+        else{
+            api.searchParams.delete("sortKey");
+            api.searchParams.delete("sortValue");
+        }
+        // Hết Sắp xếp theo tiêu chí
 
         const fetchProducts = async () => {
             const response = await fetch(api.href);
@@ -47,8 +73,7 @@ export default function ProductsAdminPage() {
         fetchProducts();
     }, []);
 
-
-
+    // Lọc theo trạng thái
     const handleChangeFilterStatus = async (event: any) => {
         const value = event.target.value;
         let url = new URL(location.href);
@@ -62,7 +87,9 @@ export default function ProductsAdminPage() {
 
         location.href = url.href;
     }
+    // Hết Lọc theo trạng thái
 
+    // Tìm kiếm sản phẩm
     const handleSumbitSearch = async (event: any) => {
         event.preventDefault();
 
@@ -78,6 +105,26 @@ export default function ProductsAdminPage() {
 
         location.href = url.href;
     }
+    // Hết Tìm kiếm sản phẩm
+
+    // Sắp xếp theo tiêu chí
+    const handleChangeSort = async (event: any) => {
+        const value = event.target.value;
+        let url = new URL(location.href);
+        
+        if(value){
+            const [sortKey, sortValue] = value.split("-");
+            url.searchParams.set("sortKey", sortKey);
+            url.searchParams.set("sortValue", sortValue);
+        }
+        else{
+            url.searchParams.delete("sortKey");
+            url.searchParams.delete("sortValue");
+        }
+
+        location.href = url.href;
+    }
+    // Hết Sắp xếp theo tiêu chí
 
     return (
         <Box p={3}>
@@ -126,10 +173,14 @@ export default function ProductsAdminPage() {
                 </Typography>
                 <Box display="flex" gap={2} flexWrap="wrap">
                     <FormControl fullWidth sx={{ maxWidth: 300 }}>
-                        <InputLabel>Sắp xếp</InputLabel>
-                        <Select defaultValue="">
-                            <MenuItem value="asc">Vị trí tăng dần</MenuItem>
-                            <MenuItem value="desc">Vị trí giảm dần</MenuItem>
+                        <InputLabel id="sort-label" shrink={true}>Sắp xếp</InputLabel>
+                        <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
+                            <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
+                            <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
+                            <MenuItem value="price-desc">Giá giảm dần</MenuItem>
+                            <MenuItem value="price-asc">Giá tăng dần</MenuItem>
+                            <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
+                            <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
                         </Select>
                     </FormControl>
                 </Box>
@@ -148,7 +199,7 @@ export default function ProductsAdminPage() {
                     </Button>
                 </Box>
                 <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-                    + Thêm mới
+                    Thêm mới
                 </Button>
             </Box>
         </Box>
