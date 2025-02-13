@@ -5,11 +5,79 @@ import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import TableProduct from "./TableProduct";
+import { useEffect, useState } from "react";
 
-export default async function ProductsAdminPage() {
-    const response = await fetch('https://freshskinweb.onrender.com/admin/products');
-    const data = await response.json();
-    const products = data.data.products;
+export default function ProductsAdminPage() {
+    const [products, setProducts] = useState([]);
+    const [linkApi, setLinkApi] = useState('https://freshskinweb.onrender.com/admin/products');
+
+    // Hiển thị lựa chọn mặc định
+    const [filterStatus, setFilterStatus] = useState("");
+    const [keyword, setKeyword] = useState("");
+
+    useEffect(() => {
+        const urlCurrent = new URL(location.href);
+        const api = new URL(linkApi);
+
+        const statusCurrent = urlCurrent.searchParams.get('status');
+        setFilterStatus(statusCurrent ?? "");
+        const keywordCurrent = urlCurrent.searchParams.get('keyword');
+        setKeyword(keywordCurrent ?? "");
+
+        if (statusCurrent) {
+            api.searchParams.set('status', statusCurrent);
+        }
+        else {
+            api.searchParams.delete('status');
+        }
+
+        if (keywordCurrent) {
+            api.searchParams.set('keyword', keywordCurrent);
+        }
+        else {
+            api.searchParams.delete('keyword');
+        }
+
+        const fetchProducts = async () => {
+            const response = await fetch(api.href);
+            const data = await response.json();
+            setProducts(data.data.products);
+        };
+
+        fetchProducts();
+    }, []);
+
+
+
+    const handleChangeFilterStatus = async (event: any) => {
+        const value = event.target.value;
+        let url = new URL(location.href);
+
+        if (value) {
+            url.searchParams.set("status", value);
+        }
+        else {
+            url.searchParams.delete("status");
+        }
+
+        location.href = url.href;
+    }
+
+    const handleSumbitSearch = async (event: any) => {
+        event.preventDefault();
+
+        const value = event.target.keyword.value;
+        let url = new URL(location.href);
+
+        if (value) {
+            url.searchParams.set("keyword", value);
+        }
+        else {
+            url.searchParams.delete("keyword");
+        }
+
+        location.href = url.href;
+    }
 
     return (
         <Box p={3}>
@@ -26,21 +94,29 @@ export default async function ProductsAdminPage() {
                 <Box display="flex" flexWrap="wrap">
                     <FormControl sx={{ width: '30%', marginRight: '20px' }} >
                         <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
-                        <Select labelId="filter-label" label="Bộ lọc" defaultValue="" displayEmpty >
+                        <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
                             <MenuItem value="">Tất cả</MenuItem>
                             <MenuItem value="active">Hoạt động</MenuItem>
-                            <MenuItem value="inactive">Không hoạt động</MenuItem>
+                            <MenuItem value="inactive">Dừng hoạt động</MenuItem>
                         </Select>
                     </FormControl>
-                    <TextField
-                        label="Nhập từ khóa..."
-                        variant="outlined"
-                        fullWidth
-                        sx={{ flex: 1 }}
-                    />
-                    <Button variant="contained" color="success" sx={{ width: "8%" }}>
-                        Tìm
-                    </Button>
+                    <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
+                        <Box display="flex">
+                            <TextField
+                                label="Nhập từ khóa..."
+                                variant="outlined"
+                                fullWidth
+                                name="keyword"
+                                defaultValue={keyword}
+                                InputLabelProps={{
+                                    shrink: true, // Giúp label không bị đè
+                                }}
+                            />
+                            <Button variant="contained" color="success" type="submit">
+                                Tìm
+                            </Button>
+                        </Box>
+                    </form>
                 </Box>
             </Paper>
             {/* Sắp xếp */}
@@ -60,7 +136,7 @@ export default async function ProductsAdminPage() {
             </Paper>
 
             {/* Table */}
-            <TableProduct data={products}/>
+            <TableProduct data={products} />
             {/* Action Buttons */}
             <Box mt={2} display="flex" justifyContent="space-between">
                 <Box>
