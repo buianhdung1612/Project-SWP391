@@ -9,7 +9,7 @@ import { useEffect, useState } from "react";
 
 export default function ProductsAdminPage() {
     const [products, setProducts] = useState([]);
-    const [linkApi, setLinkApi] = useState('https://freshskinweb.onrender.com/admin/products');
+    const linkApi = 'https://freshskinweb.onrender.com/admin/products';
 
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
@@ -76,7 +76,7 @@ export default function ProductsAdminPage() {
     // Lọc theo trạng thái
     const handleChangeFilterStatus = async (event: any) => {
         const value = event.target.value;
-        let url = new URL(location.href);
+        const url = new URL(location.href);
 
         if (value) {
             url.searchParams.set("status", value);
@@ -94,7 +94,7 @@ export default function ProductsAdminPage() {
         event.preventDefault();
 
         const value = event.target.keyword.value;
-        let url = new URL(location.href);
+        const url = new URL(location.href);
 
         if (value) {
             url.searchParams.set("keyword", value);
@@ -110,7 +110,7 @@ export default function ProductsAdminPage() {
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
         const value = event.target.value;
-        let url = new URL(location.href);
+        const url = new URL(location.href);
         
         if(value){
             const [sortKey, sortValue] = value.split("-");
