@@ -41,7 +41,7 @@ export default function Section1() {
                             <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Loại Da Của Bạn</span>
                         </div>
                     </Link>
-                    <Link href="/blog">
+                    <Link href="/blogs">
                         <div className="flex items-center ml-[15px]">
                             <img src="note-book 1.png" width={28} height={28} />
                             <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Tạp Chí Làm Đẹp</span>
