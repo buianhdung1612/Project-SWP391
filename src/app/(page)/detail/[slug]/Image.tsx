@@ -3,6 +3,7 @@ import { Section1Context } from "./Section1";
 
 export default function Image() {
     const { thumbnail, deal, banner } = useContext(Section1Context);
+    
     return (
         <>
             <div className="w-[500px] h-[500px] ml-[120px] mr-[20px] relative">

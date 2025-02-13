@@ -28,3 +28,10 @@ export const cartDecreaseQuantity = (event, index) => {
         index: index
     }
 }
+
+export const cartAddNewProduct = (products) => {
+    return {
+        type: "CART_ADD_NEW_PRODUCT",
+        products: products    
+    }
+}

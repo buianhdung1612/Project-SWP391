@@ -17,14 +17,6 @@ const productsInit: CartItem[] = [
         link: "#",
         volume: 30,
         quantity: 2
-    },
-    {
-        image: "/demo/danhmuc_1.webp",
-        title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceNew: 179000,
-        link: "#",
-        volume: 30,
-        quantity: 1
     }
 ];
 
@@ -119,7 +111,22 @@ export const cartReducer = (state = dataInit, action: any) => {
                 totalPriceInit: priceTotalUpdatedDelete,
                 totalQuantityInit: quantityTotalUpdatedDelete
             }
-            
+
+        case "CART_ADD_NEW_PRODUCT":
+            const updatedDataNewProduct = action.products;
+            const priceTotalUpdatedAddNewProduct: number = updatedDataNewProduct.reduce((sum: number, item: CartItem) => {
+                return sum + item.priceNew * item.quantity
+            }, 0)
+            const quantityTotalUpdatedAddNewProduct: number = updatedDataNewProduct.reduce((sum: number, item: CartItem) => {
+                return sum + item.quantity
+            }, 0);
+
+            return {
+                ...state,
+                products: updatedDataNewProduct,
+                totalPriceInit: priceTotalUpdatedAddNewProduct,
+                totalQuantityInit: quantityTotalUpdatedAddNewProduct
+            }
         default:
             return state;
     }

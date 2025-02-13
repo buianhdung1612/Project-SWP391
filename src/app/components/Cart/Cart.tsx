@@ -74,7 +74,7 @@ export default function Cart() {
                     onMouseEnter={handleMouseEnter}
                     onMouseLeave={handleMouseLeave}
                 >
-                    <form action="" className="px-[10px]">
+                    <div className="px-[10px]">
                         {products.map((item: CartItem, index: number) => (
                             <div key={index} className="p-[10px] max-h-[360px] overflow-y-auto flex border-b border-solid boder-[#ddd]">
                                 <div className="w-[20%]">
@@ -127,7 +127,7 @@ export default function Cart() {
                         <Link href="/order">
                             <ButtonPay className="text-[12px] py-[10px]" />
                         </Link>
-                    </form>
+                    </div>
                 </div>
             )}
         </>
