@@ -86,7 +86,7 @@ export default function Section1() {
                             <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Đăng Nhập</span>
                         </div>
                     </Link>
-                    <Link href="#">
+                    <Link href="/favorite">
                         <div className="flex items-center ml-[15px] relative">
                             <CiHeart className="text-[32px]" />
                             <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">0</span>

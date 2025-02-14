@@ -19,8 +19,9 @@ export default function CardItem(props: {
         <>
             <div className="bg-white rounded-[10px]">
                 <Link href={link}>
-                    <div className="w-[226px] aspect-square relative">
+                    <div className="w-[226px] aspect-square relative group">
                         <img src={image} className="w-full h-full object-cover" />
+                        
                         <CiHeart className="text-[28px] absolute top-[2%] right-[2%] hover:text-primary cursor-pointer" />
                         {banner && (
                             <img src={banner} className="absolute bottom-0" />
@@ -28,7 +29,11 @@ export default function CardItem(props: {
                         {deal && (
                             <img src={deal} className="absolute top-[2%] left-[2%]" />
                         )}
+                        <div className="rounded-[30px] absolute bottom-[12%] left-[27%] bg-primary hover:bg-secondary py-[8px] px-[10px] hidden text-[14px] text-white w-[98px] h-[36px] font-[500] card-see-quick group-hover:block">
+                            Xem nhanh
+                        </div>
                     </div>
+                    
                 </Link>
                 <div className={`text-center mt-[5px] w-[226px] ` + className}>
                     {category && (

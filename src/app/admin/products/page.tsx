@@ -1,11 +1,13 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper } from "@mui/material";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { BiDetail } from "react-icons/bi";
+import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 
-import TableProduct from "./TableProduct";
 import { useEffect, useState } from "react";
+import { error } from "console";
 
 export default function ProductsAdminPage() {
     const [products, setProducts] = useState([]);
@@ -54,11 +56,11 @@ export default function ProductsAdminPage() {
             setSort("position-desc");
         }
 
-        if(sortKeyCurrent && sortValueCurrent){
+        if (sortKeyCurrent && sortValueCurrent) {
             api.searchParams.set("sortKey", sortKeyCurrent);
             api.searchParams.set("sortValue", sortValueCurrent);
         }
-        else{
+        else {
             api.searchParams.delete("sortKey");
             api.searchParams.delete("sortValue");
         }
@@ -107,17 +109,42 @@ export default function ProductsAdminPage() {
     }
     // Hết Tìm kiếm sản phẩm
 
+    // Thay đổi trạng thái 1 sản phẩm
+    const handleChangeStatusOneProduct = async (status: string, dataPath: string) => {
+        const statusChange = status;
+        const path = `${linkApi}${dataPath}`;
+
+        const data = {
+            status: statusChange
+        }
+
+        const response = await fetch(path, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
+    // Hết Thay đổi trạng thái 1 sản phẩm
+
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
         const value = event.target.value;
         const url = new URL(location.href);
-        
-        if(value){
+
+        if (value) {
             const [sortKey, sortValue] = value.split("-");
             url.searchParams.set("sortKey", sortKey);
             url.searchParams.set("sortValue", sortValue);
         }
-        else{
+        else {
             url.searchParams.delete("sortKey");
             url.searchParams.delete("sortValue");
         }
@@ -187,7 +214,112 @@ export default function ProductsAdminPage() {
             </Paper>
 
             {/* Table */}
-            <TableProduct data={products} />
+            <TableContainer component={Paper}>
+                <Table>
+                    <TableHead>
+                        <TableRow>
+                            <TableCell ></TableCell>
+                            <TableCell>STT</TableCell>
+                            <TableCell>Hình ảnh</TableCell>
+                            <TableCell>Tiêu đề</TableCell>
+                            <TableCell>Giá</TableCell>
+                            <TableCell>Trạng thái</TableCell>
+                            <TableCell>Vị trí</TableCell>
+                            {/* <TableCell>Tạo bởi</TableCell> */}
+                            {/* <TableCell>Cập nhật bởi</TableCell> */}
+                            <TableCell>Hành động</TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        {products.map((product: any, index: number) => (
+                            <TableRow key={product.id}>
+                                <TableCell padding="checkbox">
+                                    <Checkbox />
+                                </TableCell>
+                                <TableCell>{index + 1}</TableCell>
+                                <TableCell>
+                                    <img
+                                        src={product.thumbnail}
+                                        alt={product.title}
+                                        style={{ width: 100, height: 100, objectFit: "cover" }}
+                                    />
+                                </TableCell>
+                                <TableCell>{product.title}</TableCell>
+                                <TableCell>{100}</TableCell>
+                                <TableCell>
+                                    {product.status === "ACTIVE" && (
+                                        <Chip
+                                            label="Hoạt động"
+                                            color="success"
+                                            size="small"
+                                            variant="outlined"
+                                            onClick={() => handleChangeStatusOneProduct("inactive", `/edit/${product.id}`)}
+                                        />
+                                    )}
+                                    {product.status === "INACTIVE" && (
+                                        <Chip
+                                            label="Dừng hoạt động"
+                                            color="error"
+                                            size="small"
+                                            variant="outlined"
+                                            onClick={() => handleChangeStatusOneProduct("active", `/edit/${product.id}`)}
+                                        />
+                                    )}
+                                </TableCell>
+                                <TableCell>{product.position}</TableCell>
+                                {/* <TableCell>
+                                    {product.createdBy}
+                                    <br />
+                                    {product.createdAt}
+                                </TableCell>
+                                <TableCell>
+                                    {product.updatedBy}
+                                    <br />
+                                    {product.updatedAt}
+                                </TableCell> */}
+                                <TableCell>
+                                    <div className="flex">
+                                        <Tooltip title="Chi tiết" placement="top">
+                                            <BiDetail className="text-[25px] text-[#138496] mr-2" />
+                                        </Tooltip>
+                                        <Tooltip title="Sửa" placement="top">
+                                            <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                        </Tooltip>
+                                        <Tooltip title="Xóa" placement="top">
+                                            <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
+                                        </Tooltip>
+                                    </div>
+                                </TableCell>
+                            </TableRow>
+                        ))}
+                    </TableBody>
+                </Table>
+            </TableContainer>
+
+            {/* Pagination */}
+            <Stack spacing={2} marginTop={2}>
+                <Pagination
+                    count={9}
+                    color="primary"
+                    variant="outlined"
+                    shape="rounded"
+                    siblingCount={1} // Điều chỉnh số lượng nút hiển thị bên cạnh nút hiện tại
+                    sx={{
+                        '& .MuiPaginationItem-root': {
+                            backgroundColor: 'white', // Màu nền trắng
+                            color: 'blue', // Màu chữ
+                            '&:hover': {
+                                backgroundColor: '#e0e0e0', // Màu nền khi hover
+                            },
+                        },
+                        '& .Mui-selected': {
+                            backgroundColor: 'blue', // Màu nền khi được chọn
+                            color: 'white', // Màu chữ khi được chọn
+                        },
+                    }}
+                />
+            </Stack>
+
             {/* Action Buttons */}
             <Box mt={2} display="flex" justifyContent="space-between">
                 <Box>
