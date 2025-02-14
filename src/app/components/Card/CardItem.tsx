@@ -3,7 +3,7 @@
 import { cartAddNewProduct } from "@/app/(actions)/cart";
 import Link from "next/link";
 import { useState } from "react";
-import { CiHeart, CiShoppingCart } from "react-icons/ci";
+import { CiHeart } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 
 interface PriceByVolume {
