@@ -1,4 +1,7 @@
+"use client"
+
 import Link from "next/link";
+import { useState } from "react";
 import { CiHeart } from "react-icons/ci";
 
 export default function CardItem(props: {
@@ -14,14 +17,24 @@ export default function CardItem(props: {
     link: string
 }) {
     const { image = "", category = "", title = "", priceOld = "", priceNew = "", discount = "", banner = "", deal = "", className = "", link = "" } = props;
-    
+
+    const [isPopupOpen, setIsPopupOpen] = useState(false);
+
+    const handleOpenPopup = () => {
+        setIsPopupOpen(true);
+    };
+
+    const handleClosePopup = () => {
+        setIsPopupOpen(false);
+    };
+
     return (
         <>
             <div className="bg-white rounded-[10px]">
                 <Link href={link}>
                     <div className="w-[226px] aspect-square relative group">
                         <img src={image} className="w-full h-full object-cover" />
-                        
+
                         <CiHeart className="text-[28px] absolute top-[2%] right-[2%] hover:text-primary cursor-pointer" />
                         {banner && (
                             <img src={banner} className="absolute bottom-0" />
@@ -29,11 +42,14 @@ export default function CardItem(props: {
                         {deal && (
                             <img src={deal} className="absolute top-[2%] left-[2%]" />
                         )}
-                        <div className="rounded-[30px] absolute bottom-[12%] left-[27%] bg-primary hover:bg-secondary py-[8px] px-[10px] hidden text-[14px] text-white w-[98px] h-[36px] font-[500] card-see-quick group-hover:block">
+                        <div
+                            onClick={() => {handleOpenPopup()}}
+                            className="rounded-[30px] absolute bottom-[12%] left-[27%] bg-primary hover:bg-secondary py-[8px] px-[10px] hidden text-[14px] text-white w-[98px] h-[36px] font-[500] card-see-quick group-hover:block"
+                        >
                             Xem nhanh
                         </div>
                     </div>
-                    
+
                 </Link>
                 <div className={`text-center mt-[5px] w-[226px] ` + className}>
                     {category && (
@@ -49,6 +65,47 @@ export default function CardItem(props: {
                     </div>
                 </div>
             </div>
+            
+            {isPopupOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg w-[90%] max-w-2xl p-5 relative">
+                        {/* Close button */}
+                        <button
+                            className="absolute top-2 right-2 text-gray-500 hover:text-black"
+                            onClick={handleClosePopup}
+                        >
+                            ✕
+                        </button>
+
+                        {/* Popup Content */}
+                        <div className="flex flex-col md:flex-row items-center">
+                            <img
+                                src={image}
+                                alt={title}
+                                className="w-full md:w-1/3 object-cover rounded-md mb-4 md:mb-0"
+                            />
+                            <div className="flex-1 md:ml-6">
+                                <h2 className="text-lg font-bold mb-2">{title}</h2>
+                                <p className="text-[#c90000] text-xl font-semibold mb-2">
+                                    {priceNew.toLocaleString("en-US")}<sup className="underline">đ</sup>
+                                </p>
+                                <p className="text-gray-500 text-sm line-through mb-4">
+                                    {priceOld.toLocaleString("en-US")}<sup className="underline">đ</sup>
+                                </p>
+                                <p className="text-gray-700 text-sm mb-4">
+                                    Khuyến mãi: Giảm giá {discount}% khi mua ngay hôm nay!
+                                </p>
+                                <button
+                                    className="bg-primary text-white px-4 py-2 rounded hover:bg-secondary"
+                                    onClick={() => alert("Thêm vào giỏ hàng!")}
+                                >
+                                    Thêm vào giỏ hàng
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            )}
         </>
     )
 }

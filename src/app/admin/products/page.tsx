@@ -7,7 +7,6 @@ import { BiDetail } from "react-icons/bi";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 
 import { useEffect, useState } from "react";
-import { error } from "console";
 
 export default function ProductsAdminPage() {
     const [products, setProducts] = useState([]);
