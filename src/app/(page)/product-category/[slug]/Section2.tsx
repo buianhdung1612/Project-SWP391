@@ -47,133 +47,349 @@ const dataProducts: any = [
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     },
     {
         image: "/demo/danhmuc_1.webp",
         category: "Maybelline",
         title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceOld: 288000,
-        priceNew: 179000,
-        discount: 38,
         banner: "/demo/banner-sale.webp",
         deal: "/demo/deal.webp",
-        link: "#"
+        link: "#",
+        priceByVolume: [
+            {
+                volume: 30,
+                priceNew: 312000,
+                price: 395000,
+                discount: 22
+            },
+            {
+                volume: 95,
+                priceNew: 400000,
+                price: 500000,
+                discount: 20
+            },
+            {
+                volume: 400,
+                priceNew: 585000,
+                price: 750000,
+                discount: 22
+            }
+        ],
+        uses: "Dành cho da nhạy cảm"
     }
 ]
 
@@ -193,12 +409,11 @@ export default function Section2() {
                                     image={item.image}
                                     category={item.category}
                                     title={item.title}
-                                    priceNew={item.priceNew}
-                                    priceOld={item.priceOld}
-                                    discount={item.discount}
                                     banner={item.banner}
                                     deal={item.deal}
                                     link={item.link}
+                                    priceByVolume={item.priceByVolume}
+                                    uses={item.uses}
                                 />
                             ))}
                         </div>

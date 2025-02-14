@@ -12,28 +12,28 @@ export default function Section11() {
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123",
             },
             {
                 image: "/demo/blog-preview.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123",
             },
             {
                 image: "/demo/blog-preview.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123",
             }
         ]
     
@@ -43,28 +43,28 @@ export default function Section11() {
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview2.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview2.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview2.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             }
         ]
     
@@ -74,28 +74,28 @@ export default function Section11() {
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview3.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview3.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview3.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             }
         ]
 
@@ -105,28 +105,28 @@ export default function Section11() {
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview4.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview4.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             },
             {
                 image: "/demo/blog-preview4.webp",
                 day: "16-11-2023",
                 title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
                 description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-                link: "#"
+                link: "/blog/123"
             }
         ]
     
@@ -163,14 +163,14 @@ export default function Section11() {
     
         return (
             <>
-                <Title title="Blog làm đẹp" />
+                <Title title="Blog làm đẹp" link="/blogs"/>
     
                 <div className="text-center mb-[20px]">
                     {dataButton.map((item: any, index: number) => (
                         <button
                             key={index}
                             onClick={() => handleClick(item.data, item.currentStatus)}
-                            className={"text-[16px] font-[500] px-[25px] py-[2px] " +
+                            className={"text-[16px] hover:text-primary font-[500] px-[25px] py-[2px] " +
                                 (currentButton == item.currentStatus ? "text-primary" : "text-[#333]")
                             }
                         >

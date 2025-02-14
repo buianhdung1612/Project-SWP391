@@ -34,7 +34,7 @@ export default function Section4() {
     ]
     return (
         <>
-            <Title title="Tìm kiếm nhiều nhất" />
+            <Title title="Tìm kiếm nhiều nhất" link="/products"/>
             <div className="container mx-auto flex flex-wrap justify-center">
                 {data.map((item: string, index: number) => (
                     <ButtonCategory key={index} text={item} />

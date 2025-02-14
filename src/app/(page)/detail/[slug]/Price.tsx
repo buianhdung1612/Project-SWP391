@@ -31,7 +31,7 @@ export default function Price() {
     }
 
     const handleClickDecrease = (): void => {
-        if (quantity - 1 >= 0) {
+        if (quantity - 1 >= 1) {
             setQuantity(quantity - 1);
         }
     }
@@ -93,7 +93,7 @@ export default function Price() {
                 <div className="mb-[10px] flex">
                     <button
                         className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tl-[40px] rounded-bl-[40px] border border-solid border-[#ddd]"
-                        onClick={() => handleClickDecrease}
+                        onClick={handleClickDecrease}
                     >
                         -
                     </button>

@@ -10,55 +10,163 @@ export default function Section5() {
             image: "/demo/tay-trang.webp",
             category: "AHA",
             title: "Nước Tẩy Trang Nature Republic Chiết Xuất AHA 500ml Good Skin AHA Ampoule Cleansing Water",
-            priceNew: 174000,
-            priceOld: 230000,
-            discount: 24,
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/tay-trang.webp",
             category: "AHA",
             title: "Nước Tẩy Trang Nature Republic Chiết Xuất AHA 500ml Good Skin AHA Ampoule Cleansing Water",
-            priceNew: 174000,
-            priceOld: 230000,
-            discount: 24,
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/tay-trang.webp",
             category: "AHA",
             title: "Nước Tẩy Trang Nature Republic Chiết Xuất AHA 500ml Good Skin AHA Ampoule Cleansing Water",
-            priceNew: 174000,
-            priceOld: 230000,
-            discount: 24,
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/tay-trang.webp",
             category: "AHA",
             title: "Nước Tẩy Trang Nature Republic Chiết Xuất AHA 500ml Good Skin AHA Ampoule Cleansing Water",
-            priceNew: 174000,
-            priceOld: 230000,
-            discount: 24,
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/tay-trang.webp",
             category: "AHA",
             title: "Nước Tẩy Trang Nature Republic Chiết Xuất AHA 500ml Good Skin AHA Ampoule Cleansing Water",
-            priceNew: 174000,
-            priceOld: 230000,
-            discount: 24,
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/tay-trang.webp",
             category: "AHA",
             title: "Nước Tẩy Trang Nature Republic Chiết Xuất AHA 500ml Good Skin AHA Ampoule Cleansing Water",
-            priceNew: 174000,
-            priceOld: 230000,
-            discount: 24,
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         }
     ]
     const dataSuaRuaMat: any = [
@@ -66,10 +174,136 @@ export default function Section5() {
             image: "/demo/sua-rua-mat.webp",
             category: "SVR",
             title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
-            priceNew: 429000,
-            priceOld: 540000,
-            discount: 21,
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
+        },
+        {
+            image: "/demo/sua-rua-mat.webp",
+            category: "SVR",
+            title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
+        },
+        {
+            image: "/demo/sua-rua-mat.webp",
+            category: "SVR",
+            title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
+        },
+        {
+            image: "/demo/sua-rua-mat.webp",
+            category: "SVR",
+            title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
+        },
+        {
+            image: "/demo/sua-rua-mat.webp",
+            category: "SVR",
+            title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/sua-rua-mat.webp",
@@ -78,43 +312,7 @@ export default function Section5() {
             priceNew: 429000,
             priceOld: 540000,
             discount: 21,
-            link: "#"
-        },
-        {
-            image: "/demo/sua-rua-mat.webp",
-            category: "SVR",
-            title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
-            priceNew: 429000,
-            priceOld: 540000,
-            discount: 21,
-            link: "#"
-        },
-        {
-            image: "/demo/sua-rua-mat.webp",
-            category: "SVR",
-            title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
-            priceNew: 429000,
-            priceOld: 540000,
-            discount: 21,
-            link: "#"
-        },
-        {
-            image: "/demo/sua-rua-mat.webp",
-            category: "SVR",
-            title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
-            priceNew: 429000,
-            priceOld: 540000,
-            discount: 21,
-            link: "#"
-        },
-        {
-            image: "/demo/sua-rua-mat.webp",
-            category: "SVR",
-            title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
-            priceNew: 429000,
-            priceOld: 540000,
-            discount: 21,
-            link: "#"
+            link: "/detail/123"
         }
     ]
     const dataToner: any = [
@@ -122,10 +320,136 @@ export default function Section5() {
             image: "/demo/toner.webp",
             category: "Laneige",
             title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
-            priceNew: 158000,
-            priceOld: 190000,
-            discount: 17,
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
+        },
+        {
+            image: "/demo/toner.webp",
+            category: "Laneige",
+            title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
+        },
+        {
+            image: "/demo/toner.webp",
+            category: "Laneige",
+            title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
+        },
+        {
+            image: "/demo/toner.webp",
+            category: "Laneige",
+            title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
+        },
+        {
+            image: "/demo/toner.webp",
+            category: "Laneige",
+            title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/toner.webp",
@@ -134,43 +458,7 @@ export default function Section5() {
             priceNew: 158000,
             priceOld: 190000,
             discount: 17,
-            link: "#"
-        },
-        {
-            image: "/demo/toner.webp",
-            category: "Laneige",
-            title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
-            priceNew: 158000,
-            priceOld: 190000,
-            discount: 17,
-            link: "#"
-        },
-        {
-            image: "/demo/toner.webp",
-            category: "Laneige",
-            title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
-            priceNew: 158000,
-            priceOld: 190000,
-            discount: 17,
-            link: "#"
-        },
-        {
-            image: "/demo/toner.webp",
-            category: "Laneige",
-            title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
-            priceNew: 158000,
-            priceOld: 190000,
-            discount: 17,
-            link: "#"
-        },
-        {
-            image: "/demo/toner.webp",
-            category: "Laneige",
-            title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
-            priceNew: 158000,
-            priceOld: 190000,
-            discount: 17,
-            link: "#"
+            link: "/detail/123"
         }
     ]
 
@@ -202,13 +490,13 @@ export default function Section5() {
 
     return (
         <>
-            <Title title="Da đẹp - Thêm tự tin cùng Fresh Skin" />
+            <Title title="Da đẹp - Thêm tự tin cùng Fresh Skin" link="/products"/>
             <div className="text-center mb-[20px]">
                 {dataButton.map((item: any, index: number) => (
                     <button
                         key={index}
                         onClick={() => handleClick(item.data, item.currentStatus)}
-                        className={"text-[16px] font-[500] px-[25px] py-[2px] " +
+                        className={"text-[16px] hover:text-primary font-[500] px-[25px] py-[2px] " +
                             (currentButton == item.currentStatus ? "text-primary" : "text-[#333]")
                         }
                     >
@@ -228,10 +516,9 @@ export default function Section5() {
                             image={item.image}
                             category={item.category}
                             title={item.title}
-                            priceNew={item.priceNew}
-                            priceOld={item.priceOld}
-                            discount={item.discount}
                             link={item.link}
+                            priceByVolume={item.priceByVolume}
+                            uses={item.uses}
                         />
                     ))}
                 </div>

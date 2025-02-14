@@ -44,7 +44,7 @@ export default function Section1() {
     return (
         <>
             <div className="container mx-auto mb-[40px]">
-                <Title title="danh mục hot" />
+                <Title title="danh mục hot" link="/products"/>
                 <CategoryList data={data}/>
             </div>
         </>

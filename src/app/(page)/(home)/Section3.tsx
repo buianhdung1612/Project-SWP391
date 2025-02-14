@@ -8,62 +8,152 @@ export default function Section3() {
             image: "/demo/danhmuc_1.webp",
             category: "Maybelline",
             title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-            priceOld: 288000,
-            priceNew: 179000,
-            discount: 38,
             banner: "/demo/banner-22-25-monthly.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/danhmuc_1.webp",
             category: "Maybelline",
             title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-            priceOld: 288000,
-            priceNew: 179000,
-            discount: 38,
             banner: "/demo/banner-22-25-monthly.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/danhmuc_1.webp",
             category: "Maybelline",
             title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-            priceOld: 288000,
-            priceNew: 179000,
-            discount: 38,
             banner: "/demo/banner-22-25-monthly.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/danhmuc_1.webp",
             category: "Maybelline",
             title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-            priceOld: 288000,
-            priceNew: 179000,
-            discount: 38,
             banner: "/demo/banner-22-25-monthly.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         },
         {
             image: "/demo/danhmuc_1.webp",
             category: "Maybelline",
             title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-            priceOld: 288000,
-            priceNew: 179000,
-            discount: 38,
             banner: "/demo/banner-22-25-monthly.webp",
             deal: "/demo/deal.webp",
-            link: "#"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         }
     ]
     return (
         <>
             <div className="container mx-auto">
-                <Title title="Top sản phẩm bán chạy" />
+                <Title title="Top sản phẩm bán chạy" link="/products"/>
                 <div className="grid grid-cols-5 gap-[25px]">
                     {data.map((item: any, index: number) => (
                         <CardItem
@@ -71,13 +161,12 @@ export default function Section3() {
                             image={item.image}
                             category={item.category}
                             title={item.title}
-                            priceNew={item.priceNew}
-                            priceOld={item.priceOld}
-                            discount={item.discount}
                             banner={item.banner}
                             deal={item.deal}
-                            className="bg-[#F7F7F7]"
+                            className=""
                             link={item.link}
+                            priceByVolume={item.priceByVolume}
+                            uses={item.uses}
                         />
                     ))}
                 </div>
