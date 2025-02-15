@@ -12,8 +12,8 @@ export default function BlogItem(props: {
         <>
             <div className="">
                 <Link href={link} className="relative">
-                    <div className="w-[303px] h-[190px]">
-                        <img src={image} className="w-full h-full object-cover rounded-t-[10px]" />
+                    <div className="w-[303px] h-[190px] overflow-hidden rounded-t-[10px]">
+                        <img src={image} className="w-full h-full object-cover image-blog-home" />
                     </div>
                     <p className="text-white absolute bottom-[0] rounded-tr-[40px] text-[14px] font-[500] bg-[#94C83D] w-[120px] h-[32px] flex items-center justify-center">{day}</p>
                 </Link>

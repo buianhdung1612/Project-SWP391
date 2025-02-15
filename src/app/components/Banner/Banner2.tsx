@@ -8,7 +8,7 @@ export default function Banner2() {
     ]
     return (
         <>
-            <div className="container mx-auto flex justify-between mt-[20px]">
+            <div className="container mx-auto flex justify-between mt-[50px]">
                 {data.map((item: string, index: number) => (
                     <div className="w-[412px] h-[196px]" key={index}>
                         <Link href="/products">

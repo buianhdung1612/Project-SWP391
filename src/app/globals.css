@@ -16,7 +16,10 @@ li {
 
 .header {
     transition: 600ms all;
-    box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2),0 6px 20px 0 rgba(0,0,0,0.19);
+}
+
+.shadow {
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
 }
 
 .login::before {
@@ -93,7 +96,7 @@ li {
 
 .search-order {
     box-shadow: 3px 3px 3px #ccc;
-    border: thin solid rgba(228,228,228,1);
+    border: thin solid rgba(228, 228, 228, 1);
 }
 
 .sale-code {
@@ -115,7 +118,7 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .cart-hover-show {
-    -webkit-box-shadow: 0px 3px 25px 0px rgba(31,38,67,0.1);
+    -webkit-box-shadow: 0px 3px 25px 0px rgba(31, 38, 67, 0.1);
 }
 
 .input-checkout:focus {
@@ -123,12 +126,37 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .blog-image-first {
-    background: linear-gradient(180deg, rgba(51,51,51,0) 0%, #333 100%);
+    background: linear-gradient(180deg, rgba(51, 51, 51, 0) 0%, #333 100%);
 }
 
 .card-see-quick {
-    box-shadow: 0px 0px 7px rgba(0,0,0,0.3);
+    box-shadow: 0px 0px 7px rgba(0, 0, 0, 0.3);
     transition: all 0.3s ease-in-out 0s;
+}
+
+.image-section2-home {
+    transform: scale(1);
+    transition: all 0.5s ease;
+}
+
+.image-section2-home:hover {
+    transform: scale(1.1);
+}
+
+.image-blog-home {
+    transition: .3s ease-in-out all;
+}
+
+.image-blog-home:hover {
+    transform: scale(1.1);
+}
+
+.image-blog-page {
+    transition: .3s ease-in-out all;
+}
+
+.image-blog-page:hover {
+    transform: scale(1.2);
 }
 
 
@@ -142,6 +170,7 @@ input[type="number"]::-webkit-inner-spin-button {
     margin-left: 300px;
     background-color: #DCE7FF;
 }
+
 /* End Body */
 
 /* Header */
@@ -186,6 +215,7 @@ input[type="number"]::-webkit-inner-spin-button {
     object-fit: cover;
     object-position: center;
 }
+
 /* End Header */
 
 /* Sider */
@@ -233,6 +263,7 @@ input[type="number"]::-webkit-inner-spin-button {
     padding: 10px 15px;
     font-size: 18px;
 }
+
 /* End Sider */
 
 .block-main {

@@ -37,6 +37,15 @@ const data: any = [
         image3: "/demo/danhmuc_1.webp",
         image4: "/demo/danhmuc_1.webp",
         image5: "/demo/danhmuc_1.webp"
+    },
+    {
+        title: "Trang điểm",
+        quantity: "15",
+        image1: "/demo/danhmuc_1.webp",
+        image2: "/demo/danhmuc_1.webp",
+        image3: "/demo/danhmuc_1.webp",
+        image4: "/demo/danhmuc_1.webp",
+        image5: "/demo/danhmuc_1.webp"
     }
 ]
 

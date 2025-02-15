@@ -93,8 +93,8 @@ export default function BlogPage() {
                     <div className="grid grid-cols-2 grid-rows-2 gap-[20px]">
                         {data.slice(4, 8).map((item: BlogItem, index: number) => (
                             <div className="w-full" key={index}>
-                                <div className="w-full h-[290px] ">
-                                    <img src="/demo/blog-image.webp" className="w-full h-full object-cover rounded-[10px]" />
+                                <div className="w-full h-[290px] overflow-hidden rounded-[10px] cursor-pointer">
+                                    <img src="/demo/blog-image.webp" className="w-full h-full object-cover image-blog-page" />
                                 </div>
                                 <div className="mt-[10px]">
                                     <Link href="#" className="text-[18px] text-[#222] font-[600] hover:text-primary">{item.title}</Link>

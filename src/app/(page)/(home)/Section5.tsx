@@ -3,9 +3,68 @@
 import CardItem from "@/app/components/Card/CardItem";
 import Title from "@/app/components/title/Title";
 import { useState } from "react";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import '../../(page)/swiper.css';
+import { Navigation } from 'swiper/modules';
 
 export default function Section5() {
     const dataTayTrang: any = [
+        // {
+        //     image: "/demo/tay-trang.webp",
+        //     category: "AHA",
+        //     title: "Nước Tẩy Trang Nature Republic Chiết Xuất AHA 500ml Good Skin AHA Ampoule Cleansing Water",
+        //     link: "/detail/123",
+        //     priceByVolume: [
+        //         {
+        //             volume: 30,
+        //             priceNew: 312000,
+        //             price: 395000,
+        //             discount: 22
+        //         },
+        //         {
+        //             volume: 95,
+        //             priceNew: 400000,
+        //             price: 500000,
+        //             discount: 20
+        //         },
+        //         {
+        //             volume: 400,
+        //             priceNew: 585000,
+        //             price: 750000,
+        //             discount: 22
+        //         }
+        //     ],
+        //     uses: "Dành cho da nhạy cảm"
+        // },
+        // {
+        //     image: "/demo/tay-trang.webp",
+        //     category: "AHA",
+        //     title: "Nước Tẩy Trang Nature Republic Chiết Xuất AHA 500ml Good Skin AHA Ampoule Cleansing Water",
+        //     link: "/detail/123",
+        //     priceByVolume: [
+        //         {
+        //             volume: 30,
+        //             priceNew: 312000,
+        //             price: 395000,
+        //             discount: 22
+        //         },
+        //         {
+        //             volume: 95,
+        //             priceNew: 400000,
+        //             price: 500000,
+        //             discount: 20
+        //         },
+        //         {
+        //             volume: 400,
+        //             priceNew: 585000,
+        //             price: 750000,
+        //             discount: 22
+        //         }
+        //     ],
+        //     uses: "Dành cho da nhạy cảm"
+        // },
         {
             image: "/demo/tay-trang.webp",
             category: "AHA",
@@ -170,6 +229,60 @@ export default function Section5() {
         }
     ]
     const dataSuaRuaMat: any = [
+        // {
+        //     image: "/demo/sua-rua-mat.webp",
+        //     category: "SVR",
+        //     title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
+        //     link: "/detail/123",
+        //     priceByVolume: [
+        //         {
+        //             volume: 30,
+        //             priceNew: 312000,
+        //             price: 395000,
+        //             discount: 22
+        //         },
+        //         {
+        //             volume: 95,
+        //             priceNew: 400000,
+        //             price: 500000,
+        //             discount: 20
+        //         },
+        //         {
+        //             volume: 400,
+        //             priceNew: 585000,
+        //             price: 750000,
+        //             discount: 22
+        //         }
+        //     ],
+        //     uses: "Dành cho da nhạy cảm"
+        // },
+        // {
+        //     image: "/demo/sua-rua-mat.webp",
+        //     category: "SVR",
+        //     title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
+        //     link: "/detail/123",
+        //     priceByVolume: [
+        //         {
+        //             volume: 30,
+        //             priceNew: 312000,
+        //             price: 395000,
+        //             discount: 22
+        //         },
+        //         {
+        //             volume: 95,
+        //             priceNew: 400000,
+        //             price: 500000,
+        //             discount: 20
+        //         },
+        //         {
+        //             volume: 400,
+        //             priceNew: 585000,
+        //             price: 750000,
+        //             discount: 22
+        //         }
+        //     ],
+        //     uses: "Dành cho da nhạy cảm"
+        // },
         {
             image: "/demo/sua-rua-mat.webp",
             category: "SVR",
@@ -309,13 +422,85 @@ export default function Section5() {
             image: "/demo/sua-rua-mat.webp",
             category: "SVR",
             title: "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu 400ml Sebiaclear Gel Moussant",
-            priceNew: 429000,
-            priceOld: 540000,
-            discount: 21,
-            link: "/detail/123"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         }
     ]
     const dataToner: any = [
+        // {
+        //     image: "/demo/toner.webp",
+        //     category: "Laneige",
+        //     title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
+        //     link: "/detail/123",
+        //     priceByVolume: [
+        //         {
+        //             volume: 30,
+        //             priceNew: 312000,
+        //             price: 395000,
+        //             discount: 22
+        //         },
+        //         {
+        //             volume: 95,
+        //             priceNew: 400000,
+        //             price: 500000,
+        //             discount: 20
+        //         },
+        //         {
+        //             volume: 400,
+        //             priceNew: 585000,
+        //             price: 750000,
+        //             discount: 22
+        //         }
+        //     ],
+        //     uses: "Dành cho da nhạy cảm"
+        // },
+        // {
+        //     image: "/demo/toner.webp",
+        //     category: "Laneige",
+        //     title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
+        //     link: "/detail/123",
+        //     priceByVolume: [
+        //         {
+        //             volume: 30,
+        //             priceNew: 312000,
+        //             price: 395000,
+        //             discount: 22
+        //         },
+        //         {
+        //             volume: 95,
+        //             priceNew: 400000,
+        //             price: 500000,
+        //             discount: 20
+        //         },
+        //         {
+        //             volume: 400,
+        //             priceNew: 585000,
+        //             price: 750000,
+        //             discount: 22
+        //         }
+        //     ],
+        //     uses: "Dành cho da nhạy cảm"
+        // },
         {
             image: "/demo/toner.webp",
             category: "Laneige",
@@ -455,10 +640,28 @@ export default function Section5() {
             image: "/demo/toner.webp",
             category: "Laneige",
             title: "Toner Laneige Dưỡng Ẩm Dành Cho Da Khô 200ml Essential Power Skin Refiner Moisture",
-            priceNew: 158000,
-            priceOld: 190000,
-            discount: 17,
-            link: "/detail/123"
+            link: "/detail/123",
+            priceByVolume: [
+                {
+                    volume: 30,
+                    priceNew: 312000,
+                    price: 395000,
+                    discount: 22
+                },
+                {
+                    volume: 95,
+                    priceNew: 400000,
+                    price: 500000,
+                    discount: 20
+                },
+                {
+                    volume: 400,
+                    priceNew: 585000,
+                    price: 750000,
+                    discount: 22
+                }
+            ],
+            uses: "Dành cho da nhạy cảm"
         }
     ]
 
@@ -503,8 +706,7 @@ export default function Section5() {
                         {item.content}
                     </button>
                 ))}
-            </div>
-
+            </div>          
             <div className="container mx-auto flex">
                 <div className="w-[412px] h-[685px] mr-[30px]">
                     <img src="/demo/buy5-gift1.webp" className="w-full h-full object-cover rounded-[5px]" />
