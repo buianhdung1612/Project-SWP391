@@ -3,11 +3,9 @@
 import CardItem from "@/app/components/Card/CardItem";
 import Title from "@/app/components/title/Title";
 import { useState } from "react";
-import { Swiper, SwiperSlide } from 'swiper/react';
 import 'swiper/css';
 import 'swiper/css/navigation';
 import '../../(page)/swiper.css';
-import { Navigation } from 'swiper/modules';
 
 export default function Section5() {
     const dataTayTrang: any = [

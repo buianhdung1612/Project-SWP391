@@ -158,8 +158,6 @@ input[type="number"]::-webkit-inner-spin-button {
 .image-blog-page:hover {
     transform: scale(1.2);
 }
-
-
 /* Body */
 .body {
     display: flex;
