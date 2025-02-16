@@ -1,7 +1,7 @@
 "use client"
 
 import React from 'react';
-import { Box, Typography, TextField, FormControl, Button, Paper, FormLabel, RadioGroup, FormControlLabel, Radio } from '@mui/material';
+import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 
 // interface dataProduct {
 //     title: string,
@@ -13,8 +13,7 @@ export default function CreateProductAdminPage() {
     const handleSubmit = (event: any) => {
         event.preventDefault();
 
-        const arrVariants = [];
-        const variants = event.target.variants.value;
+        
 
         
     }
