@@ -64,7 +64,8 @@ export default function FormOrder() {
                 <div className="">
                     <TitleCheckout text="Thông tin nhận hàng" />
                     <FormInputCheckout label="Email" type="email" name="email" id="email" required />
-                    <FormInputCheckout label="Họ và tên" name="fullname" id="fullname" required />
+                    <FormInputCheckout label="Họ" name="firstname" id="firstname" required />
+                    <FormInputCheckout label="Tên" name="lastname" id="lastname" required />
                     <FormInputCheckout label="Số điện thoại (tùy chọn)" name="phone" id="phone" />
                     <FormInputCheckout label="Địa chỉ (tùy chọn)" name="address" id="address" />
                     <div className="relative">

@@ -7,15 +7,28 @@ import { BiDetail } from "react-icons/bi";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
 export default function ProductsAdminPage() {
-    const [products, setProducts] = useState([]);
+    const [data, setData] = useState({
+        totalPages: 1,
+        totalItems: 1,
+        pageSize: 4,
+        currentPage: 1,
+        products: []
+    });
+
     const linkApi = 'https://freshskinweb.onrender.com/admin/products';
+
+    const [inputChecked, setInputChecked] = useState<number[]>([]);
 
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
     const [sort, setSort] = useState("position-desc");
+    const [page, setPage] = useState(1);
+    const [changeMulti, setChangeMulti] = useState("active");
+    const [deleteMulti, setDeleteMulti] = useState([]);
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);
@@ -45,6 +58,18 @@ export default function ProductsAdminPage() {
         }
         // Hết Tìm kiếm sản phẩm
 
+        // Phân trang
+        const pageCurrent = urlCurrent.searchParams.get('page');
+        setPage(pageCurrent ? parseInt(pageCurrent) : 1);
+
+        if (pageCurrent) {
+            api.searchParams.set('page', pageCurrent);
+        }
+        else {
+            api.searchParams.delete('page');
+        }
+        // Hết Phân trang
+
         // Sắp xếp theo tiêu chí
         const sortKeyCurrent = urlCurrent.searchParams.get('sortKey');
         const sortValueCurrent = urlCurrent.searchParams.get('sortValue');
@@ -68,7 +93,7 @@ export default function ProductsAdminPage() {
         const fetchProducts = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
-            setProducts(data.data.products);
+            setData(data.data);
         };
 
         fetchProducts();
@@ -133,6 +158,86 @@ export default function ProductsAdminPage() {
     }
     // Hết Thay đổi trạng thái 1 sản phẩm
 
+    // Thay đổi trạng thái nhiều sản phẩm
+    const handleChangeMulti = async (event: any) => {
+        event.preventDefault();
+
+        const statusChange = changeMulti;
+
+        if (statusChange == "delete") {
+            const path = `${linkApi}/deleteT`;
+
+            const data: any = {
+                id: inputChecked
+            }
+
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+
+            const dataResponse = await response.json();
+
+            if (dataResponse.code == 200) {
+                location.reload();
+            }
+
+            return;
+        }
+
+        const path = `${linkApi}/updateStatus`;
+
+        const data: any = {
+            id: inputChecked,
+            status: statusChange
+        }
+
+        const response = await fetch(path, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
+
+    const handleInputChecked = (event: any, id: number) => {
+        if (event.target.checked) {
+            setInputChecked(prev => [...prev, id]);
+        } else {
+            setInputChecked(prev => prev.filter(id => id !== id));
+        }
+    }
+    // Hết Thay đổi trạng thái nhiều sản phẩm
+
+    // Xóa một sản phẩm
+    const handleDeleteOneProduct = async (id: number) => {
+        const path = `${linkApi}/deleteT/${id}`;
+
+        const response = await fetch(path, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
+    // Hết Xóa một sản phẩm
+
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
         const value = event.target.value;
@@ -151,6 +256,21 @@ export default function ProductsAdminPage() {
         location.href = url.href;
     }
     // Hết Sắp xếp theo tiêu chí
+
+    // Phân trang
+    const handlePagination = (event: any, page: number) => {
+        const url = new URL(location.href);
+
+        if (page) {
+            url.searchParams.set("page", page.toString());
+        }
+        else {
+            url.searchParams.delete("page");
+        }
+
+        location.href = url.href;
+    }
+    // Hết phân trang
 
     return (
         <Box p={3}>
@@ -182,7 +302,7 @@ export default function ProductsAdminPage() {
                                 name="keyword"
                                 defaultValue={keyword}
                                 InputLabelProps={{
-                                    shrink: true, // Giúp label không bị đè
+                                    shrink: true,
                                 }}
                             />
                             <Button variant="contained" color="success" type="submit">
@@ -213,60 +333,94 @@ export default function ProductsAdminPage() {
             </Paper>
 
             {/* Table */}
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell ></TableCell>
-                            <TableCell>STT</TableCell>
-                            <TableCell>Hình ảnh</TableCell>
-                            <TableCell>Tiêu đề</TableCell>
-                            <TableCell>Giá</TableCell>
-                            <TableCell>Trạng thái</TableCell>
-                            <TableCell>Vị trí</TableCell>
-                            {/* <TableCell>Tạo bởi</TableCell> */}
-                            {/* <TableCell>Cập nhật bởi</TableCell> */}
-                            <TableCell>Hành động</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {products.map((product: any, index: number) => (
-                            <TableRow key={product.id}>
-                                <TableCell padding="checkbox">
-                                    <Checkbox />
-                                </TableCell>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>
-                                    <img
-                                        src={product.thumbnail}
-                                        alt={product.title}
-                                        style={{ width: 100, height: 100, objectFit: "cover" }}
-                                    />
-                                </TableCell>
-                                <TableCell>{product.title}</TableCell>
-                                <TableCell>{100}</TableCell>
-                                <TableCell>
-                                    {product.status === "ACTIVE" && (
-                                        <Chip
-                                            label="Hoạt động"
-                                            color="success"
-                                            size="small"
-                                            variant="outlined"
-                                            onClick={() => handleChangeStatusOneProduct("inactive", `/edit/${product.id}`)}
+            <Paper sx={{ backgroundColor: "white", p: 2 }}>
+                <Typography variant="h6" gutterBottom sx={{ marginLeft: "20px" }}>
+                    Danh sách
+                </Typography>
+                <Box display="flex" gap={20} flexWrap="wrap">
+                    <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
+                        <Box display="flex" >
+                            <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
+                                <MenuItem value="active">Hoạt động</MenuItem>
+                                <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+                                <MenuItem value="delete">Xóa</MenuItem>
+                            </Select>
+                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
+                                Áp dụng
+                            </Button>
+                        </Box>
+                    </form>
+                    <Button
+                        variant="contained"
+                        startIcon={<DeleteIcon />}
+                        sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
+                    >
+                        Thùng rác
+                    </Button>
+                    <Button
+                        variant="outlined"
+                        color="success"
+                        sx={{ borderColor: 'green', color: 'green' }}
+                    >
+                        <Link href="/admin/products/create">
+                            + Thêm mới
+                        </Link>
+                    </Button>
+                </Box>
+                <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell ></TableCell>
+                                <TableCell>STT</TableCell>
+                                <TableCell>Hình ảnh</TableCell>
+                                <TableCell>Tiêu đề</TableCell>
+                                <TableCell>Giá</TableCell>
+                                <TableCell>Trạng thái</TableCell>
+                                <TableCell>Vị trí</TableCell>
+                                {/* <TableCell>Tạo bởi</TableCell> */}
+                                {/* <TableCell>Cập nhật bởi</TableCell> */}
+                                <TableCell>Hành động</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.products.map((product: any, index: number) => (
+                                <TableRow key={product.id}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
+                                        <Checkbox />
+                                    </TableCell>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>
+                                        <img
+                                            src={product.thumbnail}
+                                            alt={product.title}
+                                            style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
-                                    )}
-                                    {product.status === "INACTIVE" && (
-                                        <Chip
-                                            label="Dừng hoạt động"
-                                            color="error"
-                                            size="small"
-                                            variant="outlined"
-                                            onClick={() => handleChangeStatusOneProduct("active", `/edit/${product.id}`)}
-                                        />
-                                    )}
-                                </TableCell>
-                                <TableCell>{product.position}</TableCell>
-                                {/* <TableCell>
+                                    </TableCell>
+                                    <TableCell>{product.title}</TableCell>
+                                    <TableCell>{100}</TableCell>
+                                    <TableCell>
+                                        {product.status === "ACTIVE" && (
+                                            <Chip
+                                                label="Hoạt động"
+                                                color="success"
+                                                size="small"
+                                                variant="outlined"
+                                                onClick={() => handleChangeStatusOneProduct("inactive", `/edit/${product.id}`)}
+                                            />
+                                        )}
+                                        {product.status === "INACTIVE" && (
+                                            <Chip
+                                                label="Dừng hoạt động"
+                                                color="error"
+                                                size="small"
+                                                variant="outlined"
+                                                onClick={() => handleChangeStatusOneProduct("active", `/edit/${product.id}`)}
+                                            />
+                                        )}
+                                    </TableCell>
+                                    <TableCell>{product.position}</TableCell>
+                                    {/* <TableCell>
                                     {product.createdBy}
                                     <br />
                                     {product.createdAt}
@@ -276,46 +430,52 @@ export default function ProductsAdminPage() {
                                     <br />
                                     {product.updatedAt}
                                 </TableCell> */}
-                                <TableCell>
-                                    <div className="flex">
-                                        <Tooltip title="Chi tiết" placement="top">
-                                            <BiDetail className="text-[25px] text-[#138496] mr-2" />
-                                        </Tooltip>
-                                        <Tooltip title="Sửa" placement="top">
-                                            <MdEditNote className="text-[25px] text-[#E0A800]" />
-                                        </Tooltip>
-                                        <Tooltip title="Xóa" placement="top">
-                                            <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
-                                        </Tooltip>
-                                    </div>
-                                </TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
+                                    <TableCell>
+                                        <div className="flex">
+                                            <Tooltip title="Chi tiết" placement="top">
+                                                <Link href={`/admin/products/detail/${product.id}`}>
+                                                    <BiDetail className="text-[25px] text-[#138496] mr-2" />
+                                                </Link>
+                                            </Tooltip>
+                                            <Tooltip title="Sửa" placement="top">
+                                                <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                            </Tooltip>
+                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
+                                                <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
+                                            </Tooltip>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
+            </Paper>
+
 
             {/* Pagination */}
             <Stack spacing={2} marginTop={2}>
                 <Pagination
-                    count={9}
+                    count={data.totalPages}
                     color="primary"
+                    page={page}
                     variant="outlined"
                     shape="rounded"
-                    siblingCount={1} // Điều chỉnh số lượng nút hiển thị bên cạnh nút hiện tại
+                    siblingCount={1}
                     sx={{
                         '& .MuiPaginationItem-root': {
-                            backgroundColor: 'white', // Màu nền trắng
-                            color: 'blue', // Màu chữ
+                            backgroundColor: 'white',
+                            color: 'blue',
                             '&:hover': {
-                                backgroundColor: '#e0e0e0', // Màu nền khi hover
+                                backgroundColor: '#e0e0e0',
                             },
                         },
                         '& .Mui-selected': {
-                            backgroundColor: 'blue', // Màu nền khi được chọn
-                            color: 'white', // Màu chữ khi được chọn
+                            backgroundColor: 'blue',
+                            color: 'white',
                         },
                     }}
+                    onChange={handlePagination}
                 />
             </Stack>
 

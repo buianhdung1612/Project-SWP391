@@ -1,6 +1,7 @@
 interface initState {
     email: string,
-    fullname: string,
+    firstname: string,
+    lastname: string,
     phone: string,
     address: string,
     province: string,
@@ -13,7 +14,8 @@ interface initState {
 
 const initialState: initState = {
     email: "",
-    fullname: "",
+    firstname: "",
+    lastname: "",
     phone: "",
     address: "",
     province: "",
@@ -34,7 +36,8 @@ export const orderReducer = (state = initialState, action: any) => {
         case "ORDER_SUBMIT":
             return {
                 email: action.data.email,
-                fullname: action.data.fullname,
+                firstname: action.data.firstname,
+                lastname: action.data.lastname,
                 phone: action.data.phone,
                 address: action.data.address,
                 province: action.data.province,

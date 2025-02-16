@@ -68,8 +68,8 @@ export default function Sider() {
         <>
             <div className="sider">
                 <Link className="sider__logo" href="/admin/dashboard">
-                    <span className="sider__logo--black">MAIKA</span>
-                    <span className="sider__logo--yellow">COMPUTER</span>
+                    <span className="sider__logo--black">FRESH</span>
+                    <span className="sider__logo--yellow">SKINCARE</span>
                 </Link>
                 <div className="sider__menu">
                     <ul>

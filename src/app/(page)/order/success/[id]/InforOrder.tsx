@@ -6,7 +6,9 @@ import InforOrderTitle from "./InforTitleText";
 
 export default function InforOrder() {
     const email = useSelector((state: any) => state.orderReducer.email);
-    const fullname = useSelector((state: any) => state.orderReducer.fullname);
+    const firstname = useSelector((state: any) => state.orderReducer.firstname);
+    const lastname = useSelector((state: any) => state.orderReducer.lastname);
+    const fullname = firstname + " " + lastname;
     const phone = useSelector((state: any) => state.orderReducer.phone);
     const address = useSelector((state: any) => state.orderReducer.address);
     const method = useSelector((state: any) => state.orderReducer.method);

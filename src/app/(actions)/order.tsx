@@ -14,7 +14,8 @@ export const methodChoosen = (methodChoosen: boolean) => {
 
 export const orderSubmit = (data: {
     email: string,
-    fullname: string,
+    firstname: string,
+    lastname: string,
     phone: string,
     address: string,
     province: string,
@@ -22,7 +23,7 @@ export const orderSubmit = (data: {
     ward: string,
     method: string
 }) => {
-        
+    
     return {
         type: "ORDER_SUBMIT",
         data: data

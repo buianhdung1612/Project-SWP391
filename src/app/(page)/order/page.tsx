@@ -9,7 +9,8 @@ import { useRouter } from "next/navigation";
 
 interface DataSubmit {
     email: string,
-    fullname: string,
+    firstname: string,
+    lastname: string,
     phone: string,
     address: string,
     province: string,
@@ -32,7 +33,8 @@ export default function OrderPage() {
 
         const data: DataSubmit = {
             email: event.target.email.value,
-            fullname: event.target.fullname.value,
+            firstname: event.target.firstname.value,
+            lastname: event.target.lastname.value,
             phone: event.target.phone.value,
             address: event.target.address.value,
             province: event.target.province.value,
@@ -42,7 +44,7 @@ export default function OrderPage() {
         }
 
         dispatchOrder(orderSubmit(data));
-        router.push("/order/success/1");
+        router.push(`/order/success/1`);
     }
 
     return (
