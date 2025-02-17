@@ -2,6 +2,7 @@
 
 import { Inter } from "next/font/google";
 import "../globals.css";
+
 import HeaderAdmin from "../components/header/HeaderAdmin";
 import Sider from "../components/Sider/Sider";
 

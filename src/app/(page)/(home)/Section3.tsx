@@ -194,7 +194,7 @@ export default function Section3() {
             <div className="container mx-auto">
                 <Title title="Top sản phẩm bán chạy" link="/products" />
                 <Swiper
-                    navigation={true} 
+                    navigation={true}
                     modules={[Navigation]}
                     className="mySwiper"
                     spaceBetween={25}

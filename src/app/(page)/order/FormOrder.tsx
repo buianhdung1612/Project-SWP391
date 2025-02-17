@@ -58,6 +58,16 @@ export default function FormOrder() {
         }
     };
 
+    const handleClickBank = () => {
+        setBank(true);
+        setMeeting(false);
+    }
+
+    const handleClickMetting = () => {
+        setMeeting(true);
+        setBank(false);
+    }
+
     return (
         <>
             <div className="w-full grid grid-cols-2 gap-[28px]">
@@ -147,10 +157,12 @@ outline-none mb-[20px] text-[14px] font-[450]"
                         />
                     )}
                     <div className="relative">
-                        <input
-                            placeholder="Chuyển khoản"
-                            className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-bl-none rounded-br-none border border-solid outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
-                        />
+                        <div onClick={() => handleClickBank()}>
+                            <input
+                                placeholder="Chuyển khoản"
+                                className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-bl-none rounded-br-none border border-solid outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
+                            />
+                        </div>
                         <input type="radio" className="hidden" id="bank" name="method" value="bank" onChange={handleRadioBankChange} />
                         {bank ? (
                             <label htmlFor="bank" className="cursor-pointer absolute left-[15px] top-[22px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></label>
@@ -160,10 +172,12 @@ outline-none mb-[20px] text-[14px] font-[450]"
                         <FaMoneyBillAlt className="absolute top-[16px] right-[30px] text-[30px] text-[#1990c6]" />
                     </div>
                     <div className="relative">
-                        <input
-                            placeholder="Thanh toán khi nhận hàng"
-                            className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-tl-none rounded-tr-none border border-solid border-t-0 outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
-                        />
+                        <div onClick={() => handleClickMetting()}>
+                            <input
+                                placeholder="Thanh toán khi nhận hàng"
+                                className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-tl-none rounded-tr-none border border-solid border-t-0 outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
+                            />
+                        </div>
                         <input type="radio" className="hidden" id="meeting" name="method" value="meeting" onChange={handleRadioMeetingChange} />
                         {meeting ? (
                             <label htmlFor="meeting" className="cursor-pointer absolute left-[15px] top-[22px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></label>

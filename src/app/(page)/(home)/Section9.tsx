@@ -626,7 +626,8 @@ export default function Section9() {
             </div>
 
             <Swiper
-                navigation={true} modules={[Navigation]}
+                navigation={true} 
+                modules={[Navigation]}
                 className="mySwiper container mx-auto"
                 spaceBetween={20}
                 slidesPerView={5}
@@ -634,7 +635,6 @@ export default function Section9() {
                 {data.map((item: any, index: number) => (
                     <SwiperSlide key={index}>
                         <CardItem
-                            key={index}
                             image={item.image}
                             category={item.category}
                             title={item.title}

@@ -28,7 +28,7 @@ export default function ProductsAdminPage() {
     const [sort, setSort] = useState("position-desc");
     const [page, setPage] = useState(1);
     const [changeMulti, setChangeMulti] = useState("active");
-    
+
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);
@@ -238,6 +238,12 @@ export default function ProductsAdminPage() {
     }
     // Hết Xóa một sản phẩm
 
+    // Thay đổi vị trí sản phẩm
+    const handleChangePosition = (event: any) => {
+        console.log(event.target.value);
+    }
+    // Hết Thay đổi vị trí sản phẩm
+
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
         const value = event.target.value;
@@ -419,7 +425,21 @@ export default function ProductsAdminPage() {
                                             />
                                         )}
                                     </TableCell>
-                                    <TableCell>{product.position}</TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            type="number"
+                                            variant="outlined"
+                                            size="small"
+                                            sx={{
+                                                width: "60px"
+                                            }}
+                                            onChange={handleChangePosition}
+                                            InputProps={{
+                                                inputProps: { min: 0, step: 1 },
+                                            }}
+                                            defaultValue={32} 
+                                        />
+                                    </TableCell>
                                     {/* <TableCell>
                                     {product.createdBy}
                                     <br />

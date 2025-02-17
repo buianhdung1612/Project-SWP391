@@ -3,9 +3,7 @@
 import CardItem from "@/app/components/Card/CardItem";
 import Title from "@/app/components/title/Title";
 import { useState } from "react";
-import 'swiper/css';
-import 'swiper/css/navigation';
-import '../../(page)/swiper.css';
+import Link from "next/link";
 
 export default function Section5() {
     const dataTayTrang: any = [
@@ -691,7 +689,7 @@ export default function Section5() {
 
     return (
         <>
-            <Title title="Da đẹp - Thêm tự tin cùng Fresh Skin" link="/products"/>
+            <Title title="Da đẹp - Thêm tự tin cùng Fresh Skin" link="/products" />
             <div className="text-center mb-[20px]">
                 {dataButton.map((item: any, index: number) => (
                     <button
@@ -704,11 +702,11 @@ export default function Section5() {
                         {item.content}
                     </button>
                 ))}
-            </div>          
+            </div>
             <div className="container mx-auto flex">
-                <div className="w-[412px] h-[685px] mr-[30px]">
+                <Link href="/products" className="w-[412px] h-[685px] mr-[30px]">
                     <img src="/demo/buy5-gift1.webp" className="w-full h-full object-cover rounded-[5px]" />
-                </div>
+                </Link>
                 <div className="flex-1 grid grid-cols-3 gap-[30px]">
                     {data.map((item: any, index: number) => (
                         <CardItem

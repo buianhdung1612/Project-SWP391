@@ -1,5 +1,6 @@
 import ButtonCategory from "@/app/components/Button/ButtonCategory";
 import Title from "@/app/components/title/Title";
+import Link from "next/link";
 
 export default function Section4() {
     const data: any = [
@@ -40,13 +41,13 @@ export default function Section4() {
                     <ButtonCategory key={index} text={item} />
                 ))}
             </div>
-            <div className="container mx-auto mt-[40px] grid grid-cols-6 gap-[20px]">
+            <Link href="/products" className="container mx-auto mt-[40px] grid grid-cols-6 gap-[20px]">
                 {bannerImage.map((item: string, index: number) => (
                     <div className="w-[196px] h-[98px]" key={index}>
                         <img src={item} className="w-full h-full object-cover rounded-[5px]" />
                     </div>
                 ))}
-            </div>
+            </Link>
         </>
     )
 }

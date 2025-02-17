@@ -125,7 +125,7 @@ export default function CardItem(props: {
             </div>
 
             {isPopupOpen && (
-                <div className="fixed inset-0 bg-black bg-opacity-50 z-[99999] flex justify-center items-start pt-[8%]" onClick={handleClosePopup}>
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-[99999999] flex justify-center items-start pt-[8%]" onClick={handleClosePopup}>
                     <div className="bg-white rounded-[5px] w-[840px] p-5 relative" onClick={(e) => e.stopPropagation()}>
                         <button
                             className="absolute top-2 right-2 text-gray-500 hover:text-black"
@@ -169,7 +169,7 @@ export default function CardItem(props: {
                                         {priceByVolume.map((item: any, index: number) => (
                                             <button
                                                 key={index}
-                                                className={"text-[14px] mr-[10px] rounded-[5px] min-w-[30px] h-[30px] cursor-pointer border boder-solid text-center p-[5px] " +
+                                                className={"text-[14px] mr-[10px] rounded-[5px] min-w-[30px] h-[30px] cursor-pointer border border-solid text-center p-[5px] " +
                                                     (item.volume === currentVolume.volume
                                                         ? "bg-secondary border-[#ddd] text-white"
                                                         : "border-[#e4e4e4] text-[#00090F]"
