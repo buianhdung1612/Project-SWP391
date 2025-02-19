@@ -3,11 +3,9 @@
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { BiDetail } from "react-icons/bi";
-import { MdDeleteOutline, MdEditNote } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineSettingsBackupRestore } from "react-icons/md";
 
 import { useEffect, useState } from "react";
-import Link from "next/link";
 
 export default function ProductsAdminPage() {
     const [data, setData] = useState({
@@ -18,7 +16,7 @@ export default function ProductsAdminPage() {
         products: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/products';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/products/trash';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -221,10 +219,10 @@ export default function ProductsAdminPage() {
 
     // Xóa một sản phẩm
     const handleDeleteOneProduct = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
+        const path = `${linkApi}/delete/${id}`;
 
         const response = await fetch(path, {
-            method: "PATCH",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -356,24 +354,6 @@ export default function ProductsAdminPage() {
                             </Button>
                         </Box>
                     </form>
-                    <Button
-                        variant="contained"
-                        startIcon={<DeleteIcon />}
-                        sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
-                    >
-                        <Link href="/admin/products/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        color="success"
-                        sx={{ borderColor: 'green', color: 'green' }}
-                    >
-                        <Link href="/admin/products/create">
-                            + Thêm mới
-                        </Link>
-                    </Button>
                 </Box>
                 <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
                     <Table>
@@ -454,15 +434,10 @@ export default function ProductsAdminPage() {
                                 </TableCell> */}
                                     <TableCell>
                                         <div className="flex">
-                                            <Tooltip title="Chi tiết" placement="top">
-                                                <Link href={`/admin/products/detail/${product.id}`}>
-                                                    <BiDetail className="text-[25px] text-[#138496] mr-2" />
-                                                </Link>
+                                            <Tooltip title="Khôi phục" placement="top">
+                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500"/>
                                             </Tooltip>
-                                            <Tooltip title="Sửa" placement="top">
-                                                <MdEditNote className="text-[25px] text-[#E0A800]" />
-                                            </Tooltip>
-                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
+                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>
@@ -508,9 +483,7 @@ export default function ProductsAdminPage() {
                         Áp dụng
                     </Button>{" "}
                     <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
-                        <Link href="/admin/products/trash">
-                            Thùng rác
-                        </Link>
+                        Thùng rác
                     </Button>
                 </Box>
                 <Button variant="contained" color="primary" startIcon={<AddIcon />}>

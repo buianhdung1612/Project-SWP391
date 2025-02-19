@@ -35,7 +35,7 @@ export default function Section1() {
                 </form>
                 {/* Menu */}
                 <div className="flex-1 flex items-center">
-                    <Link href="#">
+                    <Link href="/quiz">
                         <div className="flex items-center">
                             <img src="testing.png" width={28} height={28} />
                             <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Loại Da Của Bạn</span>
