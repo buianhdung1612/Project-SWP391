@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
     ssr: false
 });
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox } from '@mui/material';
 import { MdDeleteForever } from 'react-icons/md';
 
@@ -126,7 +126,6 @@ export default function CreateProductAdminPage() {
     };
 
 
-
     return (
         <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
             <Typography variant="h4" gutterBottom>
@@ -208,7 +207,7 @@ export default function CreateProductAdminPage() {
                         type="number"
                         sx={{ marginBottom: 2, marginTop: 2 }}
                     />
-                    {/* <FormGroup row>
+                    <FormGroup row>
                         <FormControlLabel
                             control={<Checkbox checked={checked.oily} onChange={handleChange} name="oily" />}
                             label="Da dầu"
@@ -229,7 +228,7 @@ export default function CreateProductAdminPage() {
                             control={<Checkbox checked={checked.normal} onChange={handleChange} name="normal" />}
                             label="Da bình thường"
                         />
-                    </FormGroup> */}
+                    </FormGroup>
                     <TextField
                         label="Nguồn gốc"
                         name='origin'

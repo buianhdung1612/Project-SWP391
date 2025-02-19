@@ -1,5 +1,4 @@
 import { Editor } from '@tinymce/tinymce-react';
-import { useState } from 'react';
 
 interface TinyEditorProps {
     value: string;
