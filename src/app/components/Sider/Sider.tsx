@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ReactNode } from "react";
 import { FaBlog, FaBorderNone, FaJoomla, FaObjectGroup, FaTable, FaUsers } from "react-icons/fa";
 import { FaGaugeHigh, FaGear, FaGroupArrowsRotate, FaHurricane } from "react-icons/fa6";
+import { TbBrandCampaignmonitor } from "react-icons/tb";
 
 interface Menu {
     content: string,
@@ -20,6 +21,11 @@ const menu: Menu[] = [
         content: "Danh mục sản phẩm",
         icon: <FaTable />,
         link: "/admin/products-category"
+    },
+    {
+        content: "Thương hiệu",
+        icon: <TbBrandCampaignmonitor />,
+        link: "/admin/brands"
     },
     {
         content: "Sản phẩm",

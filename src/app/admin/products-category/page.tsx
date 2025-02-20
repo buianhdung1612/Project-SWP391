@@ -13,12 +13,12 @@ export default function ProductsAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
-        pageSize: 8,
+        pageSize: 4,
         currentPage: 1,
-        products: []
+        product_category: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/products';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/products/category';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -27,8 +27,7 @@ export default function ProductsAdminPage() {
     const [keyword, setKeyword] = useState("");
     const [sort, setSort] = useState("position-desc");
     const [page, setPage] = useState(1);
-    const [changeMulti, setChangeMulti] = useState("active");
-
+    const [changeMulti, setChangeMulti] = useState("ACTIVE");
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);
@@ -90,13 +89,13 @@ export default function ProductsAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchProducts = async () => {
+        const fetchProductsCategory = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchProducts();
+        fetchProductsCategory();
     }, []);
 
     // Lọc theo trạng thái
@@ -164,7 +163,7 @@ export default function ProductsAdminPage() {
 
         const statusChange = changeMulti;
 
-        if (statusChange == "delete") {
+        if (statusChange == "DELETE") {
             const path = `${linkApi}/deleteT`;
 
             const data: any = {
@@ -295,8 +294,8 @@ export default function ProductsAdminPage() {
                         <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
                         <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
                             <MenuItem value="">Tất cả</MenuItem>
-                            <MenuItem value="active">Hoạt động</MenuItem>
-                            <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+                            <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                            <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
                         </Select>
                     </FormControl>
                     <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
@@ -347,9 +346,9 @@ export default function ProductsAdminPage() {
                     <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
                         <Box display="flex" >
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                <MenuItem value="active">Hoạt động</MenuItem>
-                                <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="delete">Xóa</MenuItem>
+                                <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                                <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
+                                <MenuItem value="DELETE">Xóa</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -361,7 +360,7 @@ export default function ProductsAdminPage() {
                         startIcon={<DeleteIcon />}
                         sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
                     >
-                        <Link href="/admin/products/trash">
+                        <Link href="/admin/products-category/trash">
                             Thùng rác
                         </Link>
                     </Button>
@@ -392,38 +391,38 @@ export default function ProductsAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.products.map((product: any, index: number) => (
-                                <TableRow key={product.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
+                            {data.product_category.map((category: any, index: number) => (
+                                <TableRow key={category.id}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, category.id)}>
                                         <Checkbox />
                                     </TableCell>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={product.thumbnail}
-                                            alt={product.title}
+                                            src={category.thumbnail}
+                                            alt={category.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
                                     </TableCell>
-                                    <TableCell>{product.title}</TableCell>
+                                    <TableCell>{category.title}</TableCell>
                                     <TableCell>{100}</TableCell>
                                     <TableCell>
-                                        {product.status === "ACTIVE" && (
+                                        {category.status === "ACTIVE" && (
                                             <Chip
                                                 label="Hoạt động"
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("inactive", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOneProduct("INACTIVE", `/edit/${category.id}`)}
                                             />
                                         )}
-                                        {product.status === "INACTIVE" && (
+                                        {category.status === "INACTIVE" && (
                                             <Chip
                                                 label="Dừng hoạt động"
                                                 color="error"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("active", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOneProduct("ACTIVE", `/edit/${category.id}`)}
                                             />
                                         )}
                                     </TableCell>
@@ -455,14 +454,14 @@ export default function ProductsAdminPage() {
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Chi tiết" placement="top">
-                                                <Link href={`/admin/products/detail/${product.id}`}>
+                                                <Link href={`/admin/products/detail/${category.id}`}>
                                                     <BiDetail className="text-[25px] text-[#138496] mr-2" />
                                                 </Link>
                                             </Tooltip>
                                             <Tooltip title="Sửa" placement="top">
                                                 <MdEditNote className="text-[25px] text-[#E0A800]" />
                                             </Tooltip>
-                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
+                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(category.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>

@@ -43,7 +43,6 @@ export default function ContactPage() {
                             <button type="submit" className="bg-primary hover:bg-[#fcaf17] rounded-[5px] text-white px-[20px] h-[35px] text-[14px]">Gửi thông tin</button>
                         </form>
                     </div>
-
                 </div>
                 <div className="w-[50%] px-[10px]">
                     <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3918.6100105370224!2d106.8073080748058!3d10.84112758931163!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31752731176b07b1%3A0xb752b24b379bae5e!2zVHLGsOG7nW5nIMSQ4bqhaSBo4buNYyBGUFQgVFAuIEhDTQ!5e0!3m2!1svi!2s!4v1738056836546!5m2!1svi!2s" width="100%" height="570"></iframe>

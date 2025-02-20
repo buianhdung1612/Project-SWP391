@@ -25,7 +25,7 @@ export default function QuizQuestion(props: any) {
 
     return (
         <>
-            <div className="h-[55vh]">
+            <div className="h-[52vh]">
                 <div className="max-w-[900px] flex justify-center mx-auto px-[16px] pt-[30px] pb-[30px]">
                     <div className="text-[18px] text-[#262626] font-[700]">{question}</div>
                 </div>

@@ -1,11 +1,10 @@
 "use client"
 import dynamic from 'next/dynamic';
-
 const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
     ssr: false
 });
-import React, { useState } from 'react';
-import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox } from '@mui/material';
+import React, { useEffect, useState } from 'react';
+import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, InputLabel, Select, MenuItem } from '@mui/material';
 import { MdDeleteForever } from 'react-icons/md';
 
 // interface dataProduct {
@@ -13,6 +12,8 @@ import { MdDeleteForever } from 'react-icons/md';
 //     description: string,
 //     variants: string,
 // }
+
+
 
 interface InputField {
     volume: string;
@@ -28,6 +29,8 @@ interface Variants {
 
 interface DataSubmit {
     title: string,
+    categoryId: number,
+    brandId: number,
     description: string,
     variants: Variants[],
     discountPercent: number,
@@ -44,6 +47,36 @@ interface DataSubmit {
 
 export default function CreateProductAdminPage() {
     const [description, setDescription] = useState('');
+    const [categoryCurrent, setCategoryCurrent] = useState("");
+    const [listCategory, setListCategory] = useState([]);
+    const [brandCurrent, setBrandCurrent] = useState("");
+    const [listBrand, setListBrand] = useState([]);
+
+    useEffect(() => {
+        const fetchCategories = async () => {
+            const response = await fetch('https://freshskinweb.onrender.com/admin/products/category/show');
+            const data = await response.json();
+            setListCategory(data.data);
+        };
+
+        fetchCategories();
+
+        const fetchBrands = async () => {
+            const response = await fetch('https://freshskinweb.onrender.com/admin/products/brand/show');
+            const data = await response.json();
+            setListBrand(data.data);
+        };
+
+        fetchBrands();
+    }, []);
+
+    const handleChangeCategory = (event: any) => {
+        setCategoryCurrent(event.target.value);
+    };
+
+    const handleChangeBrand = (event: any) => {
+        setBrandCurrent(event.target.value);
+    };
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -59,6 +92,8 @@ export default function CreateProductAdminPage() {
 
         const dataSubmit: DataSubmit = {
             title: event.target.title.value,
+            categoryId: parseInt(categoryCurrent),
+            brandId: parseInt(brandCurrent),
             description: description,
             variants: inputs,
             discountPercent: event.target.discount.value,
@@ -82,8 +117,6 @@ export default function CreateProductAdminPage() {
         });
 
         const dataResponse = await response.json();
-        console.log(dataResponse); // Để kiểm tra phản hồi từ server
-
 
         if (dataResponse.code == 200) {
             location.reload();
@@ -139,8 +172,43 @@ export default function CreateProductAdminPage() {
                         name='title'
                         variant="outlined"
                         fullWidth
-                        sx={{ marginBottom: 2 }}
+                        sx={{ marginBottom: 3 }}
+                        required
                     />
+                    <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
+                        <InputLabel shrink={true}>-- Chọn danh mục --</InputLabel>
+                        <Select
+                            value={categoryCurrent}
+                            onChange={handleChangeCategory}
+                            label=" Chọn danh mục --"
+                            displayEmpty
+                        >
+                            <MenuItem value="">
+                                -- Chọn danh mục --
+                            </MenuItem>
+                            {listCategory.map((item: any, index: number) => (
+                                <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+                            ))}
+
+                        </Select>
+                    </FormControl>
+                    <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
+                        <InputLabel shrink={true}>-- Chọn thương hiệu --</InputLabel>
+                        <Select
+                            value={brandCurrent}
+                            onChange={handleChangeBrand}
+                            label=" Chọn thương hiệu --"
+                            displayEmpty
+                        >
+                            <MenuItem value="">
+                                -- Chọn thương hiệu --
+                            </MenuItem>
+                            {listBrand.map((item: any, index: number) => (
+                                <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+                            ))}
+
+                        </Select>
+                    </FormControl>
                     <FormControl fullWidth sx={{ marginBottom: 3 }}>
                         <RadioGroup
                             defaultValue={false}
@@ -198,6 +266,7 @@ export default function CreateProductAdminPage() {
                         fullWidth
                         type="number"
                         sx={{ marginBottom: 2 }}
+                        required
                     />
                     <TextField
                         label="Số lượng"
@@ -206,6 +275,7 @@ export default function CreateProductAdminPage() {
                         fullWidth
                         type="number"
                         sx={{ marginBottom: 2, marginTop: 2 }}
+                        required
                     />
                     <FormGroup row>
                         <FormControlLabel
@@ -230,11 +300,12 @@ export default function CreateProductAdminPage() {
                         />
                     </FormGroup>
                     <TextField
-                        label="Nguồn gốc"
+                        label="Xuất sứ"
                         name='origin'
                         variant="outlined"
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
+                        required
                     />
                     <TextField
                         label="Thành phần"
@@ -242,6 +313,7 @@ export default function CreateProductAdminPage() {
                         variant="outlined"
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
+                        required
                     />
                     <TextField
                         label="Hướng dẫn sử dụng"
@@ -249,6 +321,7 @@ export default function CreateProductAdminPage() {
                         variant="outlined"
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
+                        required
                     />
                     <TextField
                         label="Lợi ích"
@@ -256,6 +329,7 @@ export default function CreateProductAdminPage() {
                         variant="outlined"
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
+                        required
                     />
                     <TextField
                         label="Vấn đề da"
@@ -263,6 +337,7 @@ export default function CreateProductAdminPage() {
                         variant="outlined"
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
+                        required
                     />
                     <TextField
                         label="Vị trí (tự động tăng)"

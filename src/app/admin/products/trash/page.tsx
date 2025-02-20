@@ -6,8 +6,9 @@ import DeleteIcon from "@mui/icons-material/Delete";
 import { MdDeleteOutline, MdOutlineSettingsBackupRestore } from "react-icons/md";
 
 import { useEffect, useState } from "react";
+import Link from "next/link";
 
-export default function ProductsAdminPage() {
+export default function ProductsTrashAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
@@ -162,8 +163,8 @@ export default function ProductsAdminPage() {
 
         const statusChange = changeMulti;
 
-        if (statusChange == "delete") {
-            const path = `${linkApi}/deleteT`;
+        if (statusChange == "restore") {
+            const path = `${linkApi}/restore`;
 
             const data: any = {
                 id: inputChecked
@@ -185,6 +186,30 @@ export default function ProductsAdminPage() {
 
             return;
         }
+
+        // if (statusChange == "deleteDestroy") {
+        //     const path = `${linkApi}/delete`;
+
+        //     const data: any = {
+        //         id: inputChecked
+        //     }
+
+        //     const response = await fetch(path, {
+        //         method: "DELETE",
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         },
+        //         body: JSON.stringify(data)
+        //     });
+
+        //     const dataResponse = await response.json();
+
+        //     if (dataResponse.code == 200) {
+        //         location.reload();
+        //     }
+
+        //     return;
+        // }
 
         const path = `${linkApi}/updateStatus`;
 
@@ -217,12 +242,31 @@ export default function ProductsAdminPage() {
     }
     // Hết Thay đổi trạng thái nhiều sản phẩm
 
-    // Xóa một sản phẩm
+    // Xóa vĩnh viễn một sản phẩm
     const handleDeleteOneProduct = async (id: number) => {
         const path = `${linkApi}/delete/${id}`;
 
         const response = await fetch(path, {
             method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
+    // Hết Xóa một sản phẩm
+
+    // Khôi phục một sản phẩm
+    const handleRestoreOneProduct = async (id: number) => {
+        const path = `${linkApi}/restore/${id}`;
+
+        const response = await fetch(path, {
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -347,13 +391,23 @@ export default function ProductsAdminPage() {
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                 <MenuItem value="active">Hoạt động</MenuItem>
                                 <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="delete">Xóa</MenuItem>
+                                <MenuItem value="restore">Khôi phục</MenuItem>
+                                <MenuItem value="deleteDestroy">Xóa vĩnh viễn</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
                             </Button>
                         </Box>
                     </form>
+                    <Button
+                        variant="outlined"
+                        color="success"
+                        sx={{ borderColor: 'green', color: 'green' }}
+                    >
+                        <Link href="/admin/products">
+                            Danh sách sản phẩm
+                        </Link>
+                    </Button>
                 </Box>
                 <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
                     <Table>
@@ -435,7 +489,7 @@ export default function ProductsAdminPage() {
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Khôi phục" placement="top">
-                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500"/>
+                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOneProduct(product.id)} />
                                             </Tooltip>
                                             <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />

@@ -3,22 +3,21 @@
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { BiDetail } from "react-icons/bi";
-import { MdDeleteOutline, MdEditNote } from "react-icons/md";
+import { MdDeleteOutline, MdOutlineSettingsBackupRestore } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function ProductsAdminPage() {
+export default function ProductsCategoryTrashAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
-        pageSize: 8,
+        pageSize: 4,
         currentPage: 1,
-        products: []
+        product_category: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/products';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/products/category/trash';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -27,7 +26,7 @@ export default function ProductsAdminPage() {
     const [keyword, setKeyword] = useState("");
     const [sort, setSort] = useState("position-desc");
     const [page, setPage] = useState(1);
-    const [changeMulti, setChangeMulti] = useState("active");
+    const [changeMulti, setChangeMulti] = useState("ACTIVE");
 
 
     useEffect(() => {
@@ -46,7 +45,7 @@ export default function ProductsAdminPage() {
         }
         // Hết Lọc theo trạng thái
 
-        // Tìm kiếm sản phẩm
+        // Tìm kiếm danh mục sản phẩm
         const keywordCurrent = urlCurrent.searchParams.get('keyword');
         setKeyword(keywordCurrent ?? "");
 
@@ -56,7 +55,7 @@ export default function ProductsAdminPage() {
         else {
             api.searchParams.delete('keyword');
         }
-        // Hết Tìm kiếm sản phẩm
+        // Hết Tìm kiếm danh mục sản phẩm
 
         // Phân trang
         const pageCurrent = urlCurrent.searchParams.get('page');
@@ -90,13 +89,13 @@ export default function ProductsAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchProducts = async () => {
+        const fetchProductsCategory = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchProducts();
+        fetchProductsCategory();
     }, []);
 
     // Lọc theo trạng thái
@@ -115,7 +114,7 @@ export default function ProductsAdminPage() {
     }
     // Hết Lọc theo trạng thái
 
-    // Tìm kiếm sản phẩm
+    // Tìm kiếm danh mục sản phẩm
     const handleSumbitSearch = async (event: any) => {
         event.preventDefault();
 
@@ -131,9 +130,9 @@ export default function ProductsAdminPage() {
 
         location.href = url.href;
     }
-    // Hết Tìm kiếm sản phẩm
+    // Hết Tìm kiếm danh mục sản phẩm
 
-    // Thay đổi trạng thái 1 sản phẩm
+    // Thay đổi trạng thái 1 danh mục sản phẩm
     const handleChangeStatusOneProduct = async (status: string, dataPath: string) => {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
@@ -156,16 +155,16 @@ export default function ProductsAdminPage() {
             location.reload();
         }
     }
-    // Hết Thay đổi trạng thái 1 sản phẩm
+    // Hết Thay đổi trạng thái 1 danh mục sản phẩm
 
-    // Thay đổi trạng thái nhiều sản phẩm
+    // Thay đổi trạng thái nhiều danh mục sản phẩm
     const handleChangeMulti = async (event: any) => {
         event.preventDefault();
 
         const statusChange = changeMulti;
 
-        if (statusChange == "delete") {
-            const path = `${linkApi}/deleteT`;
+        if (statusChange == "RESTORE") {
+            const path = `${linkApi}/restore`;
 
             const data: any = {
                 id: inputChecked
@@ -187,6 +186,30 @@ export default function ProductsAdminPage() {
 
             return;
         }
+
+        // if (statusChange == "DELETEDESTROY") {
+        //     const path = `${linkApi}/delete`;
+
+        //     const data: any = {
+        //         id: inputChecked
+        //     }
+
+        //     const response = await fetch(path, {
+        //         method: "PATCH",
+        //         headers: {
+        //             "Content-Type": "application/json"
+        //         },
+        //         body: JSON.stringify(data)
+        //     });
+
+        //     const dataResponse = await response.json();
+
+        //     if (dataResponse.code == 200) {
+        //         location.reload();
+        //     }
+
+        //     return;
+        // }
 
         const path = `${linkApi}/updateStatus`;
 
@@ -217,11 +240,30 @@ export default function ProductsAdminPage() {
             setInputChecked(prev => prev.filter(id => id !== id));
         }
     }
-    // Hết Thay đổi trạng thái nhiều sản phẩm
+    // Hết Thay đổi trạng thái nhiều danh mục sản phẩm
 
-    // Xóa một sản phẩm
+    // Xóa vĩnh viễn một danh mục sản phẩm
     const handleDeleteOneProduct = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
+        const path = `${linkApi}/delete/${id}`;
+
+        const response = await fetch(path, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
+    // Hết Xóa một danh mục sản phẩm
+
+    // Khôi phục một danh mục sản phẩm
+    const handleRestoreOneProduct = async (id: number) => {
+        const path = `${linkApi}/restore/${id}`;
 
         const response = await fetch(path, {
             method: "PATCH",
@@ -236,13 +278,13 @@ export default function ProductsAdminPage() {
             location.reload();
         }
     }
-    // Hết Xóa một sản phẩm
+    // Hết Xóa một danh mục sản phẩm
 
-    // Thay đổi vị trí sản phẩm
+    // Thay đổi vị trí danh mục sản phẩm
     const handleChangePosition = (event: any) => {
         console.log(event.target.value);
     }
-    // Hết Thay đổi vị trí sản phẩm
+    // Hết Thay đổi vị trí danh mục sản phẩm
 
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
@@ -282,7 +324,7 @@ export default function ProductsAdminPage() {
         <Box p={3}>
             {/* Header */}
             <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Trang danh sách sản phẩm
+                Trang danh sách danh mục sản phẩm
             </Typography>
 
             {/* Bộ lọc và Tìm kiếm */}
@@ -295,8 +337,8 @@ export default function ProductsAdminPage() {
                         <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
                         <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
                             <MenuItem value="">Tất cả</MenuItem>
-                            <MenuItem value="active">Hoạt động</MenuItem>
-                            <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+                            <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                            <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
                         </Select>
                     </FormControl>
                     <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
@@ -347,9 +389,10 @@ export default function ProductsAdminPage() {
                     <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
                         <Box display="flex" >
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                <MenuItem value="active">Hoạt động</MenuItem>
-                                <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="delete">Xóa</MenuItem>
+                                <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                                <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
+                                <MenuItem value="RESTORE">Khôi phục</MenuItem>
+                                <MenuItem value="DELETEDESTROY">Xóa vĩnh viễn</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -357,21 +400,12 @@ export default function ProductsAdminPage() {
                         </Box>
                     </form>
                     <Button
-                        variant="contained"
-                        startIcon={<DeleteIcon />}
-                        sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
-                    >
-                        <Link href="/admin/products/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                    <Button
                         variant="outlined"
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/products/create">
-                            + Thêm mới
+                        <Link href="/admin/products-category">
+                            Danh sách danh mục sản phẩm
                         </Link>
                     </Button>
                 </Box>
@@ -392,7 +426,7 @@ export default function ProductsAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.products.map((product: any, index: number) => (
+                            {data.product_category.map((product: any, index: number) => (
                                 <TableRow key={product.id}>
                                     <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
                                         <Checkbox />
@@ -414,7 +448,7 @@ export default function ProductsAdminPage() {
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("inactive", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOneProduct("INACTIVE", `/edit/${product.id}`)}
                                             />
                                         )}
                                         {product.status === "INACTIVE" && (
@@ -423,7 +457,7 @@ export default function ProductsAdminPage() {
                                                 color="error"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("active", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOneProduct("ACTIVE", `/edit/${product.id}`)}
                                             />
                                         )}
                                     </TableCell>
@@ -454,15 +488,10 @@ export default function ProductsAdminPage() {
                                 </TableCell> */}
                                     <TableCell>
                                         <div className="flex">
-                                            <Tooltip title="Chi tiết" placement="top">
-                                                <Link href={`/admin/products/detail/${product.id}`}>
-                                                    <BiDetail className="text-[25px] text-[#138496] mr-2" />
-                                                </Link>
+                                            <Tooltip title="Khôi phục" placement="top">
+                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOneProduct(product.id)} />
                                             </Tooltip>
-                                            <Tooltip title="Sửa" placement="top">
-                                                <MdEditNote className="text-[25px] text-[#E0A800]" />
-                                            </Tooltip>
-                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
+                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>
@@ -508,9 +537,7 @@ export default function ProductsAdminPage() {
                         Áp dụng
                     </Button>{" "}
                     <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
-                        <Link href="/admin/products/trash">
-                            Thùng rác
-                        </Link>
+                        Thùng rác
                     </Button>
                 </Box>
                 <Button variant="contained" color="primary" startIcon={<AddIcon />}>

@@ -9,16 +9,16 @@ import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function ProductsAdminPage() {
+export default function BrandsAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
-        pageSize: 8,
+        pageSize: 4,
         currentPage: 1,
-        products: []
+        product_category: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/products';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/products/brand';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -392,7 +392,7 @@ export default function ProductsAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.products.map((product: any, index: number) => (
+                            {data.product_category.map((product: any, index: number) => (
                                 <TableRow key={product.id}>
                                     <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
                                         <Checkbox />
