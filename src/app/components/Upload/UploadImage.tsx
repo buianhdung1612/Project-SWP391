@@ -32,15 +32,13 @@ export default function UploadImage(props: {
                 {imagePreviews.length > 0 && (
                     <div className="mt-[10px] flex gap-[10px] flex-wrap">
                         {imagePreviews.map((image: any, index: number) => (
-                            <div className="relative">
+                            <div key={`${image.name}-${image.lastModified}`} className="relative">
                                 <img
-                                    key={`${image.name}-${image.lastModified}`}
                                     src={URL.createObjectURL(image)}
                                     className="w-[200px] h-[200px] object-cover border border-solid border-[#aaaaaa] rounded-[5px] p-[10px]"
                                 />
                                 <button className="absolute right-2 top-1 text-[20px]" onClick={() => handleClickDelete(index)}>X</button>
                             </div>
-
                         ))}
                     </div>
                 )}

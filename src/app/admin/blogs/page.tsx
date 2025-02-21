@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Stack, Pagination } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 
 import { useEffect, useState } from "react";
@@ -131,28 +131,28 @@ export default function BlogsAdminPage() {
     // Hết Tìm kiếm sản phẩm
 
     // Thay đổi trạng thái 1 sản phẩm
-    const handleChangeStatusOneblog = async (status: string, dataPath: string) => {
-        const statusChange = status;
-        const path = `${linkApi}${dataPath}`;
+    // const handleChangeStatusOneblog = async (status: string, dataPath: string) => {
+    //     const statusChange = status;
+    //     const path = `${linkApi}${dataPath}`;
 
-        const data = {
-            status: statusChange
-        }
+    //     const data = {
+    //         status: statusChange
+    //     }
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+    //     const response = await fetch(path, {
+    //         method: "PATCH",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //         body: JSON.stringify(data)
+    //     });
 
-        const dataResponse = await response.json();
+    //     const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
-        }
-    }
+    //     if (dataResponse.code == 200) {
+    //         location.reload();
+    //     }
+    // }
     // Hết Thay đổi trạng thái 1 sản phẩm
 
     // Thay đổi trạng thái nhiều sản phẩm
@@ -183,38 +183,38 @@ export default function BlogsAdminPage() {
         }
     }
 
-    const handleInputChecked = (event: any, id: number) => {
-        if (event.target.checked) {
-            setInputChecked(prev => [...prev, id]);
-        } else {
-            setInputChecked(prev => prev.filter(id => id !== id));
-        }
-    }
+    // const handleInputChecked = (event: any, id: number) => {
+    //     if (event.target.checked) {
+    //         setInputChecked(prev => [...prev, id]);
+    //     } else {
+    //         setInputChecked(prev => prev.filter(id => id !== id));
+    //     }
+    // }
     // Hết Thay đổi trạng thái nhiều sản phẩm
 
     // Xóa một sản phẩm
-    const handleDeleteOneblog = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
+    // const handleDeleteOneblog = async (id: number) => {
+    //     const path = `${linkApi}/deleteT/${id}`;
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
+    //     const response = await fetch(path, {
+    //         method: "PATCH",
+    //         headers: {
+    //             "Content-Type": "application/json"
+    //         },
+    //     });
 
-        const dataResponse = await response.json();
+    //     const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
-        }
-    }
+    //     if (dataResponse.code == 200) {
+    //         location.reload();
+    //     }
+    // }
     // Hết Xóa một sản phẩm
 
     // Thay đổi vị trí sản phẩm
-    const handleChangePosition = (event: any) => {
-        console.log(event.target.value);
-    }
+    // const handleChangePosition = (event: any) => {
+    //     console.log(event.target.value);
+    // }
     // Hết Thay đổi vị trí sản phẩm
 
     // Sắp xếp theo tiêu chí
