@@ -1,12 +1,13 @@
-"use client"
+"use client";
 import dynamic from 'next/dynamic';
-const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
+const TinyEditor = dynamic(() => import('../../../../../../TinyEditor'), {
     ssr: false
 });
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, InputLabel, Select, MenuItem } from '@mui/material';
 import { MdDeleteForever } from 'react-icons/md';
 import UploadImage from '@/app/components/Upload/UploadImage';
+import { useParams } from 'next/navigation';
 
 interface InputField {
     volume: string;
@@ -39,34 +40,107 @@ interface DataSubmit {
     status: string
 }
 
-export default function CreateProductAdminPage() {
+export default function EditProductAdminPage() {
+    const { id } = useParams();
     const [description, setDescription] = useState('');
-    const [categoryCurrent, setCategoryCurrent] = useState('');
+    const [categoryCurrent, setCategoryCurrent] = useState("");
     const [listCategory, setListCategory] = useState([]);
-    const [brandCurrent, setBrandCurrent] = useState('');
+    const [brandCurrent, setBrandCurrent] = useState("");
     const [listBrand, setListBrand] = useState([]);
 
+    const [productInfo, setProductInfo] = useState({
+        title: "",
+        categories: {},
+        brandId: {},
+        description: "",
+        variants: [],
+        discountPercent: 0,
+        position: 0,
+        origin: "",
+        ingredients: "",
+        usageInstructions: "",
+        benefits: "",
+        skinIssues: "",
+        featured: false,
+        status: "ACTIVE"
+    });
+
+    // Variants
+    const [inputs, setInputs] = useState<InputField[]>([
+        { volume: "", price: "" }
+    ]);
+
+    const handleAddInput = () => {
+        setInputs([...inputs, { volume: "", price: "" }]);
+    };
+
+    const handleRemoveInput = (indexRemove: number) => {
+        const newInputs = inputs.filter((item, index) => index !== indexRemove);
+        setInputs(newInputs);
+    };
+
+    const handleInputChange = (index: number, field: 'volume' | 'price', value: string) => {
+        const newInputs = [...inputs];
+        newInputs[index][field] = value;
+        setInputs(newInputs);
+    };
+
+    // Skin Type
+    const [checked, setChecked] = useState({
+        oily: false,
+        dry: false,
+        combination: false,
+        sensitive: false,
+        normal: false,
+    });
+
+    const handleChange = (event: any) => {
+        setChecked({ ...checked, [event.target.name]: event.target.checked });
+    };
+
+    // Láy data
     useEffect(() => {
         const fetchCategories = async () => {
             const response = await fetch('https://freshskinweb.onrender.com/admin/products/category/show');
             const data = await response.json();
             setListCategory(data.data);
         };
+
         const fetchBrands = async () => {
             const response = await fetch('https://freshskinweb.onrender.com/admin/products/brand/show');
             const data = await response.json();
             setListBrand(data.data);
         };
 
+        const fetchProduct = async () => {
+            const response = await fetch(`https://freshskinweb.onrender.com/admin/products/${id}`);
+            const data = await response.json();
+            setProductInfo(data.data);
+            setDescription(data.data.description);
+            setInputs(data.data.variants);
+            setBrandCurrent(data.data.brand.id.toString());
+            setCategoryCurrent(data.data.category.id.toString())
+        };
+
         fetchCategories();
         fetchBrands();
+        fetchProduct();
     }, []);
 
     const handleChangeCategory = (event: any) => {
         setCategoryCurrent(event.target.value);
     };
+
     const handleChangeBrand = (event: any) => {
         setBrandCurrent(event.target.value);
+    };
+
+    const handleChangeFeatured = (event: any) => {
+        setProductInfo({ ...productInfo, featured: event.target.value === "true" });
+    };
+
+    const handleChangeStatus = (event: any) => {
+        setProductInfo({ ...productInfo, status: event.target.value });
     };
 
     const handleSubmit = async (event: any) => {
@@ -97,8 +171,10 @@ export default function CreateProductAdminPage() {
             position: event.target.position.value
         }
 
-        const response = await fetch('https://freshskinweb.onrender.com/admin/products/create', {
-            method: "POST",
+        console.log(dataSubmit);
+        
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/products/edit/${id}`, {
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -107,47 +183,15 @@ export default function CreateProductAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
+        if (dataResponse.code === 200) {
             location.reload();
         }
-    }
-
-    // Variants
-    const [inputs, setInputs] = useState<InputField[]>([
-        { volume: "", price: "" }
-    ]);
-    const handleAddInput = () => {
-        setInputs(
-            [...inputs, { volume: "", price: "" }]
-        );
     };
-    const handleRemoveInput = (indexRemove: number) => {
-        const newInputs = inputs.filter((item, index) => index !== indexRemove);
-        setInputs(newInputs);
-    };
-    const handleInputChange = (index: number, field: 'volume' | 'price', value: string) => {
-        const newInputs = [...inputs];
-        newInputs[index][field] = value;
-        setInputs(newInputs);
-    };
-
-    // SkinType
-    const [checked, setChecked] = useState({
-        oily: false,
-        dry: false,
-        combination: false,
-        sensitive: false,
-        normal: false,
-    });
-    const handleChangeCheckedSkinType = (event: any) => {
-        setChecked({ ...checked, [event.target.name]: event.target.checked });
-    };
-
 
     return (
         <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
             <Typography variant="h4" gutterBottom>
-                Trang tạo mới sản phẩm
+                Trang chỉnh sửa sản phẩm
             </Typography>
 
             <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
@@ -159,6 +203,8 @@ export default function CreateProductAdminPage() {
                         fullWidth
                         sx={{ marginBottom: 3 }}
                         required
+                        value={productInfo.title}
+                        onChange={(e) => setProductInfo({ ...productInfo, title: e.target.value })}
                     />
                     <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
                         <InputLabel shrink={true}>-- Chọn danh mục --</InputLabel>
@@ -168,13 +214,12 @@ export default function CreateProductAdminPage() {
                             label=" Chọn danh mục --"
                             displayEmpty
                         >
-                            <MenuItem value=''>
+                            <MenuItem value="">
                                 -- Chọn danh mục --
                             </MenuItem>
                             {listCategory.map((item: any, index: number) => (
                                 <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
                             ))}
-
                         </Select>
                     </FormControl>
                     <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
@@ -191,27 +236,25 @@ export default function CreateProductAdminPage() {
                             {listBrand.map((item: any, index: number) => (
                                 <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
                             ))}
-
                         </Select>
                     </FormControl>
                     <FormControl fullWidth sx={{ marginBottom: 3 }}>
                         <RadioGroup
-                            defaultValue={false}
+                            value={productInfo.featured.toString()}
                             name="featured"
+                            onChange={handleChangeFeatured}
                             row
                         >
-                            <FormControlLabel value={true} control={<Radio />} label="Nổi bật" />
-                            <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
+                            <FormControlLabel value="true" control={<Radio />} label="Nổi bật" />
+                            <FormControlLabel value="false" control={<Radio />} label="Không nổi bật" />
                         </RadioGroup>
                     </FormControl>
-                    <UploadImage label='Chọn ảnh' id="images" name="images" />
-
                     <h4>Mô tả</h4>
                     <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
-
+                    <UploadImage label='Chọn ảnh' id="images" name="images" />
                     <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
                         {inputs.map((input, index: number) => (
-                            <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                            <Box key={`${input.volume}-${input.price}-${index}`} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                 <TextField
                                     label="Dung tích (ml)"
                                     type='number'
@@ -231,7 +274,6 @@ export default function CreateProductAdminPage() {
                                     onChange={(e) => handleInputChange(index, 'price', e.target.value)}
                                     sx={{ ml: 1, width: "150px" }}
                                 />
-
                                 <MdDeleteForever onClick={() => handleRemoveInput(index)} className='text-red-400 text-[25px] ml-[10px] cursor-pointer' />
                             </Box>
                         ))}
@@ -247,26 +289,28 @@ export default function CreateProductAdminPage() {
                         type="number"
                         sx={{ marginBottom: 2 }}
                         required
+                        value={productInfo.discountPercent}
+                        onChange={(e) => setProductInfo({ ...productInfo, discountPercent: parseFloat(e.target.value) })}
                     />
                     <FormGroup row>
                         <FormControlLabel
-                            control={<Checkbox checked={checked.oily} onChange={handleChangeCheckedSkinType} name="oily" />}
+                            control={<Checkbox checked={checked.oily} onChange={handleChange} name="oily" />}
                             label="Da dầu"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={checked.dry} onChange={handleChangeCheckedSkinType} name="dry" />}
+                            control={<Checkbox checked={checked.dry} onChange={handleChange} name="dry" />}
                             label="Da khô"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={checked.combination} onChange={handleChangeCheckedSkinType} name="combination" />}
+                            control={<Checkbox checked={checked.combination} onChange={handleChange} name="combination" />}
                             label="Da hỗn hợp"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={checked.sensitive} onChange={handleChangeCheckedSkinType} name="sensitive" />}
+                            control={<Checkbox checked={checked.sensitive} onChange={handleChange} name="sensitive" />}
                             label="Da nhạy cảm"
                         />
                         <FormControlLabel
-                            control={<Checkbox checked={checked.normal} onChange={handleChangeCheckedSkinType} name="normal" />}
+                            control={<Checkbox checked={checked.normal} onChange={handleChange} name="normal" />}
                             label="Da bình thường"
                         />
                     </FormGroup>
@@ -277,6 +321,8 @@ export default function CreateProductAdminPage() {
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
                         required
+                        value={productInfo.origin}
+                        onChange={(e) => setProductInfo({ ...productInfo, origin: e.target.value })}
                     />
                     <TextField
                         label="Thành phần"
@@ -285,6 +331,8 @@ export default function CreateProductAdminPage() {
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
                         required
+                        value={productInfo.ingredients}
+                        onChange={(e) => setProductInfo({ ...productInfo, ingredients: e.target.value })}
                     />
                     <TextField
                         label="Hướng dẫn sử dụng"
@@ -293,6 +341,8 @@ export default function CreateProductAdminPage() {
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
                         required
+                        value={productInfo.usageInstructions}
+                        onChange={(e) => setProductInfo({ ...productInfo, usageInstructions: e.target.value })}
                     />
                     <TextField
                         label="Lợi ích"
@@ -301,6 +351,8 @@ export default function CreateProductAdminPage() {
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
                         required
+                        value={productInfo.benefits}
+                        onChange={(e) => setProductInfo({ ...productInfo, benefits: e.target.value })}
                     />
                     <TextField
                         label="Vấn đề da"
@@ -309,6 +361,8 @@ export default function CreateProductAdminPage() {
                         fullWidth
                         sx={{ marginBottom: 2, marginTop: 2 }}
                         required
+                        value={productInfo.skinIssues}
+                        onChange={(e) => setProductInfo({ ...productInfo, skinIssues: e.target.value })}
                     />
                     <TextField
                         label="Vị trí (tự động tăng)"
@@ -317,11 +371,14 @@ export default function CreateProductAdminPage() {
                         fullWidth
                         type="number"
                         sx={{ marginBottom: 2, marginTop: 2 }}
+                        value={productInfo.position}
+                        onChange={(e) => setProductInfo({ ...productInfo, position: parseInt(e.target.value) })}
                     />
                     <FormControl fullWidth sx={{ marginBottom: 3 }}>
                         <RadioGroup
-                            defaultValue="ACTIVE"
+                            value={productInfo.status}
                             name="status"
+                            onChange={handleChangeStatus}
                             row
                         >
                             <FormControlLabel value="ACTIVE" control={<Radio />} label="Hoạt động" />
@@ -329,10 +386,10 @@ export default function CreateProductAdminPage() {
                         </RadioGroup>
                     </FormControl>
                     <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                        Tạo sản phẩm
+                        Cập nhật sản phẩm
                     </Button>
                 </form>
             </Paper>
-        </Box >
+        </Box>
     );
 }

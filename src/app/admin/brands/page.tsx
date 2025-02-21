@@ -15,7 +15,7 @@ export default function BrandsAdminPage() {
         totalItems: 1,
         pageSize: 4,
         currentPage: 1,
-        product_category: []
+        brand: []
     });
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/products/brand';
@@ -90,13 +90,13 @@ export default function BrandsAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchProducts = async () => {
+        const fetchbrands = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchProducts();
+        fetchbrands();
     }, []);
 
     // Lọc theo trạng thái
@@ -134,14 +134,12 @@ export default function BrandsAdminPage() {
     // Hết Tìm kiếm sản phẩm
 
     // Thay đổi trạng thái 1 sản phẩm
-    const handleChangeStatusOneProduct = async (status: string, dataPath: string) => {
+    const handleChangeStatusOnebrand = async (status: string, dataPath: string) => {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
-
         const data = {
             status: statusChange
         }
-
         const response = await fetch(path, {
             method: "PATCH",
             headers: {
@@ -164,31 +162,7 @@ export default function BrandsAdminPage() {
 
         const statusChange = changeMulti;
 
-        if (statusChange == "delete") {
-            const path = `${linkApi}/deleteT`;
-
-            const data: any = {
-                id: inputChecked
-            }
-
-            const response = await fetch(path, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            const dataResponse = await response.json();
-
-            if (dataResponse.code == 200) {
-                location.reload();
-            }
-
-            return;
-        }
-
-        const path = `${linkApi}/updateStatus`;
+        const path = `${linkApi}/change-multi`;
 
         const data: any = {
             id: inputChecked,
@@ -220,7 +194,7 @@ export default function BrandsAdminPage() {
     // Hết Thay đổi trạng thái nhiều sản phẩm
 
     // Xóa một sản phẩm
-    const handleDeleteOneProduct = async (id: number) => {
+    const handleDeleteOnebrand = async (id: number) => {
         const path = `${linkApi}/deleteT/${id}`;
 
         const response = await fetch(path, {
@@ -329,8 +303,6 @@ export default function BrandsAdminPage() {
                         <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
                             <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
                             <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
-                            <MenuItem value="price-desc">Giá giảm dần</MenuItem>
-                            <MenuItem value="price-asc">Giá tăng dần</MenuItem>
                             <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
                             <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
                         </Select>
@@ -349,7 +321,7 @@ export default function BrandsAdminPage() {
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                 <MenuItem value="active">Hoạt động</MenuItem>
                                 <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="delete">Xóa</MenuItem>
+                                <MenuItem value="soft_deleted">Xóa</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -361,7 +333,7 @@ export default function BrandsAdminPage() {
                         startIcon={<DeleteIcon />}
                         sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
                     >
-                        <Link href="/admin/products/trash">
+                        <Link href="/admin/brands/trash">
                             Thùng rác
                         </Link>
                     </Button>
@@ -370,7 +342,7 @@ export default function BrandsAdminPage() {
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/products/create">
+                        <Link href="/admin/brands/create">
                             + Thêm mới
                         </Link>
                     </Button>
@@ -383,7 +355,6 @@ export default function BrandsAdminPage() {
                                 <TableCell>STT</TableCell>
                                 <TableCell>Hình ảnh</TableCell>
                                 <TableCell>Tiêu đề</TableCell>
-                                <TableCell>Giá</TableCell>
                                 <TableCell>Trạng thái</TableCell>
                                 <TableCell>Vị trí</TableCell>
                                 {/* <TableCell>Tạo bởi</TableCell> */}
@@ -392,38 +363,37 @@ export default function BrandsAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.product_category.map((product: any, index: number) => (
-                                <TableRow key={product.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
+                            {data.brand.map((brand: any, index: number) => (
+                                <TableRow key={brand.id}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, brand.id)}>
                                         <Checkbox />
                                     </TableCell>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={product.thumbnail}
-                                            alt={product.title}
+                                            src={brand.thumbnail}
+                                            alt={brand.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
                                     </TableCell>
-                                    <TableCell>{product.title}</TableCell>
-                                    <TableCell>{100}</TableCell>
+                                    <TableCell>{brand.title}</TableCell>
                                     <TableCell>
-                                        {product.status === "ACTIVE" && (
+                                        {brand.status === "ACTIVE" && (
                                             <Chip
                                                 label="Hoạt động"
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("inactive", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${brand.id}`)}
                                             />
                                         )}
-                                        {product.status === "INACTIVE" && (
+                                        {brand.status === "INACTIVE" && (
                                             <Chip
                                                 label="Dừng hoạt động"
                                                 color="error"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("active", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${brand.id}`)}
                                             />
                                         )}
                                     </TableCell>
@@ -439,30 +409,32 @@ export default function BrandsAdminPage() {
                                             InputProps={{
                                                 inputProps: { min: 0, step: 1 },
                                             }}
-                                            defaultValue={32}
+                                            value={brand.position}
                                         />
                                     </TableCell>
                                     {/* <TableCell>
-                                    {product.createdBy}
+                                    {brand.createdBy}
                                     <br />
-                                    {product.createdAt}
+                                    {brand.createdAt}
                                 </TableCell>
                                 <TableCell>
-                                    {product.updatedBy}
+                                    {brand.updatedBy}
                                     <br />
-                                    {product.updatedAt}
+                                    {brand.updatedAt}
                                 </TableCell> */}
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Chi tiết" placement="top">
-                                                <Link href={`/admin/products/detail/${product.id}`}>
+                                                <Link href={`/admin/brands/detail/${brand.id}`}>
                                                     <BiDetail className="text-[25px] text-[#138496] mr-2" />
                                                 </Link>
                                             </Tooltip>
                                             <Tooltip title="Sửa" placement="top">
-                                                <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                                <Link href={`/admin/brands/edit/${brand.id}`}>
+                                                    <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                                </Link>
                                             </Tooltip>
-                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
+                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(brand.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>
@@ -473,7 +445,6 @@ export default function BrandsAdminPage() {
                     </Table>
                 </TableContainer>
             </Paper>
-
 
             {/* Pagination */}
             <Stack spacing={2} marginTop={2}>
@@ -508,7 +479,7 @@ export default function BrandsAdminPage() {
                         Áp dụng
                     </Button>{" "}
                     <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
-                        <Link href="/admin/products/trash">
+                        <Link href="/admin/brands/trash">
                             Thùng rác
                         </Link>
                     </Button>

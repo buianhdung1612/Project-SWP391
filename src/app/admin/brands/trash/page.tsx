@@ -7,16 +7,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoReturnDownBackOutline } from "react-icons/io5";
 
-export default function ProductsTrashAdminPage() {
+export default function BrandsTrashAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
         pageSize: 4,
         currentPage: 1,
-        products: []
+        brand: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/products/trash';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/products/brand/trash';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -88,13 +88,13 @@ export default function ProductsTrashAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchProducts = async () => {
+        const fetchBrands = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchProducts();
+        fetchBrands();
     }, []);
 
     // Lọc theo trạng thái
@@ -132,7 +132,7 @@ export default function ProductsTrashAdminPage() {
     // Hết Tìm kiếm sản phẩm
 
     // Thay đổi trạng thái 1 sản phẩm
-    const handleChangeStatusOneProduct = async (status: string, dataPath: string) => {
+    const handleChangeStatusOnebrand = async (status: string, dataPath: string) => {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
 
@@ -218,7 +218,7 @@ export default function ProductsTrashAdminPage() {
     // Hết Thay đổi trạng thái nhiều sản phẩm
 
     // Xóa vĩnh viễn một sản phẩm
-    const handleDeleteOneProduct = async (id: number) => {
+    const handleDeleteOnebrand = async (id: number) => {
         const path = `${linkApi}/delete/${id}`;
 
         const response = await fetch(path, {
@@ -237,7 +237,7 @@ export default function ProductsTrashAdminPage() {
     // Hết Xóa một sản phẩm
 
     // Khôi phục một sản phẩm
-    const handleRestoreOneProduct = async (id: number) => {
+    const handleRestoreOnebrand = async (id: number) => {
         const path = `${linkApi}/restore/${id}`;
 
         const response = await fetch(path, {
@@ -299,7 +299,7 @@ export default function ProductsTrashAdminPage() {
         <Box p={3}>
             {/* Header */}
             <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Trang thùng rác sản phẩm
+                Trang thùng rác thương hiệu sản phẩm
             </Typography>
 
             {/* Bộ lọc và Tìm kiếm */}
@@ -346,8 +346,6 @@ export default function ProductsTrashAdminPage() {
                         <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
                             <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
                             <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
-                            <MenuItem value="price-desc">Giá giảm dần</MenuItem>
-                            <MenuItem value="price-asc">Giá tăng dần</MenuItem>
                             <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
                             <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
                         </Select>
@@ -379,9 +377,9 @@ export default function ProductsTrashAdminPage() {
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/products" className="flex items-center">
+                        <Link href="/admin/brands" className="flex items-center">
                             <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
-                            Danh sách sản phẩm
+                            Danh sách thương hiệu sản phẩm
                         </Link>
                     </Button>
                 </Box>
@@ -393,7 +391,6 @@ export default function ProductsTrashAdminPage() {
                                 <TableCell>STT</TableCell>
                                 <TableCell>Hình ảnh</TableCell>
                                 <TableCell>Tiêu đề</TableCell>
-                                <TableCell>Giá</TableCell>
                                 <TableCell>Trạng thái</TableCell>
                                 <TableCell>Vị trí</TableCell>
                                 {/* <TableCell>Tạo bởi</TableCell> */}
@@ -402,38 +399,37 @@ export default function ProductsTrashAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.products.map((product: any, index: number) => (
-                                <TableRow key={product.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
+                            {data.brand.map((brand: any, index: number) => (
+                                <TableRow key={brand.id}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, brand.id)}>
                                         <Checkbox />
                                     </TableCell>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={product.thumbnail}
-                                            alt={product.title}
+                                            src={brand.thumbnail}
+                                            alt={brand.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
                                     </TableCell>
-                                    <TableCell>{product.title}</TableCell>
-                                    <TableCell>{(product.variants[0].price).toLocaleString("en-US")}</TableCell>
+                                    <TableCell>{brand.title}</TableCell>
                                     <TableCell>
-                                        {product.status === "ACTIVE" && (
+                                        {brand.status === "ACTIVE" && (
                                             <Chip
                                                 label="Hoạt động"
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("inactive", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${brand.id}`)}
                                             />
                                         )}
-                                        {product.status === "INACTIVE" && (
+                                        {brand.status === "INACTIVE" && (
                                             <Chip
                                                 label="Dừng hoạt động"
                                                 color="error"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("active", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${brand.id}`)}
                                             />
                                         )}
                                     </TableCell>
@@ -449,25 +445,25 @@ export default function ProductsTrashAdminPage() {
                                             InputProps={{
                                                 inputProps: { min: 0, step: 1 },
                                             }}
-                                            value={product.position}
+                                            value={brand.position}
                                         />
                                     </TableCell>
                                     {/* <TableCell>
-                                    {product.createdBy}
+                                    {brand.createdBy}
                                     <br />
-                                    {product.createdAt}
+                                    {brand.createdAt}
                                 </TableCell>
                                 <TableCell>
-                                    {product.updatedBy}
+                                    {brand.updatedBy}
                                     <br />
-                                    {product.updatedAt}
+                                    {brand.updatedAt}
                                 </TableCell> */}
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Khôi phục" placement="top">
-                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOneProduct(product.id)} />
+                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOnebrand(brand.id)} />
                                             </Tooltip>
-                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
+                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(brand.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>

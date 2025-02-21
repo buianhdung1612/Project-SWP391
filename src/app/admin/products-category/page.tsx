@@ -1,7 +1,6 @@
 "use client"
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { BiDetail } from "react-icons/bi";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
@@ -9,7 +8,7 @@ import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function ProductsAdminPage() {
+export default function ProductsCategoryAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
@@ -163,31 +162,7 @@ export default function ProductsAdminPage() {
 
         const statusChange = changeMulti;
 
-        if (statusChange == "DELETE") {
-            const path = `${linkApi}/deleteT`;
-
-            const data: any = {
-                id: inputChecked
-            }
-
-            const response = await fetch(path, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            const dataResponse = await response.json();
-
-            if (dataResponse.code == 200) {
-                location.reload();
-            }
-
-            return;
-        }
-
-        const path = `${linkApi}/updateStatus`;
+        const path = `${linkApi}/change-multi`;
 
         const data: any = {
             id: inputChecked,
@@ -328,8 +303,6 @@ export default function ProductsAdminPage() {
                         <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
                             <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
                             <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
-                            <MenuItem value="price-desc">Giá giảm dần</MenuItem>
-                            <MenuItem value="price-asc">Giá tăng dần</MenuItem>
                             <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
                             <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
                         </Select>
@@ -369,7 +342,7 @@ export default function ProductsAdminPage() {
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/products/create">
+                        <Link href="/admin/products-category/create">
                             + Thêm mới
                         </Link>
                     </Button>
@@ -382,7 +355,6 @@ export default function ProductsAdminPage() {
                                 <TableCell>STT</TableCell>
                                 <TableCell>Hình ảnh</TableCell>
                                 <TableCell>Tiêu đề</TableCell>
-                                <TableCell>Giá</TableCell>
                                 <TableCell>Trạng thái</TableCell>
                                 <TableCell>Vị trí</TableCell>
                                 {/* <TableCell>Tạo bởi</TableCell> */}
@@ -405,7 +377,6 @@ export default function ProductsAdminPage() {
                                         />
                                     </TableCell>
                                     <TableCell>{category.title}</TableCell>
-                                    <TableCell>{100}</TableCell>
                                     <TableCell>
                                         {category.status === "ACTIVE" && (
                                             <Chip
@@ -438,7 +409,7 @@ export default function ProductsAdminPage() {
                                             InputProps={{
                                                 inputProps: { min: 0, step: 1 },
                                             }}
-                                            defaultValue={32}
+                                            value={category.position}
                                         />
                                     </TableCell>
                                     {/* <TableCell>
@@ -454,7 +425,7 @@ export default function ProductsAdminPage() {
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Chi tiết" placement="top">
-                                                <Link href={`/admin/products/detail/${category.id}`}>
+                                                <Link href={`/admin/products-category/detail/${category.id}`}>
                                                     <BiDetail className="text-[25px] text-[#138496] mr-2" />
                                                 </Link>
                                             </Tooltip>
@@ -472,7 +443,6 @@ export default function ProductsAdminPage() {
                     </Table>
                 </TableContainer>
             </Paper>
-
 
             {/* Pagination */}
             <Stack spacing={2} marginTop={2}>
@@ -499,23 +469,6 @@ export default function ProductsAdminPage() {
                     onChange={handlePagination}
                 />
             </Stack>
-
-            {/* Action Buttons */}
-            <Box mt={2} display="flex" justifyContent="space-between">
-                <Box>
-                    <Button variant="contained" color="success">
-                        Áp dụng
-                    </Button>{" "}
-                    <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
-                        <Link href="/admin/products/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                </Box>
-                <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-                    Thêm mới
-                </Button>
-            </Box>
         </Box>
     );
 }

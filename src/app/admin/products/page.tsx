@@ -1,7 +1,6 @@
 "use client"
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { BiDetail } from "react-icons/bi";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
@@ -164,31 +163,7 @@ export default function ProductsAdminPage() {
 
         const statusChange = changeMulti;
 
-        if (statusChange == "delete") {
-            const path = `${linkApi}/deleteT`;
-
-            const data: any = {
-                id: inputChecked
-            }
-
-            const response = await fetch(path, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            const dataResponse = await response.json();
-
-            if (dataResponse.code == 200) {
-                location.reload();
-            }
-
-            return;
-        }
-
-        const path = `${linkApi}/updateStatus`;
+        const path = `${linkApi}/change-multi`;
 
         const data: any = {
             id: inputChecked,
@@ -349,7 +324,7 @@ export default function ProductsAdminPage() {
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                 <MenuItem value="active">Hoạt động</MenuItem>
                                 <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="delete">Xóa</MenuItem>
+                                <MenuItem value="soft_deleted">Xóa</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -406,7 +381,7 @@ export default function ProductsAdminPage() {
                                         />
                                     </TableCell>
                                     <TableCell>{product.title}</TableCell>
-                                    <TableCell>{100}</TableCell>
+                                    <TableCell>{(product.variants[0].price).toLocaleString("en-US")}</TableCell>
                                     <TableCell>
                                         {product.status === "ACTIVE" && (
                                             <Chip
@@ -439,7 +414,7 @@ export default function ProductsAdminPage() {
                                             InputProps={{
                                                 inputProps: { min: 0, step: 1 },
                                             }}
-                                            defaultValue={32}
+                                            value={product.position}
                                         />
                                     </TableCell>
                                     {/* <TableCell>
@@ -460,7 +435,9 @@ export default function ProductsAdminPage() {
                                                 </Link>
                                             </Tooltip>
                                             <Tooltip title="Sửa" placement="top">
-                                                <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                                <Link href={`/admin/products/edit/${product.id}`}>
+                                                    <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                                </Link>
                                             </Tooltip>
                                             <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
@@ -473,7 +450,6 @@ export default function ProductsAdminPage() {
                     </Table>
                 </TableContainer>
             </Paper>
-
 
             {/* Pagination */}
             <Stack spacing={2} marginTop={2}>
@@ -500,23 +476,6 @@ export default function ProductsAdminPage() {
                     onChange={handlePagination}
                 />
             </Stack>
-
-            {/* Action Buttons */}
-            <Box mt={2} display="flex" justifyContent="space-between">
-                <Box>
-                    <Button variant="contained" color="success">
-                        Áp dụng
-                    </Button>{" "}
-                    <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
-                        <Link href="/admin/products/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                </Box>
-                <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-                    Thêm mới
-                </Button>
-            </Box>
         </Box>
     );
 }

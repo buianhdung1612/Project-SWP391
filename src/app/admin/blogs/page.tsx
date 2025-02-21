@@ -1,24 +1,21 @@
 "use client"
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
-import { BiDetail } from "react-icons/bi";
-import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
-export default function ProductsAdminPage() {
+export default function BlogsAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
-        pageSize: 8,
+        pageSize: 4,
         currentPage: 1,
-        products: []
+        blogs: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/products';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/blog';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -90,13 +87,13 @@ export default function ProductsAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchProducts = async () => {
+        const fetchblogs = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchProducts();
+        fetchblogs();
     }, []);
 
     // Lọc theo trạng thái
@@ -134,7 +131,7 @@ export default function ProductsAdminPage() {
     // Hết Tìm kiếm sản phẩm
 
     // Thay đổi trạng thái 1 sản phẩm
-    const handleChangeStatusOneProduct = async (status: string, dataPath: string) => {
+    const handleChangeStatusOneblog = async (status: string, dataPath: string) => {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
 
@@ -164,31 +161,7 @@ export default function ProductsAdminPage() {
 
         const statusChange = changeMulti;
 
-        if (statusChange == "delete") {
-            const path = `${linkApi}/deleteT`;
-
-            const data: any = {
-                id: inputChecked
-            }
-
-            const response = await fetch(path, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            const dataResponse = await response.json();
-
-            if (dataResponse.code == 200) {
-                location.reload();
-            }
-
-            return;
-        }
-
-        const path = `${linkApi}/updateStatus`;
+        const path = `${linkApi}/change-multi`;
 
         const data: any = {
             id: inputChecked,
@@ -220,7 +193,7 @@ export default function ProductsAdminPage() {
     // Hết Thay đổi trạng thái nhiều sản phẩm
 
     // Xóa một sản phẩm
-    const handleDeleteOneProduct = async (id: number) => {
+    const handleDeleteOneblog = async (id: number) => {
         const path = `${linkApi}/deleteT/${id}`;
 
         const response = await fetch(path, {
@@ -349,7 +322,7 @@ export default function ProductsAdminPage() {
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                 <MenuItem value="active">Hoạt động</MenuItem>
                                 <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="delete">Xóa</MenuItem>
+                                <MenuItem value="soft_deleted">Xóa</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -361,7 +334,7 @@ export default function ProductsAdminPage() {
                         startIcon={<DeleteIcon />}
                         sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
                     >
-                        <Link href="/admin/products/trash">
+                        <Link href="/admin/blogs/trash">
                             Thùng rác
                         </Link>
                     </Button>
@@ -370,110 +343,13 @@ export default function ProductsAdminPage() {
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/products/create">
+                        <Link href="/admin/blogs/create">
                             + Thêm mới
                         </Link>
                     </Button>
                 </Box>
-                <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell ></TableCell>
-                                <TableCell>STT</TableCell>
-                                <TableCell>Hình ảnh</TableCell>
-                                <TableCell>Tiêu đề</TableCell>
-                                <TableCell>Giá</TableCell>
-                                <TableCell>Trạng thái</TableCell>
-                                <TableCell>Vị trí</TableCell>
-                                {/* <TableCell>Tạo bởi</TableCell> */}
-                                {/* <TableCell>Cập nhật bởi</TableCell> */}
-                                <TableCell>Hành động</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {data.products.map((product: any, index: number) => (
-                                <TableRow key={product.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
-                                        <Checkbox />
-                                    </TableCell>
-                                    <TableCell>{index + 1}</TableCell>
-                                    <TableCell>
-                                        <img
-                                            src={product.thumbnail}
-                                            alt={product.title}
-                                            style={{ width: 100, height: 100, objectFit: "cover" }}
-                                        />
-                                    </TableCell>
-                                    <TableCell>{product.title}</TableCell>
-                                    <TableCell>{100}</TableCell>
-                                    <TableCell>
-                                        {product.status === "ACTIVE" && (
-                                            <Chip
-                                                label="Hoạt động"
-                                                color="success"
-                                                size="small"
-                                                variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("inactive", `/edit/${product.id}`)}
-                                            />
-                                        )}
-                                        {product.status === "INACTIVE" && (
-                                            <Chip
-                                                label="Dừng hoạt động"
-                                                color="error"
-                                                size="small"
-                                                variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("active", `/edit/${product.id}`)}
-                                            />
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        <TextField
-                                            type="number"
-                                            variant="outlined"
-                                            size="small"
-                                            sx={{
-                                                width: "60px"
-                                            }}
-                                            onChange={handleChangePosition}
-                                            InputProps={{
-                                                inputProps: { min: 0, step: 1 },
-                                            }}
-                                            defaultValue={32}
-                                        />
-                                    </TableCell>
-                                    {/* <TableCell>
-                                    {product.createdBy}
-                                    <br />
-                                    {product.createdAt}
-                                </TableCell>
-                                <TableCell>
-                                    {product.updatedBy}
-                                    <br />
-                                    {product.updatedAt}
-                                </TableCell> */}
-                                    <TableCell>
-                                        <div className="flex">
-                                            <Tooltip title="Chi tiết" placement="top">
-                                                <Link href={`/admin/products/detail/${product.id}`}>
-                                                    <BiDetail className="text-[25px] text-[#138496] mr-2" />
-                                                </Link>
-                                            </Tooltip>
-                                            <Tooltip title="Sửa" placement="top">
-                                                <MdEditNote className="text-[25px] text-[#E0A800]" />
-                                            </Tooltip>
-                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
-                                                <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
-                                            </Tooltip>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                
             </Paper>
-
 
             {/* Pagination */}
             <Stack spacing={2} marginTop={2}>
@@ -500,23 +376,6 @@ export default function ProductsAdminPage() {
                     onChange={handlePagination}
                 />
             </Stack>
-
-            {/* Action Buttons */}
-            <Box mt={2} display="flex" justifyContent="space-between">
-                <Box>
-                    <Button variant="contained" color="success">
-                        Áp dụng
-                    </Button>{" "}
-                    <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
-                        <Link href="/admin/products/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                </Box>
-                <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-                    Thêm mới
-                </Button>
-            </Box>
         </Box>
     );
 }

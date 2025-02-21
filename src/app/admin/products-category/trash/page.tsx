@@ -1,14 +1,13 @@
 "use client"
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
-import DeleteIcon from "@mui/icons-material/Delete";
 import { MdDeleteOutline, MdOutlineSettingsBackupRestore } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { IoReturnDownBackOutline } from "react-icons/io5";
 
-export default function ProductsCategoryTrashAdminPage() {
+export default function CategoriesTrashAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
@@ -26,7 +25,7 @@ export default function ProductsCategoryTrashAdminPage() {
     const [keyword, setKeyword] = useState("");
     const [sort, setSort] = useState("position-desc");
     const [page, setPage] = useState(1);
-    const [changeMulti, setChangeMulti] = useState("ACTIVE");
+    const [changeMulti, setChangeMulti] = useState("active");
 
 
     useEffect(() => {
@@ -45,7 +44,7 @@ export default function ProductsCategoryTrashAdminPage() {
         }
         // Hết Lọc theo trạng thái
 
-        // Tìm kiếm danh mục sản phẩm
+        // Tìm kiếm sản phẩm
         const keywordCurrent = urlCurrent.searchParams.get('keyword');
         setKeyword(keywordCurrent ?? "");
 
@@ -55,7 +54,7 @@ export default function ProductsCategoryTrashAdminPage() {
         else {
             api.searchParams.delete('keyword');
         }
-        // Hết Tìm kiếm danh mục sản phẩm
+        // Hết Tìm kiếm sản phẩm
 
         // Phân trang
         const pageCurrent = urlCurrent.searchParams.get('page');
@@ -89,14 +88,16 @@ export default function ProductsCategoryTrashAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchProductsCategory = async () => {
+        const fetchCategorys = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchProductsCategory();
+        fetchCategorys();
     }, []);
+
+    console.log(data);
 
     // Lọc theo trạng thái
     const handleChangeFilterStatus = async (event: any) => {
@@ -114,7 +115,7 @@ export default function ProductsCategoryTrashAdminPage() {
     }
     // Hết Lọc theo trạng thái
 
-    // Tìm kiếm danh mục sản phẩm
+    // Tìm kiếm sản phẩm
     const handleSumbitSearch = async (event: any) => {
         event.preventDefault();
 
@@ -130,10 +131,10 @@ export default function ProductsCategoryTrashAdminPage() {
 
         location.href = url.href;
     }
-    // Hết Tìm kiếm danh mục sản phẩm
+    // Hết Tìm kiếm sản phẩm
 
-    // Thay đổi trạng thái 1 danh mục sản phẩm
-    const handleChangeStatusOneProduct = async (status: string, dataPath: string) => {
+    // Thay đổi trạng thái 1 sản phẩm
+    const handleChangeStatusOnecategory = async (status: string, dataPath: string) => {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
 
@@ -155,31 +156,31 @@ export default function ProductsCategoryTrashAdminPage() {
             location.reload();
         }
     }
-    // Hết Thay đổi trạng thái 1 danh mục sản phẩm
+    // Hết Thay đổi trạng thái 1 sản phẩm
 
-    // Thay đổi trạng thái nhiều danh mục sản phẩm
+    // Thay đổi trạng thái nhiều sản phẩm
     const handleChangeMulti = async (event: any) => {
         event.preventDefault();
 
         const statusChange = changeMulti;
 
-        if (statusChange == "RESTORE") {
-            const path = `${linkApi}/restore`;
+        if(statusChange == "delete-destroy"){
+            const path = `${linkApi}/delete`;
 
             const data: any = {
                 id: inputChecked
             }
 
             const response = await fetch(path, {
-                method: "PATCH",
+                method: "DELETE",
                 headers: {
                     "Content-Type": "application/json"
                 },
                 body: JSON.stringify(data)
             });
-
+    
             const dataResponse = await response.json();
-
+    
             if (dataResponse.code == 200) {
                 location.reload();
             }
@@ -187,31 +188,7 @@ export default function ProductsCategoryTrashAdminPage() {
             return;
         }
 
-        // if (statusChange == "DELETEDESTROY") {
-        //     const path = `${linkApi}/delete`;
-
-        //     const data: any = {
-        //         id: inputChecked
-        //     }
-
-        //     const response = await fetch(path, {
-        //         method: "PATCH",
-        //         headers: {
-        //             "Content-Type": "application/json"
-        //         },
-        //         body: JSON.stringify(data)
-        //     });
-
-        //     const dataResponse = await response.json();
-
-        //     if (dataResponse.code == 200) {
-        //         location.reload();
-        //     }
-
-        //     return;
-        // }
-
-        const path = `${linkApi}/updateStatus`;
+        const path = `${linkApi}/change-multi`;
 
         const data: any = {
             id: inputChecked,
@@ -240,10 +217,10 @@ export default function ProductsCategoryTrashAdminPage() {
             setInputChecked(prev => prev.filter(id => id !== id));
         }
     }
-    // Hết Thay đổi trạng thái nhiều danh mục sản phẩm
+    // Hết Thay đổi trạng thái nhiều sản phẩm
 
-    // Xóa vĩnh viễn một danh mục sản phẩm
-    const handleDeleteOneProduct = async (id: number) => {
+    // Xóa vĩnh viễn một sản phẩm
+    const handleDeleteOnecategory = async (id: number) => {
         const path = `${linkApi}/delete/${id}`;
 
         const response = await fetch(path, {
@@ -259,10 +236,10 @@ export default function ProductsCategoryTrashAdminPage() {
             location.reload();
         }
     }
-    // Hết Xóa một danh mục sản phẩm
+    // Hết Xóa một sản phẩm
 
-    // Khôi phục một danh mục sản phẩm
-    const handleRestoreOneProduct = async (id: number) => {
+    // Khôi phục một sản phẩm
+    const handleRestoreOnecategory = async (id: number) => {
         const path = `${linkApi}/restore/${id}`;
 
         const response = await fetch(path, {
@@ -278,13 +255,13 @@ export default function ProductsCategoryTrashAdminPage() {
             location.reload();
         }
     }
-    // Hết Xóa một danh mục sản phẩm
+    // Hết Xóa một sản phẩm
 
-    // Thay đổi vị trí danh mục sản phẩm
+    // Thay đổi vị trí sản phẩm
     const handleChangePosition = (event: any) => {
         console.log(event.target.value);
     }
-    // Hết Thay đổi vị trí danh mục sản phẩm
+    // Hết Thay đổi vị trí sản phẩm
 
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
@@ -324,7 +301,7 @@ export default function ProductsCategoryTrashAdminPage() {
         <Box p={3}>
             {/* Header */}
             <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Trang danh sách danh mục sản phẩm
+                Trang thùng rác danh mục sản phẩm
             </Typography>
 
             {/* Bộ lọc và Tìm kiếm */}
@@ -337,8 +314,8 @@ export default function ProductsCategoryTrashAdminPage() {
                         <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
                         <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
                             <MenuItem value="">Tất cả</MenuItem>
-                            <MenuItem value="ACTIVE">Hoạt động</MenuItem>
-                            <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
+                            <MenuItem value="active">Hoạt động</MenuItem>
+                            <MenuItem value="inactive">Dừng hoạt động</MenuItem>
                         </Select>
                     </FormControl>
                     <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
@@ -371,8 +348,6 @@ export default function ProductsCategoryTrashAdminPage() {
                         <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
                             <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
                             <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
-                            <MenuItem value="price-desc">Giá giảm dần</MenuItem>
-                            <MenuItem value="price-asc">Giá tăng dần</MenuItem>
                             <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
                             <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
                         </Select>
@@ -389,10 +364,10 @@ export default function ProductsCategoryTrashAdminPage() {
                     <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
                         <Box display="flex" >
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                <MenuItem value="ACTIVE">Hoạt động</MenuItem>
-                                <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
-                                <MenuItem value="RESTORE">Khôi phục</MenuItem>
-                                <MenuItem value="DELETEDESTROY">Xóa vĩnh viễn</MenuItem>
+                                <MenuItem value="active">Hoạt động</MenuItem>
+                                <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+                                <MenuItem value="restored">Khôi phục</MenuItem>
+                                <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -404,7 +379,8 @@ export default function ProductsCategoryTrashAdminPage() {
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/products-category">
+                        <Link href="/admin/products-category" className="flex items-center">
+                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
                             Danh sách danh mục sản phẩm
                         </Link>
                     </Button>
@@ -417,7 +393,6 @@ export default function ProductsCategoryTrashAdminPage() {
                                 <TableCell>STT</TableCell>
                                 <TableCell>Hình ảnh</TableCell>
                                 <TableCell>Tiêu đề</TableCell>
-                                <TableCell>Giá</TableCell>
                                 <TableCell>Trạng thái</TableCell>
                                 <TableCell>Vị trí</TableCell>
                                 {/* <TableCell>Tạo bởi</TableCell> */}
@@ -426,38 +401,37 @@ export default function ProductsCategoryTrashAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.product_category.map((product: any, index: number) => (
-                                <TableRow key={product.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
+                            {data.product_category.map((category: any, index: number) => (
+                                <TableRow key={category.id}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, category.id)}>
                                         <Checkbox />
                                     </TableCell>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={product.thumbnail}
-                                            alt={product.title}
+                                            src={category.thumbnail}
+                                            alt={category.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
                                     </TableCell>
-                                    <TableCell>{product.title}</TableCell>
-                                    <TableCell>{100}</TableCell>
+                                    <TableCell>{category.title}</TableCell>
                                     <TableCell>
-                                        {product.status === "ACTIVE" && (
+                                        {category.status === "ACTIVE" && (
                                             <Chip
                                                 label="Hoạt động"
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("INACTIVE", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOnecategory("INACTIVE", `/edit/${category.id}`)}
                                             />
                                         )}
-                                        {product.status === "INACTIVE" && (
+                                        {category.status === "INACTIVE" && (
                                             <Chip
                                                 label="Dừng hoạt động"
                                                 color="error"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("ACTIVE", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOnecategory("ACTIVE", `/edit/${category.id}`)}
                                             />
                                         )}
                                     </TableCell>
@@ -473,25 +447,25 @@ export default function ProductsCategoryTrashAdminPage() {
                                             InputProps={{
                                                 inputProps: { min: 0, step: 1 },
                                             }}
-                                            defaultValue={32}
+                                            value={category.position}
                                         />
                                     </TableCell>
                                     {/* <TableCell>
-                                    {product.createdBy}
+                                    {category.createdBy}
                                     <br />
-                                    {product.createdAt}
+                                    {category.createdAt}
                                 </TableCell>
                                 <TableCell>
-                                    {product.updatedBy}
+                                    {category.updatedBy}
                                     <br />
-                                    {product.updatedAt}
+                                    {category.updatedAt}
                                 </TableCell> */}
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Khôi phục" placement="top">
-                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOneProduct(product.id)} />
+                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOnecategory(category.id)} />
                                             </Tooltip>
-                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
+                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnecategory(category.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>
@@ -529,21 +503,6 @@ export default function ProductsCategoryTrashAdminPage() {
                     onChange={handlePagination}
                 />
             </Stack>
-
-            {/* Action Buttons */}
-            <Box mt={2} display="flex" justifyContent="space-between">
-                <Box>
-                    <Button variant="contained" color="success">
-                        Áp dụng
-                    </Button>{" "}
-                    <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
-                        Thùng rác
-                    </Button>
-                </Box>
-                <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-                    Thêm mới
-                </Button>
-            </Box>
         </Box>
     );
 }

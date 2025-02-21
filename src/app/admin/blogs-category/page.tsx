@@ -1,22 +1,23 @@
 "use client"
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
-import { MdDeleteOutline, MdOutlineSettingsBackupRestore } from "react-icons/md";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { BiDetail } from "react-icons/bi";
+import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { IoReturnDownBackOutline } from "react-icons/io5";
 
-export default function ProductsTrashAdminPage() {
+export default function BlogsCategoryAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
         pageSize: 4,
         currentPage: 1,
-        products: []
+        product_category: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/products/trash';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/products/category';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -25,8 +26,7 @@ export default function ProductsTrashAdminPage() {
     const [keyword, setKeyword] = useState("");
     const [sort, setSort] = useState("position-desc");
     const [page, setPage] = useState(1);
-    const [changeMulti, setChangeMulti] = useState("active");
-
+    const [changeMulti, setChangeMulti] = useState("ACTIVE");
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);
@@ -88,13 +88,13 @@ export default function ProductsTrashAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchProducts = async () => {
+        const fetchProductsCategory = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchProducts();
+        fetchProductsCategory();
     }, []);
 
     // Lọc theo trạng thái
@@ -162,30 +162,6 @@ export default function ProductsTrashAdminPage() {
 
         const statusChange = changeMulti;
 
-        if(statusChange == "delete-destroy"){
-            const path = `${linkApi}/delete`;
-
-            const data: any = {
-                id: inputChecked
-            }
-
-            const response = await fetch(path, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-    
-            const dataResponse = await response.json();
-    
-            if (dataResponse.code == 200) {
-                location.reload();
-            }
-
-            return;
-        }
-
         const path = `${linkApi}/change-multi`;
 
         const data: any = {
@@ -217,28 +193,9 @@ export default function ProductsTrashAdminPage() {
     }
     // Hết Thay đổi trạng thái nhiều sản phẩm
 
-    // Xóa vĩnh viễn một sản phẩm
+    // Xóa một sản phẩm
     const handleDeleteOneProduct = async (id: number) => {
-        const path = `${linkApi}/delete/${id}`;
-
-        const response = await fetch(path, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
-            location.reload();
-        }
-    }
-    // Hết Xóa một sản phẩm
-
-    // Khôi phục một sản phẩm
-    const handleRestoreOneProduct = async (id: number) => {
-        const path = `${linkApi}/restore/${id}`;
+        const path = `${linkApi}/deleteT/${id}`;
 
         const response = await fetch(path, {
             method: "PATCH",
@@ -299,7 +256,7 @@ export default function ProductsTrashAdminPage() {
         <Box p={3}>
             {/* Header */}
             <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Trang thùng rác sản phẩm
+                Trang danh sách sản phẩm
             </Typography>
 
             {/* Bộ lọc và Tìm kiếm */}
@@ -312,8 +269,8 @@ export default function ProductsTrashAdminPage() {
                         <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
                         <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
                             <MenuItem value="">Tất cả</MenuItem>
-                            <MenuItem value="active">Hoạt động</MenuItem>
-                            <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+                            <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                            <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
                         </Select>
                     </FormControl>
                     <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
@@ -346,8 +303,6 @@ export default function ProductsTrashAdminPage() {
                         <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
                             <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
                             <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
-                            <MenuItem value="price-desc">Giá giảm dần</MenuItem>
-                            <MenuItem value="price-asc">Giá tăng dần</MenuItem>
                             <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
                             <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
                         </Select>
@@ -364,10 +319,9 @@ export default function ProductsTrashAdminPage() {
                     <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
                         <Box display="flex" >
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                <MenuItem value="active">Hoạt động</MenuItem>
-                                <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="restored">Khôi phục</MenuItem>
-                                <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
+                                <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                                <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
+                                <MenuItem value="DELETE">Xóa</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -375,13 +329,21 @@ export default function ProductsTrashAdminPage() {
                         </Box>
                     </form>
                     <Button
+                        variant="contained"
+                        startIcon={<DeleteIcon />}
+                        sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
+                    >
+                        <Link href="/admin/products-category/trash">
+                            Thùng rác
+                        </Link>
+                    </Button>
+                    <Button
                         variant="outlined"
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/products" className="flex items-center">
-                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
-                            Danh sách sản phẩm
+                        <Link href="/admin/products-category/create">
+                            + Thêm mới
                         </Link>
                     </Button>
                 </Box>
@@ -393,7 +355,6 @@ export default function ProductsTrashAdminPage() {
                                 <TableCell>STT</TableCell>
                                 <TableCell>Hình ảnh</TableCell>
                                 <TableCell>Tiêu đề</TableCell>
-                                <TableCell>Giá</TableCell>
                                 <TableCell>Trạng thái</TableCell>
                                 <TableCell>Vị trí</TableCell>
                                 {/* <TableCell>Tạo bởi</TableCell> */}
@@ -402,38 +363,37 @@ export default function ProductsTrashAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.products.map((product: any, index: number) => (
-                                <TableRow key={product.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
+                            {data.product_category.map((category: any, index: number) => (
+                                <TableRow key={category.id}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, category.id)}>
                                         <Checkbox />
                                     </TableCell>
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={product.thumbnail}
-                                            alt={product.title}
+                                            src={category.thumbnail}
+                                            alt={category.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
                                     </TableCell>
-                                    <TableCell>{product.title}</TableCell>
-                                    <TableCell>{(product.variants[0].price).toLocaleString("en-US")}</TableCell>
+                                    <TableCell>{category.title}</TableCell>
                                     <TableCell>
-                                        {product.status === "ACTIVE" && (
+                                        {category.status === "ACTIVE" && (
                                             <Chip
                                                 label="Hoạt động"
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("inactive", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOneProduct("INACTIVE", `/edit/${category.id}`)}
                                             />
                                         )}
-                                        {product.status === "INACTIVE" && (
+                                        {category.status === "INACTIVE" && (
                                             <Chip
                                                 label="Dừng hoạt động"
                                                 color="error"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneProduct("active", `/edit/${product.id}`)}
+                                                onClick={() => handleChangeStatusOneProduct("ACTIVE", `/edit/${category.id}`)}
                                             />
                                         )}
                                     </TableCell>
@@ -449,7 +409,7 @@ export default function ProductsTrashAdminPage() {
                                             InputProps={{
                                                 inputProps: { min: 0, step: 1 },
                                             }}
-                                            value={product.position}
+                                            value={category.position}
                                         />
                                     </TableCell>
                                     {/* <TableCell>
@@ -464,10 +424,15 @@ export default function ProductsTrashAdminPage() {
                                 </TableCell> */}
                                     <TableCell>
                                         <div className="flex">
-                                            <Tooltip title="Khôi phục" placement="top">
-                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOneProduct(product.id)} />
+                                            <Tooltip title="Chi tiết" placement="top">
+                                                <Link href={`/admin/products-category/detail/${category.id}`}>
+                                                    <BiDetail className="text-[25px] text-[#138496] mr-2" />
+                                                </Link>
                                             </Tooltip>
-                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(product.id)}>
+                                            <Tooltip title="Sửa" placement="top">
+                                                <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                            </Tooltip>
+                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(category.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>
@@ -478,7 +443,6 @@ export default function ProductsTrashAdminPage() {
                     </Table>
                 </TableContainer>
             </Paper>
-
 
             {/* Pagination */}
             <Stack spacing={2} marginTop={2}>
