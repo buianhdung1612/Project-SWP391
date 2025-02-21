@@ -159,7 +159,7 @@ export default function BlogsAdminPage() {
     const handleChangeMulti = async (event: any) => {
         event.preventDefault();
 
-        const statusChange = changeMulti;
+        // const statusChange = changeMulti;
 
         const path = `${linkApi}/change-multi`;
 
