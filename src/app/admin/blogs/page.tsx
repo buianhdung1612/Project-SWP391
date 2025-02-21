@@ -17,7 +17,7 @@ export default function BlogsAdminPage() {
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/blog';
 
-    const [inputChecked, setInputChecked] = useState<number[]>([]);
+    // const [inputChecked, setInputChecked] = useState<number[]>([]);
 
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
@@ -163,10 +163,10 @@ export default function BlogsAdminPage() {
 
         const path = `${linkApi}/change-multi`;
 
-        const data: any = {
-            id: inputChecked,
-            status: statusChange
-        }
+        // const data: any = {
+        //     id: inputChecked,
+        //     status: statusChange
+        // }
 
         const response = await fetch(path, {
             method: "PATCH",

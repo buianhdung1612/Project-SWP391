@@ -4,7 +4,7 @@ const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
     ssr: false
 });
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, InputLabel, Select, MenuItem } from '@mui/material';
+import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, InputLabel, Select, MenuItem } from '@mui/material';
 // import UploadImage from '@/app/components/Upload/UploadImage';
 
 interface DataSubmit {
@@ -16,7 +16,7 @@ interface DataSubmit {
     status: string
 }
 
-export default function CreateProductAdminPage() {
+export default function CreateProductCategoryAdminPage() {
     const [description, setDescription] = useState('');
     const [categoryCurrent, setCategoryCurrent] = useState("");
     const [listCategory, setListCategory] = useState([]);

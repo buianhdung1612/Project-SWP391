@@ -3,7 +3,7 @@ import dynamic from 'next/dynamic';
 const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
     ssr: false
 });
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 // import UploadImage from '@/app/components/Upload/UploadImage';
 
