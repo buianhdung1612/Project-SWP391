@@ -1,11 +1,16 @@
+"use client"
+
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
-import { ReactNode } from "react";
+import { ReactNode, useContext } from "react";
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa6";
 import TitleFooter from "../title/TitleFooter";
 import ContentFooter from "./ContentFooter";
+import { SettingContext } from "@/app/(page)/layout";
 
 export default function Footer() {
+    const setting = useContext(SettingContext);
+
     interface buttonIcon {
         icon: ReactNode,
         link: Url
@@ -19,19 +24,19 @@ export default function Footer() {
     const menuButton: buttonIcon[] = [
         {
             icon: <FaFacebookF />,
-            link: "#"
+            link: setting?.facebook || "#"
         },
         {
             icon: <FaTwitter />,
-            link: "#"
+            link: setting?.twitter || "#"
         },
         {
             icon: <FaYoutube />,
-            link: "#"
+            link: setting?.youtube || "#"
         },
         {
             icon: <FaInstagram />,
-            link: "#"
+            link: setting?.instagram || "#"
         }
     ]
 
@@ -94,7 +99,7 @@ export default function Footer() {
             <div className="bg-[#B2D18F] container mx-auto flex items-center px-[20px] rounded-[10px] mt-[60px] justify-between">
                 <div className="">
                     <div className="text-[22px] font-[600] uppercase text-white">
-                        Đăng ký nhận tin từ Dino Beaute
+                        Đăng ký nhận tin từ Fresh Skin
                     </div>
                     <div className="text-[14px] font-[400] text-white">
                         Nhận thông tin sản phẩm mới nhất và các chương trình khuyến mãi.
@@ -124,16 +129,16 @@ export default function Footer() {
                         ))}
                     </div>
                 </div>
-                <div className="w-[420px]">
+                <div className="w-[420px] pr-[50px]">
                     <TitleFooter title="Thông tin liên hệ"/>
-                    <div className="text-[14px] mb-[5px]"><b>Địa chỉ: </b>70 Lữ Gia, Phường 15, Quận 11, TP. Hồ Chí Minh</div>
+                    <div className="text-[14px] mb-[5px]"><b>Địa chỉ: </b>{setting?.address || ""}</div>
                     <div className="text-[14px] mb-[5px]">
                         <b>Điện thoại: </b>
-                        <span className="text-primary font-[600] hover:text-secondary cursor-pointer">1900 6750</span>
+                        <span className="text-primary font-[600] hover:text-secondary cursor-pointer">{setting?.phone || ""}</span>
                     </div>
                     <div className="text-[14px] mb-[5px]">
                         <b>Email: </b>
-                        <span className="text-primary font-[600] hover:text-secondary cursor-pointer">support@sapo.vn</span>
+                        <span className="text-primary font-[600] hover:text-secondary cursor-pointer">{setting?.email || ""}</span>
                     </div>
                 </div>
                 <div className="w-[304px]">

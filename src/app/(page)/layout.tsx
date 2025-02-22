@@ -36,7 +36,6 @@ interface Setting {
   support3: string;
   support4: string;
   support5: string;
-  support6: string;
 }
 
 export const SettingContext = createContext<Setting | undefined>(undefined);
@@ -69,8 +68,7 @@ export default function RootLayout({
     support2: '',
     support3: '',
     support4: '',
-    support5: '',
-    support6: ''
+    support5: ''
   });
 
   useEffect(() => {
@@ -113,7 +111,6 @@ export default function RootLayout({
               support3: setting.support3,
               support4: setting.support4,
               support5: setting.support5,
-              support6: setting.support6
           }}
         >
           <Provider store={store}>

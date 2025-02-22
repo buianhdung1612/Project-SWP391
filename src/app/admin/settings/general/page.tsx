@@ -72,8 +72,7 @@ export default function SettingGeneralAdminPage() {
             support2: data.support2,
             support3: data.support3,
             support4: data.support4,
-            support5: data.support5,
-            support6: data.support6
+            support5: data.support5
         }
 
         console.log(dataSetting);
@@ -201,12 +200,10 @@ export default function SettingGeneralAdminPage() {
                         <TinyEditor value={data.support2} onEditorChange={(content: string) => setData({ ...data, support2: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Tích điểm đổi quà</h4>
                         <TinyEditor value={data.support3} onEditorChange={(content: string) => setData({ ...data, support3: content })} />
-                        <h4 className="my-4 ml-2 text-[18px]">Hệ thống cửa hàng</h4>
+                        <h4 className="my-4 ml-2 text-[18px]">Hỗ trợ kĩ thuật</h4>
                         <TinyEditor value={data.support4} onEditorChange={(content: string) => setData({ ...data, support4: content })} />
-                        <h4 className="my-4 ml-2 text-[18px]">Tuyển dụng</h4>
+                        <h4 className="my-4 ml-2 text-[18px]">Câu hỏi thường gặp</h4>
                         <TinyEditor value={data.support5} onEditorChange={(content: string) => setData({ ...data, support5: content })} />
-                        <h4 className="my-4 ml-2 text-[18px]">Liên hệ</h4>
-                        <TinyEditor value={data.support6} onEditorChange={(content: string) => setData({ ...data, support6: content })} />
 
                         <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>
                             Cập nhật
