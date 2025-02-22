@@ -1,379 +1,379 @@
-"use client"
+// "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Stack, Pagination } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+// import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Stack, Pagination } from "@mui/material";
+// import DeleteIcon from "@mui/icons-material/Delete";
 
-import { useEffect, useState } from "react";
-import Link from "next/link";
+// import { useEffect, useState } from "react";
+// import Link from "next/link";
 
-export default function BlogsAdminPage() {
-    const [data, setData] = useState({
-        totalPages: 1,
-        totalItems: 1,
-        pageSize: 4,
-        currentPage: 1,
-        blogs: []
-    });
+// export default function BlogsAdminPage() {
+//     const [data, setData] = useState({
+//         totalPages: 1,
+//         totalItems: 1,
+//         pageSize: 4,
+//         currentPage: 1,
+//         blogs: []
+//     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/blog';
+//     const linkApi = 'https://freshskinweb.onrender.com/admin/blog';
 
-    const [inputChecked, setInputChecked] = useState<number[]>([]);
+//     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
-    // Hiển thị lựa chọn mặc định
-    const [filterStatus, setFilterStatus] = useState("");
-    const [keyword, setKeyword] = useState("");
-    const [sort, setSort] = useState("position-desc");
-    const [page, setPage] = useState(1);
-    const [changeMulti, setChangeMulti] = useState("active");
+//     // Hiển thị lựa chọn mặc định
+//     const [filterStatus, setFilterStatus] = useState("");
+//     const [keyword, setKeyword] = useState("");
+//     const [sort, setSort] = useState("position-desc");
+//     const [page, setPage] = useState(1);
+//     const [changeMulti, setChangeMulti] = useState("active");
 
 
-    useEffect(() => {
-        const urlCurrent = new URL(location.href);
-        const api = new URL(linkApi);
+//     useEffect(() => {
+//         const urlCurrent = new URL(location.href);
+//         const api = new URL(linkApi);
 
-        // Lọc theo trạng thái
-        const statusCurrent = urlCurrent.searchParams.get('status');
-        setFilterStatus(statusCurrent ?? "");
+//         // Lọc theo trạng thái
+//         const statusCurrent = urlCurrent.searchParams.get('status');
+//         setFilterStatus(statusCurrent ?? "");
 
-        if (statusCurrent) {
-            api.searchParams.set('status', statusCurrent);
-        }
-        else {
-            api.searchParams.delete('status');
-        }
-        // Hết Lọc theo trạng thái
+//         if (statusCurrent) {
+//             api.searchParams.set('status', statusCurrent);
+//         }
+//         else {
+//             api.searchParams.delete('status');
+//         }
+//         // Hết Lọc theo trạng thái
 
-        // Tìm kiếm sản phẩm
-        const keywordCurrent = urlCurrent.searchParams.get('keyword');
-        setKeyword(keywordCurrent ?? "");
+//         // Tìm kiếm sản phẩm
+//         const keywordCurrent = urlCurrent.searchParams.get('keyword');
+//         setKeyword(keywordCurrent ?? "");
 
-        if (keywordCurrent) {
-            api.searchParams.set('keyword', keywordCurrent);
-        }
-        else {
-            api.searchParams.delete('keyword');
-        }
-        // Hết Tìm kiếm sản phẩm
+//         if (keywordCurrent) {
+//             api.searchParams.set('keyword', keywordCurrent);
+//         }
+//         else {
+//             api.searchParams.delete('keyword');
+//         }
+//         // Hết Tìm kiếm sản phẩm
 
-        // Phân trang
-        const pageCurrent = urlCurrent.searchParams.get('page');
-        setPage(pageCurrent ? parseInt(pageCurrent) : 1);
+//         // Phân trang
+//         const pageCurrent = urlCurrent.searchParams.get('page');
+//         setPage(pageCurrent ? parseInt(pageCurrent) : 1);
 
-        if (pageCurrent) {
-            api.searchParams.set('page', pageCurrent);
-        }
-        else {
-            api.searchParams.delete('page');
-        }
-        // Hết Phân trang
+//         if (pageCurrent) {
+//             api.searchParams.set('page', pageCurrent);
+//         }
+//         else {
+//             api.searchParams.delete('page');
+//         }
+//         // Hết Phân trang
 
-        // Sắp xếp theo tiêu chí
-        const sortKeyCurrent = urlCurrent.searchParams.get('sortKey');
-        const sortValueCurrent = urlCurrent.searchParams.get('sortValue');
+//         // Sắp xếp theo tiêu chí
+//         const sortKeyCurrent = urlCurrent.searchParams.get('sortKey');
+//         const sortValueCurrent = urlCurrent.searchParams.get('sortValue');
 
-        if (sortKeyCurrent && sortValueCurrent) {
-            setSort(`${sortKeyCurrent}-${sortValueCurrent}`);
-        } else {
-            setSort("position-desc");
-        }
+//         if (sortKeyCurrent && sortValueCurrent) {
+//             setSort(`${sortKeyCurrent}-${sortValueCurrent}`);
+//         } else {
+//             setSort("position-desc");
+//         }
 
-        if (sortKeyCurrent && sortValueCurrent) {
-            api.searchParams.set("sortKey", sortKeyCurrent);
-            api.searchParams.set("sortValue", sortValueCurrent);
-        }
-        else {
-            api.searchParams.delete("sortKey");
-            api.searchParams.delete("sortValue");
-        }
-        // Hết Sắp xếp theo tiêu chí
+//         if (sortKeyCurrent && sortValueCurrent) {
+//             api.searchParams.set("sortKey", sortKeyCurrent);
+//             api.searchParams.set("sortValue", sortValueCurrent);
+//         }
+//         else {
+//             api.searchParams.delete("sortKey");
+//             api.searchParams.delete("sortValue");
+//         }
+//         // Hết Sắp xếp theo tiêu chí
 
-        const fetchblogs = async () => {
-            const response = await fetch(api.href);
-            const data = await response.json();
-            setData(data.data);
-        };
+//         const fetchblogs = async () => {
+//             const response = await fetch(api.href);
+//             const data = await response.json();
+//             setData(data.data);
+//         };
 
-        fetchblogs();
-    }, []);
+//         fetchblogs();
+//     }, []);
 
-    // Lọc theo trạng thái
-    const handleChangeFilterStatus = async (event: any) => {
-        const value = event.target.value;
-        const url = new URL(location.href);
+//     // Lọc theo trạng thái
+//     const handleChangeFilterStatus = async (event: any) => {
+//         const value = event.target.value;
+//         const url = new URL(location.href);
 
-        if (value) {
-            url.searchParams.set("status", value);
-        }
-        else {
-            url.searchParams.delete("status");
-        }
+//         if (value) {
+//             url.searchParams.set("status", value);
+//         }
+//         else {
+//             url.searchParams.delete("status");
+//         }
 
-        location.href = url.href;
-    }
-    // Hết Lọc theo trạng thái
+//         location.href = url.href;
+//     }
+//     // Hết Lọc theo trạng thái
 
-    // Tìm kiếm sản phẩm
-    const handleSumbitSearch = async (event: any) => {
-        event.preventDefault();
+//     // Tìm kiếm sản phẩm
+//     const handleSumbitSearch = async (event: any) => {
+//         event.preventDefault();
 
-        const value = event.target.keyword.value;
-        const url = new URL(location.href);
+//         const value = event.target.keyword.value;
+//         const url = new URL(location.href);
 
-        if (value) {
-            url.searchParams.set("keyword", value);
-        }
-        else {
-            url.searchParams.delete("keyword");
-        }
+//         if (value) {
+//             url.searchParams.set("keyword", value);
+//         }
+//         else {
+//             url.searchParams.delete("keyword");
+//         }
 
-        location.href = url.href;
-    }
-    // Hết Tìm kiếm sản phẩm
+//         location.href = url.href;
+//     }
+//     // Hết Tìm kiếm sản phẩm
 
-    // Thay đổi trạng thái 1 sản phẩm
-    const handleChangeStatusOneblog = async (status: string, dataPath: string) => {
-        const statusChange = status;
-        const path = `${linkApi}${dataPath}`;
+//     // Thay đổi trạng thái 1 sản phẩm
+//     const handleChangeStatusOneblog = async (status: string, dataPath: string) => {
+//         const statusChange = status;
+//         const path = `${linkApi}${dataPath}`;
 
-        const data = {
-            status: statusChange
-        }
+//         const data = {
+//             status: statusChange
+//         }
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+//         const response = await fetch(path, {
+//             method: "PATCH",
+//             headers: {
+//                 "Content-Type": "application/json"
+//             },
+//             body: JSON.stringify(data)
+//         });
 
-        const dataResponse = await response.json();
+//         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
-        }
-    }
-    // Hết Thay đổi trạng thái 1 sản phẩm
+//         if (dataResponse.code == 200) {
+//             location.reload();
+//         }
+//     }
+//     // Hết Thay đổi trạng thái 1 sản phẩm
 
-    // Thay đổi trạng thái nhiều sản phẩm
-    const handleChangeMulti = async (event: any) => {
-        event.preventDefault();
+//     // Thay đổi trạng thái nhiều sản phẩm
+//     const handleChangeMulti = async (event: any) => {
+//         event.preventDefault();
 
-        const statusChange = changeMulti;
+//         const statusChange = changeMulti;
 
-        const path = `${linkApi}/change-multi`;
+//         const path = `${linkApi}/change-multi`;
 
-        const data: any = {
-            id: inputChecked,
-            status: statusChange
-        }
+//         const data: any = {
+//             id: inputChecked,
+//             status: statusChange
+//         }
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+//         const response = await fetch(path, {
+//             method: "PATCH",
+//             headers: {
+//                 "Content-Type": "application/json"
+//             },
+//             body: JSON.stringify(data)
+//         });
 
-        const dataResponse = await response.json();
+//         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
-        }
-    }
+//         if (dataResponse.code == 200) {
+//             location.reload();
+//         }
+//     }
 
-    const handleInputChecked = (event: any, id: number) => {
-        if (event.target.checked) {
-            setInputChecked(prev => [...prev, id]);
-        } else {
-            setInputChecked(prev => prev.filter(id => id !== id));
-        }
-    }
-    // Hết Thay đổi trạng thái nhiều sản phẩm
+//     const handleInputChecked = (event: any, id: number) => {
+//         if (event.target.checked) {
+//             setInputChecked(prev => [...prev, id]);
+//         } else {
+//             setInputChecked(prev => prev.filter(id => id !== id));
+//         }
+//     }
+//     // Hết Thay đổi trạng thái nhiều sản phẩm
 
-    // Xóa một sản phẩm
-    const handleDeleteOneblog = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
+//     // Xóa một sản phẩm
+//     const handleDeleteOneblog = async (id: number) => {
+//         const path = `${linkApi}/deleteT/${id}`;
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
+//         const response = await fetch(path, {
+//             method: "PATCH",
+//             headers: {
+//                 "Content-Type": "application/json"
+//             },
+//         });
 
-        const dataResponse = await response.json();
+//         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
-        }
-    }
-    // Hết Xóa một sản phẩm
+//         if (dataResponse.code == 200) {
+//             location.reload();
+//         }
+//     }
+//     // Hết Xóa một sản phẩm
 
-    // Thay đổi vị trí sản phẩm
-    const handleChangePosition = (event: any) => {
-        console.log(event.target.value);
-    }
-    // Hết Thay đổi vị trí sản phẩm
+//     // Thay đổi vị trí sản phẩm
+//     const handleChangePosition = (event: any) => {
+//         console.log(event.target.value);
+//     }
+//     // Hết Thay đổi vị trí sản phẩm
 
-    // Sắp xếp theo tiêu chí
-    const handleChangeSort = async (event: any) => {
-        const value = event.target.value;
-        const url = new URL(location.href);
+//     // Sắp xếp theo tiêu chí
+//     const handleChangeSort = async (event: any) => {
+//         const value = event.target.value;
+//         const url = new URL(location.href);
 
-        if (value) {
-            const [sortKey, sortValue] = value.split("-");
-            url.searchParams.set("sortKey", sortKey);
-            url.searchParams.set("sortValue", sortValue);
-        }
-        else {
-            url.searchParams.delete("sortKey");
-            url.searchParams.delete("sortValue");
-        }
+//         if (value) {
+//             const [sortKey, sortValue] = value.split("-");
+//             url.searchParams.set("sortKey", sortKey);
+//             url.searchParams.set("sortValue", sortValue);
+//         }
+//         else {
+//             url.searchParams.delete("sortKey");
+//             url.searchParams.delete("sortValue");
+//         }
 
-        location.href = url.href;
-    }
-    // Hết Sắp xếp theo tiêu chí
+//         location.href = url.href;
+//     }
+//     // Hết Sắp xếp theo tiêu chí
 
-    // Phân trang
-    const handlePagination = (event: any, page: number) => {
-        const url = new URL(location.href);
+//     // Phân trang
+//     const handlePagination = (event: any, page: number) => {
+//         const url = new URL(location.href);
 
-        if (page) {
-            url.searchParams.set("page", page.toString());
-        }
-        else {
-            url.searchParams.delete("page");
-        }
+//         if (page) {
+//             url.searchParams.set("page", page.toString());
+//         }
+//         else {
+//             url.searchParams.delete("page");
+//         }
 
-        location.href = url.href;
-    }
-    // Hết phân trang
+//         location.href = url.href;
+//     }
+//     // Hết phân trang
 
-    return (
-        <Box p={3}>
-            {/* Header */}
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Trang danh sách sản phẩm
-            </Typography>
+//     return (
+//         <Box p={3}>
+//             {/* Header */}
+//             <Typography variant="h4" fontWeight="bold" gutterBottom>
+//                 Trang danh sách sản phẩm
+//             </Typography>
 
-            {/* Bộ lọc và Tìm kiếm */}
-            <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: "white" }} >
-                <Typography variant="subtitle1" fontWeight="bold" marginBottom={2} gutterBottom>
-                    Bộ lọc và Tìm kiếm
-                </Typography>
-                <Box display="flex" flexWrap="wrap">
-                    <FormControl sx={{ width: '30%', marginRight: '20px' }} >
-                        <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
-                        <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
-                            <MenuItem value="">Tất cả</MenuItem>
-                            <MenuItem value="active">Hoạt động</MenuItem>
-                            <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
-                        <Box display="flex">
-                            <TextField
-                                label="Nhập từ khóa..."
-                                variant="outlined"
-                                fullWidth
-                                name="keyword"
-                                defaultValue={keyword}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <Button variant="contained" color="success" type="submit">
-                                Tìm
-                            </Button>
-                        </Box>
-                    </form>
-                </Box>
-            </Paper>
-            {/* Sắp xếp */}
-            <Paper elevation={1} sx={{ p: 2, mb: 3, bgcolor: "white" }}>
-                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                    Sắp xếp
-                </Typography>
-                <Box display="flex" gap={2} flexWrap="wrap">
-                    <FormControl fullWidth sx={{ maxWidth: 300 }}>
-                        <InputLabel id="sort-label" shrink={true}>Sắp xếp</InputLabel>
-                        <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
-                            <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
-                            <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
-                            <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
-                            <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Box>
-            </Paper>
+//             {/* Bộ lọc và Tìm kiếm */}
+//             <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: "white" }} >
+//                 <Typography variant="subtitle1" fontWeight="bold" marginBottom={2} gutterBottom>
+//                     Bộ lọc và Tìm kiếm
+//                 </Typography>
+//                 <Box display="flex" flexWrap="wrap">
+//                     <FormControl sx={{ width: '30%', marginRight: '20px' }} >
+//                         <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
+//                         <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
+//                             <MenuItem value="">Tất cả</MenuItem>
+//                             <MenuItem value="active">Hoạt động</MenuItem>
+//                             <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+//                         </Select>
+//                     </FormControl>
+//                     <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
+//                         <Box display="flex">
+//                             <TextField
+//                                 label="Nhập từ khóa..."
+//                                 variant="outlined"
+//                                 fullWidth
+//                                 name="keyword"
+//                                 defaultValue={keyword}
+//                                 InputLabelProps={{
+//                                     shrink: true,
+//                                 }}
+//                             />
+//                             <Button variant="contained" color="success" type="submit">
+//                                 Tìm
+//                             </Button>
+//                         </Box>
+//                     </form>
+//                 </Box>
+//             </Paper>
+//             {/* Sắp xếp */}
+//             <Paper elevation={1} sx={{ p: 2, mb: 3, bgcolor: "white" }}>
+//                 <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+//                     Sắp xếp
+//                 </Typography>
+//                 <Box display="flex" gap={2} flexWrap="wrap">
+//                     <FormControl fullWidth sx={{ maxWidth: 300 }}>
+//                         <InputLabel id="sort-label" shrink={true}>Sắp xếp</InputLabel>
+//                         <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
+//                             <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
+//                             <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
+//                             <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
+//                             <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
+//                         </Select>
+//                     </FormControl>
+//                 </Box>
+//             </Paper>
 
-            {/* Table */}
-            <Paper sx={{ backgroundColor: "white", p: 2 }}>
-                <Typography variant="h6" gutterBottom sx={{ marginLeft: "20px" }}>
-                    Danh sách
-                </Typography>
-                <Box display="flex" gap={20} flexWrap="wrap">
-                    <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
-                        <Box display="flex" >
-                            <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                <MenuItem value="active">Hoạt động</MenuItem>
-                                <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="soft_deleted">Xóa</MenuItem>
-                            </Select>
-                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
-                                Áp dụng
-                            </Button>
-                        </Box>
-                    </form>
-                    <Button
-                        variant="contained"
-                        startIcon={<DeleteIcon />}
-                        sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
-                    >
-                        <Link href="/admin/blogs/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        color="success"
-                        sx={{ borderColor: 'green', color: 'green' }}
-                    >
-                        <Link href="/admin/blogs/create">
-                            + Thêm mới
-                        </Link>
-                    </Button>
-                </Box>
+//             {/* Table */}
+//             <Paper sx={{ backgroundColor: "white", p: 2 }}>
+//                 <Typography variant="h6" gutterBottom sx={{ marginLeft: "20px" }}>
+//                     Danh sách
+//                 </Typography>
+//                 <Box display="flex" gap={20} flexWrap="wrap">
+//                     <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
+//                         <Box display="flex" >
+//                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
+//                                 <MenuItem value="active">Hoạt động</MenuItem>
+//                                 <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+//                                 <MenuItem value="soft_deleted">Xóa</MenuItem>
+//                             </Select>
+//                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
+//                                 Áp dụng
+//                             </Button>
+//                         </Box>
+//                     </form>
+//                     <Button
+//                         variant="contained"
+//                         startIcon={<DeleteIcon />}
+//                         sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
+//                     >
+//                         <Link href="/admin/blogs/trash">
+//                             Thùng rác
+//                         </Link>
+//                     </Button>
+//                     <Button
+//                         variant="outlined"
+//                         color="success"
+//                         sx={{ borderColor: 'green', color: 'green' }}
+//                     >
+//                         <Link href="/admin/blogs/create">
+//                             + Thêm mới
+//                         </Link>
+//                     </Button>
+//                 </Box>
                 
-            </Paper>
+//             </Paper>
 
-            {/* Pagination */}
-            <Stack spacing={2} marginTop={2}>
-                <Pagination
-                    count={data.totalPages}
-                    color="primary"
-                    page={page}
-                    variant="outlined"
-                    shape="rounded"
-                    siblingCount={1}
-                    sx={{
-                        '& .MuiPaginationItem-root': {
-                            backgroundColor: 'white',
-                            color: 'blue',
-                            '&:hover': {
-                                backgroundColor: '#e0e0e0',
-                            },
-                        },
-                        '& .Mui-selected': {
-                            backgroundColor: 'blue',
-                            color: 'white',
-                        },
-                    }}
-                    onChange={handlePagination}
-                />
-            </Stack>
-        </Box>
-    );
-}
+//             {/* Pagination */}
+//             <Stack spacing={2} marginTop={2}>
+//                 <Pagination
+//                     count={data.totalPages}
+//                     color="primary"
+//                     page={page}
+//                     variant="outlined"
+//                     shape="rounded"
+//                     siblingCount={1}
+//                     sx={{
+//                         '& .MuiPaginationItem-root': {
+//                             backgroundColor: 'white',
+//                             color: 'blue',
+//                             '&:hover': {
+//                                 backgroundColor: '#e0e0e0',
+//                             },
+//                         },
+//                         '& .Mui-selected': {
+//                             backgroundColor: 'blue',
+//                             color: 'white',
+//                         },
+//                     }}
+//                     onChange={handlePagination}
+//                 />
+//             </Stack>
+//         </Box>
+//     );
+// }
