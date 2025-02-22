@@ -102,19 +102,19 @@ export default function CreateProductAdminPage() {
             position: event.target.position.value
         }
 
-        // const response = await fetch('https://freshskinweb.onrender.com/admin/products/create', {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify(dataSubmit)
-        // });
+        const response = await fetch('https://freshskinweb.onrender.com/admin/products/create', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(dataSubmit)
+        });
 
-        // const dataResponse = await response.json();
+        const dataResponse = await response.json();
 
-        // if (dataResponse.code == 200) {
-        //     location.reload();
-        // }
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
     }
 
     // Variants
