@@ -13,8 +13,6 @@ interface InputField {
     price: string;
 }
 
-type SkinType = 'oily' | 'dry' | 'combination' | 'sensitive' | 'normal';
-
 interface Variants {
     volume: number | string,
     price: number | string
@@ -29,7 +27,7 @@ interface DataSubmit {
     variants: Variants[],
     discount: number,
     position: number,
-    // skinType: string[],
+    // skinType: number[],
     origin: string,
     ingredients: string,
     usageInstructions: string,
@@ -75,10 +73,12 @@ export default function CreateProductAdminPage() {
         // Skin Type
         const selectedSkinTypes: string[] = [];
         for (const type in checked) {
-            if (checked[type as SkinType]) {
-                selectedSkinTypes.push(type as SkinType);
+            if (checked) {
+                selectedSkinTypes.push(type);
             }
         }
+
+        console.log(selectedSkinTypes);
 
         const dataSubmit: DataSubmit = {
             title: event.target.title.value,
@@ -87,6 +87,7 @@ export default function CreateProductAdminPage() {
             description: description,
             variants: inputs,
             discount: event.target.discount.value,
+            // skinType: selectedSkinTypes,
             origin: event.target.origin.value,
             ingredients: event.target.ingredients.value,
             usageInstructions: event.target.usageInstructions.value,

@@ -11,6 +11,11 @@ export default function Footer() {
         link: Url
     }
 
+    interface PolicySupport {
+        content: string,
+        link: string
+    }
+
     const menuButton: buttonIcon[] = [
         {
             icon: <FaFacebookF />,
@@ -30,22 +35,58 @@ export default function Footer() {
         }
     ]
 
-    const contentPolicy: any = [
-        "Chính sách và quy định chung",
-        "Chính sách thanh toán",
-        "Chính sách giao nhận",
-        "Chính sách đổi trả sản phẩm",
-        "Chính sách bảo mật thông tin cá nhân",
-        "Điều khoản sử dụng"
+    const contentPolicy: PolicySupport[] = [
+        {
+            content: "Chính sách và quy định chung",
+            link: "/chinh-sach-va-quy-dinh-chung"
+        },
+        {
+            content: "Chính sách thanh toán",
+            link: "/chinh-sach-thanh-toan"
+        },
+        {
+            content: "Chính sách giao nhận",
+            link: "/chinh-sach-giao-nhan"
+        },
+        {
+            content: "Chính sách đổi trả sản phẩm",
+            link: "/chinh-sach-doi-tra-san-pham"
+        },
+        {
+            content:  "Chính sách bảo mật thông tin cá nhân",
+            link: "/chinh-sach-bao-mat-thong-tin-ca-nhan"
+        },
+        {
+            content: "Điều khoản sử dụng",
+            link: "/dieu-khoan-su-dung"
+        }
     ] 
 
-    const contentSupport: any = [
-        "Quyền lợi Fresh-er",
-        "Thông tin thành viên",
-        "Tích điểm đổi quà",
-        "Hỗ trợ kỹ thuật",
-        "Câu hỏi thường gặp",
-        "Liên hệ"
+    const contentSupport: PolicySupport[] = [
+        {
+            content: "Quyền lợi Fresh-er",
+            link: "/quyen-loi-fresher"
+        },
+        {
+            content: "Thông tin thành viên",
+            link: "/thong-tin-thanh-vien"
+        },
+        {
+            content: "Tích điểm đổi quà",
+            link: "/tich-diem-doi-qua"
+        },
+        {
+            content: "Hỗ trợ kỹ thuật",
+            link: "/ho-tro-ki-thuat"
+        },
+        {
+            content: "Câu hỏi thường gặp",
+            link: "/cau-hoi-thuong-gap"
+        },
+        {
+            content: "Liên hệ",
+            link: "/contact"
+        }
     ] 
 
     return (
@@ -97,14 +138,14 @@ export default function Footer() {
                 </div>
                 <div className="w-[304px]">
                     <TitleFooter title="Chính sách"/>
-                    {contentPolicy.map((item: string, index: number) => (
-                        <ContentFooter title={item} key={index}/>
+                    {contentPolicy.map((item: any, index: number) => (
+                        <ContentFooter title={item.content} link={item.link} key={index}/>
                     ))}
                 </div>
                 <div className="flex-1">
                     <TitleFooter title="Hỗ trợ"/>
-                    {contentSupport.map((item: string, index: number) => (
-                        <ContentFooter title={item} key={index}/>
+                    {contentSupport.map((item: any, index: number) => (
+                        <ContentFooter title={item.content} link={item.link} key={index}/>
                     ))}
                 </div>
             </div>

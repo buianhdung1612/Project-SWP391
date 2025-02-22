@@ -1,21 +1,22 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Stack, Pagination } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
+import { MdDeleteOutline, MdOutlineSettingsBackupRestore } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { IoReturnDownBackOutline } from "react-icons/io5";
 
-export default function BlogsAdminPage() {
+export default function BlogTrashAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
         pageSize: 4,
         currentPage: 1,
-        blogs: []
+        brand: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/blog';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/products/blog/trash';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -87,13 +88,13 @@ export default function BlogsAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchblogs = async () => {
+        const fetchBrands = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchblogs();
+        fetchBrands();
     }, []);
 
     // Lọc theo trạng thái
@@ -131,7 +132,7 @@ export default function BlogsAdminPage() {
     // Hết Tìm kiếm sản phẩm
 
     // Thay đổi trạng thái 1 sản phẩm
-    const handleChangeStatusOneblog = async (status: string, dataPath: string) => {
+    const handleChangeStatusOnebrand = async (status: string, dataPath: string) => {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
 
@@ -160,6 +161,30 @@ export default function BlogsAdminPage() {
         event.preventDefault();
 
         const statusChange = changeMulti;
+
+        if(statusChange == "delete-destroy"){
+            const path = `${linkApi}/delete`;
+
+            const data: any = {
+                id: inputChecked
+            }
+
+            const response = await fetch(path, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+    
+            const dataResponse = await response.json();
+    
+            if (dataResponse.code == 200) {
+                location.reload();
+            }
+
+            return;
+        }
 
         const path = `${linkApi}/change-multi`;
 
@@ -192,9 +217,28 @@ export default function BlogsAdminPage() {
     }
     // Hết Thay đổi trạng thái nhiều sản phẩm
 
-    // Xóa một sản phẩm
-    const handleDeleteOneblog = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
+    // Xóa vĩnh viễn một sản phẩm
+    const handleDeleteOnebrand = async (id: number) => {
+        const path = `${linkApi}/delete/${id}`;
+
+        const response = await fetch(path, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
+    // Hết Xóa một sản phẩm
+
+    // Khôi phục một sản phẩm
+    const handleRestoreOnebrand = async (id: number) => {
+        const path = `${linkApi}/restore/${id}`;
 
         const response = await fetch(path, {
             method: "PATCH",
@@ -255,7 +299,7 @@ export default function BlogsAdminPage() {
         <Box p={3}>
             {/* Header */}
             <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Trang danh sách sản phẩm
+                Trang thùng rác thương hiệu sản phẩm
             </Typography>
 
             {/* Bộ lọc và Tìm kiếm */}
@@ -320,7 +364,8 @@ export default function BlogsAdminPage() {
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                 <MenuItem value="active">Hoạt động</MenuItem>
                                 <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="soft_deleted">Xóa</MenuItem>
+                                <MenuItem value="restored">Khôi phục</MenuItem>
+                                <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -328,26 +373,108 @@ export default function BlogsAdminPage() {
                         </Box>
                     </form>
                     <Button
-                        variant="contained"
-                        startIcon={<DeleteIcon />}
-                        sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
-                    >
-                        <Link href="/admin/blogs/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                    <Button
                         variant="outlined"
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/blogs/create">
-                            + Thêm mới
+                        <Link href="/admin/brands" className="flex items-center">
+                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
+                            Danh sách thương hiệu sản phẩm
                         </Link>
                     </Button>
                 </Box>
-                
+                <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell ></TableCell>
+                                <TableCell>STT</TableCell>
+                                <TableCell>Hình ảnh</TableCell>
+                                <TableCell>Tiêu đề</TableCell>
+                                <TableCell>Trạng thái</TableCell>
+                                <TableCell>Vị trí</TableCell>
+                                {/* <TableCell>Tạo bởi</TableCell> */}
+                                {/* <TableCell>Cập nhật bởi</TableCell> */}
+                                <TableCell>Hành động</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.brand.map((brand: any, index: number) => (
+                                <TableRow key={brand.id}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, brand.id)}>
+                                        <Checkbox />
+                                    </TableCell>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>
+                                        <img
+                                            src={brand.thumbnail}
+                                            alt={brand.title}
+                                            style={{ width: 100, height: 100, objectFit: "cover" }}
+                                        />
+                                    </TableCell>
+                                    <TableCell>{brand.title}</TableCell>
+                                    <TableCell>
+                                        {brand.status === "ACTIVE" && (
+                                            <Chip
+                                                label="Hoạt động"
+                                                color="success"
+                                                size="small"
+                                                variant="outlined"
+                                                onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${brand.id}`)}
+                                            />
+                                        )}
+                                        {brand.status === "INACTIVE" && (
+                                            <Chip
+                                                label="Dừng hoạt động"
+                                                color="error"
+                                                size="small"
+                                                variant="outlined"
+                                                onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${brand.id}`)}
+                                            />
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            type="number"
+                                            variant="outlined"
+                                            size="small"
+                                            sx={{
+                                                width: "60px"
+                                            }}
+                                            onChange={handleChangePosition}
+                                            InputProps={{
+                                                inputProps: { min: 0, step: 1 },
+                                            }}
+                                            value={brand.position}
+                                        />
+                                    </TableCell>
+                                    {/* <TableCell>
+                                    {brand.createdBy}
+                                    <br />
+                                    {brand.createdAt}
+                                </TableCell>
+                                <TableCell>
+                                    {brand.updatedBy}
+                                    <br />
+                                    {brand.updatedAt}
+                                </TableCell> */}
+                                    <TableCell>
+                                        <div className="flex">
+                                            <Tooltip title="Khôi phục" placement="top">
+                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOnebrand(brand.id)} />
+                                            </Tooltip>
+                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(brand.id)}>
+                                                <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
+                                            </Tooltip>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Paper>
+
 
             {/* Pagination */}
             <Stack spacing={2} marginTop={2}>

@@ -15,7 +15,12 @@ const TinyEditor: React.FC<TinyEditorProps> = ({ value, onEditorChange }) => {
                     height: 350,
                     plugins: 'autolink lists link image',
                     toolbar: 'undo redo | bold italic | alignleft aligncenter alignright | bullist numlist outdent indent | link image',
-                    menubar: false
+                    menubar: false,
+                    content_style: `
+                        body {
+                            font-size: 14px
+                        }
+                    `
                 }}
                 onEditorChange={onEditorChange}
             />

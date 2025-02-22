@@ -1,27 +1,14 @@
 "use client";
 
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
     ssr: false
 });
 
 export default function SettingGeneralAdminPage() {
-    const [policy1, setPolicy1] = useState('');
-    const [policy2, setPolicy2] = useState('');
-    const [policy3, setPolicy3] = useState('');
-    const [policy4, setPolicy4] = useState('');
-    const [policy5, setPolicy5] = useState('');
-    const [policy6, setPolicy6] = useState('');
-    const [support1, setSupport1] = useState('');
-    const [support2, setSupport2] = useState('');
-    const [support3, setSupport3] = useState('');
-    const [support4, setSupport4] = useState('');
-    const [support5, setSupport5] = useState('');
-    const [support6, setSupport6] = useState('');
-
-    const [formData, setFormData] = useState({
+    const [data, setData] = useState({
         websiteName: '',
         logo: '',
         phone: '',
@@ -31,43 +18,79 @@ export default function SettingGeneralAdminPage() {
         facebook: '',
         twitter: '',
         youtube: '',
-        instagram: ''
+        instagram: '',
+        policy1: '',
+        policy2: '',
+        policy3: '',
+        policy4: '',
+        policy5: '',
+        policy6: '',
+        support1: '',
+        support2: '',
+        support3: '',
+        support4: '',
+        support5: '',
+        support6: ''
     });
+
+    useEffect(() => {
+        const fetchSettings = async () => {
+            const response = await fetch('https://freshskinweb.onrender.com/setting/show');
+            const data = await response.json();
+            setData(data.data[0]);
+        };
+
+        fetchSettings();
+    }, []);
 
     const handleChange = (event: any) => {
         const { name, value } = event.target;
-        setFormData({ ...formData, [name]: value });
+        setData({ ...data, [name]: value });
     };
 
-    const handleSubmit = (event: any) => {
+    const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        const data: any = {
-            websiteName: formData.websiteName,
-            logo: formData.logo,
-            phone: formData.phone,
-            email: formData.email,
-            address: formData.address,
-            copyright: formData.copyright,
-            facebook: formData.facebook,
-            twitter: formData.twitter,
-            youtube: formData.youtube,
-            instagram: formData.instagram,
-            policy1: policy1,
-            policy2: policy2,
-            policy3: policy3,
-            policy4: policy4,
-            policy5: policy5,
-            policy6: policy6,
-            support1: support1,
-            support2: support2,
-            support3: support3,
-            support4: support4,
-            support5: support5,
-            support6: support6
+        const dataSetting: any = {
+            websiteName: data.websiteName,
+            logo: data.logo,
+            phone: data.phone,
+            email: data.email,
+            address: data.address,
+            copyright: data.copyright,
+            facebook: data.facebook,
+            twitter: data.twitter,
+            youtube: data.youtube,
+            instagram: data.instagram,
+            policy1: data.policy1,
+            policy2: data.policy2,
+            policy3: data.policy3,
+            policy4: data.policy4,
+            policy5: data.policy5,
+            policy6: data.policy6,
+            support1: data.support1,
+            support2: data.support2,
+            support3: data.support3,
+            support4: data.support4,
+            support5: data.support5,
+            support6: data.support6
         }
 
-        console.log(data);
+        console.log(dataSetting);
+
+        const response = await fetch('https://freshskinweb.onrender.com/setting/edit/1', {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
     };
 
     return (
@@ -83,7 +106,7 @@ export default function SettingGeneralAdminPage() {
                             margin="normal"
                             label="Tên website"
                             name="websiteName"
-                            value={formData.websiteName}
+                            value={data.websiteName}
                             onChange={handleChange}
                         />
                         <TextField
@@ -91,7 +114,7 @@ export default function SettingGeneralAdminPage() {
                             margin="normal"
                             label="Logo"
                             name="logo"
-                            value={formData.logo}
+                            value={data.logo}
                             onChange={handleChange}
                         />
                         <TextField
@@ -99,7 +122,7 @@ export default function SettingGeneralAdminPage() {
                             margin="normal"
                             label="Số điện thoại"
                             name="phone"
-                            value={formData.phone}
+                            value={data.phone}
                             onChange={handleChange}
                         />
                         <TextField
@@ -108,7 +131,7 @@ export default function SettingGeneralAdminPage() {
                             label="Email"
                             name="email"
                             type="email"
-                            value={formData.email}
+                            value={data.email}
                             onChange={handleChange}
                         />
                         <TextField
@@ -116,7 +139,7 @@ export default function SettingGeneralAdminPage() {
                             margin="normal"
                             label="Địa chỉ"
                             name="address"
-                            value={formData.address}
+                            value={data.address}
                             onChange={handleChange}
                         />
                         <TextField
@@ -124,7 +147,7 @@ export default function SettingGeneralAdminPage() {
                             margin="normal"
                             label="Copyright"
                             name="copyright"
-                            value={formData.copyright}
+                            value={data.copyright}
                             onChange={handleChange}
                         />
                         <TextField
@@ -132,7 +155,7 @@ export default function SettingGeneralAdminPage() {
                             margin="normal"
                             label="Facebook"
                             name="facebook"
-                            value={formData.facebook}
+                            value={data.facebook}
                             onChange={handleChange}
                         />
                         <TextField
@@ -140,7 +163,7 @@ export default function SettingGeneralAdminPage() {
                             margin="normal"
                             label="Twitter"
                             name="twitter"
-                            value={formData.twitter}
+                            value={data.twitter}
                             onChange={handleChange}
                         />
                         <TextField
@@ -148,7 +171,7 @@ export default function SettingGeneralAdminPage() {
                             margin="normal"
                             label="Youtube"
                             name="youtube"
-                            value={formData.youtube}
+                            value={data.youtube}
                             onChange={handleChange}
                         />
                         <TextField
@@ -156,34 +179,34 @@ export default function SettingGeneralAdminPage() {
                             margin="normal"
                             label="Instagram"
                             name="instagram"
-                            value={formData.instagram}
+                            value={data.instagram}
                             onChange={handleChange}
                         />
                         <h4 className="my-4 ml-2 text-[18px]">Chính sách và quy định chung</h4>
-                        <TinyEditor value={policy1} onEditorChange={(content: string) => setPolicy1(content)} />
+                        <TinyEditor value={data.policy1} onEditorChange={(content: string) => setData({ ...data, policy1: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Chính sách thanh toán</h4>
-                        <TinyEditor value={policy2} onEditorChange={(content: string) => setPolicy2(content)} />
+                        <TinyEditor value={data.policy2} onEditorChange={(content: string) => setData({ ...data, policy2: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Chính sách giao nhận</h4>
-                        <TinyEditor value={policy3} onEditorChange={(content: string) => setPolicy3(content)} />
+                        <TinyEditor value={data.policy3} onEditorChange={(content: string) => setData({ ...data, policy3: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Chính sách đổi trả sản phẩm</h4>
-                        <TinyEditor value={policy4} onEditorChange={(content: string) => setPolicy4(content)} />
+                        <TinyEditor value={data.policy4} onEditorChange={(content: string) => setData({ ...data, policy4: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Chính sách bảo mật thông tin cá nhân</h4>
-                        <TinyEditor value={policy5} onEditorChange={(content: string) => setPolicy5(content)} />
+                        <TinyEditor value={data.policy5} onEditorChange={(content: string) => setData({ ...data, policy5: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Điều khoản sử dụng</h4>
-                        <TinyEditor value={policy6} onEditorChange={(content: string) => setPolicy6(content)} />
+                        <TinyEditor value={data.policy6} onEditorChange={(content: string) => setData({ ...data, policy6: content })} />
 
                         <h4 className="my-4 ml-2 text-[18px]">Quyền lợi Fresh-er</h4>
-                        <TinyEditor value={support1} onEditorChange={(content: string) => setSupport1(content)} />
+                        <TinyEditor value={data.support1} onEditorChange={(content: string) => setData({ ...data, support1: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Thông tin thành viên</h4>
-                        <TinyEditor value={support2} onEditorChange={(content: string) => setSupport2(content)} />
+                        <TinyEditor value={data.support2} onEditorChange={(content: string) => setData({ ...data, support2: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Tích điểm đổi quà</h4>
-                        <TinyEditor value={support3} onEditorChange={(content: string) => setSupport3(content)} />
+                        <TinyEditor value={data.support3} onEditorChange={(content: string) => setData({ ...data, support3: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Hệ thống cửa hàng</h4>
-                        <TinyEditor value={support4} onEditorChange={(content: string) => setSupport4(content)} />
+                        <TinyEditor value={data.support4} onEditorChange={(content: string) => setData({ ...data, support4: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Tuyển dụng</h4>
-                        <TinyEditor value={support5} onEditorChange={(content: string) => setSupport5(content)} />
+                        <TinyEditor value={data.support5} onEditorChange={(content: string) => setData({ ...data, support5: content })} />
                         <h4 className="my-4 ml-2 text-[18px]">Liên hệ</h4>
-                        <TinyEditor value={support6} onEditorChange={(content: string) => setSupport6(content)} />
+                        <TinyEditor value={data.support6} onEditorChange={(content: string) => setData({ ...data, support6: content })} />
 
                         <Button type="submit" variant="contained" color="primary" sx={{ marginTop: 2 }}>
                             Cập nhật
