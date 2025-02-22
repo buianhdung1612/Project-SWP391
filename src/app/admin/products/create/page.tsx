@@ -7,6 +7,7 @@ import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, InputLabel, Select, MenuItem } from '@mui/material';
 import { MdDeleteForever } from 'react-icons/md';
 import UploadImage from '@/app/components/Upload/UploadImage';
+import SubCategory from '@/app/components/Sub-Category/SubCategory';
 
 interface InputField {
     volume: string;
@@ -20,7 +21,7 @@ interface Variants {
 
 interface DataSubmit {
     title: string,
-    categoryId: number,
+    categoryId: number[],
     brandId: number,
     description: string,
     // images: File[],
@@ -39,7 +40,6 @@ interface DataSubmit {
 
 export default function CreateProductAdminPage() {
     const [description, setDescription] = useState('');
-    const [categoryCurrent, setCategoryCurrent] = useState('');
     const [listCategory, setListCategory] = useState([]);
     const [brandCurrent, setBrandCurrent] = useState('');
     const [listBrand, setListBrand] = useState([]);
@@ -60,9 +60,15 @@ export default function CreateProductAdminPage() {
         fetchBrands();
     }, []);
 
-    const handleChangeCategory = (event: any) => {
-        setCategoryCurrent(event.target.value);
+    const [inputCheckedCategory, setInputCheckedCategory] = useState<number[]>([]); 
+
+    const handleCheckedChange = (checkedIds: number[]) => {
+        setInputCheckedCategory(prev => {
+            const newCheckedIds = Array.from(new Set([...prev, ...checkedIds]));
+            return newCheckedIds;
+        });
     };
+
     const handleChangeBrand = (event: any) => {
         setBrandCurrent(event.target.value);
     };
@@ -78,11 +84,9 @@ export default function CreateProductAdminPage() {
             }
         }
 
-        console.log(selectedSkinTypes);
-
         const dataSubmit: DataSubmit = {
             title: event.target.title.value,
-            categoryId: parseInt(categoryCurrent),
+            categoryId: inputCheckedCategory,
             brandId: parseInt(brandCurrent),
             description: description,
             variants: inputs,
@@ -98,19 +102,19 @@ export default function CreateProductAdminPage() {
             position: event.target.position.value
         }
 
-        const response = await fetch('https://freshskinweb.onrender.com/admin/products/create', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataSubmit)
-        });
+        // const response = await fetch('https://freshskinweb.onrender.com/admin/products/create', {
+        //     method: "POST",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(dataSubmit)
+        // });
 
-        const dataResponse = await response.json();
+        // const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
-        }
+        // if (dataResponse.code == 200) {
+        //     location.reload();
+        // }
     }
 
     // Variants
@@ -144,7 +148,6 @@ export default function CreateProductAdminPage() {
         setChecked({ ...checked, [event.target.name]: event.target.checked });
     };
 
-
     return (
         <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
             <Typography variant="h4" gutterBottom>
@@ -161,7 +164,7 @@ export default function CreateProductAdminPage() {
                         sx={{ marginBottom: 3 }}
                         required
                     />
-                    <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
+                    {/* <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
                         <InputLabel shrink={true}>-- Chọn danh mục --</InputLabel>
                         <Select
                             value={categoryCurrent}
@@ -177,7 +180,11 @@ export default function CreateProductAdminPage() {
                             ))}
 
                         </Select>
-                    </FormControl>
+                    </FormControl> */}
+                    <div className='mb-6 sub-menu'>
+                        <Typography variant="h6" className='border border-solid border-[#BFBFBF] rounded-[5px] p-[10px]'>Chọn danh mục sản phẩm</Typography>
+                        <SubCategory items={listCategory} onCheckedChange={handleCheckedChange}/>
+                    </div>
                     <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
                         <InputLabel shrink={true}>-- Chọn thương hiệu --</InputLabel>
                         <Select

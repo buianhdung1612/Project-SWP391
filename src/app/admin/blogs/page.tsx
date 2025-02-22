@@ -1,7 +1,10 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Stack, Pagination } from "@mui/material";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
+import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { BiDetail } from "react-icons/bi";
+import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -10,14 +13,14 @@ export default function BlogsAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
-        pageSize: 4,
+        pageSize: 8,
         currentPage: 1,
         blogs: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/blog';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/blogs';
 
-    // const [inputChecked, setInputChecked] = useState<number[]>([]);
+    const [inputChecked, setInputChecked] = useState<number[]>([]);
 
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
@@ -87,13 +90,13 @@ export default function BlogsAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchblogs = async () => {
+        const fetchBlogs = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchblogs();
+        fetchBlogs();
     }, []);
 
     // Lọc theo trạng thái
@@ -131,90 +134,90 @@ export default function BlogsAdminPage() {
     // Hết Tìm kiếm sản phẩm
 
     // Thay đổi trạng thái 1 sản phẩm
-    // const handleChangeStatusOneblog = async (status: string, dataPath: string) => {
-    //     const statusChange = status;
-    //     const path = `${linkApi}${dataPath}`;
+    const handleChangeStatusOneblog = async (status: string, dataPath: string) => {
+        const statusChange = status;
+        const path = `${linkApi}${dataPath}`;
+        const data = {
+            status: statusChange
+        }
+        console.log(data);
+        console.log(path);
+        const response = await fetch(path, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
 
-    //     const data = {
-    //         status: statusChange
-    //     }
+        const dataResponse = await response.json();
 
-    //     const response = await fetch(path, {
-    //         method: "PATCH",
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         },
-    //         body: JSON.stringify(data)
-    //     });
-
-    //     const dataResponse = await response.json();
-
-    //     if (dataResponse.code == 200) {
-    //         location.reload();
-    //     }
-    // }
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
     // Hết Thay đổi trạng thái 1 sản phẩm
 
     // Thay đổi trạng thái nhiều sản phẩm
     const handleChangeMulti = async (event: any) => {
         event.preventDefault();
 
-        // const statusChange = changeMulti;
+        const statusChange = changeMulti;
 
-        // const path = `${linkApi}/change-multi`;
+        const path = `${linkApi}/change-multi`;
 
-        // const data: any = {
-        //     id: inputChecked,
-        //     status: statusChange
-        // }
+        const data: any = {
+            id: inputChecked,
+            status: statusChange
+        }
 
-        // const response = await fetch(path, {
-        //     method: "PATCH",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify(data)
-        // });
+        const response = await fetch(path, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
 
-        // const dataResponse = await response.json();
+        const dataResponse = await response.json();
 
-        // if (dataResponse.code == 200) {
-        //     location.reload();
-        // }
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
     }
 
-    // const handleInputChecked = (event: any, id: number) => {
-    //     if (event.target.checked) {
-    //         setInputChecked(prev => [...prev, id]);
-    //     } else {
-    //         setInputChecked(prev => prev.filter(id => id !== id));
-    //     }
-    // }
+    const handleInputChecked = (event: any, id: number) => {
+        if (event.target.checked) {
+            setInputChecked(prev => [...prev, id]);
+        } else {
+            setInputChecked(prev => prev.filter(id => id !== id));
+        }
+    }
     // Hết Thay đổi trạng thái nhiều sản phẩm
 
     // Xóa một sản phẩm
-    // const handleDeleteOneblog = async (id: number) => {
-    //     const path = `${linkApi}/deleteT/${id}`;
+    const handleDeleteOneblog = async (id: number) => {
+        const path = `${linkApi}/deleteT/${id}`;
 
-    //     const response = await fetch(path, {
-    //         method: "PATCH",
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         },
-    //     });
+        const response = await fetch(path, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
 
-    //     const dataResponse = await response.json();
+        const dataResponse = await response.json();
 
-    //     if (dataResponse.code == 200) {
-    //         location.reload();
-    //     }
-    // }
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
     // Hết Xóa một sản phẩm
 
     // Thay đổi vị trí sản phẩm
-    // const handleChangePosition = (event: any) => {
-    //     console.log(event.target.value);
-    // }
+    const handleChangePosition = (event: any) => {
+        console.log(event.target.value);
+    }
     // Hết Thay đổi vị trí sản phẩm
 
     // Sắp xếp theo tiêu chí
@@ -249,7 +252,7 @@ export default function BlogsAdminPage() {
 
         location.href = url.href;
     }
-    // Hết phân trang
+    // Hết phân trang    
 
     return (
         <Box p={3}>
@@ -346,7 +349,93 @@ export default function BlogsAdminPage() {
                         </Link>
                     </Button>
                 </Box>
-                
+                <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
+                    <Table>
+                        <TableHead>
+                            <TableRow>
+                                <TableCell ></TableCell>
+                                <TableCell>STT</TableCell>
+                                <TableCell>Hình ảnh</TableCell>
+                                <TableCell>Tiêu đề</TableCell>
+                                <TableCell>Trạng thái</TableCell>
+                                <TableCell>Vị trí</TableCell>
+                                {/* <TableCell>Tạo bởi</TableCell> */}
+                                {/* <TableCell>Cập nhật bởi</TableCell> */}
+                                <TableCell>Hành động</TableCell>
+                            </TableRow>
+                        </TableHead>
+                        <TableBody>
+                            {data.blogs.map((blog: any, index: number) => (
+                                <TableRow key={blog.id}> 
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, blog.id)}>
+                                        <Checkbox />
+                                    </TableCell>
+                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>
+                                        <img
+                                            src={blog.thumbnail}
+                                            alt={blog.title}
+                                            style={{ width: 100, height: 100, objectFit: "cover" }}
+                                        />
+                                    </TableCell>
+                                    <TableCell>{blog.title}</TableCell>
+                                    <TableCell>
+                                        {blog.status === "ACTIVE" && (
+                                            <Chip
+                                                label="Hoạt động"
+                                                color="success"
+                                                size="small"
+                                                variant="outlined"
+                                                onClick={() => handleChangeStatusOneblog("INACTIVE", `/edit/${blog.id}`)}
+                                            />
+                                        )}
+                                        {blog.status === "INACTIVE" && (
+                                            <Chip
+                                                label="Dừng hoạt động"
+                                                color="error"
+                                                size="small"
+                                                variant="outlined"
+                                                onClick={() => handleChangeStatusOneblog("ACTIVE", `/edit/${blog.id}`)}
+                                            />
+                                        )}
+                                    </TableCell>
+                                    <TableCell>
+                                        <TextField
+                                            type="number"
+                                            variant="outlined"
+                                            size="small"
+                                            sx={{
+                                                width: "60px"
+                                            }}
+                                            onChange={handleChangePosition}
+                                            InputProps={{
+                                                inputProps: { min: 0, step: 1 },
+                                            }}
+                                            value={blog.position}
+                                        />
+                                    </TableCell>
+                                    <TableCell>
+                                        <div className="flex">
+                                            <Tooltip title="Chi tiết" placement="top">
+                                                <Link href={`/admin/blogs/detail/${blog.id}`}>
+                                                    <BiDetail className="text-[25px] text-[#138496] mr-2" />
+                                                </Link>
+                                            </Tooltip>
+                                            <Tooltip title="Sửa" placement="top">
+                                                <Link href={`/admin/blogs/edit/${blog.id}`}>
+                                                    <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                                </Link>
+                                            </Tooltip>
+                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneblog(blog.id)}>
+                                                <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
+                                            </Tooltip>
+                                        </div>
+                                    </TableCell>
+                                </TableRow>
+                            ))}
+                        </TableBody>
+                    </Table>
+                </TableContainer>
             </Paper>
 
             {/* Pagination */}
@@ -374,6 +463,23 @@ export default function BlogsAdminPage() {
                     onChange={handlePagination}
                 />
             </Stack>
+
+            {/* Action Buttons */}
+            <Box mt={2} display="flex" justifyContent="space-between">
+                <Box>
+                    <Button variant="contained" color="success">
+                        Áp dụng
+                    </Button>{" "}
+                    <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
+                        <Link href="/admin/blogs/trash">
+                            Thùng rác
+                        </Link>
+                    </Button>
+                </Box>
+                <Button variant="contained" color="primary" startIcon={<AddIcon />}>
+                    Thêm mới
+                </Button>
+            </Box>
         </Box>
     );
 }
