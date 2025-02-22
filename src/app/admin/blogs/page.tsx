@@ -17,7 +17,7 @@ export default function BlogsAdminPage() {
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/blog';
 
-    const [inputChecked, setInputChecked] = useState<number[]>([]);
+    // const [inputChecked, setInputChecked] = useState<number[]>([]);
 
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
@@ -159,28 +159,28 @@ export default function BlogsAdminPage() {
     const handleChangeMulti = async (event: any) => {
         event.preventDefault();
 
-        const statusChange = changeMulti;
+        // const statusChange = changeMulti;
 
-        const path = `${linkApi}/change-multi`;
+        // const path = `${linkApi}/change-multi`;
 
-        const data: any = {
-            id: inputChecked,
-            status: statusChange
-        }
+        // const data: any = {
+        //     id: inputChecked,
+        //     status: statusChange
+        // }
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+        // const response = await fetch(path, {
+        //     method: "PATCH",
+        //     headers: {
+        //         "Content-Type": "application/json"
+        //     },
+        //     body: JSON.stringify(data)
+        // });
 
-        const dataResponse = await response.json();
+        // const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
-        }
+        // if (dataResponse.code == 200) {
+        //     location.reload();
+        // }
     }
 
     // const handleInputChecked = (event: any, id: number) => {
