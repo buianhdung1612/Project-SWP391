@@ -5,7 +5,7 @@ const TinyEditor = dynamic(() => import('../../../../../../TinyEditor'), {
 });
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio } from '@mui/material';
-import UploadImage from '@/app/components/Upload/UploadImage';
+// import UploadImage from '@/app/components/Upload/UploadImage';
 import { useParams } from 'next/navigation';
 
 interface DataSubmit {
@@ -107,7 +107,7 @@ export default function EditBrandtAdminPage() {
                     </FormControl>
                     <h4>Mô tả</h4>
                     <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
-                    <UploadImage label='Chọn ảnh' id="images" name="images" />                                     
+                    {/* <UploadImage label='Chọn ảnh' id="images" name="images" />                                      */}
                     <TextField
                         label="Vị trí (tự động tăng)"
                         name='position'
