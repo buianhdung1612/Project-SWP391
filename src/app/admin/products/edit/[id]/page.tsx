@@ -251,7 +251,7 @@ export default function EditProductAdminPage() {
                     </FormControl>
                     <h4>Mô tả</h4>
                     <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
-                    <UploadImage label='Chọn ảnh' id="images" name="images" />
+                    {/* <UploadImage label='Chọn ảnh' id="images" name="images" /> */}
                     <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
                         {inputs.map((input, index: number) => (
                             <Box key={`${input.volume}-${input.price}-${index}`} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
