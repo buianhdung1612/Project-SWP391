@@ -5,21 +5,27 @@ import { useState } from "react";
 export default function UploadImage(props: {
     label: string,
     id: string,
-    name: string
+    name: string,
+    onImageChange: (images: File[]) => void
 }) {
-    const { label = "", id = "", name = "" } = props;
+    const { label = "", id = "", name = "", onImageChange  } = props;
 
     const [imagePreviews, setImagePreviews] = useState<File[]>([]);
 
     const handleChange = (event: any) => {
         const newFiles = Array.from(event.target.files) as File[];
-        setImagePreviews(prevFiles => [...prevFiles, ...newFiles]);
+        const updatedFiles = [...imagePreviews, ...newFiles];
+        setImagePreviews(updatedFiles); 
+        onImageChange(updatedFiles); // Gọi ở đây
     };
 
     const handleClickDelete = (index: number) => {
-        setImagePreviews(prevFiles => prevFiles.filter((_, i) => i !== index)); 
+        setImagePreviews(prevFiles => {
+            const updatedFiles = prevFiles.filter((_, i) => i !== index);
+            onImageChange(updatedFiles); 
+            return updatedFiles;
+        });
     };
-
     return (
         <>
             <div className="mb-[10px]">

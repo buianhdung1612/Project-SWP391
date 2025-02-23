@@ -24,7 +24,7 @@ interface DataSubmit {
     categoryId: number[],
     brandId: number,
     description: string,
-    // images: File[],
+    images: File[],
     variants: Variants[],
     discount: number,
     position: number,
@@ -60,6 +60,7 @@ export default function CreateProductAdminPage() {
         fetchBrands();
     }, []);
 
+    
     const [inputCheckedCategory, setInputCheckedCategory] = useState<number[]>([]); 
 
     const handleCheckedChange = (checkedIds: number[]) => {
@@ -67,6 +68,11 @@ export default function CreateProductAdminPage() {
             const newCheckedIds = Array.from(new Set([...prev, ...checkedIds]));
             return newCheckedIds;
         });
+    };
+
+    const [images, setImages] = useState<File[]>([]); 
+    const handleImageChange = (newImages: File[]) => {
+        setImages(newImages); 
     };
 
     const handleChangeBrand = (event: any) => {
@@ -89,6 +95,7 @@ export default function CreateProductAdminPage() {
             categoryId: inputCheckedCategory,
             brandId: parseInt(brandCurrent),
             description: description,
+            images: images,
             variants: inputs,
             discount: event.target.discount.value,
             // skinType: selectedSkinTypes,
@@ -164,23 +171,6 @@ export default function CreateProductAdminPage() {
                         sx={{ marginBottom: 3 }}
                         required
                     />
-                    {/* <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
-                        <InputLabel shrink={true}>-- Chọn danh mục --</InputLabel>
-                        <Select
-                            value={categoryCurrent}
-                            onChange={handleChangeCategory}
-                            label=" Chọn danh mục --"
-                            displayEmpty
-                        >
-                            <MenuItem value=''>
-                                -- Chọn danh mục --
-                            </MenuItem>
-                            {listCategory.map((item: any, index: number) => (
-                                <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
-                            ))}
-
-                        </Select>
-                    </FormControl> */}
                     <div className='mb-6 sub-menu'>
                         <Typography variant="h6" className='border border-solid border-[#BFBFBF] rounded-[5px] p-[10px]'>Chọn danh mục sản phẩm</Typography>
                         <SubCategory items={listCategory} onCheckedChange={handleCheckedChange}/>
@@ -212,7 +202,7 @@ export default function CreateProductAdminPage() {
                             <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
                         </RadioGroup>
                     </FormControl>
-                    <UploadImage label='Chọn ảnh' id="images" name="images" />
+                    <UploadImage label='Chọn ảnh' id="images" name="images" onImageChange={handleImageChange}/>
 
                     <h4>Mô tả</h4>
                     <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
