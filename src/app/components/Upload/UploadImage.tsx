@@ -22,9 +22,10 @@ export default function UploadImage(props: {
     const handleClickDelete = (index: number) => {
         setImagePreviews(prevFiles => {
             const updatedFiles = prevFiles.filter((_, i) => i !== index);
-            onImageChange(updatedFiles); 
-            return updatedFiles;
+            return updatedFiles; 
         });
+        
+        onImageChange(imagePreviews.filter((_, i) => i !== index)); 
     };
     return (
         <>
