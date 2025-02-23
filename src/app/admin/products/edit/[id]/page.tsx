@@ -6,7 +6,7 @@ const TinyEditor = dynamic(() => import('../../../../../../TinyEditor'), {
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, InputLabel, Select, MenuItem } from '@mui/material';
 import { MdDeleteForever } from 'react-icons/md';
-import UploadImage from '@/app/components/Upload/UploadImage';
+// import UploadImage from '@/app/components/Upload/UploadImage';
 import { useParams } from 'next/navigation';
 
 interface InputField {
