@@ -21,6 +21,8 @@ export default function CreateBlogCategoryAdminPage() {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
+        const formData = new FormData();
+
         const dataSubmit = {
             title: event.target.title.value,
             description: description,
@@ -28,6 +30,8 @@ export default function CreateBlogCategoryAdminPage() {
             featured: event.target.featured.value,
             status: event.target.status.value
         }
+
+        images.forEach((image) => formData.append("thumbnail", image));
 
         const response = await fetch('https://freshskinweb.onrender.com/admin/products/brand/create', {
             method: "POST",

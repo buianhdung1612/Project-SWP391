@@ -67,7 +67,6 @@ export default function CreateProductAdminPage() {
 
         const formData = new FormData();
 
-        // Tạo đối tượng JSON cho phần "request"
         const requestPayload = {
             categoryId: inputCheckedCategory,
             brandId: brandCurrent,
