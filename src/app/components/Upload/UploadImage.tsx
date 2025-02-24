@@ -26,6 +26,7 @@ export default function UploadImage(props: {
         if (isDefault) {
             // Nếu là ảnh mặc định, chỉ loại bỏ URL khỏi danh sách
             const updatedDefaultImages = defaultImages.filter((_, i) => i !== index);
+            console.log(updatedDefaultImages);
             onImageChange(imagePreviews); // Chỉ gửi ảnh mới (không bao gồm ảnh mặc định) cho parent
         } else {
             // Nếu là ảnh do người dùng tải lên, xóa khỏi `imagePreviews`
@@ -34,6 +35,8 @@ export default function UploadImage(props: {
             onImageChange(updatedPreviews);
         }
     };
+
+    
 
     return (
         <div className="mb-[10px]">
