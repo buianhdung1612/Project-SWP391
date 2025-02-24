@@ -1,6 +1,7 @@
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { CiCrop } from "react-icons/ci";
 import { FaBlog, FaBorderNone, FaJoomla, FaObjectGroup, FaTable, FaUsers } from "react-icons/fa";
 import { FaGaugeHigh, FaGear, FaGroupArrowsRotate, FaHurricane } from "react-icons/fa6";
 import { TbBrandCampaignmonitor } from "react-icons/tb";
@@ -26,6 +27,11 @@ const menu: Menu[] = [
         content: "Thương hiệu",
         icon: <TbBrandCampaignmonitor />,
         link: "/admin/brands"
+    },
+    {
+        content: "Thể loại da",
+        icon: <CiCrop />,
+        link: "/admin/skin"
     },
     {
         content: "Sản phẩm",

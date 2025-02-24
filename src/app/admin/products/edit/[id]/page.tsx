@@ -6,47 +6,26 @@ const TinyEditor = dynamic(() => import('../../../../../../TinyEditor'), {
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, InputLabel, Select, MenuItem } from '@mui/material';
 import { MdDeleteForever } from 'react-icons/md';
-// import UploadImage from '@/app/components/Upload/UploadImage';
+import UploadImage from '@/app/components/Upload/UploadImage';
 import { useParams } from 'next/navigation';
+import SubCategory from '@/app/components/Sub-Category/SubCategory';
 
 interface InputField {
-    volume: string;
-    price: string;
+    volume: number;
+    price: number;
 }
 
 type SkinType = 'oily' | 'dry' | 'combination' | 'sensitive' | 'normal';
 
-interface Variants {
-    volume: number | string,
-    price: number | string
-}
-
-interface DataSubmit {
-    title: string,
-    categoryId: number,
-    brandId: number,
-    description: string,
-    // images: File[],
-    variants: Variants[],
-    discount: number,
-    position: number,
-    // skinType: string[],
-    origin: string,
-    ingredients: string,
-    usageInstructions: string,
-    benefits: string,
-    skinIssues: string,
-    featured: boolean,
-    status: string
-}
-
 export default function EditProductAdminPage() {
     const { id } = useParams();
+
+    // Quản lý mặc định
     const [description, setDescription] = useState('');
-    const [categoryCurrent, setCategoryCurrent] = useState("");
     const [listCategory, setListCategory] = useState([]);
     const [brandCurrent, setBrandCurrent] = useState("");
     const [listBrand, setListBrand] = useState([]);
+    const [defaultImages, setDefaultImages] = useState<string[]>([]);
 
     const [productInfo, setProductInfo] = useState({
         title: "",
@@ -65,40 +44,6 @@ export default function EditProductAdminPage() {
         status: "ACTIVE"
     });
 
-    // Variants
-    const [inputs, setInputs] = useState<InputField[]>([
-        { volume: "", price: "" }
-    ]);
-
-    const handleAddInput = () => {
-        setInputs([...inputs, { volume: "", price: "" }]);
-    };
-
-    const handleRemoveInput = (indexRemove: number) => {
-        const newInputs = inputs.filter((item, index) => index !== indexRemove);
-        setInputs(newInputs);
-    };
-
-    const handleInputChange = (index: number, field: 'volume' | 'price', value: string) => {
-        const newInputs = [...inputs];
-        newInputs[index][field] = value;
-        setInputs(newInputs);
-    };
-
-    // Skin Type
-    const [checked, setChecked] = useState({
-        oily: false,
-        dry: false,
-        combination: false,
-        sensitive: false,
-        normal: false,
-    });
-
-    const handleChange = (event: any) => {
-        setChecked({ ...checked, [event.target.name]: event.target.checked });
-    };
-
-    // Láy data
     useEffect(() => {
         const fetchCategories = async () => {
             const response = await fetch('https://freshskinweb.onrender.com/admin/products/category/show');
@@ -119,7 +64,8 @@ export default function EditProductAdminPage() {
             setDescription(data.data.description);
             setInputs(data.data.variants);
             setBrandCurrent(data.data.brand.id.toString());
-            setCategoryCurrent(data.data.category.id.toString())
+            setDefaultImages(data.data.thumbnail);
+            setInputCheckedCategory(data.data.categories);
         };
 
         fetchCategories();
@@ -127,8 +73,52 @@ export default function EditProductAdminPage() {
         fetchProduct();
     }, []);
 
-    const handleChangeCategory = (event: any) => {
-        setCategoryCurrent(event.target.value);
+    // Variants
+    const [inputs, setInputs] = useState<InputField[]>([
+        { volume: 0, price: 0 }
+    ]);
+
+    const handleAddInput = () => {
+        setInputs([...inputs, { volume: 0, price: 0 }]);
+    };
+
+    const handleRemoveInput = (indexRemove: number) => {
+        const newInputs = inputs.filter((item, index) => index !== indexRemove);
+        setInputs(newInputs);
+    };
+
+    const handleInputChange = (index: number, field: 'volume' | 'price', value: string) => {
+        const newInputs = [...inputs];
+        newInputs[index][field] = value ? parseFloat(value) : 0;
+        setInputs(newInputs);
+    };
+
+    // Skin Type
+    const [checked, setChecked] = useState({
+        oily: false,
+        dry: false,
+        combination: false,
+        sensitive: false,
+        normal: false,
+    });
+
+    const handleChange = (event: any) => {
+        setChecked({ ...checked, [event.target.name]: event.target.checked });
+    };
+
+    // Upload ảnh
+    const [images, setImages] = useState<File[]>([]);
+    const handleImageChange = (newImages: File[]) => {
+        setImages(newImages);
+    };
+
+    const [inputCheckedCategory, setInputCheckedCategory] = useState<number[]>([]);
+
+    const handleCheckedChange = (checkedIds: number[]) => {
+        setInputCheckedCategory(prev => {
+            const newCheckedIds = Array.from(new Set([...prev, ...checkedIds]));
+            return newCheckedIds;
+        });
     };
 
     const handleChangeBrand = (event: any) => {
@@ -143,6 +133,8 @@ export default function EditProductAdminPage() {
         setProductInfo({ ...productInfo, status: event.target.value });
     };
 
+    console.log(inputCheckedCategory);
+
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
@@ -154,31 +146,54 @@ export default function EditProductAdminPage() {
             }
         }
 
-        const dataSubmit: DataSubmit = {
+        // const dataSubmit: DataSubmit = {
+        //     title: event.target.title.value,
+        //     categoryId: parseInt(categoryCurrent),
+        //     brandId: parseInt(brandCurrent),
+        //     description: description,
+        //     variants: inputs,
+        //     discount: event.target.discount.value,
+        //     origin: event.target.origin.value,
+        //     ingredients: event.target.ingredients.value,
+        //     usageInstructions: event.target.usageInstructions.value,
+        //     benefits: event.target.benefits.value,
+        //     skinIssues: event.target.skinIssues.value,
+        //     featured: event.target.featured.value,
+        //     status: event.target.status.value,
+        //     position: event.target.position.value
+        // }
+
+        const formData = new FormData();
+
+        // Tạo đối tượng JSON cho phần "request"
+        const requestPayload = {
+            categoryId: inputCheckedCategory,
+            brandId: brandCurrent,
             title: event.target.title.value,
-            categoryId: parseInt(categoryCurrent),
-            brandId: parseInt(brandCurrent),
             description: description,
-            variants: inputs,
-            discount: event.target.discount.value,
+            variants: inputs.map(input => ({
+                price: Number(input.price),
+                volume: input.volume ? Number(input.volume) : 0
+            })),
+            skinTypes: [1, 2, 3, 4, 5],
+            discountPercent: parseInt(event.target.discount.value),
+            position: event.target.position.value,
             origin: event.target.origin.value,
             ingredients: event.target.ingredients.value,
             usageInstructions: event.target.usageInstructions.value,
             benefits: event.target.benefits.value,
             skinIssues: event.target.skinIssues.value,
-            featured: event.target.featured.value,
+            featured: event.target.featured.value === "true",
             status: event.target.status.value,
-            position: event.target.position.value
-        }
+        };
 
-        console.log(dataSubmit);
-        
+        formData.append("request", JSON.stringify(requestPayload));
+
+        images.forEach((image) => formData.append("thumbnail", image));
+
         const response = await fetch(`https://freshskinweb.onrender.com/admin/products/edit/${id}`, {
             method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataSubmit)
+            body: formData,
         });
 
         const dataResponse = await response.json();
@@ -206,22 +221,10 @@ export default function EditProductAdminPage() {
                         value={productInfo.title}
                         onChange={(e) => setProductInfo({ ...productInfo, title: e.target.value })}
                     />
-                    <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
-                        <InputLabel shrink={true}>-- Chọn danh mục --</InputLabel>
-                        <Select
-                            value={categoryCurrent}
-                            onChange={handleChangeCategory}
-                            label=" Chọn danh mục --"
-                            displayEmpty
-                        >
-                            <MenuItem value="">
-                                -- Chọn danh mục --
-                            </MenuItem>
-                            {listCategory.map((item: any, index: number) => (
-                                <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
-                            ))}
-                        </Select>
-                    </FormControl>
+                    <div className='mb-6 sub-menu'>
+                        <Typography className='border border-solid border-[#BFBFBF] rounded-[5px] p-[10px]'>Chọn danh mục sản phẩm</Typography>
+                        <SubCategory items={listCategory} onCheckedChange={handleCheckedChange} defaultCheckedIds={inputCheckedCategory} />
+                    </div>
                     <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
                         <InputLabel shrink={true}>-- Chọn thương hiệu --</InputLabel>
                         <Select
@@ -251,7 +254,7 @@ export default function EditProductAdminPage() {
                     </FormControl>
                     <h4>Mô tả</h4>
                     <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
-                    {/* <UploadImage label='Chọn ảnh' id="images" name="images" /> */}
+                    <UploadImage label='Chọn ảnh' id="images" name="images" onImageChange={handleImageChange} defaultImages={defaultImages} />
                     <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
                         {inputs.map((input, index: number) => (
                             <Box key={`${input.volume}-${input.price}-${index}`} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>

@@ -16,7 +16,7 @@ export default function BlogTrashAdminPage() {
         brand: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/products/blog/trash';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/products/blogs/trash';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -377,9 +377,9 @@ export default function BlogTrashAdminPage() {
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/brands" className="flex items-center">
+                        <Link href="/admin/blogs" className="flex items-center">
                             <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
-                            Danh sách thương hiệu sản phẩm
+                            Danh sách bài viết
                         </Link>
                     </Button>
                 </Box>

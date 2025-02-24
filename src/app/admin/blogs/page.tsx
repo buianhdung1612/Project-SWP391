@@ -140,8 +140,6 @@ export default function BlogsAdminPage() {
         const data = {
             status: statusChange
         }
-        console.log(data);
-        console.log(path);
         const response = await fetch(path, {
             method: "PATCH",
             headers: {

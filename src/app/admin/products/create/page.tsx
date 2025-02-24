@@ -10,32 +10,8 @@ import UploadImage from '@/app/components/Upload/UploadImage';
 import SubCategory from '@/app/components/Sub-Category/SubCategory';
 
 interface InputField {
-    volume: string;
-    price: string;
-}
-
-interface Variants {
-    volume: number | string,
-    price: number | string
-}
-
-interface DataSubmit {
-    title: string,
-    categoryId: number[],
-    brandId: number,
-    description: string,
-    thumbnail: File[],
-    variants: Variants[],
-    discount: number,
-    position: number,
-    skinType: number[],
-    origin: string,
-    ingredients: string,
-    usageInstructions: string,
-    benefits: string,
-    skinIssues: string,
-    featured: boolean,
-    status: string
+    price: number;
+    volume: number;
 }
 
 export default function CreateProductAdminPage() {
@@ -43,6 +19,7 @@ export default function CreateProductAdminPage() {
     const [listCategory, setListCategory] = useState([]);
     const [brandCurrent, setBrandCurrent] = useState('');
     const [listBrand, setListBrand] = useState([]);
+    const [listSkinType, setListSkinType] = useState([]);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -56,12 +33,18 @@ export default function CreateProductAdminPage() {
             setListBrand(data.data);
         };
 
+        const fetchSkintypes = async () => {
+            const response = await fetch('https://freshskinweb.onrender.com/admin/skintypes/show');
+            const data = await response.json();
+            setListSkinType(data.data);
+        }
+
         fetchCategories();
         fetchBrands();
+        fetchSkintypes();
     }, []);
 
-    
-    const [inputCheckedCategory, setInputCheckedCategory] = useState<number[]>([]); 
+    const [inputCheckedCategory, setInputCheckedCategory] = useState<number[]>([]);
 
     const handleCheckedChange = (checkedIds: number[]) => {
         setInputCheckedCategory(prev => {
@@ -70,9 +53,9 @@ export default function CreateProductAdminPage() {
         });
     };
 
-    const [images, setImages] = useState<File[]>([]); 
+    const [images, setImages] = useState<File[]>([]);
     const handleImageChange = (newImages: File[]) => {
-        setImages(newImages); 
+        setImages(newImages);
     };
 
     const handleChangeBrand = (event: any) => {
@@ -82,55 +65,52 @@ export default function CreateProductAdminPage() {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        // Skin Type
-        const selectedSkinTypes: string[] = [];
-        for (const type in checked) {
-            if (checked) {
-                selectedSkinTypes.push(type);
-            }
-        }
+        const formData = new FormData();
 
-        const dataSubmit: DataSubmit = {
-            title: event.target.title.value,
+        // Tạo đối tượng JSON cho phần "request"
+        const requestPayload = {
             categoryId: inputCheckedCategory,
-            brandId: parseInt(brandCurrent),
+            brandId: brandCurrent,
+            title: event.target.title.value,
             description: description,
-            thumbnail: images,
-            variants: inputs,
-            discount: event.target.discount.value,
-            skinType: [1, 2, 3, 4, 5],
+            variants: inputs.map(input => ({
+                price: Number(input.price),
+                volume: input.volume ? Number(input.volume) : 0
+            })),
+            skinTypes: checkedSkinType,
+            discountPercent: parseInt(event.target.discount.value),
+            position: event.target.position.value,
             origin: event.target.origin.value,
             ingredients: event.target.ingredients.value,
             usageInstructions: event.target.usageInstructions.value,
             benefits: event.target.benefits.value,
             skinIssues: event.target.skinIssues.value,
-            featured: event.target.featured.value,
+            featured: event.target.featured.value === "true",
             status: event.target.status.value,
-            position: event.target.position.value
-        }
+        };
+
+        formData.append("request", JSON.stringify(requestPayload));
+
+        images.forEach((image) => formData.append("thumbnail", image));
 
         const response = await fetch('https://freshskinweb.onrender.com/admin/products/create', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataSubmit)
+            method: 'POST',
+            body: formData,
         });
 
         const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
+        if (dataResponse.code === 200) {
             location.reload();
         }
     }
 
     // Variants
     const [inputs, setInputs] = useState<InputField[]>([
-        { volume: "", price: "" }
+        { price: 0, volume: 0 }
     ]);
     const handleAddInput = () => {
         setInputs(
-            [...inputs, { volume: "", price: "" }]
+            [...inputs, { price: 0, volume: 0 }]
         );
     };
     const handleRemoveInput = (indexRemove: number) => {
@@ -139,20 +119,24 @@ export default function CreateProductAdminPage() {
     };
     const handleInputChange = (index: number, field: 'volume' | 'price', value: string) => {
         const newInputs = [...inputs];
-        newInputs[index][field] = value;
+        newInputs[index][field] = value ? parseFloat(value) : 0;
         setInputs(newInputs);
     };
 
     // SkinType
-    const [checked, setChecked] = useState({
-        oily: false,
-        dry: false,
-        combination: false,
-        sensitive: false,
-        normal: false,
-    });
+    const [checkedSkinType, setCheckedSkinType] = useState<number[]>([]); // Mảng để lưu các ID đã chọn
     const handleChangeCheckedSkinType = (event: any) => {
-        setChecked({ ...checked, [event.target.name]: event.target.checked });
+        const id = parseInt(event.target.name);
+        setCheckedSkinType((prev) => {
+            // Kiểm tra xem ID đã tồn tại trong mảng chưa
+            if (prev.includes(id)) {
+                // Nếu đã tồn tại, xóa ID khỏi mảng
+                return prev.filter((item) => item !== id);
+            } else {
+                // Nếu chưa, thêm ID vào mảng
+                return [...prev, id];
+            }
+        });
     };
 
     return (
@@ -172,8 +156,8 @@ export default function CreateProductAdminPage() {
                         required
                     />
                     <div className='mb-6 sub-menu'>
-                        <Typography variant="h6" className='border border-solid border-[#BFBFBF] rounded-[5px] p-[10px]'>Chọn danh mục sản phẩm</Typography>
-                        <SubCategory items={listCategory} onCheckedChange={handleCheckedChange}/>
+                        <Typography className='border border-solid border-[#BFBFBF] rounded-[5px] p-[10px]'>Chọn danh mục sản phẩm</Typography>
+                        <SubCategory items={listCategory} onCheckedChange={handleCheckedChange} />
                     </div>
                     <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
                         <InputLabel shrink={true}>-- Chọn thương hiệu --</InputLabel>
@@ -202,7 +186,7 @@ export default function CreateProductAdminPage() {
                             <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
                         </RadioGroup>
                     </FormControl>
-                    <UploadImage label='Chọn ảnh' id="images" name="images" onImageChange={handleImageChange}/>
+                    <UploadImage label='Chọn ảnh' id="images" name="images" onImageChange={handleImageChange} />
 
                     <h4>Mô tả</h4>
                     <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
@@ -247,26 +231,13 @@ export default function CreateProductAdminPage() {
                         required
                     />
                     <FormGroup row>
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.oily} onChange={handleChangeCheckedSkinType} name="oily" />}
-                            label="Da dầu"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.dry} onChange={handleChangeCheckedSkinType} name="dry" />}
-                            label="Da khô"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.combination} onChange={handleChangeCheckedSkinType} name="combination" />}
-                            label="Da hỗn hợp"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.sensitive} onChange={handleChangeCheckedSkinType} name="sensitive" />}
-                            label="Da nhạy cảm"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.normal} onChange={handleChangeCheckedSkinType} name="normal" />}
-                            label="Da bình thường"
-                        />
+                        {listSkinType.map((item: any, index: number) => (
+                            <FormControlLabel
+                                key={index}
+                                control={<Checkbox checked={checkedSkinType.includes(item.id)} onChange={handleChangeCheckedSkinType} name={item.id} />}
+                                label={item.type}
+                            />
+                        ))}
                     </FormGroup>
                     <TextField
                         label="Xuất sứ"

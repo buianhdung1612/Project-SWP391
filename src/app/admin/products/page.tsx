@@ -28,7 +28,6 @@ export default function ProductsAdminPage() {
     const [page, setPage] = useState(1);
     const [changeMulti, setChangeMulti] = useState("active");
 
-
     useEffect(() => {
         const urlCurrent = new URL(location.href);
         const api = new URL(linkApi);
@@ -375,7 +374,7 @@ export default function ProductsAdminPage() {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={product.thumbnail}
+                                            src={product.thumbnail[0]}
                                             alt={product.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />

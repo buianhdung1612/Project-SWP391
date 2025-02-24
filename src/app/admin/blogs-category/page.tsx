@@ -12,9 +12,9 @@ export default function BlogsCategoryAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
-        pageSize: 4,
+        pageSize: 8,
         currentPage: 1,
-        product_category: []
+        blog_category: []
     });
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/products/category';
@@ -255,8 +255,8 @@ export default function BlogsCategoryAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Trang danh sách sản phẩm
+            <Typography variant="h4" gutterBottom>
+                Trang danh sách danh mục bài viết
             </Typography>
 
             {/* Bộ lọc và Tìm kiếm */}
@@ -363,7 +363,7 @@ export default function BlogsCategoryAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.product_category.map((category: any, index: number) => (
+                            {data.blog_category.map((category: any, index: number) => (
                                 <TableRow key={category.id}>
                                     <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, category.id)}>
                                         <Checkbox />
