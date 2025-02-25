@@ -1,57 +1,11 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
-import {
-    Box,
-    Container,
-    Typography,
-    Card,
-    CardContent,
-    Chip,
-    Divider,
-    Button,
-    Grid,
-    List,
-    ListItem,
-    ListItemText,
-} from "@mui/material";
-import { useParams } from "next/navigation";
+
+
 
 export default function DetailProductAdminPage() {
-    const { id } = useParams();
 
-    const [productInfo, setProductInfo] = useState({
-        category: [],
-        brand: {},
-        title: "",
-        description: "",
-        thumbnail: [],     
-        variants: [],
-        skinTypes: [],
-        discountPercent: 0,
-        position: 0,
-        origin: "",
-        ingredients: "",
-        usageInstructions: "",
-        benefits: "",
-        skinIssues: "",
-        featured: false,
-        status: "ACTIVE",
-    });
-
-    const [showFullDescription, setShowFullDescription] = useState(false);
-
-    useEffect(() => {
-        const fetchProduct = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/admin/products/${id}`);
-            const data = await response.json();
-            setProductInfo(data.data);
-        };
-
-        fetchProduct();
-    }, []);
-
-    console.log(productInfo);
+    
 
     return (
         // <Container maxWidth="md" sx={{ mt: 4 }}>
