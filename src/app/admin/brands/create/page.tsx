@@ -22,15 +22,12 @@ const TinyEditor = dynamic(() => import("../../../../../TinyEditor"), {
 export default function CreateBrandAdminPage() {
     const [description, setDescription] = useState("");
 
-    // Change to (string | File)[]
-    const [images, setImages] = useState<(string | File)[]>([]);
+    const [images, setImages] = useState<(File)[]>([]);
 
-    // Handle image change from UploadImage
-    const handleImageChange = (newImages: (string | File)[]) => {
-        setImages(newImages); // Update images with both URLs and new Files
+    const handleImageChange = (newImages: (File)[]) => {
+        setImages(newImages); 
     };
 
-    // Handle form submission
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 

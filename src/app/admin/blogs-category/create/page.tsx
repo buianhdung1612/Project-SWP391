@@ -21,24 +21,28 @@ export default function CreateBlogCategoryAdminPage() {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        const formData = new FormData();
+        const formData = new FormData(event.currentTarget);
 
-        const dataSubmit = {
-            title: event.target.title.value,
+        const request = {
+            title: formData.get("title"),
             description: description,
-            position: event.target.position.value,
-            featured: event.target.featured.value,
-            status: event.target.status.value
-        }
+            position: formData.get("position"),
+            featured: formData.get("featured") === "true",
+            status: formData.get("status")
+        };
 
-        images.forEach((image) => formData.append("thumbnail", image));
+
+        formData.append("request", JSON.stringify(request));
+
+        images.forEach((image) => {
+            if (image instanceof File) {
+                formData.append("thumbnail", image);
+            }
+        });
 
         const response = await fetch('https://freshskinweb.onrender.com/admin/blogs/category/create', {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataSubmit)
+            body: formData
         });
 
         const dataResponse = await response.json();

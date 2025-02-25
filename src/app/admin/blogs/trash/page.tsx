@@ -88,13 +88,13 @@ export default function BlogTrashAdminPage() {
         }
         // Hết Sắp xếp theo tiêu chí
 
-        const fetchBrands = async () => {
+        const fetchBlogs = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchBrands();
+        fetchBlogs();
     }, []);
 
     // Lọc theo trạng thái

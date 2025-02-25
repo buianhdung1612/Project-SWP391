@@ -67,7 +67,7 @@ export default function CreateProductAdminPage() {
 
         const formData = new FormData();
 
-        const requestPayload = {
+        const request = {
             categoryId: inputCheckedCategory,
             brandId: brandCurrent,
             title: event.target.title.value,
@@ -88,7 +88,7 @@ export default function CreateProductAdminPage() {
             status: event.target.status.value,
         };
 
-        formData.append("request", JSON.stringify(requestPayload));
+        formData.append("request", JSON.stringify(request));
 
         images.forEach((image) => formData.append("thumbnail", image));
 

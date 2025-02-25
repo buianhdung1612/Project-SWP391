@@ -321,7 +321,7 @@ export default function ProductsCategoryAdminPage() {
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                 <MenuItem value="ACTIVE">Hoạt động</MenuItem>
                                 <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
-                                <MenuItem value="DELETE">Xóa</MenuItem>
+                                <MenuItem value="SOFT_DELETED">Xóa</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -371,7 +371,7 @@ export default function ProductsCategoryAdminPage() {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={category.thumbnail}
+                                            src={category.image[0]}
                                             alt={category.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />

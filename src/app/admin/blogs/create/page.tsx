@@ -5,16 +5,7 @@ const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
 });
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, MenuItem, InputLabel, Select } from '@mui/material';
-// import UploadImage from '@/app/components/Upload/UploadImage';
-
-interface DataSubmit {
-    title: string,
-    parent_id: number,
-    description: string,
-    position: number,
-    featured: boolean,
-    status: string
-}
+import UploadImage from '@/app/components/Upload/UploadImage';
 
 export default function CreateBlogAdminPage() {
     const [content, setContent] = useState('');
@@ -35,24 +26,37 @@ export default function CreateBlogAdminPage() {
         setCategoryCurrent(event.target.value);
     };
 
-    const handleSubmit = async (event: any) => {
+    const [images, setImages] = useState<(File)[]>([]);
+
+    const handleImageChange = (newImages: (File)[]) => {
+        setImages(newImages);
+    };
+
+    const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
-        const dataSubmit: DataSubmit = {
-            title: event.target.title.value,
-            parent_id: 1,
-            description: content,
-            position: event.target.position.value,
-            featured: event.target.featured.value,
-            status: event.target.status.value
-        }
+        const formData = new FormData(event.currentTarget);
+
+        const request = {
+            title: formData.get("title"),
+            content: content,
+            position: formData.get("position"),
+            status: formData.get("status"),
+            featured: formData.get("featured") === "true",
+            categoryID: categoryCurrent
+        };
+
+        formData.append("request", JSON.stringify(request));
+
+        images.forEach((image) => {
+            if (image instanceof File) {
+                formData.append("thumbnail", image);
+            }
+        });
 
         const response = await fetch('https://freshskinweb.onrender.com/admin/blogs/create', {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataSubmit)
+            body: formData
         });
 
         const dataResponse = await response.json();
@@ -105,6 +109,12 @@ export default function CreateBlogAdminPage() {
                             <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
                         </RadioGroup>
                     </FormControl>
+                    <UploadImage
+                        label="Chọn ảnh"
+                        id="images"
+                        name="images"
+                        onImageChange={handleImageChange}
+                    />
                     <h4>Nội dung bài viết</h4>
                     <TinyEditor value={content} onEditorChange={(content: string) => setContent(content)} />
                     <TextField

@@ -252,6 +252,8 @@ export default function BlogsAdminPage() {
     }
     // Hết phân trang    
 
+    console.log(data);
+
     return (
         <Box p={3}>
             {/* Header */}
@@ -371,7 +373,7 @@ export default function BlogsAdminPage() {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={blog.thumbnail}
+                                            src={blog.thumbnail[0]}
                                             alt={blog.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />

@@ -5,16 +5,7 @@ const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
 });
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, InputLabel, Select, MenuItem } from '@mui/material';
-// import UploadImage from '@/app/components/Upload/UploadImage';
-
-interface DataSubmit {
-    title: string,
-    parentId: number,
-    description: string,
-    position: number,
-    featured: boolean,
-    status: string
-}
+import UploadImage from '@/app/components/Upload/UploadImage';
 
 export default function CreateProductCategoryAdminPage() {
     const [description, setDescription] = useState('');
@@ -23,13 +14,19 @@ export default function CreateProductCategoryAdminPage() {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const response = await fetch('https://freshskinweb.onrender.com/admin/products/category/show');
+            const response = await fetch('https://freshskinweb.onrender.com/admin/products/category');
             const data = await response.json();
-            setListCategory(data.data);
+            setListCategory(data.data.product_category);
         };
 
         fetchCategories();
     }, []);
+
+    const [images, setImages] = useState<(File)[]>([]);
+
+    const handleImageChange = (newImages: (File)[]) => {
+        setImages(newImages);
+    };
 
     const handleChangeCategory = (event: any) => {
         setCategoryCurrent(event.target.value);
@@ -38,21 +35,24 @@ export default function CreateProductCategoryAdminPage() {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        const dataSubmit: DataSubmit = {
+        const formData = new FormData();
+
+        const request = {
             title: event.target.title.value,
-            parentId: parseInt(categoryCurrent),
             description: description,
             position: event.target.position.value,
-            featured: event.target.featured.value,
-            status: event.target.status.value
-        }
+            parentID: categoryCurrent,
+            status: event.target.status.value,
+            featured: event.target.featured.value === "true",
+        };
+
+        formData.append("request", JSON.stringify(request));
+
+        images.forEach((image) => formData.append("thumbnail", image));
 
         const response = await fetch('https://freshskinweb.onrender.com/admin/products/category/create', {
             method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(dataSubmit)
+            body: formData
         });
 
         const dataResponse = await response.json();
@@ -106,6 +106,12 @@ export default function CreateProductCategoryAdminPage() {
                             <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
                         </RadioGroup>
                     </FormControl>
+                    <UploadImage
+                        label="Chọn ảnh"
+                        id="images"
+                        name="images"
+                        onImageChange={handleImageChange}
+                    />
                     <h4>Mô tả</h4>
                     <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
                     <TextField
@@ -116,7 +122,6 @@ export default function CreateProductCategoryAdminPage() {
                         type="number"
                         sx={{ marginBottom: 2, marginTop: 2 }}
                     />
-                    {/* <UploadImage/> */}
                     <FormControl fullWidth sx={{ marginBottom: 3 }}>
                         <RadioGroup
                             defaultValue="ACTIVE"

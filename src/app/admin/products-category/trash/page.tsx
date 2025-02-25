@@ -97,8 +97,7 @@ export default function CategoriesTrashAdminPage() {
         fetchCategorys();
     }, []);
 
-    console.log(data);
-
+    
     // Lọc theo trạng thái
     const handleChangeFilterStatus = async (event: any) => {
         const value = event.target.value;
@@ -170,6 +169,9 @@ export default function CategoriesTrashAdminPage() {
             const data: any = {
                 id: inputChecked
             }
+
+            console.log(path);
+            console.log(data);
 
             const response = await fetch(path, {
                 method: "DELETE",
