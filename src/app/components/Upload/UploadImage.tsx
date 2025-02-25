@@ -6,8 +6,8 @@ export default function UploadImage(props: {
     label: string;
     id: string;
     name: string;
-    onImageChange: (images: (string | File)[]) => void;
-    defaultImages?: string[]; // Các ảnh mặc định có thể là URL
+    onImageChange: (images: File[]) => void;
+    defaultImages?: string[]; // Thêm props cho ảnh mặc định
 }) {
     const { label = "", id = "", name = "", onImageChange, defaultImages = [] } = props;
 
@@ -18,27 +18,23 @@ export default function UploadImage(props: {
     const handleChange = (event: any) => {
         const newFiles = Array.from(event.target.files) as File[];
         const updatedFiles = [...imagePreviews, ...newFiles];
-        setImagePreviews(updatedFiles); 
-        onImageChange(updatedFiles); // Gọi ở đây để gửi ảnh mới lên cho parent
+        setImagePreviews(updatedFiles);
+        onImageChange(updatedFiles); // Gửi các ảnh mới cho parent component
     };
 
-    const handleClickDelete = (index: number, isDefault: boolean) => {
-        if (isDefault) {
-            // Nếu là ảnh mặc định, chỉ loại bỏ URL khỏi danh sách
-            const updatedDefaultImages = defaultImages.filter((_, i) => i !== index);
-            onImageChange(updatedDefaultImages); // Chỉ gửi ảnh mới (không bao gồm ảnh mặc định) cho parent
-        } else {
-            // Nếu là ảnh do người dùng tải lên, xóa khỏi `imagePreviews`
-            const updatedPreviews = imagePreviews.filter((_, i) => i !== index);
-            setImagePreviews(updatedPreviews);
-            onImageChange(updatedPreviews); // Cập nhật lại danh sách ảnh sau khi xóa
-        }
+    // Xử lý khi xóa ảnh
+    const handleClickDelete = (index: number) => {
+        const updatedFiles = imagePreviews.filter((_, i) => i !== index);
+        setImagePreviews(updatedFiles);
+        onImageChange(updatedFiles); // Cập nhật lại danh sách ảnh cho parent
     };
 
     return (
         <div className="mb-[10px]">
             {label && (
-                <label htmlFor={id} className="text-[16px] text-[#333] block mb-[5px]">{label}</label>
+                <label htmlFor={id} className="text-[16px] text-[#333] block mb-[5px]">
+                    {label}
+                </label>
             )}
             <label
                 htmlFor={id}
@@ -56,10 +52,8 @@ export default function UploadImage(props: {
                 onChange={handleChange}
             />
 
-            {/* Hiển thị ảnh */}
             {(defaultImages.length > 0 || imagePreviews.length > 0) && (
                 <div className="mt-[10px] flex gap-[10px] flex-wrap">
-                    {/* Hiển thị ảnh mặc định */}
                     {defaultImages.map((image, index) => (
                         <div key={`default-${image}-${index}`} className="relative">
                             <img
@@ -68,14 +62,13 @@ export default function UploadImage(props: {
                             />
                             <button
                                 className="absolute right-2 top-1 text-[20px]"
-                                onClick={() => handleClickDelete(index, true)}
+                                onClick={() => handleClickDelete(index)}
                             >
                                 X
                             </button>
                         </div>
                     ))}
 
-                    {/* Hiển thị ảnh mới tải lên */}
                     {imagePreviews.map((image, index) => (
                         <div key={`preview-${index}`} className="relative">
                             <img
@@ -84,7 +77,7 @@ export default function UploadImage(props: {
                             />
                             <button
                                 className="absolute right-2 top-1 text-[20px]"
-                                onClick={() => handleClickDelete(index, false)}
+                                onClick={() => handleClickDelete(index)}
                             >
                                 X
                             </button>
