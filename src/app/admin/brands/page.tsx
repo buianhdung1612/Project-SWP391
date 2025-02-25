@@ -255,8 +255,8 @@ export default function BrandsAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Trang danh sách sản phẩm
+            <Typography variant="h4" gutterBottom>
+                Trang danh sách thương hiệu
             </Typography>
 
             {/* Bộ lọc và Tìm kiếm */}
@@ -371,7 +371,7 @@ export default function BrandsAdminPage() {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={brand.thumbnail}
+                                            src={brand.image[0]}
                                             alt={brand.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />

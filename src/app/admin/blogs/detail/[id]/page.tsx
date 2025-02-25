@@ -24,12 +24,13 @@ export default function DetailBlogAdminPage() {
         featured: false,
         status: "ACTIVE",
     });
+    
     const [showFullDescription, setShowFullDescription] = useState(false);
 
     useEffect(() => {
         const fetchBlog = async () => {
             const response = await fetch(
-                `https://freshskinweb.onrender.com/admin/products/blog/${id}`
+                `https://freshskinweb.onrender.com/admin/blogs/${id}`
             );
             const data = await response.json();
             setBlogInfo(data.data);

@@ -7,16 +7,16 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { IoReturnDownBackOutline } from "react-icons/io5";
 
-export default function BlogTrashAdminPage() {
+export default function BrandsTrashAdminPage() {
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
-        pageSize: 8,
+        pageSize: 4,
         currentPage: 1,
-        blogs: []
+        brand: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/blogs/trash';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/blogs/category/trash';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -298,7 +298,7 @@ export default function BlogTrashAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h4" fontWeight="bold" gutterBottom>
                 Trang thùng rác thương hiệu sản phẩm
             </Typography>
 
@@ -377,9 +377,9 @@ export default function BlogTrashAdminPage() {
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/blogs" className="flex items-center">
+                        <Link href="/admin/blogs-category" className="flex items-center">
                             <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
-                            Danh sách bài viết
+                            Danh sách danh mục bài viết
                         </Link>
                     </Button>
                 </Box>
@@ -399,7 +399,7 @@ export default function BlogTrashAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.blogs.map((brand: any, index: number) => (
+                            {data.brand.map((brand: any, index: number) => (
                                 <TableRow key={brand.id}>
                                     <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, brand.id)}>
                                         <Checkbox />

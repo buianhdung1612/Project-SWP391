@@ -17,7 +17,7 @@ export default function BlogsCategoryAdminPage() {
         blog_category: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/products/category';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/blogs/category';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
@@ -321,7 +321,7 @@ export default function BlogsCategoryAdminPage() {
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                 <MenuItem value="ACTIVE">Hoạt động</MenuItem>
                                 <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
-                                <MenuItem value="DELETE">Xóa</MenuItem>
+                                <MenuItem value="SOFT_DELETED">Xóa</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
@@ -333,7 +333,7 @@ export default function BlogsCategoryAdminPage() {
                         startIcon={<DeleteIcon />}
                         sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
                     >
-                        <Link href="/admin/products-category/trash">
+                        <Link href="/admin/blogs-category/trash">
                             Thùng rác
                         </Link>
                     </Button>
@@ -342,7 +342,7 @@ export default function BlogsCategoryAdminPage() {
                         color="success"
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
-                        <Link href="/admin/products-category/create">
+                        <Link href="/admin/blogs-category/create">
                             + Thêm mới
                         </Link>
                     </Button>

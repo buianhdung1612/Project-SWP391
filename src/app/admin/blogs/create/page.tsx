@@ -47,7 +47,7 @@ export default function CreateBlogAdminPage() {
             status: event.target.status.value
         }
 
-        const response = await fetch('https://freshskinweb.onrender.com/admin/products/blog/create', {
+        const response = await fetch('https://freshskinweb.onrender.com/admin/blogs/create', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

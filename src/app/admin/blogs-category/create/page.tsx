@@ -33,7 +33,7 @@ export default function CreateBlogCategoryAdminPage() {
 
         images.forEach((image) => formData.append("thumbnail", image));
 
-        const response = await fetch('https://freshskinweb.onrender.com/admin/products/brand/create', {
+        const response = await fetch('https://freshskinweb.onrender.com/admin/blogs/category/create', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -51,7 +51,7 @@ export default function CreateBlogCategoryAdminPage() {
     return (
         <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
             <Typography variant="h4" gutterBottom>
-                Trang tạo mới danh mục sản phẩm
+                Trang tạo mới danh mục bài viết
             </Typography>
 
             <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
@@ -64,7 +64,6 @@ export default function CreateBlogCategoryAdminPage() {
                         sx={{ marginBottom: 3 }}
                         required
                     />
-
                     <FormControl fullWidth sx={{ marginBottom: 3 }}>
                         <RadioGroup
                             defaultValue={false}
@@ -75,6 +74,7 @@ export default function CreateBlogCategoryAdminPage() {
                             <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
                         </RadioGroup>
                     </FormControl>
+                    <UploadImage label='Chọn ảnh' id="images" name="images" onImageChange={handleImageChange} />
                     <h4>Mô tả</h4>
                     <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
                     <TextField
@@ -85,7 +85,6 @@ export default function CreateBlogCategoryAdminPage() {
                         type="number"
                         sx={{ marginBottom: 2, marginTop: 2 }}
                     />
-                    <UploadImage label='Chọn ảnh' id="images" name="images" onImageChange={handleImageChange} />
                     <FormControl fullWidth sx={{ marginBottom: 3 }}>
                         <RadioGroup
                             defaultValue="ACTIVE"

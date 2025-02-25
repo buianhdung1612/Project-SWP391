@@ -169,6 +169,9 @@ export default function BrandsTrashAdminPage() {
                 id: inputChecked
             }
 
+            console.log(path);
+            console.log(data);
+
             const response = await fetch(path, {
                 method: "DELETE",
                 headers: {
@@ -298,7 +301,7 @@ export default function BrandsTrashAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
+            <Typography variant="h4" gutterBottom>
                 Trang thùng rác thương hiệu sản phẩm
             </Typography>
 
@@ -407,7 +410,7 @@ export default function BrandsTrashAdminPage() {
                                     <TableCell>{index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={brand.thumbnail}
+                                            src={brand.image[0]}
                                             alt={brand.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
