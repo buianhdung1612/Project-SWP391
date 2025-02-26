@@ -368,7 +368,7 @@ export default function BrandsAdminPage() {
                                     <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, brand.id)}>
                                         <Checkbox />
                                     </TableCell>
-                                    <TableCell>{index + 1}</TableCell>
+                                    <TableCell>{(data.currentPage - 1) * data.pageSize +  index + 1}</TableCell>
                                     <TableCell>
                                         <img
                                             src={brand.image[0]}

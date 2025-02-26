@@ -1,11 +1,8 @@
-"use client";
-
-
 
 
 export default function DetailProductAdminPage() {
 
-    
+
 
     return (
         // <Container maxWidth="md" sx={{ mt: 4 }}>

@@ -58,14 +58,14 @@ export default function Footer() {
             link: "/chinh-sach-doi-tra-san-pham"
         },
         {
-            content:  "Chính sách bảo mật thông tin cá nhân",
+            content: "Chính sách bảo mật thông tin cá nhân",
             link: "/chinh-sach-bao-mat-thong-tin-ca-nhan"
         },
         {
             content: "Điều khoản sử dụng",
             link: "/dieu-khoan-su-dung"
         }
-    ] 
+    ]
 
     const contentSupport: PolicySupport[] = [
         {
@@ -92,7 +92,7 @@ export default function Footer() {
             content: "Liên hệ",
             link: "/contact"
         }
-    ] 
+    ]
 
     return (
         <>
@@ -130,7 +130,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="w-[420px] pr-[50px]">
-                    <TitleFooter title="Thông tin liên hệ"/>
+                    <TitleFooter title="Thông tin liên hệ" />
                     <div className="text-[14px] mb-[5px]"><b>Địa chỉ: </b>{setting?.address || ""}</div>
                     <div className="text-[14px] mb-[5px]">
                         <b>Điện thoại: </b>
@@ -142,17 +142,20 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="w-[304px]">
-                    <TitleFooter title="Chính sách"/>
+                    <TitleFooter title="Chính sách" />
                     {contentPolicy.map((item: any, index: number) => (
-                        <ContentFooter title={item.content} link={item.link} key={index}/>
+                        <ContentFooter title={item.content} link={item.link} key={index} />
                     ))}
                 </div>
                 <div className="flex-1">
-                    <TitleFooter title="Hỗ trợ"/>
+                    <TitleFooter title="Hỗ trợ" />
                     {contentSupport.map((item: any, index: number) => (
-                        <ContentFooter title={item.content} link={item.link} key={index}/>
+                        <ContentFooter title={item.content} link={item.link} key={index} />
                     ))}
                 </div>
+            </div>
+            <div className="text-[14px] text-secondary mb-[5px] container mx-auto py-[20px] border-t border-solid border-black">
+                <span className="font-[600 cursor-pointer">{setting?.copyright || ""}</span>
             </div>
         </>
     )

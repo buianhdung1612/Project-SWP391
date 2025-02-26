@@ -1,6 +1,12 @@
+"use client"
+
 import FormInput from "@/app/components/Form/FormInput";
+import { useContext } from "react";
+import { SettingContext } from "../layout";
 
 export default function ContactPage() {
+     const setting = useContext(SettingContext);
+
     return (
         <>
             <div className="container mx-auto flex items-start mt-[30px]">
@@ -8,14 +14,14 @@ export default function ContactPage() {
                     <div className="mb-[15px]">
                         <h4 className="uppercase text-[15px] font-[600] mb-[13px]">Nơi giải đáp toàn bộ mọi thắc mắc của bạn?</h4>
                         <div className="text-[#00090f] text-[14px] mb-[10px]">Không phải những người đẹp là những người hạnh phúc, mà những người hạnh phúc mới là những người đẹp.</div>
-                        <div className="text-[#00090f] text-[14px] mb-[10px]"><b>Địa chỉ:</b> 70 Lữ Gia, Phường 15, Quận 11, TP. Hồ Chí Minh</div>
+                        <div className="text-[#00090f] text-[14px] mb-[10px]"><b>Địa chỉ:</b> {setting?.address || ""}</div>
                         <div className="text-[#00090f] text-[14px] mb-[5px]">
                             <b>Hotline: </b>
-                            <span className="font-[600] cursor-pointer text-secondary hover:text-primary">1900 6750</span>
+                            <span className="font-[600] cursor-pointer text-secondary hover:text-primary">{setting?.phone || ""}</span>
                         </div>
                         <div className="text-[#00090f] text-[14px] mb-[5px]">
                             <b>Email: </b>
-                            <span className="font-[600] cursor-pointer text-secondary hover:text-primary">support@sapo.vn</span>
+                            <span className="font-[600] cursor-pointer text-secondary hover:text-primary">{setting?.email || ""}</span>
                         </div>
                     </div>
                     <div className="">
