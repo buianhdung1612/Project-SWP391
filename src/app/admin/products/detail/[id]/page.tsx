@@ -195,6 +195,6 @@ export default function DetailProductAdminPage() {
         //         </CardContent>
         //     </Card>
         // </Container>
-<div>ds</div>
+        <div>May ngu qa hUY OI</div>
     );
 }
