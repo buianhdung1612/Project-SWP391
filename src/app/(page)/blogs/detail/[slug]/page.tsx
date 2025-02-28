@@ -1,12 +1,12 @@
-"use client"
+// "use client"
 
-import { useParams } from "next/navigation";
-import { useEffect, useState } from "react"
+// import { useParams } from "next/navigation";
+// import { useEffect, useState } from "react"
 
 export default function BlogDetail() {
-    const { slug } = useParams();
+    // const { slug } = useParams();
 
-    const [data, setData] = useState([]);
+    // const [data, setData] = useState([]);
 
     // useEffect(() => {
     //     const fetchBlogDetail = async () => {

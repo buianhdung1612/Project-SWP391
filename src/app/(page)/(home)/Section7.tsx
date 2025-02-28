@@ -8,7 +8,7 @@ import { useState } from "react";
 export default function Section7(props: any) {
     const { dataInit = [] } = props;
 
-    const dataButton: any = dataInit.map((item: any, index: number) => (
+    const dataButton: any = dataInit.map((item: any) => (
         {
             data: item.products,
             currentStatus: item.slug,
