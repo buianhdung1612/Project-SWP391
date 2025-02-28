@@ -107,13 +107,13 @@ export default function Section8() {
                                 <CardItem
                                     key={index}
                                     image={item.image}
-                                    category={item.category}
+                                    brand={item.category}
                                     title={item.title}
                                     banner={item.banner}
                                     deal={item.deal}
                                     link={item.link}
                                     priceByVolume={item.priceByVolume}
-                                    uses={item.uses}
+                                    discount={10}
                                 />
                             ))}
                         </div>

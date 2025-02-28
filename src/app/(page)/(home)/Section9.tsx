@@ -636,11 +636,11 @@ export default function Section9() {
                     <SwiperSlide key={index}>
                         <CardItem
                             image={item.image}
-                            category={item.category}
+                            brand={item.category}
                             title={item.title}
                             link={item.link}
                             priceByVolume={item.priceByVolume}
-                            uses={item.uses}
+                            discount={10}
                         />
                     </SwiperSlide>
                 ))}
