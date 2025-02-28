@@ -33,7 +33,7 @@ export default function CategoryItem(props: any) {
                         </Link>
                     </div>
                     <div className="w-[70px] aspect-square border-b border-r border-dashed border-primary rounded-br-[15px] cursor-pointer overflow-hidden">
-                        <Link href={link3}>
+                        <Link href={link4}>
                             <img src={image5} className="w-full h-full object-cover image-section2-home" />
                         </Link>
                     </div>

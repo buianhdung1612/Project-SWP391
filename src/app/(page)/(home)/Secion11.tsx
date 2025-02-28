@@ -3,7 +3,7 @@
 import BlogItem from "@/app/components/Blog/BlogItem";
 import ButtonSeeAll from "@/app/components/Button/ButtonSeeAll";
 import Title from "@/app/components/title/Title";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 export default function Section11(props: any) {
     const { dataInit = [] } = props;
