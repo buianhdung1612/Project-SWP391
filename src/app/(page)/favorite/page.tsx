@@ -209,13 +209,13 @@ export default function FavoritePage() {
                         <CardItem
                             key={index}
                             image={item.image}
-                            category={item.category}
+                            brand={item.category}
                             title={item.title}
                             banner={item.banner}
                             deal={item.deal}
                             link={item.link}
                             priceByVolume={item.priceByVolume}
-                            uses={item.uses}
+                            discount={20}
                         />
                     ))}
                 </div>
