@@ -7,7 +7,7 @@ const TinyEditor = dynamic(() => import("../../../../../../TinyEditor"), {
 
 import React, { useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, MenuItem, InputLabel, Select } from '@mui/material';
-import UploadImage from '@/app/components/Upload/UploadImage';
+// import UploadImage from '@/app/components/Upload/UploadImage';
 import { useParams } from 'next/navigation';
 
 export default function EditBlogAdminPage() {
@@ -48,11 +48,11 @@ export default function EditBlogAdminPage() {
         setCategoryCurrent(event.target.value);
     };
 
-    const [images, setImages] = useState<(File)[]>([]);
+    // const [images, setImages] = useState<(File)[]>([]);
 
-    const handleImageChange = (newImages: (File)[]) => {
-        setImages(newImages);
-    };
+    // const handleImageChange = (newImages: (File)[]) => {
+    //     setImages(newImages);
+    // };
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
@@ -147,12 +147,12 @@ export default function EditBlogAdminPage() {
                             <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
                         </RadioGroup>
                     </FormControl>
-                    <UploadImage
+                    {/* <UploadImage
                         label="Chọn ảnh"
                         id="images"
                         name="images"
                         onImageChange={handleImageChange}
-                    />
+                    /> */}
                     <h4>Nội dung bài viết</h4>
                     <TinyEditor value={content} onEditorChange={(content: string) => setContent(content)} />
                     <TextField
