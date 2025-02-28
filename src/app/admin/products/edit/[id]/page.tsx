@@ -133,8 +133,6 @@ export default function EditProductAdminPage() {
         setProductInfo({ ...productInfo, status: event.target.value });
     };
 
-    console.log(inputCheckedCategory);
-
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 

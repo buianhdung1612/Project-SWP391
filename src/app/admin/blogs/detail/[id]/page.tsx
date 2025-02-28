@@ -19,13 +19,17 @@ export default function DetailBlogAdminPage() {
 
     const [blogInfo, setBlogInfo] = useState({
         title: "",
-        description: "",
+        content: "",
         position: 0,
         featured: false,
         status: "ACTIVE",
+        blogCategory: {
+            title: ""
+        },
+        thumbnail: []
     });
-    
-    const [showFullDescription, setShowFullDescription] = useState(false);
+
+    const [showFullContent, setShowFullContent] = useState(false);
 
     useEffect(() => {
         const fetchBlog = async () => {
@@ -33,6 +37,7 @@ export default function DetailBlogAdminPage() {
                 `https://freshskinweb.onrender.com/admin/blogs/${id}`
             );
             const data = await response.json();
+            console.log(data.data);
             setBlogInfo(data.data);
         };
 
@@ -43,7 +48,24 @@ export default function DetailBlogAdminPage() {
         <Container maxWidth="md" sx={{ mt: 4 }}>
             <Card elevation={3}>
                 <CardContent>
-                    {/* Title */}
+                    {blogInfo.thumbnail[0] && (
+                        <Box
+                            sx={{
+                                width: "50%",
+                                aspectRatio: 1 / 1,
+                                backgroundSize: "cover",
+                                backgroundPosition: "center",
+                                backgroundImage: `url(${blogInfo.thumbnail[0]})`,
+                                borderRadius: 2,
+                                mb: 2,
+                                objectFit: "cover",
+                                display: "flex",
+                                justifyContent: "center",
+                                alignItems: "center",
+                                margin: "0 auto",
+                            }}
+                        />
+                    )}
                     <Typography
                         variant="h4"
                         component="h1"
@@ -109,9 +131,19 @@ export default function DetailBlogAdminPage() {
                         </Button>
                     </Box>
 
+                    <Box sx={{ mb: 2 }}>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mr: 1 }}>
+                                Danh mục bài viết:
+                            </Typography>
+                            <Typography variant="body1" sx={{ color: "#555" }}>
+                                {blogInfo.blogCategory.title}
+                            </Typography>
+                        </Box>
+                    </Box>
+
                     <Divider sx={{ my: 2 }} />
 
-                    {/* Description */}
                     <Box
                         sx={{
                             mb: 4,
@@ -135,9 +167,9 @@ export default function DetailBlogAdminPage() {
                         </Typography>
                         <div
                             dangerouslySetInnerHTML={{
-                                __html: showFullDescription
-                                    ? blogInfo.description
-                                    : blogInfo.description.slice(0, 800) + (blogInfo.description.length > 800 ? "..." : ""),
+                                __html: showFullContent
+                                    ? blogInfo.content
+                                    : blogInfo.content.slice(0, 800) + (blogInfo.content.length > 800 ? "..." : ""),
                             }}
                             style={{
                                 fontSize: "1rem",
@@ -146,18 +178,18 @@ export default function DetailBlogAdminPage() {
                                 textAlign: "justify",
                             }}
                         />
-                        {blogInfo.description.length > 800 && (
+                        {blogInfo.content.length > 800 && (
                             <Box sx={{ mt: 2, textAlign: "center" }}>
                                 <Button
                                     variant="text"
-                                    onClick={() => setShowFullDescription(!showFullDescription)}
+                                    onClick={() => setShowFullContent(!showFullContent)}
                                     sx={{
                                         fontWeight: "bold",
                                         textTransform: "none",
                                         mx: 1,
                                     }}
                                 >
-                                    {showFullDescription ? "Rút gọn" : "Xem thêm"}
+                                    {showFullContent ? "Rút gọn" : "Xem thêm"}
                                 </Button>
                             </Box>
                         )}

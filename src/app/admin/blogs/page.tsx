@@ -252,8 +252,6 @@ export default function BlogsAdminPage() {
     }
     // Hết phân trang    
 
-    console.log(data);
-
     return (
         <Box p={3}>
             {/* Header */}
