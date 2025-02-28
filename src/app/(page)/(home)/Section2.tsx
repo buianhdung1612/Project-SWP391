@@ -42,7 +42,7 @@ export default function Section2(props: any) {
                             <CardItem
                                 key={index}
                                 image={item.thumbnail[0]}
-                                category={item.brand.title}
+                                brand={item.brand.title}
                                 title={item.title}
                                 banner={item.banner}
                                 deal="/demo/deal.webp"

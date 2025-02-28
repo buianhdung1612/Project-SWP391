@@ -24,7 +24,7 @@ interface CartItem {
 
 export default function CardItem(props: {
     image: string,
-    category: string,
+    brand: string,
     title: string,
     deal?: string,
     banner?: string,
@@ -33,7 +33,7 @@ export default function CardItem(props: {
     priceByVolume: PriceByVolume[],
     discount: number
 }) {
-    const { image = "", category = "", title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0 } = props;
+    const { image = "", brand = "",  title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0 } = props;
 
     const dispatchCart = useDispatch();
 
@@ -111,8 +111,8 @@ export default function CardItem(props: {
                 </div>
 
                 <div className={`text-center mt-[5px] w-[226px] h-[100px]` + className}>
-                    {category && (
-                        <div className="uppercase text-[14px] font-[600 text-[#4e7661] mb-[5px] hover:text-primary">{category}</div>
+                    {brand && (
+                        <div className="uppercase text-[14px] font-[600 text-[#4e7661] mb-[5px] hover:text-primary">{brand}</div>
                     )}
                     <Link href={link}>
                         <div className="text-[14px] font-[400] mx-[5px] line-clamp-2 mb-[5px] hover:text-secondary">{title}</div>
