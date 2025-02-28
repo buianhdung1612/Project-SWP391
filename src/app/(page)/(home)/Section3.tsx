@@ -204,14 +204,14 @@ export default function Section3() {
                         <SwiperSlide key={index}>
                             <CardItem
                                 image={item.image}
-                                category={item.category}
+                                brand={item.category}
                                 title={item.title}
                                 banner={item.banner}
                                 deal={item.deal}
                                 className=""
                                 link={item.link}
                                 priceByVolume={item.priceByVolume}
-                                uses={item.uses}
+                                discount={10}
                             />
                         </SwiperSlide>
                     ))}
