@@ -1,7 +1,7 @@
 import Link from "next/link";
 
 export default function ButtonSeeAll(props: {
-    link: string
+    link?: string
 }) {
     
     const { link = "" } = props;
