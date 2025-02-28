@@ -8,15 +8,15 @@ import { useDispatch, useSelector } from "react-redux";
 
 interface PriceByVolume {
     volume: number,
-    priceNew: number,
     price: number,
-    discount: number
+    unit: string
 }
 
 interface CartItem {
     image: string,
     title: string,
-    priceNew: number,
+    price: number,
+    discount: number,
     link: string,
     volume: number,
     quantity: number
@@ -31,15 +31,15 @@ export default function CardItem(props: {
     className?: string,
     link: string,
     priceByVolume: PriceByVolume[],
-    uses: string
+    discount: number
 }) {
-    const { image = "", category = "", title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], uses = "" } = props;
+    const { image = "", category = "", title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0 } = props;
 
     const dispatchCart = useDispatch();
 
     const products = useSelector((state: any) => state.cartReducer.products);
 
-    const [currentVolume, setCurrentVolume] = useState(priceByVolume.length > 0 ? priceByVolume[0] : { priceNew: 0, price: 0, discount: 0, volume: 0 });
+    const [currentVolume, setCurrentVolume] = useState(priceByVolume.length > 0 ? priceByVolume[0] : { price: 0, volume: 0, unit: "" });
 
     const [quantity, setQuantity] = useState(1);
 
@@ -57,7 +57,8 @@ export default function CardItem(props: {
         const data: CartItem = {
             image: image,
             title: title,
-            priceNew: currentVolume.priceNew,
+            price: currentVolume.price,
+            discount: discount,
             link: "#",
             volume: currentVolume.volume,
             quantity: quantity
@@ -88,10 +89,10 @@ export default function CardItem(props: {
 
     return (
         <>
-            <div className="bg-white rounded-[10px]">
+            <div className="bg-white rounded-[10px] w-[226px]">
                 <div className="w-[226px] aspect-square relative group">
                     <Link href={link}>
-                        <img src={image} className="w-full h-full object-cover" />
+                        <img src={image} className="w-full h-full object-cover rounded-[10px]" />
                     </Link>
 
                     <CiHeart className="text-[28px] absolute top-[2%] right-[2%] hover:text-primary cursor-pointer" />
@@ -109,7 +110,7 @@ export default function CardItem(props: {
                     </div>
                 </div>
 
-                <div className={`text-center mt-[5px] w-[226px] ` + className}>
+                <div className={`text-center mt-[5px] w-[226px] h-[100px]` + className}>
                     {category && (
                         <div className="uppercase text-[14px] font-[600 text-[#4e7661] mb-[5px] hover:text-primary">{category}</div>
                     )}
@@ -117,9 +118,9 @@ export default function CardItem(props: {
                         <div className="text-[14px] font-[400] mx-[5px] line-clamp-2 mb-[5px] hover:text-secondary">{title}</div>
                     </Link>
                     <div className="flex items-center mb-[10px] justify-center">
-                        <span className="text-[#c90000] text-[15px] font-[500] mr-[5px]">{currentVolume.priceNew.toLocaleString("en-US")}<sup className="underline">đ</sup></span>
+                        <span className="text-[#c90000] text-[15px] font-[500] mr-[5px]">{(currentVolume.price * (1 - discount/100)).toLocaleString("en-US")}<sup className="underline">đ</sup></span>
                         <span className="text-[#98a4a9] text-[12px] font-[300] line-through mr-[5px]">{currentVolume.price.toLocaleString("en-US")}<sup className="underline">đ</sup></span>
-                        <span className="text-white bg-primary py-[3px] rounded-[3px] text-[12px] min-w-11">-{currentVolume.discount}%</span>
+                        <span className="text-white bg-primary py-[3px] rounded-[3px] text-[12px] min-w-11">-{discount}%</span>
                     </div>
                 </div>
             </div>
@@ -160,7 +161,7 @@ export default function CardItem(props: {
                             <div className="flex-1">
                                 <div className="text-[23px] font-[600] text-[#333]">{title}</div>
                                 <div className="flex mt-[10px] items-center mb-[10px]">
-                                    <div className="text-[20px] font-[600] text-primary">{currentVolume.priceNew.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
+                                    <div className="text-[20px] font-[600] text-primary">{currentVolume.price.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                                     <div className="text-[16px] font-[600] text-[#a5a5a5] ml-[10px] line-through">{currentVolume.price.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                                 </div>
                                 <div>
@@ -182,7 +183,7 @@ export default function CardItem(props: {
                                         ))}
                                     </div>
                                 </div>
-                                <div className="text-[14px] my-[10px]">Công dụng: <span className="text-[14px] font-[600] text-secondary">{uses}</span></div>
+                                {/* <div className="text-[14px] my-[10px]">Công dụng: <span className="text-[14px] font-[600] text-secondary">{uses}</span></div> */}
                                 <div className="flex items-center">
                                     <div className="mb-[10px] flex">
                                         <button

@@ -12,6 +12,7 @@ import SubCategory from '@/app/components/Sub-Category/SubCategory';
 interface InputField {
     price: number;
     volume: number;
+    unit: string
 }
 
 export default function CreateProductAdminPage() {
@@ -74,7 +75,8 @@ export default function CreateProductAdminPage() {
             description: description,
             variants: inputs.map(input => ({
                 price: Number(input.price),
-                volume: input.volume ? Number(input.volume) : 0
+                volume: input.volume ? Number(input.volume) : 0,
+                unit: input.unit
             })),
             skinTypes: checkedSkinType,
             discountPercent: parseInt(event.target.discount.value),
@@ -92,6 +94,10 @@ export default function CreateProductAdminPage() {
 
         images.forEach((image) => formData.append("thumbnail", image));
 
+        formData.forEach((value, key) => {
+            console.log(key + ':', value);
+        });
+
         const response = await fetch('https://freshskinweb.onrender.com/admin/products/create', {
             method: 'POST',
             body: formData,
@@ -105,20 +111,25 @@ export default function CreateProductAdminPage() {
 
     // Variants
     const [inputs, setInputs] = useState<InputField[]>([
-        { price: 0, volume: 0 }
+        { price: 0, volume: 0, unit: "" }
     ]);
     const handleAddInput = () => {
         setInputs(
-            [...inputs, { price: 0, volume: 0 }]
+            [...inputs, { price: 0, volume: 0, unit: "" }]
         );
     };
     const handleRemoveInput = (indexRemove: number) => {
         const newInputs = inputs.filter((item, index) => index !== indexRemove);
         setInputs(newInputs);
     };
-    const handleInputChange = (index: number, field: 'volume' | 'price', value: string) => {
+    const handleInputChange = (index: number, field: 'volume' | 'price' | 'unit', value: string) => {
         const newInputs = [...inputs];
-        newInputs[index][field] = value ? parseFloat(value) : 0;
+        if(field === "unit"){
+            newInputs[index][field] = value ? value : "";
+        }
+        else{
+            newInputs[index][field] = value ? parseFloat(value) : 0;
+        }
         setInputs(newInputs);
     };
 
@@ -194,7 +205,7 @@ export default function CreateProductAdminPage() {
                         {inputs.map((input, index: number) => (
                             <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                 <TextField
-                                    label="Dung tích (ml)"
+                                    label="Dung tích / Số lượng"
                                     type='number'
                                     variant="outlined"
                                     size="small"
@@ -210,6 +221,15 @@ export default function CreateProductAdminPage() {
                                     size="small"
                                     value={input.price}
                                     onChange={(e) => handleInputChange(index, 'price', e.target.value)}
+                                    sx={{ ml: 1, width: "150px" }}
+                                />
+                                <TextField
+                                    label="Đơn vị"
+                                    type="text"
+                                    variant="outlined"
+                                    size="small"
+                                    value={input.unit}
+                                    onChange={(e) => handleInputChange(index, 'unit', e.target.value)}
                                     sx={{ ml: 1, width: "150px" }}
                                 />
 

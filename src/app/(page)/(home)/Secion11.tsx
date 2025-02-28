@@ -1,20 +1,22 @@
-"use client"
+"use client";
 
 import BlogItem from "@/app/components/Blog/BlogItem";
 import ButtonSeeAll from "@/app/components/Button/ButtonSeeAll";
 import Title from "@/app/components/title/Title";
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 
-export default function Section11() {
-    const [dataDuongChatChoLanDa, setDataDuongChatChoLanDa] = useState([]);
-    const [dataTinTuc, setDataTinTuc] = useState([]);
-    const [dataCachChamSocDa, setDataCachChamSocDa] = useState([]);
-    const [dataGocReview, setDataGocReview] = useState([]);
+export default function Section11(props: any) {
+    const { dataInit = [] } = props;
+    const [data, setData] = useState(dataInit[0].blogs.slice(0, 4));
 
-    const [data, setData] = useState([]);
     const [currentButton, setCurrentButton] = useState("tintuc");
 
-    const dataButton: any = [
+    const dataDuongChatChoLanDa = dataInit[0]?.blogs.slice(0, 4);
+    const dataGocReview = dataInit[1]?.blogs.slice(0, 4);
+    const dataCachChamSocDa = dataInit[2]?.blogs.slice(0, 4);
+    const dataTinTuc = dataInit[3]?.blogs.slice(0, 4);
+
+    const dataButton = [
         {
             data: dataTinTuc,
             currentStatus: "tintuc",
@@ -35,43 +37,25 @@ export default function Section11() {
             currentStatus: "duongchatcholanda",
             content: "Dưỡng chất cho làn da"
         }
-    ]
+    ];
 
-    useEffect(() => {
-        const fetchBlogCategoryFeatured = async () => {
-            const response = await fetch(
-                `https://freshskinweb.onrender.com/home`
-            );
-            const data = await response.json();
-            setDataTinTuc(data.featuredBlogCategory[3].blogs.slice(0, 4));
-            setDataCachChamSocDa(data.featuredBlogCategory[2].blogs.slice(0, 4));
-            setDataGocReview(data.featuredBlogCategory[1].blogs.slice(0, 4));
-            setDataDuongChatChoLanDa(data.featuredBlogCategory[0].blogs.slice(0, 4));
-            setData(data.featuredBlogCategory[3].blogs.slice(0, 4));
-        };
-
-        fetchBlogCategoryFeatured();
-    }, [])
-
-    
-
-    const handleClick: any = (data: any, currentButton: string) => {
+    const handleClick = (data: any, currentButton: string) => {
         setData(data);
         setCurrentButton(currentButton);
-    }
+    };
 
     return (
         <>
             <Title title="Blog làm đẹp" link="/blogs" />
 
             <div className="text-center mb-[20px]">
-                {dataButton.map((item: any, index: number) => (
+                {dataButton.map((item, index) => (
                     <button
                         key={index}
                         onClick={() => handleClick(item.data, item.currentStatus)}
-                        className={"text-[16px] hover:text-primary font-[500] px-[25px] py-[2px] " +
-                            (currentButton == item.currentStatus ? "text-primary" : "text-[#333]")
-                        }
+                        className={`text-[16px] hover:text-primary font-[500] px-[25px] py-[2px] ${
+                            currentButton === item.currentStatus ? "text-primary" : "text-[#333]"
+                        }`}
                     >
                         {item.content}
                     </button>
@@ -79,19 +63,19 @@ export default function Section11() {
             </div>
 
             <div className="container mx-auto grid grid-cols-4 gap-[20px]">
-                {data.map((item: any, index: number) => (
+                {data.length > 0 && data.map((item: any, index: number) => (
                     <BlogItem
                         key={index}
                         image={item.thumbnail[0]}
-                        day={item.day}
+                        day={item.createdAt} 
                         title={item.title}
-                        description={item.description}
-                        link={item.slug}
+                        description={item.content} 
+                        link={`/blogs/detail/${item.slug}`}
                     />
                 ))}
             </div>
 
-            <ButtonSeeAll link="/blogs"/>
+            <ButtonSeeAll link="/blogs" />
         </>
-    )
+    );
 }

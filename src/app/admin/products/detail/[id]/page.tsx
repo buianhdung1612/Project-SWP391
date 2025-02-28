@@ -24,7 +24,7 @@ export default function DetailProductAdminPage() {
         },
         category: [],
         description: "",
-        discountPercent: 0, //
+        discountPercent: 0, 
         featured: false,
         ingredients: "",
         origin: "",
@@ -196,7 +196,7 @@ export default function DetailProductAdminPage() {
                                         }}
                                     >
                                         <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4caf50' }}>
-                                            {item.volume}ml
+                                            {item.volume}{item.unit}
                                         </Typography>
                                         <Typography variant="body1" sx={{ color: '#555', marginBottom: 2 }}>
                                             Giá: {item.price.toLocaleString()} VND

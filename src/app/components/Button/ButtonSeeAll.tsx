@@ -6,8 +6,6 @@ export default function ButtonSeeAll(props: {
     
     const { link = "" } = props;
 
-    console.log(link);
-
     return (
         <>
             <div className="flex justify-center">

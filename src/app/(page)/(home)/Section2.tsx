@@ -9,7 +9,9 @@ import 'swiper/css/navigation';
 import '../../(page)/swiper.css';
 import { Navigation } from 'swiper/modules';
 
-export default function Section2() {
+export default function Section2(props: any) {
+    const {dataInit = []} = props;
+
     const data: any = [
         {
             image: "/demo/danhmuc_1.webp",
@@ -224,18 +226,18 @@ export default function Section2() {
                     spaceBetween={25}
                     slidesPerView={5}
                 >
-                    {data.map((item: any, index: number) => (
+                    {dataInit.map((item: any, index: number) => (
                         <SwiperSlide key={index}>
                             <CardItem
                                 key={index}
-                                image={item.image}
-                                category={item.category}
+                                image={item.thumbnail[0]}
+                                category={item.brand.title}
                                 title={item.title}
                                 banner={item.banner}
-                                deal={item.deal}
-                                link={item.link}
-                                priceByVolume={item.priceByVolume}
-                                uses={item.uses}
+                                deal="/demo/deal.webp"
+                                link={`/detail/${item.slug}`}
+                                priceByVolume={item.variants}
+                                discount={item.discountPercent}
                             />
                         </SwiperSlide>
 

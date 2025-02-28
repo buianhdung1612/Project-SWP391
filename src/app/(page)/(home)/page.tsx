@@ -1,3 +1,5 @@
+"use client";
+
 import Banner2 from "@/app/components/Banner/Banner2";
 import Banner from "../../components/Banner/Banner";
 import Section11 from "./Secion11";
@@ -10,22 +12,46 @@ import Section5 from "./Section5";
 import Section7 from "./Section7";
 import Section8 from "./Section8";
 import Section9 from "./Section9";
+import { useEffect, useState } from "react";
 
 export default function HomePage() {
+  const [dataFeaturedBlogCategory, setDataFeaturedBlogCategory] = useState([]); 
+  const [dataFeaturedProductCategory, setDataFeaturedProductCategory] = useState([]); 
+  const [dataTop7ProductFlashSale, setDataTop7ProductFlashSale] = useState([]); 
+  const [isLoading, setIsLoading] = useState(true); 
+
+  useEffect(() => {
+    const fetchData = async () => {
+      const response = await fetch(`https://freshskinweb.onrender.com/home`);
+      const data = await response.json();
+      setDataFeaturedBlogCategory(data.featuredBlogCategory);
+      setDataFeaturedProductCategory(data.featuredProductCategory);
+      setDataTop7ProductFlashSale(data.Top7ProductFlashSale);
+      setIsLoading(false); 
+    };
+
+    fetchData();
+  }, []);
+
+  
+  if (isLoading) {
+    return <div>Loading...</div>; 
+  }
+
   return (
     <>
-      <Banner/>
-      <Section1/>
-      <Section2/>
-      <Section3/>
-      <Section4/>
-      <Section5/>
-      <Banner2/>
-      <Section7/>
-      <Section8/>
-      <Section9/>
-      <Section10/>
-      <Section11/>
+      <Banner />
+      <Section1 dataInit={dataFeaturedProductCategory} />
+      <Section2 dataInit={dataTop7ProductFlashSale}/>
+      <Section3 />
+      <Section4 />
+      <Section5 />
+      <Banner2 />
+      <Section7 />
+      <Section8 />
+      <Section9 />
+      <Section10 />
+      <Section11 dataInit={dataFeaturedBlogCategory} />
     </>
   );
 }
