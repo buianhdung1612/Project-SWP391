@@ -3,132 +3,16 @@
 import BlogItem from "@/app/components/Blog/BlogItem";
 import ButtonSeeAll from "@/app/components/Button/ButtonSeeAll";
 import Title from "@/app/components/title/Title";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function Section11() {
-    const dataTinTuc: any = [
-        {
-            image: "/demo/blog-preview.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123",
-        },
-        {
-            image: "/demo/blog-preview.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123",
-        },
-        {
-            image: "/demo/blog-preview.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123",
-        }
-    ]
+    const [dataDuongChatChoLanDa, setDataDuongChatChoLanDa] = useState([]);
+    const [dataTinTuc, setDataTinTuc] = useState([]);
+    const [dataCachChamSocDa, setDataCachChamSocDa] = useState([]);
+    const [dataGocReview, setDataGocReview] = useState([]);
 
-    const dataCachChamSocDa: any = [
-        {
-            image: "/demo/blog-preview2.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview2.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview2.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview2.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        }
-    ]
-
-    const dataGocReview: any = [
-        {
-            image: "/demo/blog-preview3.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview3.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview3.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview3.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        }
-    ]
-
-    const dataDuongChatChoLanDa: any = [
-        {
-            image: "/demo/blog-preview4.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview4.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview4.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        },
-        {
-            image: "/demo/blog-preview4.webp",
-            day: "16-11-2023",
-            title: "Rửa mặt bằng nước muối sinh lý như thế nào để không hại da?",
-            description: "Bạn có thể dễ dàng rửa mặt bằng nước muối sinh lý hằng ngày. Dung dịch đặc biệt này sẽ giúp cải thiện tình trạng mụn trên da trong thời gian nhất định. Rửa mặt bằng nước",
-            link: "/blog/123"
-        }
-    ]
+    const [data, setData] = useState([]);
+    const [currentButton, setCurrentButton] = useState("tintuc");
 
     const dataButton: any = [
         {
@@ -153,8 +37,23 @@ export default function Section11() {
         }
     ]
 
-    const [data, setData] = useState(dataTinTuc);
-    const [currentButton, setCurrentButton] = useState("tintuc");
+    useEffect(() => {
+        const fetchBlogCategoryFeatured = async () => {
+            const response = await fetch(
+                `https://freshskinweb.onrender.com/home`
+            );
+            const data = await response.json();
+            setDataTinTuc(data.featuredBlogCategory[3].blogs.slice(0, 4));
+            setDataCachChamSocDa(data.featuredBlogCategory[2].blogs.slice(0, 4));
+            setDataGocReview(data.featuredBlogCategory[1].blogs.slice(0, 4));
+            setDataDuongChatChoLanDa(data.featuredBlogCategory[0].blogs.slice(0, 4));
+            setData(data.featuredBlogCategory[3].blogs.slice(0, 4));
+        };
+
+        fetchBlogCategoryFeatured();
+    }, [])
+
+    
 
     const handleClick: any = (data: any, currentButton: string) => {
         setData(data);
@@ -183,16 +82,16 @@ export default function Section11() {
                 {data.map((item: any, index: number) => (
                     <BlogItem
                         key={index}
-                        image={item.image}
+                        image={item.thumbnail[0]}
                         day={item.day}
                         title={item.title}
                         description={item.description}
-                        link={item.link}
+                        link={item.slug}
                     />
                 ))}
             </div>
 
-            <ButtonSeeAll />
+            <ButtonSeeAll link="/blogs"/>
         </>
     )
 }

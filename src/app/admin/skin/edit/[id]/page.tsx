@@ -49,10 +49,7 @@ export default function EditTypeSkinAdminPage() {
             location.reload();
         }
     }
-
-    console.log(data.type);
-    console.log(data.description);
-
+    
     return (
         <>
             <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>

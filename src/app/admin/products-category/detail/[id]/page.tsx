@@ -17,24 +17,27 @@ import {
 export default function DetailBrandAdminPage() {
     const { id } = useParams();
 
-    const [brandInfo, setBrandInfo] = useState({
+    const [data, setData] = useState({
         title: "",
         description: "",
         position: 0,
         featured: false,
         status: "ACTIVE",
         image: [],
+        parent: {
+            title: ""
+        }
     });
     const [showFullDescription, setShowFullDescription] = useState(false);
 
     useEffect(() => {
         const fetchBrand = async () => {
             const response = await fetch(
-                `https://freshskinweb.onrender.com/admin/products/brand/${id}`
+                `https://freshskinweb.onrender.com/admin/products/category/${id}`
             );
             const data = await response.json();
             console.log(data.data)
-            setBrandInfo(data.data);
+            setData(data.data);
         };
 
         fetchBrand();
@@ -44,14 +47,14 @@ export default function DetailBrandAdminPage() {
         <Container maxWidth="md" sx={{ mt: 4 }}>
             <Card elevation={3}>
                 <CardContent>
-                    {brandInfo.image[0] && (
+                    {data.image[0] && (
                         <Box
                             sx={{
                                 width: "50%",
                                 aspectRatio: 1/1,
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
-                                backgroundImage: `url(${brandInfo.image[0]})`,
+                                backgroundImage: `url(${data.image[0]})`,
                                 borderRadius: 2,
                                 mb: 2,
                                 objectFit: "cover",
@@ -68,12 +71,12 @@ export default function DetailBrandAdminPage() {
                         gutterBottom
                         sx={{ fontWeight: "bold", textAlign: "center" }}
                     >
-                        {brandInfo.title}
+                        {data.title}
                     </Typography>
                     <Box sx={{ textAlign: "center", mb: 2 }}>
                         <Chip
-                            label={brandInfo.status === "ACTIVE" ? "Đang hoạt động" : "Không hoạt động"}
-                            color={brandInfo.status === "ACTIVE" ? "success" : "error"}
+                            label={data.status === "ACTIVE" ? "Đang hoạt động" : "Không hoạt động"}
+                            color={data.status === "ACTIVE" ? "success" : "error"}
                             sx={{ fontSize: "1rem", fontWeight: "bold" }}
                         />
                     </Box>
@@ -94,15 +97,15 @@ export default function DetailBrandAdminPage() {
                             >
                                 Nổi bật:
                             </Typography>
-                            <Switch checked={brandInfo.featured} disabled />
+                            <Switch checked={data.featured} disabled />
                             <Typography
                                 variant="body1"
                                 sx={{
-                                    color: brandInfo.featured ? "#4caf50" : "#f44336",
+                                    color: data.featured ? "#4caf50" : "#f44336",
                                     fontWeight: "bold",
                                 }}
                             >
-                                {brandInfo.featured ? "Có" : "Không"}
+                                {data.featured ? "Có" : "Không"}
                             </Typography>
                         </Box>
                         <Button
@@ -119,10 +122,21 @@ export default function DetailBrandAdminPage() {
                                 },
                             }}
                         >
-                            Vị trí: {brandInfo.position}
+                            Vị trí: {data.position}
                         </Button>
                     </Box>
+                    
                     <Divider sx={{ my: 2 }} />
+                    <Box sx={{ mb: 2 }}>
+                        <Box sx={{ display: "flex", alignItems: "center" }}>
+                            <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mr: 1 }}>
+                                Danh mục cha:
+                            </Typography>
+                            <Typography variant="body1" sx={{ color: "#555" }}>
+                                {data.parent.title}
+                            </Typography>
+                        </Box>
+                    </Box>
                     <Box
                         sx={{
                             mb: 4,
@@ -147,8 +161,8 @@ export default function DetailBrandAdminPage() {
                         <div
                             dangerouslySetInnerHTML={{
                                 __html: showFullDescription
-                                    ? brandInfo.description
-                                    : brandInfo.description.slice(0, 800) + (brandInfo.description.length > 800 ? "..." : ""),
+                                    ? data.description
+                                    : data.description.slice(0, 800) + (data.description.length > 800 ? "..." : ""),
                             }}
                             style={{
                                 fontSize: "1rem",
@@ -157,7 +171,7 @@ export default function DetailBrandAdminPage() {
                                 textAlign: "justify",
                             }}
                         />
-                        {brandInfo.description.length > 800 && (
+                        {data.description.length > 800 && (
                             <Box sx={{ mt: 2, textAlign: "center" }}>
                                 <Button
                                     variant="text"

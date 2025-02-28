@@ -11,7 +11,7 @@ export default function BlogItem(props: {
     return (
         <>
             <div className="">
-                <Link href={link} className="relative">
+                <Link href={`/blog/detail/${link}`} className="relative">
                     <div className="w-[303px] h-[190px] overflow-hidden rounded-t-[10px]">
                         <img src={image} className="w-full h-full object-cover image-blog-home" />
                     </div>
