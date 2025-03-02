@@ -1,10 +1,10 @@
 "use client"
 
 import { useContext, useState } from "react";
-import { Section1Context } from "./Section1";
 import { CiHeart, CiShoppingCart } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { cartAddNewProduct } from "@/app/(actions)/cart";
+import { Context } from "./MiddlewareGetData";
 
 interface CartItem {
     image: string,
@@ -20,9 +20,11 @@ export default function Price() {
 
     const products = useSelector((state: any) => state.cartReducer.products);
 
-    const { priceByVolume, uses, thumbnail, title } = useContext(Section1Context);
+    const { productDetail } = useContext(Context);
 
-    const [currentVolume, setCurrentVolume] = useState(priceByVolume[0]);
+    console.log(productDetail.variants[0]);
+
+    const [currentVolume, setCurrentVolume] = useState(productDetail.variants[0]);
 
     const [quantity, setQuantity] = useState(1);
 
@@ -38,9 +40,9 @@ export default function Price() {
 
     const handleAddNewProductToCart = () => {
         const data: CartItem = {
-            image: thumbnail,
-            title: title,
-            priceNew: currentVolume.priceNew,
+            image: productDetail.thumbnail[0],
+            title: productDetail.title,
+            priceNew: currentVolume.price * (1 - productDetail.discountPercent / 100),
             link: "#",
             volume: currentVolume.volume,
             quantity: quantity
@@ -61,15 +63,15 @@ export default function Price() {
     return (
         <>
             <div className="flex items-center">
-                <div className="text-[32px] font-[500] text-[#cc2020] mr-[20px]">{currentVolume.priceNew.toLocaleString('en-US')}<sup className="underline">đ</sup></div>
+                <div className="text-[32px] font-[500] text-[#cc2020] mr-[20px]">{(currentVolume.price * (1 - productDetail.discountPercent / 100)).toLocaleString('en-US')}<sup className="underline">đ</sup></div>
                 <div className="text-[20px] font-[400] text-[#9f9f9f] mr-[15px] pt-[6px] line-through">{currentVolume.price.toLocaleString('en-US')}<sup className="underline">đ</sup></div>
-                <div className="rounded-[3px] bg-primary px-[5px] py-[1px] text-[12px] min-w-[20px] text-white mt-[7px]">-{currentVolume.discount}%</div>
+                <div className="rounded-[3px] bg-primary px-[5px] py-[1px] text-[12px] min-w-[20px] text-white mt-[7px]">-{productDetail.discountPercent}%</div>
             </div>
 
             <div className="my-[5px]">
-                <div className="text-[14px] text-[#0090F] mb-[10px]">Dung Tích: <span className="text-secondary font-[600]">{currentVolume.volume}ml</span></div>
+                <div className="text-[14px] text-[#0090F] mb-[10px]">Dung Tích: <span className="text-secondary font-[600]">{currentVolume.volume}{currentVolume.unit.toLowerCase()}</span></div>
                 <div className="flex items-center">
-                    {priceByVolume.map((item: any, index: number) => (
+                    {productDetail.variants.map((item: any, index: number) => (
                         <button
                             key={index}
                             className={"text-[14px] mr-[10px] rounded-[5px] min-w-[30px] h-[30px] cursor-pointer border boder-solid text-center p-[5px] " +
@@ -80,13 +82,13 @@ export default function Price() {
                             }
                             onClick={() => setCurrentVolume(item)}
                         >
-                            {item.volume}ml
+                            {item.volume}{item.unit.toLowerCase()}
                         </button>
                     ))}
                 </div>
             </div>
 
-            <div className="text-[14px] mt-[20px]">Công dụng: <span className="text-[14px] font-[600] text-secondary">{uses}</span></div>
+            {/* <div className="text-[14px] mt-[20px]">Công dụng: <span className="text-[14px] font-[600] text-secondary">{uses}</span></div> */}
 
             <div className="text-[14px] font-[500] text-[#00090f] my-[10px]">Số lượng:</div>
             <div className="flex items-center">
@@ -111,7 +113,10 @@ export default function Price() {
                         +
                     </button>
                 </div>
-                <button className="px-[40px] flex items-center bg-[#000] hover:bg-secondary rounded-[40px] mb-[10px] ml-[15px]" onClick={handleAddNewProductToCart}>
+                <button
+                    className="px-[40px] flex items-center bg-[#000] hover:bg-secondary rounded-[40px] mb-[10px] ml-[15px]"
+                    onClick={handleAddNewProductToCart}
+                >
                     <CiShoppingCart className="text-white text-[24px]" />
                     <span className="ml-[5px] text-[12px] uppercase text-white font-[400] h-[40px] w-auto flex items-center">Thêm vào giỏ hàng</span>
                 </button>

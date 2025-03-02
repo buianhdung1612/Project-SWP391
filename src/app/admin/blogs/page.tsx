@@ -1,7 +1,6 @@
 "use client"
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
-import AddIcon from "@mui/icons-material/Add";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { BiDetail } from "react-icons/bi";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
@@ -461,23 +460,6 @@ export default function BlogsAdminPage() {
                     onChange={handlePagination}
                 />
             </Stack>
-
-            {/* Action Buttons */}
-            <Box mt={2} display="flex" justifyContent="space-between">
-                <Box>
-                    <Button variant="contained" color="success">
-                        Áp dụng
-                    </Button>{" "}
-                    <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
-                        <Link href="/admin/blogs/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                </Box>
-                <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-                    Thêm mới
-                </Button>
-            </Box>
         </Box>
     );
 }

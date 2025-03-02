@@ -78,7 +78,8 @@ export default function EditBlogAdminPage() {
 
         const dataSubmit: any = {
             title: data.title,
-            category: categoryCurrent,
+            categoryID: categoryCurrent,
+            content: content,
             featured: data.featured,
             position: data.position,
             status: data.status

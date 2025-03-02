@@ -1,9 +1,9 @@
-export default async function SaleCode(props: any) {
+export default function SaleCode(props: any) {
     const { data = "" } = props;
 
     return (
         <>
-            <div className="container mx-auto rounded-[10px] sale-code">
+            <div className="container mx-auto mt-[30px] rounded-[10px] sale-code">
                 <div className="text-[22px] font-[700] text-white text-center p-[10px]">Mua nhiều giảm giá</div>
                 <div className="grid grid-cols-4 gap-[15px] px-[20px] pb-[20px]">
                     {data.map((item: any, index: number) => (

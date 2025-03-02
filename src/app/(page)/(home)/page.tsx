@@ -21,6 +21,7 @@ export default function HomePage() {
   const [dataFreshSkinSlogan, setDataFreshSkinSlogan] = useState([]); 
   const [dataTop_moisturizing_products, setDataTop_moisturizing_products] = useState([]); 
   const [dataBeautyTrends, setDataBeautyTrends] = useState([]); 
+  const [dataTop3ProductFeature, setDataTop3ProductFeature] = useState([]); 
   const [isLoading, setIsLoading] = useState(true); 
 
   useEffect(() => {
@@ -33,6 +34,7 @@ export default function HomePage() {
       setDataFreshSkinSlogan(data.FreshSkinSlogan);
       setDataTop_moisturizing_products(data.Top_moisturizing_products);
       setDataBeautyTrends(data.BeautyTrends);
+      setDataTop3ProductFeature(data.Top3ProductFeature);
       setIsLoading(false); 
     };
 
@@ -54,7 +56,7 @@ export default function HomePage() {
       <Section5 dataInit={dataFreshSkinSlogan}/>
       <Banner2 />
       <Section7 dataInit={dataTop_moisturizing_products}/>
-      <Section8 />
+      <Section8 dataInit={dataTop3ProductFeature}/>
       <Section9 dataInit={dataBeautyTrends}/>
       <Section10 />
       <Section11 dataInit={dataFeaturedBlogCategory} />

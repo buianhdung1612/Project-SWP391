@@ -1,95 +1,21 @@
 import CardItem from "@/app/components/Card/CardItem"
 
-export default function Section8() {
-    const data: any = [
+export default function Section8(props: any) {
+    const { dataInit = [] } = props;
+
+    const data: any = dataInit.map((item: any) => (
         {
-            image: "/demo/danhmuc_1.webp",
-            category: "Maybelline",
-            title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
+            image: item.thumbnail[0],
+            brand: item.brand.title,
+            title: item.title,
             banner: "/demo/freeship.webp",
             deal: "/demo/deal.webp",
-            link: "/detail/123",
-            priceByVolume: [
-                {
-                    volume: 30,
-                    priceNew: 312000,
-                    price: 395000,
-                    discount: 22
-                },
-                {
-                    volume: 95,
-                    priceNew: 400000,
-                    price: 500000,
-                    discount: 20
-                },
-                {
-                    volume: 400,
-                    priceNew: 585000,
-                    price: 750000,
-                    discount: 22
-                }
-            ],
-            uses: "Dành cho da nhạy cảm"
-        },
-        {
-            image: "/demo/danhmuc_1.webp",
-            category: "Maybelline",
-            title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-            banner: "/demo/freeship.webp",
-            deal: "/demo/deal.webp",
-            link: "/detail/123",
-            priceByVolume: [
-                {
-                    volume: 30,
-                    priceNew: 312000,
-                    price: 395000,
-                    discount: 22
-                },
-                {
-                    volume: 95,
-                    priceNew: 400000,
-                    price: 500000,
-                    discount: 20
-                },
-                {
-                    volume: 400,
-                    priceNew: 585000,
-                    price: 750000,
-                    discount: 22
-                }
-            ],
-            uses: "Dành cho da nhạy cảm"
-        },
-        {
-            image: "/demo/danhmuc_1.webp",
-            category: "Maybelline",
-            title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-            banner: "/demo/freeship.webp",
-            deal: "/demo/deal.webp",
-            link: "/detail/123",
-            priceByVolume: [
-                {
-                    volume: 30,
-                    priceNew: 312000,
-                    price: 395000,
-                    discount: 22
-                },
-                {
-                    volume: 95,
-                    priceNew: 400000,
-                    price: 500000,
-                    discount: 20
-                },
-                {
-                    volume: 400,
-                    priceNew: 585000,
-                    price: 750000,
-                    discount: 22
-                }
-            ],
-            uses: "Dành cho da nhạy cảm"
+            link: `/detail/${item.slug}`,
+            priceByVolume: item.variants,
+            discount: item.discountPercent
         }
-    ]
+    ));
+    
     return (
         <>
             <div className="h-[660px] bg-[url('../../public/demo/bg-section8.webp')] bg-cover mt-[50px]">
@@ -113,7 +39,7 @@ export default function Section8() {
                                     deal={item.deal}
                                     link={item.link}
                                     priceByVolume={item.priceByVolume}
-                                    discount={10}
+                                    discount={item.discount}
                                 />
                             ))}
                         </div>

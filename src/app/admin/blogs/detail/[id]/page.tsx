@@ -72,7 +72,7 @@ export default function DetailBlogAdminPage() {
                         gutterBottom
                         sx={{ fontWeight: "bold", textAlign: "center" }}
                     >
-                        {blogInfo.title}
+                        {blogInfo.blogCategory.title}
                     </Typography>
 
                     {/* Status */}

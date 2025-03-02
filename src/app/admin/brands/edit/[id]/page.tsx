@@ -41,7 +41,6 @@ export default function EditBrandtAdminPage() {
         status: "ACTIVE",
     });
 
-    // Fetch brand data on mount
     useEffect(() => {
         const fetchBrand = async () => {
             const response = await fetch(
