@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Tooltip } from "@mui/material";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { BiDetail } from "react-icons/bi";
 import { MdDeleteOutline, MdEditNote, MdOutlineChangeCircle } from "react-icons/md";
@@ -8,16 +8,16 @@ import Link from "next/link";
 import { useState } from "react";
 
 export default function AccountAdminPage() {
-    const [data, setData] = useState({
-        accounts: []
-    });
+    // const [data, setData] = useState({
+    //     accounts: []
+    // });
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/accounts';
 
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
-    const [changeMulti, setChangeMulti] = useState("active");
+    // const [changeMulti, setChangeMulti] = useState("active");
 
     // Lọc theo trạng thái
     const handleChangeFilterStatus = async (event: any) => {
@@ -176,7 +176,7 @@ export default function AccountAdminPage() {
                                     <TableCell>Hành động</TableCell>
                                 </TableRow>
                             </TableHead>
-                            <TableBody>
+                            {/* <TableBody>
                                 {data.accounts.map((user: any, index: number) => (
                                     <TableRow key={user.id}>
                                         <TableCell>{index + 1}</TableCell>
@@ -234,7 +234,7 @@ export default function AccountAdminPage() {
                                         </TableCell>
                                     </TableRow>
                                 ))}
-                            </TableBody>
+                            </TableBody> */}
                         </Table>
                     </TableContainer>
                 </Paper>

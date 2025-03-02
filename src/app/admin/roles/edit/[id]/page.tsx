@@ -13,7 +13,7 @@ interface Data {
     description: string
 }
 
-export default function () {
+export default function EditRoleAdmin () {
     const [description, setDescription] = useState('');
     const { id } = useParams();
 
@@ -54,7 +54,7 @@ export default function () {
         });
 
         const dataResponse = await response.json();
-        
+
         if (dataResponse.code === 200) {
             location.reload();
         }

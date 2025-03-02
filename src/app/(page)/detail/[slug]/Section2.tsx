@@ -4,7 +4,7 @@ import { useContext } from "react";
 import { Context } from "./MiddlewareGetData";
 import Link from "next/link";
 
-export default function () {
+export default function Section2() {
     const { productDetail, productsRelated } = useContext(Context);
 
     return (
