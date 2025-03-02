@@ -12,7 +12,7 @@ interface Data {
     description: string
 }
 
-export default function () {
+export default function CreateRoleAdmin () {
     const [content, setContent] = useState('');
 
     const handleSubmit = async (event: any) => {
