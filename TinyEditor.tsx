@@ -9,7 +9,7 @@ const TinyEditor: React.FC<TinyEditorProps> = ({ value, onEditorChange }) => {
     return (
         <div>
             <Editor
-                apiKey='cjlgkpm42v7mu4b6biit5pt93hgok2oiqf6p2slv9n95xdc1' // Thay thế bằng API key của bạn
+                apiKey='n6eleo57uagyei1qphbdbsj0qwdktt94d9tuaa3wuqfjft3w' 
                 value={value}
                 init={{
                     height: 350,
@@ -32,7 +32,7 @@ const TinyEditor: React.FC<TinyEditorProps> = ({ value, onEditorChange }) => {
                     menubar: 'file edit view insert format tools table help',
                     content_style: `
                         body {
-                            font-size: 16px; /* Thay đổi font-size mặc định */
+                            font-size: 16px; 
                         }
                     `,
                     font_size_formats: '8pt 10pt 12pt 14pt 18pt 24pt 36pt',

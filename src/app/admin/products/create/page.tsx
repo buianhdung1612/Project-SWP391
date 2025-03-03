@@ -94,10 +94,6 @@ export default function CreateProductAdminPage() {
 
         images.forEach((image) => formData.append("thumbnail", image));
 
-        formData.forEach((value, key) => {
-            console.log(key + ':', value);
-        });
-
         const response = await fetch('https://freshskinweb.onrender.com/admin/products/create', {
             method: 'POST',
             body: formData,
