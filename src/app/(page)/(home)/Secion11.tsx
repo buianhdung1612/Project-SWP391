@@ -7,40 +7,41 @@ import { useState } from "react";
 
 export default function Section11(props: any) {
     const { dataInit = [] } = props;
-    const [data, setData] = useState(dataInit[0].blogs.slice(0, 4));
+    console.log(dataInit);
+    const [dataBlogsCurrent, setDataBlogsCurrent] = useState(dataInit[0].blogs.slice(0, 4));
 
-    const [currentButton, setCurrentButton] = useState("tintuc");
+    const [currentButton, setCurrentButton] = useState(dataInit[0].slug);
 
-    const dataDuongChatChoLanDa = dataInit[0]?.blogs.slice(0, 4);
-    const dataGocReview = dataInit[1]?.blogs.slice(0, 4);
-    const dataCachChamSocDa = dataInit[2]?.blogs.slice(0, 4);
-    const dataTinTuc = dataInit[3]?.blogs.slice(0, 4);
+    const dataDuongChatChoLanDa = dataInit[3]?.blogs.slice(0, 4);
+    const dataGocReview = dataInit[2]?.blogs.slice(0, 4);
+    const dataCachChamSocDa = dataInit[1]?.blogs.slice(0, 4);
+    const dataTinTuc = dataInit[0]?.blogs.slice(0, 4);
 
     const dataButton = [
         {
             data: dataTinTuc,
-            currentStatus: "tintuc",
-            content: "Tin tức"
+            currentStatus: dataInit[0].slug,
+            content: dataInit[0].title
         },
         {
             data: dataCachChamSocDa,
-            currentStatus: "cach-cham-soc-da",
-            content: "Cách chăm sóc da"
+            currentStatus: dataInit[1].slug,
+            content: dataInit[1].title
         },
         {
             data: dataGocReview,
-            currentStatus: "gocreview",
-            content: "Góc review"
+            currentStatus: dataInit[2].slug,
+            content: dataInit[2].title
         },
         {
             data: dataDuongChatChoLanDa,
-            currentStatus: "duongchatcholanda",
-            content: "Dưỡng chất cho làn da"
+            currentStatus: dataInit[3].slug,
+            content: dataInit[3].title
         }
     ];
 
     const handleClick = (data: any, currentButton: string) => {
-        setData(data);
+        setDataBlogsCurrent(data);
         setCurrentButton(currentButton);
     };
 
@@ -63,7 +64,7 @@ export default function Section11(props: any) {
             </div>
 
             <div className="container mx-auto grid grid-cols-4 gap-[20px]">
-                {data.length > 0 && data.map((item: any, index: number) => (
+                {dataBlogsCurrent.length > 0 && dataBlogsCurrent.map((item: any, index: number) => (
                     <BlogItem
                         key={index}
                         image={item.thumbnail[0]}

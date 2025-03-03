@@ -14,9 +14,9 @@ export default function CreateProductCategoryAdminPage() {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const response = await fetch('https://freshskinweb.onrender.com/admin/products/category');
+            const response = await fetch('https://freshskinweb.onrender.com/admin/products/category/shows');
             const data = await response.json();
-            setListCategory(data.data.product_category);
+            setListCategory(data.data);
         };
 
         fetchCategories();
@@ -72,7 +72,7 @@ export default function CreateProductCategoryAdminPage() {
             <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
                 <form onSubmit={handleSubmit}>
                     <TextField
-                        label="Tên sản phẩm"
+                        label="Tên danh mục"
                         name='title'
                         variant="outlined"
                         fullWidth

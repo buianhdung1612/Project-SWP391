@@ -134,7 +134,7 @@ export default function CreateProductAdminPage() {
     };
 
     // SkinType
-    const [checkedSkinType, setCheckedSkinType] = useState<number[]>([]); // Mảng để lưu các ID đã chọn
+    const [checkedSkinType, setCheckedSkinType] = useState<number[]>([]); 
     const handleChangeCheckedSkinType = (event: any) => {
         const id = parseInt(event.target.name);
         setCheckedSkinType((prev) => {
@@ -148,6 +148,7 @@ export default function CreateProductAdminPage() {
             }
         });
     };
+
 
     return (
         <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
