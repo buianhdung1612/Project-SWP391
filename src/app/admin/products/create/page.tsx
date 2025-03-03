@@ -107,30 +107,30 @@ export default function CreateProductAdminPage() {
 
     // Variants
     const [inputs, setInputs] = useState<InputField[]>([
-        { price: 0, volume: 0, unit: "" }
+        { price: 0, volume: 0, unit: "ML" }
     ]);
     const handleAddInput = () => {
         setInputs(
-            [...inputs, { price: 0, volume: 0, unit: "" }]
+            [...inputs, { price: 0, volume: 0, unit: "ML" }]
         );
     };
     const handleRemoveInput = (indexRemove: number) => {
-        const newInputs = inputs.filter((item, index) => index !== indexRemove);
+        const newInputs = inputs.filter((_, index) => index !== indexRemove);
         setInputs(newInputs);
     };
     const handleInputChange = (index: number, field: 'volume' | 'price' | 'unit', value: string) => {
         const newInputs = [...inputs];
-        if(field === "unit"){
-            newInputs[index][field] = value ? value : "";
+        if (field === "unit") {
+            newInputs[index][field] = value ? value : "ML";
         }
-        else{
+        else {
             newInputs[index][field] = value ? parseFloat(value) : 0;
         }
         setInputs(newInputs);
     };
 
     // SkinType
-    const [checkedSkinType, setCheckedSkinType] = useState<number[]>([]); 
+    const [checkedSkinType, setCheckedSkinType] = useState<number[]>([]);
     const handleChangeCheckedSkinType = (event: any) => {
         const id = parseInt(event.target.name);
         setCheckedSkinType((prev) => {
@@ -220,16 +220,15 @@ export default function CreateProductAdminPage() {
                                     onChange={(e) => handleInputChange(index, 'price', e.target.value)}
                                     sx={{ ml: 1, width: "150px" }}
                                 />
-                                <TextField
-                                    label="Đơn vị"
-                                    type="text"
-                                    variant="outlined"
-                                    size="small"
+                                <Select
                                     value={input.unit}
-                                    onChange={(e) => handleInputChange(index, 'unit', e.target.value)}
+                                    onChange={(e) => handleInputChange(index, "unit", e.target.value)}
+                                    size="small"
                                     sx={{ ml: 1, width: "150px" }}
-                                />
-
+                                >
+                                    <MenuItem value="ML">ML</MenuItem>
+                                    <MenuItem value="G">G</MenuItem>
+                                </Select>
                                 <MdDeleteForever onClick={() => handleRemoveInput(index)} className='text-red-400 text-[25px] ml-[10px] cursor-pointer' />
                             </Box>
                         ))}
