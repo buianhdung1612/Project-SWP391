@@ -10,6 +10,8 @@ import { Navigation } from 'swiper/modules';
 export default function CategoryList(props: any) {
     const { data } = props;
 
+    console.log(data);
+
     return (
         <>
             <Swiper
@@ -18,7 +20,7 @@ export default function CategoryList(props: any) {
                 spaceBetween={20}
                 slidesPerView={4}
             >
-                {data.map((item: any, index: number) => (
+                {data.length > 0 && data.map((item: any, index: number) => (
                     <SwiperSlide key={index}>
                         <CategoryItem
                             title={item.title}
@@ -29,10 +31,10 @@ export default function CategoryList(props: any) {
                             image4={item.products[2]?.thumbnail[0] || ''}
                             image5={item.products[3]?.thumbnail[0] || ''}
                             link={`/product-category/${item.slug}`}
-                            link1={`/detail/${item.products[0].slug}`}
-                            link2={`/detail/${item.products[1].slug}`}
-                            link3={`/detail/${item.products[2].slug}`}
-                            link4={`/detail/${item.products[3].slug}`}
+                            link1={`/detail/${item.products[0]?.slug}`}
+                            link2={`/detail/${item.products[1]?.slug}`}
+                            link3={`/detail/${item.products[2]?.slug}`}
+                            link4={`/detail/${item.products[3]?.slug}`}
                         />
                     </SwiperSlide>
                 ))}
