@@ -213,9 +213,32 @@ export default function BrandsAdminPage() {
     // Hết Xóa một sản phẩm
 
     // Thay đổi vị trí sản phẩm
-    const handleChangePosition = (event: any) => {
-        console.log(event.target.value);
-    }
+    const handleChangePosition = async (event: any, id: number) => {
+        const newPosition = event.target.value;
+
+        if (newPosition < 0) {
+            alert('Vị trí phải là một số không âm');
+            return;
+        }
+
+        const path = `${linkApi}/edit/${id}`;
+
+        const response = await fetch(path, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                position: newPosition
+            })
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code === 200) {
+            location.reload();
+        }
+    };
     // Hết Thay đổi vị trí sản phẩm
 
     // Sắp xếp theo tiêu chí
@@ -405,11 +428,11 @@ export default function BrandsAdminPage() {
                                             sx={{
                                                 width: "60px"
                                             }}
-                                            onChange={handleChangePosition}
+                                            onChange={(e) => handleChangePosition(e, brand.id)}
+                                            defaultValue={brand.position}
                                             InputProps={{
                                                 inputProps: { min: 0, step: 1 },
                                             }}
-                                            value={brand.position}
                                         />
                                     </TableCell>
                                     {/* <TableCell>
@@ -471,23 +494,6 @@ export default function BrandsAdminPage() {
                     onChange={handlePagination}
                 />
             </Stack>
-
-            {/* Action Buttons */}
-            <Box mt={2} display="flex" justifyContent="space-between">
-                <Box>
-                    <Button variant="contained" color="success">
-                        Áp dụng
-                    </Button>{" "}
-                    <Button variant="outlined" color="secondary" startIcon={<DeleteIcon />}>
-                        <Link href="/admin/brands/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                </Box>
-                <Button variant="contained" color="primary" startIcon={<AddIcon />}>
-                    Thêm mới
-                </Button>
-            </Box>
         </Box>
     );
 }

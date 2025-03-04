@@ -27,7 +27,7 @@ export default function EditRoleAdmin () {
     useEffect(() => {
         const fetchBrand = async () => {
             const response = await fetch(
-                `https://freshskinweb.onrender.com/admin/role/${id}`
+                `https://freshskinweb.onrender.com/admin/roles/${id}`
             );
             const data = await response.json();
             setRoleInfo(data.data);

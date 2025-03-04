@@ -11,7 +11,7 @@ export default function CreateAccountAdmin() {
 
     useEffect(() => {
         const fetchCategories = async () => {
-            const response = await fetch('https://freshskinweb.onrender.com/admin/role');
+            const response = await fetch('https://freshskinweb.onrender.com/admin/roles');
             const data = await response.json();
             setListRoles(data.data);
         };
@@ -31,24 +31,26 @@ export default function CreateAccountAdmin() {
         const formData = new FormData(event.currentTarget);
 
         const request = {
-            firstname: formData.get("firstname"),
-            lastname: formData.get("lastname"),
-            email: formData.get("email"),
+            username: formData.get("username"),
             password: formData.get("password"),
+            role: roleCurrent,
+            firstName: formData.get("firstname"),
+            lastName: formData.get("lastname"),
+            email: formData.get("email"),
             phone: formData.get("phone"),
+            address: formData.get("address"),
             status: formData.get("status"),
-            roleId: roleCurrent
         };
 
         formData.append("request", JSON.stringify(request));
 
         images.forEach((image) => {
             if (image instanceof File) {
-                formData.append("thumbnail", image);
+                formData.append("avatar", image);
             }
         });
 
-        const response = await fetch('https://freshskinweb.onrender.com/admin/blogs/create', {
+        const response = await fetch('https://freshskinweb.onrender.com/admin/users/create', {
             method: "POST",
             body: formData
         });
@@ -97,6 +99,22 @@ export default function CreateAccountAdmin() {
                         <TextField
                             label="Tên"
                             name="lastname"
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 3 }}
+                            required
+                        />
+                        <TextField
+                            label="Tên đăng nhập"
+                            name="username"
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 3 }}
+                            required
+                        />
+                        <TextField
+                            label="Địa chỉ"
+                            name="address"
                             variant="outlined"
                             fullWidth
                             sx={{ marginBottom: 3 }}

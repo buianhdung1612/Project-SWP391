@@ -10,7 +10,7 @@ export default function RoleAdminPage() {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/role';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/roles';
 
     useEffect(() => {
         const fetchbrands = async () => {

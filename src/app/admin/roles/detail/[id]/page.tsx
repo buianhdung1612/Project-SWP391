@@ -22,7 +22,7 @@ export default function DetailRoleAdmin() {
 
     useEffect(() => {
         const fetchRole = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/admin/role/${id}`);
+            const response = await fetch(`https://freshskinweb.onrender.com/admin/roles/${id}`);
             const data = await response.json();
             setData(data.data);
         };

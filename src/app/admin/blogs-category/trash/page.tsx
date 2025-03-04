@@ -13,7 +13,7 @@ export default function BrandsTrashAdminPage() {
         totalItems: 1,
         pageSize: 4,
         currentPage: 1,
-        brand: []
+        blog_category: []
     });
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/blogs/category/trash';
@@ -255,12 +255,6 @@ export default function BrandsTrashAdminPage() {
     }
     // Hết Xóa một sản phẩm
 
-    // Thay đổi vị trí sản phẩm
-    const handleChangePosition = (event: any) => {
-        console.log(event.target.value);
-    }
-    // Hết Thay đổi vị trí sản phẩm
-
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
         const value = event.target.value;
@@ -399,54 +393,44 @@ export default function BrandsTrashAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.brand.map((brand: any, index: number) => (
-                                <TableRow key={brand.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, brand.id)}>
+                            {data.blog_category.map((category: any, index: number) => (
+                                <TableRow key={category.id}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, category.id)}>
                                         <Checkbox />
                                     </TableCell>
                                     <TableCell>{(data.currentPage - 1) * data.pageSize +  index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={brand.thumbnail}
-                                            alt={brand.title}
+                                            src={category.thumbnail}
+                                            alt={category.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
                                     </TableCell>
-                                    <TableCell>{brand.title}</TableCell>
+                                    <TableCell>{category.title}</TableCell>
                                     <TableCell>
-                                        {brand.status === "ACTIVE" && (
+                                        {category.status === "ACTIVE" && (
                                             <Chip
                                                 label="Hoạt động"
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${brand.id}`)}
+                                                onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${category.id}`)}
                                             />
                                         )}
-                                        {brand.status === "INACTIVE" && (
+                                        {category.status === "INACTIVE" && (
                                             <Chip
                                                 label="Dừng hoạt động"
                                                 color="error"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${brand.id}`)}
+                                                onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${category.id}`)}
                                             />
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <TextField
-                                            type="number"
-                                            variant="outlined"
-                                            size="small"
-                                            sx={{
-                                                width: "60px"
-                                            }}
-                                            onChange={handleChangePosition}
-                                            InputProps={{
-                                                inputProps: { min: 0, step: 1 },
-                                            }}
-                                            value={brand.position}
-                                        />
+                                        <Typography variant="body2">
+                                            {category.position}
+                                        </Typography>
                                     </TableCell>
                                     {/* <TableCell>
                                     {brand.createdBy}
@@ -461,9 +445,9 @@ export default function BrandsTrashAdminPage() {
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Khôi phục" placement="top">
-                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOnebrand(brand.id)} />
+                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOnebrand(category.id)} />
                                             </Tooltip>
-                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(brand.id)}>
+                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(category.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>

@@ -162,7 +162,7 @@ export default function BlogTrashAdminPage() {
 
         const statusChange = changeMulti;
 
-        if(statusChange == "delete-destroy"){
+        if (statusChange == "delete-destroy") {
             const path = `${linkApi}/delete`;
 
             const data: any = {
@@ -176,9 +176,9 @@ export default function BlogTrashAdminPage() {
                 },
                 body: JSON.stringify(data)
             });
-    
+
             const dataResponse = await response.json();
-    
+
             if (dataResponse.code == 200) {
                 location.reload();
             }
@@ -254,12 +254,6 @@ export default function BlogTrashAdminPage() {
         }
     }
     // Hết Xóa một sản phẩm
-
-    // Thay đổi vị trí sản phẩm
-    const handleChangePosition = (event: any) => {
-        console.log(event.target.value);
-    }
-    // Hết Thay đổi vị trí sản phẩm
 
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
@@ -378,7 +372,7 @@ export default function BlogTrashAdminPage() {
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
                         <Link href="/admin/blogs" className="flex items-center">
-                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
+                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]" />
                             Danh sách bài viết
                         </Link>
                     </Button>
@@ -399,54 +393,44 @@ export default function BlogTrashAdminPage() {
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.blogs.map((brand: any, index: number) => (
-                                <TableRow key={brand.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, brand.id)}>
+                            {data.blogs.map((blog: any, index: number) => (
+                                <TableRow key={blog.id}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, blog.id)}>
                                         <Checkbox />
                                     </TableCell>
-                                    <TableCell>{(data.currentPage - 1) * data.pageSize +  index + 1}</TableCell>
+                                    <TableCell>{(data.currentPage - 1) * data.pageSize + index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={brand.thumbnail}
-                                            alt={brand.title}
+                                            src={blog.thumbnail}
+                                            alt={blog.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
                                     </TableCell>
-                                    <TableCell>{brand.title}</TableCell>
+                                    <TableCell>{blog.title}</TableCell>
                                     <TableCell>
-                                        {brand.status === "ACTIVE" && (
+                                        {blog.status === "ACTIVE" && (
                                             <Chip
                                                 label="Hoạt động"
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${brand.id}`)}
+                                                onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${blog.id}`)}
                                             />
                                         )}
-                                        {brand.status === "INACTIVE" && (
+                                        {blog.status === "INACTIVE" && (
                                             <Chip
                                                 label="Dừng hoạt động"
                                                 color="error"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${brand.id}`)}
+                                                onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${blog.id}`)}
                                             />
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <TextField
-                                            type="number"
-                                            variant="outlined"
-                                            size="small"
-                                            sx={{
-                                                width: "60px"
-                                            }}
-                                            onChange={handleChangePosition}
-                                            InputProps={{
-                                                inputProps: { min: 0, step: 1 },
-                                            }}
-                                            value={brand.position}
-                                        />
+                                        <Typography variant="body2">
+                                            {blog.position}
+                                        </Typography>
                                     </TableCell>
                                     {/* <TableCell>
                                     {brand.createdBy}
@@ -461,9 +445,9 @@ export default function BlogTrashAdminPage() {
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Khôi phục" placement="top">
-                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOnebrand(brand.id)} />
+                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOnebrand(blog.id)} />
                                             </Tooltip>
-                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(brand.id)}>
+                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(blog.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>

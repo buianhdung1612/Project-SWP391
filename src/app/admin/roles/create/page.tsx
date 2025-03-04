@@ -23,7 +23,7 @@ export default function CreateRoleAdmin () {
             description: content
         }
 
-        const response = await fetch(`https://freshskinweb.onrender.com/admin/role/create`, {
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/roles/create`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

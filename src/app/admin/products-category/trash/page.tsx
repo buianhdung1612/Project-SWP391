@@ -97,7 +97,7 @@ export default function CategoriesTrashAdminPage() {
         fetchCategorys();
     }, []);
 
-    
+
     // Lọc theo trạng thái
     const handleChangeFilterStatus = async (event: any) => {
         const value = event.target.value;
@@ -163,7 +163,7 @@ export default function CategoriesTrashAdminPage() {
 
         const statusChange = changeMulti;
 
-        if(statusChange == "delete-destroy"){
+        if (statusChange == "delete-destroy") {
             const path = `${linkApi}/delete`;
 
             const data: any = {
@@ -180,9 +180,9 @@ export default function CategoriesTrashAdminPage() {
                 },
                 body: JSON.stringify(data)
             });
-    
+
             const dataResponse = await response.json();
-    
+
             if (dataResponse.code == 200) {
                 location.reload();
             }
@@ -382,7 +382,7 @@ export default function CategoriesTrashAdminPage() {
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
                         <Link href="/admin/products-category" className="flex items-center">
-                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
+                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]" />
                             Danh sách danh mục sản phẩm
                         </Link>
                     </Button>
@@ -438,19 +438,9 @@ export default function CategoriesTrashAdminPage() {
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <TextField
-                                            type="number"
-                                            variant="outlined"
-                                            size="small"
-                                            sx={{
-                                                width: "60px"
-                                            }}
-                                            onChange={handleChangePosition}
-                                            InputProps={{
-                                                inputProps: { min: 0, step: 1 },
-                                            }}
-                                            value={category.position}
-                                        />
+                                        <Typography variant="body2">
+                                            {category.position}
+                                        </Typography>
                                     </TableCell>
                                     {/* <TableCell>
                                     {category.createdBy}

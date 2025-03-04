@@ -258,12 +258,6 @@ export default function BrandsTrashAdminPage() {
     }
     // Hết Xóa một sản phẩm
 
-    // Thay đổi vị trí sản phẩm
-    const handleChangePosition = (event: any) => {
-        console.log(event.target.value);
-    }
-    // Hết Thay đổi vị trí sản phẩm
-
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
         const value = event.target.value;
@@ -437,19 +431,9 @@ export default function BrandsTrashAdminPage() {
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <TextField
-                                            type="number"
-                                            variant="outlined"
-                                            size="small"
-                                            sx={{
-                                                width: "60px"
-                                            }}
-                                            onChange={handleChangePosition}
-                                            InputProps={{
-                                                inputProps: { min: 0, step: 1 },
-                                            }}
-                                            value={brand.position}
-                                        />
+                                        <Typography variant="body2">
+                                            {brand.position}
+                                        </Typography>
                                     </TableCell>
                                     {/* <TableCell>
                                     {brand.createdBy}
@@ -477,33 +461,6 @@ export default function BrandsTrashAdminPage() {
                     </Table>
                 </TableContainer>
             </Paper>
-
-
-            {/* Pagination */}
-            <Stack spacing={2} marginTop={2}>
-                <Pagination
-                    count={data.totalPages}
-                    color="primary"
-                    page={page}
-                    variant="outlined"
-                    shape="rounded"
-                    siblingCount={1}
-                    sx={{
-                        '& .MuiPaginationItem-root': {
-                            backgroundColor: 'white',
-                            color: 'blue',
-                            '&:hover': {
-                                backgroundColor: '#e0e0e0',
-                            },
-                        },
-                        '& .Mui-selected': {
-                            backgroundColor: 'blue',
-                            color: 'white',
-                        },
-                    }}
-                    onChange={handlePagination}
-                />
-            </Stack>
         </Box>
     );
 }

@@ -162,7 +162,7 @@ export default function ProductsTrashAdminPage() {
 
         const statusChange = changeMulti;
 
-        if(statusChange == "delete-destroy"){
+        if (statusChange == "delete-destroy") {
             const path = `${linkApi}/delete`;
 
             const data: any = {
@@ -176,9 +176,9 @@ export default function ProductsTrashAdminPage() {
                 },
                 body: JSON.stringify(data)
             });
-    
+
             const dataResponse = await response.json();
-    
+
             if (dataResponse.code == 200) {
                 location.reload();
             }
@@ -254,12 +254,6 @@ export default function ProductsTrashAdminPage() {
         }
     }
     // Hết Xóa một sản phẩm
-
-    // Thay đổi vị trí sản phẩm
-    const handleChangePosition = (event: any) => {
-        console.log(event.target.value);
-    }
-    // Hết Thay đổi vị trí sản phẩm
 
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
@@ -380,7 +374,7 @@ export default function ProductsTrashAdminPage() {
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
                         <Link href="/admin/products" className="flex items-center">
-                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
+                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]" />
                             Danh sách sản phẩm
                         </Link>
                     </Button>
@@ -407,10 +401,10 @@ export default function ProductsTrashAdminPage() {
                                     <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, product.id)}>
                                         <Checkbox />
                                     </TableCell>
-                                    <TableCell>{(data.currentPage - 1) * data.pageSize +  index + 1}</TableCell>
+                                    <TableCell>{(data.currentPage - 1) * data.pageSize + index + 1}</TableCell>
                                     <TableCell>
                                         <img
-                                            src={product.thumbnail}
+                                            src={product.thumbnail[0]}
                                             alt={product.title}
                                             style={{ width: 100, height: 100, objectFit: "cover" }}
                                         />
@@ -438,19 +432,9 @@ export default function ProductsTrashAdminPage() {
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <TextField
-                                            type="number"
-                                            variant="outlined"
-                                            size="small"
-                                            sx={{
-                                                width: "60px"
-                                            }}
-                                            onChange={handleChangePosition}
-                                            InputProps={{
-                                                inputProps: { min: 0, step: 1 },
-                                            }}
-                                            value={product.position}
-                                        />
+                                        <Typography variant="body2">
+                                            {product.position}
+                                        </Typography>
                                     </TableCell>
                                     {/* <TableCell>
                                     {product.createdBy}

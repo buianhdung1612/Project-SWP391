@@ -213,9 +213,32 @@ export default function BlogsCategoryAdminPage() {
     // Hết Xóa một sản phẩm
 
     // Thay đổi vị trí sản phẩm
-    const handleChangePosition = (event: any) => {
-        console.log(event.target.value);
-    }
+    const handleChangePosition = async (event: any, id: number) => {
+        const newPosition = event.target.value;
+
+        if (newPosition < 0) {
+            alert('Vị trí phải là một số không âm');
+            return;
+        }
+
+        const path = `${linkApi}/edit/${id}`;
+
+        const response = await fetch(path, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                position: newPosition
+            })
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code === 200) {
+            location.reload();
+        }
+    };
     // Hết Thay đổi vị trí sản phẩm
 
     // Sắp xếp theo tiêu chí
@@ -405,11 +428,11 @@ export default function BlogsCategoryAdminPage() {
                                             sx={{
                                                 width: "60px"
                                             }}
-                                            onChange={handleChangePosition}
+                                            onChange={(e) => handleChangePosition(e, category.id)}
+                                            defaultValue={category.position}
                                             InputProps={{
                                                 inputProps: { min: 0, step: 1 },
                                             }}
-                                            value={category.position}
                                         />
                                     </TableCell>
                                     {/* <TableCell>
