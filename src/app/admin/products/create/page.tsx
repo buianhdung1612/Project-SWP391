@@ -4,7 +4,7 @@ const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
     ssr: false
 });
 import React, { useEffect, useState } from 'react';
-import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, InputLabel, Select, MenuItem } from '@mui/material';
+import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, InputLabel, Select, MenuItem, Divider } from '@mui/material';
 import { MdDeleteForever } from 'react-icons/md';
 import UploadImage from '@/app/components/Upload/UploadImage';
 import SubCategory from '@/app/components/Sub-Category/SubCategory';
@@ -17,6 +17,8 @@ interface InputField {
 
 export default function CreateProductAdminPage() {
     const [description, setDescription] = useState('');
+    const [ingredients, setIngredients] = useState('');
+    const [usageInstructions, setUsageInstructions] = useState('');
     const [listCategory, setListCategory] = useState([]);
     const [brandCurrent, setBrandCurrent] = useState('');
     const [listBrand, setListBrand] = useState([]);
@@ -82,8 +84,8 @@ export default function CreateProductAdminPage() {
             discountPercent: parseInt(event.target.discount.value),
             position: event.target.position.value,
             origin: event.target.origin.value,
-            ingredients: event.target.ingredients.value,
-            usageInstructions: event.target.usageInstructions.value,
+            ingredients: ingredients,
+            usageInstructions: usageInstructions,
             benefits: event.target.benefits.value,
             skinIssues: event.target.skinIssues.value,
             featured: event.target.featured.value === "true",
@@ -197,7 +199,6 @@ export default function CreateProductAdminPage() {
 
                     <h4>Mô tả</h4>
                     <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
-
                     <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
                         {inputs.map((input, index: number) => (
                             <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
@@ -262,22 +263,11 @@ export default function CreateProductAdminPage() {
                         sx={{ marginBottom: 2, marginTop: 2 }}
                         required
                     />
-                    <TextField
-                        label="Thành phần"
-                        name='ingredients'
-                        variant="outlined"
-                        fullWidth
-                        sx={{ marginBottom: 2, marginTop: 2 }}
-                        required
-                    />
-                    <TextField
-                        label="Hướng dẫn sử dụng"
-                        name='usageInstructions'
-                        variant="outlined"
-                        fullWidth
-                        sx={{ marginBottom: 2, marginTop: 2 }}
-                        required
-                    />
+                    <h4>Thành phần</h4>
+                    <TinyEditor value={ingredients} onEditorChange={(ingredients: string) => setIngredients(ingredients)} />
+                    <Divider sx={{marginBottom: 2}}/>
+                    <h4>Hướng dẫn sử dụng</h4>
+                    <TinyEditor value={usageInstructions} onEditorChange={(usageInstructions: string) => setUsageInstructions(usageInstructions)} />
                     <TextField
                         label="Lợi ích"
                         name='benefits'
