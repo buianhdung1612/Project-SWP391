@@ -259,12 +259,6 @@ export default function CategoriesTrashAdminPage() {
     }
     // Hết Xóa một sản phẩm
 
-    // Thay đổi vị trí sản phẩm
-    const handleChangePosition = (event: any) => {
-        console.log(event.target.value);
-    }
-    // Hết Thay đổi vị trí sản phẩm
-
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
         const value = event.target.value;

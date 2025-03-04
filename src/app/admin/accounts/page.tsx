@@ -250,13 +250,18 @@ export default function AccountAdminPage() {
                                         <TableCell>
                                             <div className="flex">
                                                 <Tooltip title="Chi tiết" placement="top">
-                                                    <Link href={`/admin/users/show/${account.id}`}>
+                                                    <Link href={`/admin/accounts/detail/${account.id}`}>
                                                         <BiDetail className="text-[25px] text-[#138496] mr-2" />
                                                     </Link>
                                                 </Tooltip>
                                                 <Tooltip title="Sửa" placement="top">
-                                                    <Link href={`/admin/users/edit/${account.id}`}>
+                                                    <Link href={`/admin/accounts/edit/${account.id}`}>
                                                         <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                                    </Link>
+                                                </Tooltip>
+                                                <Tooltip title="Đổi mật khẩu" placement="top">
+                                                    <Link href={`/admin/accounts/change-password/${account.id}`}>
+                                                        <MdOutlineChangeCircle className="text-[25px] text-[#E0A800]" />
                                                     </Link>
                                                 </Tooltip>
                                                 <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneAccount(account.id)}>

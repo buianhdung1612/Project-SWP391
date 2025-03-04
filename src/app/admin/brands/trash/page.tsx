@@ -162,7 +162,7 @@ export default function BrandsTrashAdminPage() {
 
         const statusChange = changeMulti;
 
-        if(statusChange == "delete-destroy"){
+        if (statusChange == "delete-destroy") {
             const path = `${linkApi}/delete`;
 
             const data: any = {
@@ -179,9 +179,9 @@ export default function BrandsTrashAdminPage() {
                 },
                 body: JSON.stringify(data)
             });
-    
+
             const dataResponse = await response.json();
-    
+
             if (dataResponse.code == 200) {
                 location.reload();
             }
@@ -375,7 +375,7 @@ export default function BrandsTrashAdminPage() {
                         sx={{ borderColor: 'green', color: 'green' }}
                     >
                         <Link href="/admin/brands" className="flex items-center">
-                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]"/>
+                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]" />
                             Danh sách thương hiệu sản phẩm
                         </Link>
                     </Button>
@@ -401,7 +401,7 @@ export default function BrandsTrashAdminPage() {
                                     <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, brand.id)}>
                                         <Checkbox />
                                     </TableCell>
-                                    <TableCell>{(data.currentPage - 1) * data.pageSize +  index + 1}</TableCell>
+                                    <TableCell>{(data.currentPage - 1) * data.pageSize + index + 1}</TableCell>
                                     <TableCell>
                                         <img
                                             src={brand.image[0]}
@@ -461,6 +461,32 @@ export default function BrandsTrashAdminPage() {
                     </Table>
                 </TableContainer>
             </Paper>
+
+            {/* Pagination */}
+            <Stack spacing={2} marginTop={2}>
+                <Pagination
+                    count={data.totalPages}
+                    color="primary"
+                    page={page}
+                    variant="outlined"
+                    shape="rounded"
+                    siblingCount={1}
+                    sx={{
+                        '& .MuiPaginationItem-root': {
+                            backgroundColor: 'white',
+                            color: 'blue',
+                            '&:hover': {
+                                backgroundColor: '#e0e0e0',
+                            },
+                        },
+                        '& .Mui-selected': {
+                            backgroundColor: 'blue',
+                            color: 'white',
+                        },
+                    }}
+                    onChange={handlePagination}
+                />
+            </Stack>
         </Box>
     );
 }
