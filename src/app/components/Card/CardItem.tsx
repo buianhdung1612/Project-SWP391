@@ -13,7 +13,7 @@ interface PriceByVolume {
 }
 
 interface CartItem {
-    image: string,
+    image: string[],
     title: string,
     price: number,
     discount: number,
@@ -23,7 +23,7 @@ interface CartItem {
 }
 
 export default function CardItem(props: {
-    image: string,
+    image: string[],
     brand: string,
     title: string,
     deal?: string,
@@ -33,7 +33,7 @@ export default function CardItem(props: {
     priceByVolume: PriceByVolume[],
     discount: number
 }) {
-    const { image = "", brand = "",  title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0 } = props;
+    const { image = [], brand = "",  title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0 } = props;
 
     const dispatchCart = useDispatch();
 
@@ -92,7 +92,7 @@ export default function CardItem(props: {
             <div className="bg-white rounded-[10px] w-[226px]">
                 <div className="w-[226px] aspect-square relative group">
                     <Link href={link}>
-                        <img src={image} className="w-full h-full object-cover rounded-[10px]" />
+                        <img src={image[0]} className="w-full h-full object-cover rounded-[10px]" />
                     </Link>
 
                     <CiHeart className="text-[28px] absolute top-[2%] right-[2%] hover:text-primary cursor-pointer" />
@@ -139,21 +139,21 @@ export default function CardItem(props: {
                             <div className="w-[256px] mr-[10px]">
                                 <div className="w-full aspect-square">
                                     <img
-                                        src={image}
+                                        src={image[0]}
                                         className="w-full h-full object-cover"
                                     />
                                 </div>
                                 <div className="grid grid-cols-3 gap-[10px]">
                                     <img
-                                        src={image}
+                                        src={image[1]}
                                         className="w-full h-full object-cover border border-solid border-[#e9edf5]"
                                     />
                                     <img
-                                        src={image}
+                                        src={image[2]}
                                         className="w-full h-full object-cover border border-solid border-[#e9edf5]"
                                     />
                                     <img
-                                        src={image}
+                                        src={image[3]}
                                         className="w-full h-full object-cover border border-solid border-[#e9edf5]"
                                     />
                                 </div>
@@ -183,7 +183,6 @@ export default function CardItem(props: {
                                         ))}
                                     </div>
                                 </div>
-                                {/* <div className="text-[14px] my-[10px]">Công dụng: <span className="text-[14px] font-[600] text-secondary">{uses}</span></div> */}
                                 <div className="flex items-center">
                                     <div className="mb-[10px] flex">
                                         <button

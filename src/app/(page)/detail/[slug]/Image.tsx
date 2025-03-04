@@ -8,16 +8,16 @@ export default function Image() {
         <>
             <div className="w-[115px] px-3">
                 <div className="cursor-pointer border border-solid bg-white border-[#e4e4e4] w-[80px] aspect-square mb-[10px]">
-                    <img src={productDetail.thumbnail[0]} className="w-full h-full object-cover"/>
+                    <img src={productDetail.thumbnail[1]} className="w-full h-full object-cover"/>
                 </div>
                 <div className="cursor-pointer border border-solid bg-white border-[#e4e4e4] w-[80px] aspect-square mb-[10px]">
-                    <img src={productDetail.thumbnail[0]} className="w-full h-full object-cover"/>
+                    <img src={productDetail.thumbnail[2]} className="w-full h-full object-cover"/>
                 </div>
                 <div className="cursor-pointer border border-solid bg-white border-[#e4e4e4] w-[80px] aspect-square mb-[10px]">
-                    <img src={productDetail.thumbnail[0]} className="w-full h-full object-cover"/>
+                    <img src={productDetail.thumbnail[3]} className="w-full h-full object-cover"/>
                 </div>
                 <div className="cursor-pointer border border-solid bg-white border-[#e4e4e4] w-[80px] aspect-square">
-                    <img src={productDetail.thumbnail[0]} className="w-full h-full object-cover"/>
+                    <img src={productDetail.thumbnail[4]} className="w-full h-full object-cover"/>
                 </div>
             </div>
             <div className="w-[420px] h-[420px] mr-[20px] relative">
