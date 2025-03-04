@@ -6,12 +6,12 @@ import InforOrderTitle from "./InforTitleText";
 
 export default function InforOrder() {
     const email = useSelector((state: any) => state.orderReducer.email);
-    const firstname = useSelector((state: any) => state.orderReducer.firstname);
-    const lastname = useSelector((state: any) => state.orderReducer.lastname);
+    const firstname = useSelector((state: any) => state.orderReducer.firstName);
+    const lastname = useSelector((state: any) => state.orderReducer.lastName);
     const fullname = firstname + " " + lastname;
-    const phone = useSelector((state: any) => state.orderReducer.phone);
+    const phone = useSelector((state: any) => state.orderReducer.phoneNumber);
     const address = useSelector((state: any) => state.orderReducer.address);
-    const method = useSelector((state: any) => state.orderReducer.method);
+    const method = useSelector((state: any) => state.orderReducer.paymentMethod);
 
     const province = useSelector((state: any) => state.orderReducer.province);
     const provinceData = province.split('+')[1];

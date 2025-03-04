@@ -1,6 +1,6 @@
 "use client"
 
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import FormOrder from "./FormOrder";
 import Section2 from "./Section2";
 import Link from "next/link";
@@ -9,21 +9,23 @@ import { useRouter } from "next/navigation";
 
 interface DataSubmit {
     email: string,
-    firstname: string,
-    lastname: string,
-    phone: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
     address: string,
-    province: string,
-    district: string,
-    ward: string,
-    method: string
+    totalAmount: number,
+    totalPrice: number,
+    paymentMethod: string
 }
 
 export default function OrderPage() {
     const dispatchOrder = useDispatch();
     const router = useRouter();
 
-    const handleSubmitForm = (event: any) => {
+    const quantity = useSelector((state: any) => state.cartReducer.totalQuantityInit);
+    const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
+
+    const handleSubmitForm = async (event: any) => {
         event.preventDefault();
         
         if(!event.target.method.value){
@@ -31,20 +33,39 @@ export default function OrderPage() {
             return;
         }
 
+        const provinceData = event.target.province.value.split('+')[1];
+        const districtData = event.target.district.value.split('+')[1];
+        const wardData = event.target.ward.value.split('+')[1];
+        const dataAddress = `${event.target.address.value}, ${provinceData}, ${districtData}, ${wardData}`;
+
         const data: DataSubmit = {
             email: event.target.email.value,
-            firstname: event.target.firstname.value,
-            lastname: event.target.lastname.value,
-            phone: event.target.phone.value,
-            address: event.target.address.value,
-            province: event.target.province.value,
-            district: event.target.district.value,
-            ward: event.target.ward.value,
-            method: event.target.method.value
+            firstName: event.target.firstname.value,
+            lastName: event.target.lastname.value,
+            phoneNumber: event.target.phone.value,
+            address: dataAddress,
+            totalAmount: quantity,
+            totalPrice: totalPrice + 40000,
+            paymentMethod: event.target.method.value
+        }
+
+        console.log(data);
+
+        const response = await fetch('https://freshskinweb.onrender.com/admin/orders/create', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            router.push(`/order/success/1`);
         }
 
         dispatchOrder(orderSubmit(data));
-        router.push(`/order/success/1`);
     }
 
     return (

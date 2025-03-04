@@ -10,8 +10,6 @@ import { Navigation } from 'swiper/modules';
 export default function CategoryList(props: any) {
     const { data } = props;
 
-    console.log(data);
-
     return (
         <>
             <Swiper

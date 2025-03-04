@@ -163,7 +163,7 @@ outline-none mb-[20px] text-[14px] font-[450]"
                                 className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-bl-none rounded-br-none border border-solid outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                             />
                         </div>
-                        <input type="radio" className="hidden" id="bank" name="method" value="bank" onChange={handleRadioBankChange} />
+                        <input type="radio" className="hidden" id="bank" name="method" value="QR" onChange={handleRadioBankChange} />
                         {bank ? (
                             <label htmlFor="bank" className="cursor-pointer absolute left-[15px] top-[22px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></label>
                         ) : (
@@ -178,7 +178,7 @@ outline-none mb-[20px] text-[14px] font-[450]"
                                 className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-tl-none rounded-tr-none border border-solid border-t-0 outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                             />
                         </div>
-                        <input type="radio" className="hidden" id="meeting" name="method" value="meeting" onChange={handleRadioMeetingChange} />
+                        <input type="radio" className="hidden" id="meeting" name="method" value="CAST" onChange={handleRadioMeetingChange} />
                         {meeting ? (
                             <label htmlFor="meeting" className="cursor-pointer absolute left-[15px] top-[22px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></label>
                         ) : (

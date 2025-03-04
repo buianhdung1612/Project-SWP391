@@ -14,14 +14,13 @@ export const methodChoosen = (methodChoosen: boolean) => {
 
 export const orderSubmit = (data: {
     email: string,
-    firstname: string,
-    lastname: string,
-    phone: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
     address: string,
-    province: string,
-    district: string,
-    ward: string,
-    method: string
+    totalAmount: number,
+    totalPrice: number,
+    paymentMethod: string
 }) => {
     
     return {

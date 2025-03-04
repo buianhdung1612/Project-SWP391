@@ -58,7 +58,7 @@ export default function Section9(props: any) {
                 {data.map((item: any, index: number) => (
                     <SwiperSlide key={index}>
                         <CardItem
-                            image={item.thumbnail[0]}
+                            image={item.thumbnail}
                             brand={item.brand.title}
                             title={item.title}
                             link={`/detail/${item.slug}`}

@@ -1,27 +1,25 @@
 interface initState {
     email: string,
-    firstname: string,
-    lastname: string,
-    phone: string,
+    firstName: string,
+    lastName: string,
+    phoneNumber: string,
     address: string,
-    province: string,
-    district: string,
-    ward: string,
-    method: string,
+    totalAmount: number,
+    totalPrice: number,
+    paymentMethod: string,
     provinceChoosen: boolean,
     methodChoosen: boolean
 }
 
 const initialState: initState = {
     email: "",
-    firstname: "",
-    lastname: "",
-    phone: "",
+    firstName: "",
+    lastName: "",
+    phoneNumber: "",
     address: "",
-    province: "",
-    district: "",
-    ward: "",
-    method: "",
+    totalAmount: 0,
+    totalPrice: 0,
+    paymentMethod: "",
     provinceChoosen: false,
     methodChoosen: true
 }
@@ -36,14 +34,13 @@ export const orderReducer = (state = initialState, action: any) => {
         case "ORDER_SUBMIT":
             return {
                 email: action.data.email,
-                firstname: action.data.firstname,
-                lastname: action.data.lastname,
-                phone: action.data.phone,
+                firstName: action.data.firstName,
+                lastName: action.data.lastName,
+                phoneNumber: action.data.phoneNumber,
                 address: action.data.address,
-                province: action.data.province,
-                district: action.data.district,
-                ward: action.data.ward,
-                method: action.data.method,
+                totalAmount: action.data.totalAmount,
+                totalPrice: action.data.totalPrice,
+                paymentMethod: action.data.paymentMethod,
                 provinceChoosen: state.provinceChoosen
             };
         case "METHOD_CHOOSEN":

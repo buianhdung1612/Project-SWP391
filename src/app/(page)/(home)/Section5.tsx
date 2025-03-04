@@ -48,7 +48,7 @@ export default function Section5(props: any) {
                     {data.map((item: any, index: number) => (
                         <CardItem
                             key={index}
-                            image={item.thumbnail[0]}
+                            image={item.thumbnail}
                             brand={item.brand.title}
                             title={item.title}
                             link={`/detail/${item.slug}`}

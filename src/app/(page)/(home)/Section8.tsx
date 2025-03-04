@@ -5,7 +5,7 @@ export default function Section8(props: any) {
 
     const data: any = dataInit.map((item: any) => (
         {
-            image: item.thumbnail[0],
+            image: item.thumbnail,
             brand: item.brand.title,
             title: item.title,
             banner: "/demo/freeship.webp",

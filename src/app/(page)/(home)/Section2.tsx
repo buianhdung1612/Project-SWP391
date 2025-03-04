@@ -41,7 +41,7 @@ export default function Section2(props: any) {
                         <SwiperSlide key={index}>
                             <CardItem
                                 key={index}
-                                image={item.thumbnail[0]}
+                                image={item.thumbnail}
                                 brand={item.brand.title}
                                 title={item.title}
                                 banner={item.banner}
