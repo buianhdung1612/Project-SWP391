@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MdOutlineArrowDropDown } from "react-icons/md";
 
-export default function MenuShow(props: { text: string, link: Url }) {
+export default function MenuShowBrand(props: { text: string, link: Url }) {
     const { text = "", link = "" } = props;
     const [isOpen, setIsOpen] = useState(false);
 

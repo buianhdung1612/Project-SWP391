@@ -7,7 +7,6 @@ import { useState } from "react";
 
 export default function Section11(props: any) {
     const { dataInit = [] } = props;
-    console.log(dataInit);
     const [dataBlogsCurrent, setDataBlogsCurrent] = useState(dataInit[0].blogs.slice(0, 4));
 
     const [currentButton, setCurrentButton] = useState(dataInit[0].slug);

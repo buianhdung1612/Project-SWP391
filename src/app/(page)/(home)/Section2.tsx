@@ -14,7 +14,7 @@ export default function Section2(props: any) {
 
     return (
         <>
-            <div className="container mx-auto bg-[#C0DFC8] px-[20px] pt-[20px] pb-[30px]">
+            <div className="container mx-auto bg-[#C0DFC8] px-[20px] pt-[20px] pb-[30px] rounded-[5px]">
                 <div className="flex items-center justify-between mb-[30px]">
                     <Link href="#">
                         <div className="w-[180px] h-auto">

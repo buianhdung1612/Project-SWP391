@@ -38,18 +38,16 @@ export default function OrderPage() {
         const wardData = event.target.ward.value.split('+')[1];
         const dataAddress = `${event.target.address.value}, ${provinceData}, ${districtData}, ${wardData}`;
 
-        const data: DataSubmit = {
-            email: event.target.email.value,
+        const data: DataSubmit = {  
             firstName: event.target.firstname.value,
             lastName: event.target.lastname.value,
-            phoneNumber: event.target.phone.value,
+            email: event.target.email.value,
             address: dataAddress,
+            phoneNumber: event.target.phone.value,
             totalAmount: quantity,
             totalPrice: totalPrice + 40000,
             paymentMethod: event.target.method.value
         }
-
-        console.log(data);
 
         const response = await fetch('https://freshskinweb.onrender.com/admin/orders/create', {
             method: "POST",
@@ -60,12 +58,13 @@ export default function OrderPage() {
         });
 
         const dataResponse = await response.json();
+        console.log(dataResponse);
 
-        if (dataResponse.code == 200) {
-            router.push(`/order/success/1`);
-        }
+        // if (dataResponse.code == 200) {
+        //     // router.push(`/order/success/1`);
+        // }
 
-        dispatchOrder(orderSubmit(data));
+        // // dispatchOrder(orderSubmit(data));
     }
 
     return (

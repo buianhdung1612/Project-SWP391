@@ -391,7 +391,7 @@ export default function BlogsCategoryAdminPage() {
                                     <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, category.id)}>
                                         <Checkbox />
                                     </TableCell>
-                                    <TableCell>{(data.currentPage - 1) * data.pageSize +  index + 1}</TableCell>
+                                    <TableCell>{(data.currentPage - 1) * data.pageSize + index + 1}</TableCell>
                                     <TableCell>
                                         <img
                                             src={category.image[0]}
@@ -448,12 +448,14 @@ export default function BlogsCategoryAdminPage() {
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Chi tiết" placement="top">
-                                                <Link href={`/admin/products-category/detail/${category.id}`}>
+                                                <Link href={`/admin/blogs-category/detail/${category.id}`}>
                                                     <BiDetail className="text-[25px] text-[#138496] mr-2" />
                                                 </Link>
                                             </Tooltip>
                                             <Tooltip title="Sửa" placement="top">
-                                                <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                                <Link href={`/admin/blogs-category/edit/${category.id}`}>
+                                                    <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                                </Link>
                                             </Tooltip>
                                             <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneProduct(category.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />

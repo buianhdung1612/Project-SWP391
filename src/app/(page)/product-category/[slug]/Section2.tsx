@@ -14,20 +14,42 @@ export default function Section2() {
     const [brand, setBrand] = useState("");
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [page, setPage] = useState(1);
 
-     useEffect(() => {
-        const fetchBlogs = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/home/products/brand/${slug}`);
+    // Lấy giá trị page từ URL query
+    const linkApi = `https://freshskinweb.onrender.com/home/${slug}`;
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const urlCurrent = new URL(location.href);
+            const api = new URL(linkApi);
+
+            // Phân trang
+            const pageCurrent = urlCurrent.searchParams.get('page');
+            setPage(pageCurrent ? parseInt(pageCurrent) : 1);
+
+            if (pageCurrent) {
+                api.searchParams.set('page', pageCurrent);
+            }
+            else {
+                api.searchParams.delete('page');
+            }
+            // Hết Phân trang
+            const response = await fetch(api.href);
             const data = await response.json();
             setDataSkinTypes(data.data.skinTypes);
             setDataProductTypes(data.data.categories);
             setBrand(data.data.brands[0].title);
             setProducts(data.data.products);
+            setTotalPages(data.data.page.totalPages);
+            setCurrentPage(data.data.page.page);
             setIsLoading(false);
         };
 
-        fetchBlogs();
-    }, []);
+        fetchData();
+    }, [slug, page]);
 
     const finalSkinTypes: string[] = [];
     const finalCategories: string[] = [];
@@ -78,7 +100,7 @@ export default function Section2() {
                                 />
                             ))}
                         </div>
-                        <Pagination/>
+                        <Pagination totalPages={totalPages} currentPage={currentPage} />
                     </div>
                 </div>
             </div>

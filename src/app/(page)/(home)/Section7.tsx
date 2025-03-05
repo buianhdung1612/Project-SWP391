@@ -56,7 +56,7 @@ export default function Section7(props: any) {
                 ))}
             </div>
 
-            <ButtonSeeAll />
+            <ButtonSeeAll link={`/product-category/${currentButton}`}/>
         </>
     )
 }

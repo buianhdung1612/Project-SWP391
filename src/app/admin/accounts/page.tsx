@@ -97,7 +97,6 @@ export default function AccountAdminPage() {
             status: statusChange
         }
 
-        console.log(data);
         const response = await fetch(path, {
             method: "PATCH",
             headers: {
@@ -260,7 +259,7 @@ export default function AccountAdminPage() {
                                                     </Link>
                                                 </Tooltip>
                                                 <Tooltip title="Đổi mật khẩu" placement="top">
-                                                    <Link href={`/admin/accounts/change-password/${account.id}`}>
+                                                    <Link href={`/admin/accounts/edit/change-password/${account.id}`}>
                                                         <MdOutlineChangeCircle className="text-[25px] text-[#E0A800]" />
                                                     </Link>
                                                 </Tooltip>
