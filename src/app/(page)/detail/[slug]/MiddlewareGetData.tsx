@@ -26,7 +26,6 @@ interface ProductRelated {
     variants: Variants[];
     discountPercent: number;
 }
-
 interface ProductDetail {
     thumbnail: string[];
     category: Category[],

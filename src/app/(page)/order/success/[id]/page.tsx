@@ -6,7 +6,18 @@ import Section2 from "./Section2";
 import { createContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 
-export const SuccessOrderContext = createContext({
+interface Data {
+    fullname: string,
+    email: string,
+    address: string,
+    phone: string,
+    quantity: number,
+    totalPrice: number,
+    method: string,
+    date: string
+}
+
+export const SuccessOrderContext = createContext<Data>({
     fullname: "",
     email: "",
     address: "",
