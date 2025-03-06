@@ -3,30 +3,9 @@
 import Link from "next/link";
 import Section1 from "./Section1";
 import Section2 from "./Section2";
-import { createContext, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-
-interface Data {
-    fullname: string,
-    email: string,
-    address: string,
-    phone: string,
-    quantity: number,
-    totalPrice: number,
-    method: string,
-    date: string
-}
-
-export const SuccessOrderContext = createContext<Data>({
-    fullname: "",
-    email: "",
-    address: "",
-    phone: "",
-    quantity: 0,
-    totalPrice: 0,
-    method: "",
-    date: ""
-});
+import { SuccessOrderContext } from "./SuccessOrderContext"
 
 export default function SuccessPage() {
     const { id } = useParams();
