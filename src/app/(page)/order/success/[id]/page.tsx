@@ -1,5 +1,4 @@
-"use client"
-
+import { FC } from 'react'; // import FC type
 import Link from "next/link";
 import Section1 from "./Section1";
 import Section2 from "./Section2";
@@ -17,7 +16,7 @@ export const SuccessOrderContext = createContext({
     date: ""
 });
 
-export default function SuccessPage() {
+const SuccessPage: FC = () => {
     const { id } = useParams();
     const [data, setData] = useState({
         firstName: "",
@@ -41,7 +40,7 @@ export default function SuccessPage() {
         };
 
         fetchData();
-    }, []);
+    }, [id]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -70,9 +69,9 @@ export default function SuccessPage() {
                     <Section1 />
                     <Section2 />
                 </SuccessOrderContext.Provider>
-
             </div>
-
         </div>
     )
-}
+};
+
+export default SuccessPage;
