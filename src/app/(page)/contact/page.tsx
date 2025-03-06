@@ -3,13 +3,27 @@
 import FormInput from "@/app/components/Form/FormInput";
 import { useContext } from "react";
 import { SettingContext } from "../layout";
+import Link from "next/link";
+import { MdNavigateNext } from "react-icons/md";
 
 export default function ContactPage() {
-     const setting = useContext(SettingContext);
+    const setting = useContext(SettingContext);
 
     return (
         <>
-            <div className="container mx-auto flex items-start mt-[30px]">
+            <ul className="flex items-center container mx-auto px-3">
+                <li>
+                    <Link href="/" className="flex items-center">
+                        <span className="text-[#333] text-[15px] font-[400] hover:text-secondary">Trang chủ</span>
+                        <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
+                    </Link>
+                </li>
+                <li className="text-secondary text-[15px] font-[400]">
+                    Liên hệ
+                </li>
+            </ul>
+            <div className="container mx-auto flex items-start mt-[25px]">
+
                 <div className="w-[50%] px-[10px]">
                     <div className="mb-[15px]">
                         <h4 className="uppercase text-[15px] font-[600] mb-[13px]">Nơi giải đáp toàn bộ mọi thắc mắc của bạn?</h4>

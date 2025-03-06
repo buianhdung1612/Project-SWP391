@@ -4,6 +4,7 @@ import ButtonPay from "@/app/components/Button/ButtonPay";
 import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../(actions)/cart";
+import { MdNavigateNext } from "react-icons/md";
 
 interface CartItem {
     image: string,
@@ -37,6 +38,17 @@ export default function CartPage() {
 
     return (
         <>
+            <ul className="flex items-center container mx-auto mb-[30px]">
+                <li>
+                    <Link href="/" className="flex items-center">
+                        <span className="text-[#333] text-[15px] font-[400] hover:text-secondary">Trang chủ</span>
+                        <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
+                    </Link>
+                </li>
+                <li className="text-secondary text-[15px] font-[400]">
+                    Giỏ hàng
+                </li>
+            </ul>
             <div className="container mx-auto mt-[40px]">
                 <div className="text-[22px] font-[600] text-center mb-[20px]">Giỏ hàng của bạn</div>
                 <div className="">

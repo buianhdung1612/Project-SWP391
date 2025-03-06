@@ -12,6 +12,11 @@ interface Variants {
 interface Brand {
     title: string;
 }
+interface Category {
+    slug: string, 
+    title: string,
+    parent: Category
+}
 interface ProductRelated {
     title: string;
     slug: string;
@@ -23,6 +28,7 @@ interface ProductRelated {
 
 interface ProductDetail {
     thumbnail: string[];
+    category: Category[],
     deal: string;
     banner: string;
     title: string;
@@ -31,7 +37,6 @@ interface ProductDetail {
     discountPercent: number;
     description: string;
 }
-
 interface Context {
     productsRelated: ProductRelated[],
     productDetail: ProductDetail
@@ -53,8 +58,9 @@ export default function DetailProductPage() {
         ],
         productDetail: {
             thumbnail: [],
-            deal: "/demo/deal.webp",
-            banner: "/demo/banner-sale.webp",
+            category: [],
+            deal: "",
+            banner: "",
             title: "",
             brand: { title: "" },
             variants: [{ volume: 0, price: 0, unit: "" }],

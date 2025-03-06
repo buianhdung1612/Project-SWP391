@@ -87,7 +87,7 @@ export default function CreateBlogAdminPage() {
                         <Select
                             value={categoryCurrent}
                             onChange={handleChangeCategory}
-                            label=" Chọn danh mục --"
+                            label="Chọn danh mục --"
                             displayEmpty
                         >
                             <MenuItem value=''>

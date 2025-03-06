@@ -3,8 +3,10 @@
 import Aside from "@/app/components/Aside/Aside"
 import CardItem from "@/app/components/Card/CardItem"
 import Pagination from "@/app/components/Pagination/Pagination"
+import Link from "next/link"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
+import { MdNavigateNext } from "react-icons/md"
 
 export default function Section2() {
     const { slug } = useParams();
@@ -80,7 +82,18 @@ export default function Section2() {
     return (
         <>
             <div className="container mx-auto">
-                <div className="uppercase text-[26px] font-[600] mt-[40px]">{title}</div>
+                <ul className="flex items-center mt-[17px]">
+                    <li>
+                        <Link href="/" className="flex items-center">
+                            <span className="text-[#333] text-[15px] font-[400] hover:text-secondary">Trang chủ</span>
+                            <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
+                        </Link>
+                    </li>
+                    <li className="text-secondary text-[15px] font-[400]">
+                        {title}
+                    </li>
+                </ul>
+                <div className="uppercase text-[26px] font-[600] mt-[30px]">{title}</div>
                 <div className="flex items-start">
                     <Aside data={data} />
                     <div className="flex-1 ml-[40px] mt-[15px]">

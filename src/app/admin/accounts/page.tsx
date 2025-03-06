@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 export default function AccountAdminPage() {
     const [data, setData] = useState([]);
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/users';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/account';
 
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");

@@ -4,6 +4,7 @@ import Banner2 from "@/app/components/Banner/Banner2";
 import Pagination from "@/app/components/Pagination/Pagination";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { MdNavigateNext } from "react-icons/md";
 
 export default function BlogPage() {
     const [data, setData] = useState([
@@ -58,6 +59,17 @@ export default function BlogPage() {
 
     return (
         <>
+            <ul className="flex items-center mt-[17px] container mx-auto px-3">
+                <li>
+                    <Link href="/" className="flex items-center">
+                        <span className="text-[#333] text-[15px] font-[400] hover:text-secondary">Trang chủ</span>
+                        <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
+                    </Link>
+                </li>
+                <li className="text-secondary text-[15px] font-[400]">
+                    Tin tức
+                </li>
+            </ul>
             <Banner2 />
             <div className="container mx-auto mb-[35px]">
                 <div className="uppercase text-center p-[20px] text-[18px] font-[550] text-textColor">{dataCurrent.title}</div>
@@ -121,7 +133,7 @@ export default function BlogPage() {
                     ))}
                 </div>
             </div>
-            <Pagination />
+            {/* <Pagination /> */}
         </>
     )
 }

@@ -55,7 +55,7 @@ export const cartReducer = (state = dataInit, action: any) => {
 
             const updatedDataIncreaseQuantity = [...state.products];
             updatedDataIncreaseQuantity[action.index].quantity += 1;
-            const priceTotalUpdatedIncreaseQuantity: number = state.totalPriceInit + updatedDataIncreaseQuantity[action.index].priceNew;
+            const priceTotalUpdatedIncreaseQuantity: number = state.totalPriceInit + updatedDataIncreaseQuantity[action.index].price;
             const quantityTotalUpdatedIncreaseQuantity: number = state.totalQuantityInit + 1;
 
             return {
@@ -71,7 +71,7 @@ export const cartReducer = (state = dataInit, action: any) => {
             const updatedDataDecreaseQuantity = [...state.products];
             if (updatedDataDecreaseQuantity[action.index].quantity - 1 >= 0) {
                 updatedDataDecreaseQuantity[action.index].quantity -= 1;
-                const priceTotalUpdatedDecreaseQuantity: number = state.totalPriceInit - updatedDataDecreaseQuantity[action.index].priceNew;
+                const priceTotalUpdatedDecreaseQuantity: number = state.totalPriceInit - updatedDataDecreaseQuantity[action.index].price;
                 const quantityTotalUpdatedDecreaseQuantity: number = state.totalQuantityInit - 1;
 
                 return {

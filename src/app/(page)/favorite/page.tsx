@@ -1,4 +1,6 @@
 import CardItem from "@/app/components/Card/CardItem";
+import Link from "next/link";
+import { MdNavigateNext } from "react-icons/md";
 
 export default function FavoritePage() {
     const data: any = [
@@ -203,6 +205,17 @@ export default function FavoritePage() {
     return (
         <>
             <div className="container mx-auto">
+                <ul className="flex items-center container mx-auto">
+                    <li>
+                        <Link href="/" className="flex items-center">
+                            <span className="text-[#333] text-[15px] font-[400] hover:text-secondary">Trang chủ</span>
+                            <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
+                        </Link>
+                    </li>
+                    <li className="text-secondary text-[15px] font-[400]">
+                        Sản phẩm yêu thích
+                    </li>
+                </ul>
                 <div className="uppercase text-[16px] text-textColor mt-[20px] mb-[10px] font-[500]">Sản phẩm yêu thích</div>
                 <div className="grid grid-cols-5">
                     {data.map((item: any, index: number) => (

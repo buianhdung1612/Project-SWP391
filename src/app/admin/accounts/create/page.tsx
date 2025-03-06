@@ -6,8 +6,7 @@ import UploadImage from "@/app/components/Upload/UploadImage";
 
 export default function CreateAccountAdmin() {
     const [listRoles, setListRoles] = useState([]);
-    const [roleCurrent, setRoleCurrent] = useState('');
-
+    const [roleCurrent, setRoleCurrent] = useState(""); 
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -50,7 +49,7 @@ export default function CreateAccountAdmin() {
             }
         });
 
-        const response = await fetch('https://freshskinweb.onrender.com/admin/users/create', {
+        const response = await fetch('https://freshskinweb.onrender.com/admin/account/create', {
             method: "POST",
             body: formData
         });
@@ -76,16 +75,15 @@ export default function CreateAccountAdmin() {
                             <Select
                                 value={roleCurrent}
                                 onChange={(e) => setRoleCurrent(e.target.value)}
-                                label=" Chọn nhóm quyền --"
+                                label="Chọn nhóm quyền --"
                                 displayEmpty
                             >
                                 <MenuItem value="">
                                     -- Chọn nhóm quyền --
                                 </MenuItem>
                                 {listRoles.map((item: any, index: number) => (
-                                    <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+                                    <MenuItem key={index} value={item.roleId}>{item.title}</MenuItem>
                                 ))}
-
                             </Select>
                         </FormControl>
                         <TextField
@@ -113,6 +111,15 @@ export default function CreateAccountAdmin() {
                             required
                         />
                         <TextField
+                            label="Mật khẩu"
+                            name="password"
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 3 }}
+                            required
+                            type="password"
+                        />
+                        <TextField
                             label="Địa chỉ"
                             name="address"
                             variant="outlined"
@@ -128,15 +135,6 @@ export default function CreateAccountAdmin() {
                             sx={{ marginBottom: 3 }}
                             required
                             type="email"
-                        />
-                        <TextField
-                            label="Mật khẩu"
-                            name="password"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                            type="password"
                         />
                         <TextField
                             label="Số điện thoại"
