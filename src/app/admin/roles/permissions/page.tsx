@@ -1,20 +1,20 @@
 "use client"
 
 import { Box, Button, Paper, Table, TableCell, TableContainer, TableHead, TableRow, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+// import { useEffect, useState } from "react";
 
 export default function PermissionPage() {
-    const [listRoles, setListRoles] = useState([]);
+    // const [listRoles, setListRoles] = useState([]);
 
-    useEffect(() => {
-        const fetchCategories = async () => {
-            const response = await fetch('https://freshskinweb.onrender.com/admin/roles');
-            const data = await response.json();
-            setListRoles(data.data);
-        };
+    // useEffect(() => {
+    //     const fetchCategories = async () => {
+    //         const response = await fetch('https://freshskinweb.onrender.com/admin/roles');
+    //         const data = await response.json();
+    //         setListRoles(data.data);
+    //     };
 
-        fetchCategories();
-    }, []);
+    //     fetchCategories();
+    // }, []);
 
     return (
         <>

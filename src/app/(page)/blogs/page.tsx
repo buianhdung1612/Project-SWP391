@@ -1,7 +1,7 @@
 "use client"
 
 import Banner2 from "@/app/components/Banner/Banner2";
-import Pagination from "@/app/components/Pagination/Pagination";
+// import Pagination from "@/app/components/Pagination/Pagination";
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MdNavigateNext } from "react-icons/md";

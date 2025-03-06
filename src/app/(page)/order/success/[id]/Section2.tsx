@@ -1,6 +1,5 @@
 "use client"
 
-import { useSelector } from "react-redux";
 import Products from "../../Products";
 import { useContext } from "react";
 import { SuccessOrderContext } from "./page";
@@ -9,7 +8,6 @@ import { useParams } from "next/navigation";
 export default function Section2() {
     const { id } = useParams();
     const { totalPrice } = useContext(SuccessOrderContext);
-    const provinceChoosen = useSelector((state: any) => state.orderReducer.provinceChoosen);
 
     return (
         <>
