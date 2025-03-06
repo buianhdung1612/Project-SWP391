@@ -1,5 +1,3 @@
-"use client"
-
 import Link from "next/link";
 import Section1 from "./Section1";
 import Section2 from "./Section2";
@@ -41,7 +39,7 @@ export default function SuccessPage() {
         };
 
         fetchData();
-    }, []);
+    }, [id]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -70,9 +68,7 @@ export default function SuccessPage() {
                     <Section1 />
                     <Section2 />
                 </SuccessOrderContext.Provider>
-
             </div>
-
         </div>
-    )
+    );
 }
