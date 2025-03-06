@@ -1,9 +1,10 @@
 "use client"
 
-import { useSelector } from "react-redux";
+import { useContext } from "react";
+import { SuccessOrderContext } from "./page";
 
 export default function Thanks() {
-    const email = useSelector((state: any) => state.orderReducer.email);
+    const { email } = useContext(SuccessOrderContext);
 
     return (
         <>

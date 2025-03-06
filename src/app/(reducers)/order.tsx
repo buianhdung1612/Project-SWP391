@@ -31,18 +31,6 @@ export const orderReducer = (state = initialState, action: any) => {
                 ...state,
                 provinceChoosen: action.provinceChoosen
             };
-        case "ORDER_SUBMIT":
-            return {
-                email: action.data.email,
-                firstName: action.data.firstName,
-                lastName: action.data.lastName,
-                phoneNumber: action.data.phoneNumber,
-                address: action.data.address,
-                totalAmount: action.data.totalAmount,
-                totalPrice: action.data.totalPrice,
-                paymentMethod: action.data.paymentMethod,
-                provinceChoosen: state.provinceChoosen
-            };
         case "METHOD_CHOOSEN":
             return {
                 ...state,

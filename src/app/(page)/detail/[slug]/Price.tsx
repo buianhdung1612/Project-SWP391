@@ -9,9 +9,10 @@ import { Context } from "./MiddlewareGetData";
 interface CartItem {
     image: string,
     title: string,
-    priceNew: number,
+    price: number,
     link: string,
     volume: number,
+    unit: string,
     quantity: number
 }
 
@@ -21,8 +22,6 @@ export default function Price() {
     const products = useSelector((state: any) => state.cartReducer.products);
 
     const { productDetail } = useContext(Context);
-
-    console.log(productDetail.variants[0]);
 
     const [currentVolume, setCurrentVolume] = useState(productDetail.variants[0]);
 
@@ -42,9 +41,10 @@ export default function Price() {
         const data: CartItem = {
             image: productDetail.thumbnail[0],
             title: productDetail.title,
-            priceNew: currentVolume.price * (1 - productDetail.discountPercent / 100),
+            price: currentVolume.price * (1 - productDetail.discountPercent / 100),
             link: "#",
             volume: currentVolume.volume,
+            unit: currentVolume.unit,
             quantity: quantity
         };
 

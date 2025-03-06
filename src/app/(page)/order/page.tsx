@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from "react-redux";
 import FormOrder from "./FormOrder";
 import Section2 from "./Section2";
 import Link from "next/link";
-import { methodChoosen, orderSubmit } from "@/app/(actions)/order";
+import { methodChoosen } from "@/app/(actions)/order";
 import { useRouter } from "next/navigation";
 
 interface DataSubmit {
@@ -58,13 +58,12 @@ export default function OrderPage() {
         });
 
         const dataResponse = await response.json();
+
         console.log(dataResponse);
 
-        // if (dataResponse.code == 200) {
-        //     // router.push(`/order/success/1`);
-        // }
-
-        // // dispatchOrder(orderSubmit(data));
+        if (dataResponse.code == 200) {
+            router.push(`/order/success/${dataResponse.data.orderId}`);
+        }
     }
 
     return (

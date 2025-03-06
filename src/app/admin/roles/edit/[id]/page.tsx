@@ -45,7 +45,7 @@ export default function EditRoleAdmin () {
             description: description
         }
 
-        const response = await fetch(`https://freshskinweb.onrender.com/admin/role/edit/${id}`, {
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/roles/edit/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"

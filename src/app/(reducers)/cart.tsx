@@ -3,31 +3,21 @@
 interface CartItem {
     image: string,
     title: string,
-    priceNew: number,
+    price: number,
     link: string,
     volume: number,
+    unit: string,
     quantity: number
 }
 
-const productsInit: CartItem[] = [
-    {
-        image: "/demo/danhmuc_1.webp",
-        title: "Son Lì Maybelline Mịn Môi Siêu Nhẹ 1299 Đỏ Cam Đất 1.7g",
-        priceNew: 179000,
-        link: "#",
-        volume: 30,
-        quantity: 2
-    }
-];
-
+// Data Init
+const productsInit: CartItem[] = [];
 const totalPriceInit: number = productsInit.reduce((sum: number, item: CartItem) => {
-    return sum + item.priceNew * item.quantity
+    return sum + item.price * item.quantity
 }, 0);
-
 const totalQuantityInit: number = productsInit.reduce((sum: number, item: CartItem) => {
     return sum + item.quantity
 }, 0);
-
 const dataInit: any = {
     products: productsInit,
     totalPriceInit: totalPriceInit,
@@ -43,7 +33,7 @@ export const cartReducer = (state = dataInit, action: any) => {
                 updatedDataChangeQuantity[action.index].quantity = newQuantity;
 
                 const priceTotalUpdatedChangeQuantity: number = updatedDataChangeQuantity.reduce((sum: number, item: CartItem) => {
-                    return sum += item.priceNew * item.quantity
+                    return sum += item.price * item.quantity
                 }, 0);
 
                 const quantityTotalUpdatedChangeQuantity: number = updatedDataChangeQuantity.reduce((sum: number, item: CartItem) => {
@@ -98,7 +88,7 @@ export const cartReducer = (state = dataInit, action: any) => {
             const updatedDataDelete = state.products.filter((item: CartItem, index: number) => index !== action.index);
 
             const priceTotalUpdatedDelete: number = updatedDataDelete.reduce((sum: number, item: CartItem) => {
-                return sum += item.priceNew * item.quantity
+                return sum += item.price * item.quantity
             }, 0);
 
             const quantityTotalUpdatedDelete: number = updatedDataDelete.reduce((sum: number, item: CartItem) => {
@@ -115,7 +105,7 @@ export const cartReducer = (state = dataInit, action: any) => {
         case "CART_ADD_NEW_PRODUCT":
             const updatedDataNewProduct = action.products;
             const priceTotalUpdatedAddNewProduct: number = updatedDataNewProduct.reduce((sum: number, item: CartItem) => {
-                return sum + item.priceNew * item.quantity
+                return sum + item.price * item.quantity
             }, 0)
             const quantityTotalUpdatedAddNewProduct: number = updatedDataNewProduct.reduce((sum: number, item: CartItem) => {
                 return sum + item.quantity

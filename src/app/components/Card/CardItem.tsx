@@ -13,12 +13,12 @@ interface PriceByVolume {
 }
 
 interface CartItem {
-    image: string[],
+    image: string,
     title: string,
     price: number,
-    discount: number,
     link: string,
     volume: number,
+    unit: string,
     quantity: number
 }
 
@@ -55,12 +55,12 @@ export default function CardItem(props: {
 
     const handleAddNewProductToCart = () => {
         const data: CartItem = {
-            image: image,
+            image: image[0],
             title: title,
             price: currentVolume.price,
-            discount: discount,
-            link: "#",
+            link: link,
             volume: currentVolume.volume,
+            unit: currentVolume.unit,
             quantity: quantity
         };
 
@@ -135,7 +135,7 @@ export default function CardItem(props: {
                             ✕
                         </button>
 
-                        <div className="flex px-[5px]">
+                        <div className="flex items-center px-[5px]">
                             <div className="w-[256px] mr-[10px]">
                                 <div className="w-full aspect-square">
                                     <img
@@ -161,12 +161,12 @@ export default function CardItem(props: {
                             <div className="flex-1">
                                 <div className="text-[23px] font-[600] text-[#333]">{title}</div>
                                 <div className="flex mt-[10px] items-center mb-[10px]">
-                                    <div className="text-[20px] font-[600] text-primary">{currentVolume.price.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
+                                    <div className="text-[20px] font-[600] text-primary">{(currentVolume.price * (1 - discount/100)).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                                     <div className="text-[16px] font-[600] text-[#a5a5a5] ml-[10px] line-through">{currentVolume.price.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                                 </div>
                                 <div>
-                                    <div className="text-[14px] text-[#0090F] mb-[10px]">Dung Tích: <span className="text-secondary font-[600]">{currentVolume.volume}ml</span></div>
-                                    <div className="flex items-center">
+                                    <div className="text-[14px] text-[#0090F] mb-[10px]">Dung Tích: <span className="text-secondary font-[600]">{currentVolume.volume}{currentVolume.unit.toLowerCase()}</span></div>
+                                    <div className="flex items-center mb-[10px]">
                                         {priceByVolume.map((item: any, index: number) => (
                                             <button
                                                 key={index}
@@ -178,7 +178,7 @@ export default function CardItem(props: {
                                                 }
                                                 onClick={() => setCurrentVolume(item)}
                                             >
-                                                {item.volume}ml
+                                                {item.volume}{item.unit.toLowerCase()}
                                             </button>
                                         ))}
                                     </div>

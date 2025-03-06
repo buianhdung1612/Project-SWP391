@@ -11,7 +11,7 @@ export default function Section2() {
 
     const [dataSkinTypes, setDataSkinTypes] = useState([]);
     const [dataProductTypes, setDataProductTypes] = useState([]);
-    const [brand, setBrand] = useState("");
+    const [title, setTitle] = useState("");
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
@@ -41,7 +41,7 @@ export default function Section2() {
             const data = await response.json();
             setDataSkinTypes(data.data.skinTypes);
             setDataProductTypes(data.data.categories);
-            setBrand(data.data.brands[0].title);
+            setTitle(data.data.title);
             setProducts(data.data.products);
             setTotalPages(data.data.page.totalPages);
             setCurrentPage(data.data.page.page);
@@ -80,7 +80,7 @@ export default function Section2() {
     return (
         <>
             <div className="container mx-auto">
-                <div className="uppercase text-[26px] font-[600] mt-[40px]">{brand}</div>
+                <div className="uppercase text-[26px] font-[600] mt-[40px]">{title}</div>
                 <div className="flex items-start">
                     <Aside data={data} />
                     <div className="flex-1 ml-[40px] mt-[15px]">

@@ -81,23 +81,23 @@ export default function RoleAdminPage() {
                             </TableHead>
                             <TableBody>
                                 {data.map((role: any, index: number) => (
-                                    <TableRow key={role.id}>
+                                    <TableRow key={index}>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>{role.title}</TableCell>
                                         <TableCell dangerouslySetInnerHTML={{__html: role.description}}></TableCell>
                                         <TableCell>
                                             <div className="flex">
                                                 <Tooltip title="Chi tiết" placement="top">
-                                                    <Link href={`/admin/roles/detail/${role.id}`}>
+                                                    <Link href={`/admin/roles/detail/${role.roleId}`}>
                                                         <BiDetail className="text-[25px] text-[#138496] mr-2" />
                                                     </Link>
                                                 </Tooltip>
                                                 <Tooltip title="Sửa" placement="top">
-                                                    <Link href={`/admin/roles/edit/${role.id}`}>
+                                                    <Link href={`/admin/roles/edit/${role.roleId}`}>
                                                         <MdEditNote className="text-[25px] text-[#E0A800]" />
                                                     </Link>
                                                 </Tooltip>
-                                                <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneRole(role.id)}>
+                                                <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneRole(role.roleId)}>
                                                     <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                                 </Tooltip>
                                             </div>

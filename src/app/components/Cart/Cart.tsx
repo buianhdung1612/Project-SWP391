@@ -11,9 +11,10 @@ import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuant
 interface CartItem {
     image: string,
     title: string,
-    priceNew: number,
+    price: number,
     link: string,
     volume: number,
+    unit: string,
     quantity: number
 }
 
@@ -77,16 +78,16 @@ export default function Cart() {
                     <div className="px-[10px]">
                         {products.map((item: CartItem, index: number) => (
                             <div key={index} className="p-[10px] max-h-[360px] overflow-y-auto flex border-b border-solid boder-[#ddd]">
-                                <div className="w-[20%]">
+                                <div className="w-[18%]">
                                     <div className="w-[80px] aspect-square">
-                                        <Link href="#">
+                                        <Link href={item.link}>
                                             <img src={item.image} className="w-full h-full object-cover" />
                                         </Link>
                                     </div>
                                 </div>
-                                <div className="w-[80%] ml-[15px]">
+                                <div className="flex-1 ml-[35px]">
                                     <div className="text-[13px] font-[400] text-textColor pr-[5px] line-clamp-2 hover:text-secondary cursor-pointer">{item.title}</div>
-                                    <span className="text-[12px] text-[#9e9e9e]">{item.volume}ml</span>
+                                    <span className="text-[12px] text-[#9e9e9e]">{item.volume}{item.unit.toLowerCase()}</span>
                                     <div className="flex items-center justify-between mt-[4px]">
                                         <div className="flex">
                                             <button
@@ -110,7 +111,7 @@ export default function Cart() {
                                                 +
                                             </button>
                                         </div>
-                                        <div className="text-primary">{(item.priceNew * item.quantity).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
+                                        <div className="text-primary">{(item.price * item.quantity).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                                     </div>
                                 </div>
                                 <div

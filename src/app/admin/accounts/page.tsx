@@ -10,8 +10,7 @@ import { useEffect, useState } from "react";
 export default function AccountAdminPage() {
     const [data, setData] = useState([]);
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/users/show';
-    const linkApiUse = 'https://freshskinweb.onrender.com/admin/users';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/users';
 
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
@@ -91,7 +90,7 @@ export default function AccountAdminPage() {
     // Thay đổi trạng thái 1 tài khoản
     const handleChangeStatusOneAccount = async (status: string, dataPath: string) => {
         const statusChange = status;
-        const path = `${linkApiUse}${dataPath}`;
+        const path = `${linkApi}${dataPath}`;
 
         const data = {
             status: statusChange
@@ -214,7 +213,7 @@ export default function AccountAdminPage() {
                             </TableHead>
                             <TableBody>
                                 {data.map((account: any, index: number) => (
-                                    <TableRow key={account.id}>
+                                    <TableRow key={index}>
                                         <TableCell>{index + 1}</TableCell>
                                         <TableCell>
                                             <img
@@ -233,7 +232,7 @@ export default function AccountAdminPage() {
                                                     color="success"
                                                     size="small"
                                                     variant="outlined"
-                                                    onClick={() => handleChangeStatusOneAccount("INACTIVE", `/edit/${account.id}`)}
+                                                    onClick={() => handleChangeStatusOneAccount("INACTIVE", `/edit/${account.userID}`)}
                                                 />
                                             )}
                                             {account.status === "INACTIVE" && (
@@ -242,28 +241,28 @@ export default function AccountAdminPage() {
                                                     color="error"
                                                     size="small"
                                                     variant="outlined"
-                                                    onClick={() => handleChangeStatusOneAccount("ACTIVE", `/edit/${account.id}`)}
+                                                    onClick={() => handleChangeStatusOneAccount("ACTIVE", `/edit/${account.userID}`)}
                                                 />
                                             )}
                                         </TableCell>
                                         <TableCell>
                                             <div className="flex">
                                                 <Tooltip title="Chi tiết" placement="top">
-                                                    <Link href={`/admin/accounts/detail/${account.id}`}>
+                                                    <Link href={`/admin/accounts/detail/${account.userID}`}>
                                                         <BiDetail className="text-[25px] text-[#138496] mr-2" />
                                                     </Link>
                                                 </Tooltip>
                                                 <Tooltip title="Sửa" placement="top">
-                                                    <Link href={`/admin/accounts/edit/${account.id}`}>
+                                                    <Link href={`/admin/accounts/edit/${account.userID}`}>
                                                         <MdEditNote className="text-[25px] text-[#E0A800]" />
                                                     </Link>
                                                 </Tooltip>
                                                 <Tooltip title="Đổi mật khẩu" placement="top">
-                                                    <Link href={`/admin/accounts/edit/change-password/${account.id}`}>
+                                                    <Link href={`/admin/accounts/edit/change-password/${account.userID}`}>
                                                         <MdOutlineChangeCircle className="text-[25px] text-[#E0A800]" />
                                                     </Link>
                                                 </Tooltip>
-                                                <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneAccount(account.id)}>
+                                                <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneAccount(account.userID)}>
                                                     <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                                 </Tooltip>
                                             </div>

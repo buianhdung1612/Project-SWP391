@@ -15,6 +15,7 @@ export default function Action() {
             setQuantity(quantity - 1);
         }
     }
+    
     return (
         <>
             <div className="text-[14px] font-[500] text-[#00090f] my-[10px]">Số lượng:</div>

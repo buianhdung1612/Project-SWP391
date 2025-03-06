@@ -3,9 +3,10 @@ import { useSelector } from "react-redux";
 interface Product {
     image: string,
     title: string,
-    priceNew: number,
+    price: number,
     link: string
     volume: number,
+    unit: string,
     quantity: number
 }
 
@@ -23,9 +24,9 @@ export default function Products() {
                         </div>
                         <div className="flex-1">
                             <div className="text-[14px] text-[#333] font-[400]">{item.title}</div>
-                            <div className="text-[12px] text-[#969696] font-[350]">{item.volume}ml</div>
+                            <div className="text-[12px] text-[#969696] font-[350]">{item.volume}{item.unit.toLowerCase()}</div>
                         </div>
-                        <div className="text-[14px] w-[73px] text-[#969696] ml-[35px]">{(item.priceNew * item.quantity).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
+                        <div className="text-[14px] w-[73px] text-[#969696] ml-[35px]">{(item.price * item.quantity).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                     </div>
                 ))}
             </div>

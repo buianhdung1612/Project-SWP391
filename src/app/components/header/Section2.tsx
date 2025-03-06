@@ -7,7 +7,7 @@ export default function Section2() {
         <>
             <div className="container mx-auto flex items-center justify-center py-[10px]">
                 <MenuUnShow text="Trang chủ" link="/"/>
-                <MenuShowBrand text="Thương hiệu" link=''/>
+                <MenuShowBrand text="Thương hiệu" link='/product-category/thuong-hieu'/>
                 <MenuShowMainCategory text="Chăm sóc da mặt" link='/product-category/cham-soc-da-mat'/>
                 <MenuUnShow text="Khuyến mãi HOT" image="fire 1.png" link="/product-category/khuyen-mai-hot"/>  
                 <MenuUnShow text="Sản phẩm mới" link="/product-category/san-pham-moi"/>

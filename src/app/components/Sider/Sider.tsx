@@ -64,7 +64,7 @@ const menu: Menu[] = [
         link: "/admin/roles/permissions"
     },
     {
-        content: "Tài khoản",
+        content: "Tài khoản quản trị",
         icon: <FaUsers />,
         link: "/admin/accounts"
     },
