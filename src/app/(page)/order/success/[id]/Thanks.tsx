@@ -1,7 +1,7 @@
 "use client"
 
 import { useContext } from "react";
-import { SuccessOrderContext } from "./page";
+import { SuccessOrderContext } from "./SuccessOrderContext";
 
 export default function Thanks() {
     const { email } = useContext(SuccessOrderContext);

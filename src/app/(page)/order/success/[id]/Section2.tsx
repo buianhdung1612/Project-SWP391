@@ -2,7 +2,7 @@
 
 import Products from "../../Products";
 import { useContext } from "react";
-import { SuccessOrderContext } from "./page";
+import { SuccessOrderContext } from "./SuccessOrderContext";
 import { useParams } from "next/navigation";
 
 export default function Section2() {

@@ -3,7 +3,7 @@
 import InforOderText from "./InforOrderText";
 import InforOrderTitle from "./InforTitleText";
 import { useContext } from "react";
-import { SuccessOrderContext } from "./page";
+import { SuccessOrderContext } from "./SuccessOrderContext";
 
 export default function InforOrder() {
     const { email, fullname, phone, address, method } = useContext(SuccessOrderContext);
