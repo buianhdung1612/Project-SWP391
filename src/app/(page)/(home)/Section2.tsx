@@ -16,7 +16,7 @@ export default function Section2(props: any) {
         <>
             <div className="container mx-auto bg-[#C0DFC8] px-[20px] pt-[20px] pb-[30px] rounded-[5px]">
                 <div className="flex items-center justify-between mb-[30px]">
-                    <Link href="#">
+                    <Link href="/product-category/khuyen-mai-hot">
                         <div className="w-[180px] h-auto">
                             <img src="/demo/flash.webp" className="w-full h-full object-cover" />
                         </div>
@@ -25,7 +25,7 @@ export default function Section2(props: any) {
                         <div className="text-primary text-[18px] font-[600] mb-[5px]">Sản phẩm khuyến mãi</div>
                         <div className="text-[16px] bg-white px-[8px] py-[8px] rounded-[15px]">Chương trình sắp hết hạn</div>
                     </div>
-                    <Link href="#">
+                    <Link href="/product-category/khuyen-mai-hot">
                         <button className="text-[#4e7661] px-[15px] py-[8px] rounded-[10px] text-[14px] font-[500] bg-white hover:bg-[#4E7661] hover:text-white">
                             Xem tất cả
                         </button>

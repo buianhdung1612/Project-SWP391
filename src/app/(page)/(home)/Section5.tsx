@@ -45,7 +45,7 @@ export default function Section5(props: any) {
                     <img src="/demo/buy5-gift1.webp" className="w-full h-full object-cover rounded-[5px]" />
                 </Link>
                 <div className="flex-1 grid grid-cols-3 gap-[30px]">
-                    {data.map((item: any, index: number) => (
+                    {data.slice(0,6).map((item: any, index: number) => (
                         <CardItem
                             key={index}
                             image={item.thumbnail}

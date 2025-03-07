@@ -43,7 +43,7 @@ export default function Section7(props: any) {
             </div>
 
             <div className="container mx-auto grid grid-cols-5 gap-[20px]">
-                {data.map((item: any, index: number) => (
+                {data.slice(0,5).map((item: any, index: number) => (
                     <CardItem
                         key={index}
                         image={item.thumbnail}
