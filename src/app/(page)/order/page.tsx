@@ -42,7 +42,7 @@ export default function OrderPage() {
         const dataAddress = `${event.target.address.value}, ${provinceData}, ${districtData}, ${wardData}`;
 
         const dataProducts: any = [];
-        products.map((item: any, index: number) => (
+        products.map((item: any) => (
             dataProducts.push({
                 variantId: item.variantId,
                 quantity: item.quantity
