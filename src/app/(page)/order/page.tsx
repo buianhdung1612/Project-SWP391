@@ -17,7 +17,7 @@ interface DataSubmit {
     totalAmount: number,
     totalPrice: number,
     paymentMethod: string,
-    products: any
+    orderItems: any
 }
 
 export default function OrderPage() {
@@ -44,7 +44,7 @@ export default function OrderPage() {
         const dataProducts: any = [];
         products.map((item: any) => (
             dataProducts.push({
-                variantId: item.variantId,
+                productVariantId: item.variantId,
                 quantity: item.quantity
             })
         ))
@@ -58,10 +58,10 @@ export default function OrderPage() {
             totalAmount: quantity,
             totalPrice: totalPrice + 40000,
             paymentMethod: event.target.method.value,
-            products: dataProducts
+            orderItems: dataProducts
         }
 
-        const response = await fetch('https://freshskinweb.onrender.com/admin/orders/create', {
+        const response = await fetch('https://freshskinweb.onrender.com/home/order/create', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

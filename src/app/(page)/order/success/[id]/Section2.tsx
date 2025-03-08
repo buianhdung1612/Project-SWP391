@@ -1,9 +1,9 @@
 "use client"
 
-import Products from "../../Products";
 import { useContext } from "react";
-import { SuccessOrderContext } from "./SuccessOrderContext";
 import { useParams } from "next/navigation";
+import { SuccessOrderContext } from "./SuccessOrderContext";
+import Products from "./Products";
 
 export default function Section2() {
     const { id } = useParams();

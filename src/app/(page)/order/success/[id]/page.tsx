@@ -18,13 +18,14 @@ export default function SuccessPage() {
         totalAmount: 0,
         totalPrice: 0,
         paymentMethod: "",
-        orderDate: ""
+        orderDate: "",
+        orderItems: []
     });
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/admin/orders/search/${id}`);
+            const response = await fetch(`https://freshskinweb.onrender.com/home/order/${id}`);
             const data = await response.json();
             setData(data.data);
             setIsLoading(false);
@@ -36,6 +37,8 @@ export default function SuccessPage() {
     if (isLoading) {
         return <div>Loading...</div>;
     }
+
+    console.log(data);
 
     return (
         <div className="container mx-auto pt-[30px]">
@@ -54,7 +57,8 @@ export default function SuccessPage() {
                         quantity: data.totalAmount,
                         totalPrice: data.totalPrice,
                         method: data.paymentMethod,
-                        date: data.orderDate
+                        date: data.orderDate,
+                        products: data.orderItems
                     }}
                 >
                     <Section1 />
