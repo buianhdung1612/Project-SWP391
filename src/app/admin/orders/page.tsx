@@ -130,9 +130,9 @@ export default function OrdersAdminPage() {
 
         location.href = url.href;
     }
-    // Hết Tìm kiếm sản phẩm
+    // Hết Tìm kiếm đơn hàng
 
-    // Thay đổi trạng thái 1 sản phẩm
+    // Thay đổi trạng thái 1 đơn hàng
     const handleChangeStatusOnebrand = async (status: string, dataPath: string) => {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
@@ -153,9 +153,9 @@ export default function OrdersAdminPage() {
             location.reload();
         }
     }
-    // Hết Thay đổi trạng thái 1 sản phẩm
+    // Hết Thay đổi trạng thái 1 đơn hàng
 
-    // Thay đổi trạng thái nhiều sản phẩm
+    // Thay đổi trạng thái nhiều đơn hàng
     const handleChangeMulti = async (event: any) => {
         event.preventDefault();
 
@@ -190,9 +190,9 @@ export default function OrdersAdminPage() {
             setInputChecked(prev => prev.filter(id => id !== id));
         }
     }
-    // Hết Thay đổi trạng thái nhiều sản phẩm
+    // Hết Thay đổi trạng thái nhiều đơn hàng
 
-    // Xóa một sản phẩm
+    // Xóa vĩnh viễn một đơn hàng
     const handleDeleteOnebrand = async (id: number) => {
         const path = `${linkApi}/deleteT/${id}`;
 
@@ -209,36 +209,7 @@ export default function OrdersAdminPage() {
             location.reload();
         }
     }
-    // Hết Xóa một sản phẩm
-
-    // Thay đổi vị trí sản phẩm
-    const handleChangePosition = async (event: any, id: number) => {
-        const newPosition = event.target.value;
-
-        if (newPosition < 0) {
-            alert('Vị trí phải là một số không âm');
-            return;
-        }
-
-        const path = `${linkApi}/edit/${id}`;
-
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                position: newPosition
-            })
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code === 200) {
-            location.reload();
-        }
-    };
-    // Hết Thay đổi vị trí sản phẩm
+    // Hết Xóa vĩnh viễn một đơn hàng
 
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {
@@ -376,7 +347,8 @@ export default function OrdersAdminPage() {
                                 <TableCell ></TableCell>
                                 <TableCell>STT</TableCell>
                                 <TableCell>Tình trạng</TableCell>
-                                <TableCell>Khách hàng</TableCell>
+                                <TableCell>Họ</TableCell>
+                                <TableCell>Tên</TableCell>
                                 <TableCell>Điện thoại khách</TableCell>
                                 <TableCell>Địa chỉ giao hàng</TableCell>
                                 <TableCell>Hành động</TableCell>
@@ -411,30 +383,10 @@ export default function OrdersAdminPage() {
                                         )}
                                     </TableCell>
                                     <TableCell>
-                                        <TextField
-                                            type="number"
-                                            variant="outlined"
-                                            size="small"
-                                            sx={{
-                                                width: "60px"
-                                            }}
-                                            onChange={(e) => handleChangePosition(e, brand.id)}
-                                            defaultValue={brand.position}
-                                            InputProps={{
-                                                inputProps: { min: 0, step: 1 },
-                                            }}
-                                        />
-                                    </TableCell>
-                                    <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Chi tiết" placement="top">
                                                 <Link href={`/admin/brands/detail/${brand.id}`}>
                                                     <BiDetail className="text-[25px] text-[#138496] mr-2" />
-                                                </Link>
-                                            </Tooltip>
-                                            <Tooltip title="Sửa" placement="top">
-                                                <Link href={`/admin/brands/edit/${brand.id}`}>
-                                                    <MdEditNote className="text-[25px] text-[#E0A800]" />
                                                 </Link>
                                             </Tooltip>
                                             <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(brand.id)}>
