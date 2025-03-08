@@ -5,6 +5,7 @@ import { useParams } from "next/navigation";
 import MiddlewareGetData from "./MiddlewareGetData";
 
 interface Variants {
+    id: number,
     volume: number;
     price: number;
     unit: string;
@@ -52,7 +53,7 @@ export default function DetailProductPage() {
                 slug: "",
                 description: "",
                 thumbnail: [],
-                variants: [{ volume: 0, price: 0, unit: "" }],
+                variants: [{ id: 0, volume: 0, price: 0, unit: "" }],
                 discountPercent: 0
             }
         ],
@@ -63,7 +64,7 @@ export default function DetailProductPage() {
             banner: "",
             title: "",
             brand: { title: "" },
-            variants: [{ volume: 0, price: 0, unit: "" }],
+            variants: [{ id: 0, volume: 0, price: 0, unit: "" }],
             discountPercent: 0,
             description: ""
         }
