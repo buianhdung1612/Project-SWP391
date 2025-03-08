@@ -37,14 +37,26 @@ export default function BlogPage() {
                 createdAt: ""
             }
         ]
-    })
+    });
 
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
         const fetchBlogs = async () => {
+            const cachedData = sessionStorage.getItem('blogData');
+            if (cachedData) {
+                const data = JSON.parse(cachedData);
+                setData(data.featuredBlogCategory);
+                setDataCurrent(data.featuredBlogCategory[0]);
+                setIsLoading(false);
+                return;
+            }
+
             const response = await fetch('https://freshskinweb.onrender.com/home');
             const data = await response.json();
+
+            sessionStorage.setItem('blogData', JSON.stringify(data));
+
             setData(data.featuredBlogCategory);
             setDataCurrent(data.featuredBlogCategory[0]);
             setIsLoading(false);
@@ -95,7 +107,6 @@ export default function BlogPage() {
                                     <div className="text-textColor text-[13px] italic py-1">{item.createdAt}</div>
                                     <div className="text-textColor text-[13px] line-clamp-2" dangerouslySetInnerHTML={{ __html: item.content }}></div>
                                 </div>
-
                             </div>
                         ))}
                     </div>

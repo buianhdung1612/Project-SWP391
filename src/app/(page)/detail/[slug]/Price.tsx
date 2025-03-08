@@ -11,6 +11,7 @@ interface CartItem {
     title: string,
     price: number,
     link: string,
+    variantId: number,
     volume: number,
     unit: string,
     quantity: number
@@ -43,6 +44,7 @@ export default function Price() {
             title: productDetail.title,
             price: currentVolume.price * (1 - productDetail.discountPercent / 100),
             link: "#",
+            variantId: currentVolume.id,
             volume: currentVolume.volume,
             unit: currentVolume.unit,
             quantity: quantity

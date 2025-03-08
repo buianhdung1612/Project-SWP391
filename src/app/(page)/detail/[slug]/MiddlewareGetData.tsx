@@ -6,6 +6,7 @@ import Section2 from "./Section2";
 import SaleCode from "@/app/components/SaleCode/SaleCode";
 
 interface Variants {
+    id: number;
     volume: number;
     price: number;
     unit: string;
@@ -50,7 +51,7 @@ export const Context = createContext<Context>({
             slug: "",
             description: "",
             thumbnail: [],
-            variants: [{ volume: 0, price: 0, unit: "" }],
+            variants: [{ id: 0, volume: 0, price: 0, unit: "" }],
             discountPercent: 0
         }
     ],
@@ -61,7 +62,7 @@ export const Context = createContext<Context>({
         banner: "",
         title: "",
         brand: { title: "" },
-        variants: [{ volume: 0, price: 0, unit: "" }],
+        variants: [{ id: 0, volume: 0, price: 0, unit: "" }],
         discountPercent: 0,
         description: ""
     }

@@ -32,7 +32,7 @@ export default function Section9(props: any) {
 
     return (
         <>
-            <Title title="Xu hướng làm đẹp" link="/products" />
+            <Title title="Tóc khỏe tóc đẹp" link="/products" />
 
             <div className="text-center mb-[20px]">
                 {dataButton.map((item: any, index: number) => (

@@ -13,6 +13,7 @@ interface CartItem {
     title: string,
     price: number,
     link: string,
+    variantId: number,
     volume: number,
     unit: string,
     quantity: number

@@ -47,7 +47,7 @@ export default function AccountAdminPage() {
             const fetchAccounts = async () => {
                 const response = await fetch(api.href);
                 const data = await response.json();
-                setData(data.data);
+                setData(data.data.users);
             };
     
             fetchAccounts();
@@ -111,6 +111,9 @@ export default function AccountAdminPage() {
         }
     }
     
+    // Đổi mật khẩu
+    
+
     // Xóa một tài khoản
     const handleDeleteOneAccount = async (id: number) => {
         const path = `${linkApi}/deleteT/${id}`;
@@ -258,7 +261,7 @@ export default function AccountAdminPage() {
                                                     </Link>
                                                 </Tooltip>
                                                 <Tooltip title="Đổi mật khẩu" placement="top">
-                                                    <Link href={`/admin/accounts/edit/change-password/${account.userID}`}>
+                                                    <Link href={`/admin/accounts/change-password/${account.userID}`}>
                                                         <MdOutlineChangeCircle className="text-[25px] text-[#E0A800]" />
                                                     </Link>
                                                 </Tooltip>

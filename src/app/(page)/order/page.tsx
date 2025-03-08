@@ -6,6 +6,7 @@ import Section2 from "./Section2";
 import Link from "next/link";
 import { methodChoosen } from "@/app/(actions)/order";
 import { useRouter } from "next/navigation";
+import { cartReset } from "@/app/(actions)/cart";
 
 interface DataSubmit {
     email: string,
@@ -15,7 +16,8 @@ interface DataSubmit {
     address: string,
     totalAmount: number,
     totalPrice: number,
-    paymentMethod: string
+    paymentMethod: string,
+    products: any
 }
 
 export default function OrderPage() {
@@ -24,6 +26,7 @@ export default function OrderPage() {
 
     const quantity = useSelector((state: any) => state.cartReducer.totalQuantityInit);
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
+    const products = useSelector((state: any) => (state.cartReducer.products));
 
     const handleSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -38,6 +41,14 @@ export default function OrderPage() {
         const wardData = event.target.ward.value.split('+')[1];
         const dataAddress = `${event.target.address.value}, ${provinceData}, ${districtData}, ${wardData}`;
 
+        const dataProducts: any = [];
+        products.map((item: any, index: number) => (
+            dataProducts.push({
+                variantId: item.variantId,
+                quantity: item.quantity
+            })
+        ))
+
         const data: DataSubmit = {  
             firstName: event.target.firstname.value,
             lastName: event.target.lastname.value,
@@ -46,7 +57,8 @@ export default function OrderPage() {
             phoneNumber: event.target.phone.value,
             totalAmount: quantity,
             totalPrice: totalPrice + 40000,
-            paymentMethod: event.target.method.value
+            paymentMethod: event.target.method.value,
+            products: dataProducts
         }
 
         const response = await fetch('https://freshskinweb.onrender.com/admin/orders/create', {
@@ -59,10 +71,10 @@ export default function OrderPage() {
 
         const dataResponse = await response.json();
 
-        console.log(dataResponse);
-
         if (dataResponse.code == 200) {
+            dispatchOrder(cartReset());
             router.push(`/order/success/${dataResponse.data.orderId}`);
+            
         }
     }
 

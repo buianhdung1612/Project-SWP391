@@ -5,6 +5,7 @@ interface CartItem {
     title: string,
     price: number,
     link: string,
+    variantId: number,
     volume: number,
     unit: string,
     quantity: number
@@ -116,6 +117,13 @@ export const cartReducer = (state = dataInit, action: any) => {
                 products: updatedDataNewProduct,
                 totalPriceInit: priceTotalUpdatedAddNewProduct,
                 totalQuantityInit: quantityTotalUpdatedAddNewProduct
+            }
+
+        case "CART_RESET":
+            return {
+                products: [],
+                totalPriceInit: 0,
+                totalQuantityInit: 0
             }
         default:
             return state;

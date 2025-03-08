@@ -11,7 +11,7 @@ export default function Banner() {
                 </div>
                 <div className="flex-1">
                     <div className="mb-[15px] h-[164px]">
-                        <Link href="products">
+                        <Link href="/products">
                             <img src="banner-2.webp" className="rounded-[15px]" />
                         </Link>
                     </div>

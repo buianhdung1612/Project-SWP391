@@ -36,7 +36,6 @@ export default function DetailBrandAdminPage() {
                 `https://freshskinweb.onrender.com/admin/products/category/${id}`
             );
             const data = await response.json();
-            console.log(data.data)
             setData(data.data);
         };
 
@@ -51,7 +50,7 @@ export default function DetailBrandAdminPage() {
                         <Box
                             sx={{
                                 width: "50%",
-                                aspectRatio: 1/1,
+                                aspectRatio: 1 / 1,
                                 backgroundSize: "cover",
                                 backgroundPosition: "center",
                                 backgroundImage: `url(${data.image[0]})`,
@@ -59,9 +58,9 @@ export default function DetailBrandAdminPage() {
                                 mb: 2,
                                 objectFit: "cover",
                                 display: "flex",
-                                justifyContent: "center",  
-                                alignItems: "center",      
-                                margin: "0 auto",          
+                                justifyContent: "center",
+                                alignItems: "center",
+                                margin: "0 auto",
                             }}
                         />
                     )}
@@ -125,18 +124,20 @@ export default function DetailBrandAdminPage() {
                             Vị trí: {data.position}
                         </Button>
                     </Box>
-                    
+
                     <Divider sx={{ my: 2 }} />
-                    <Box sx={{ mb: 2 }}>
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mr: 1 }}>
-                                Danh mục cha:
-                            </Typography>
-                            <Typography variant="body1" sx={{ color: "#555" }}>
-                                {data.parent.title}
-                            </Typography>
+                    {data.parent && (
+                        <Box sx={{ mb: 2 }}>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                                <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mr: 1 }}>
+                                    Danh mục cha:
+                                </Typography>
+                                <Typography variant="body1" sx={{ color: "#555" }}>
+                                    {data.parent.title}
+                                </Typography>
+                            </Box>
                         </Box>
-                    </Box>
+                    )}
                     <Box
                         sx={{
                             mb: 4,

@@ -35,3 +35,9 @@ export const cartAddNewProduct = (products) => {
         products: products    
     }
 }
+
+export const cartReset = () => {
+    return {
+        type: "CART_RESET"
+    }
+}

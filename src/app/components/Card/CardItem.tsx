@@ -7,6 +7,7 @@ import { CiHeart } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 
 interface PriceByVolume {
+    id: number,
     volume: number,
     price: number,
     unit: string
@@ -17,6 +18,7 @@ interface CartItem {
     title: string,
     price: number,
     link: string,
+    variantId: number,
     volume: number,
     unit: string,
     quantity: number
@@ -39,7 +41,7 @@ export default function CardItem(props: {
 
     const products = useSelector((state: any) => state.cartReducer.products);
 
-    const [currentVolume, setCurrentVolume] = useState(priceByVolume.length > 0 ? priceByVolume[0] : { price: 0, volume: 0, unit: "" });
+    const [currentVolume, setCurrentVolume] = useState(priceByVolume.length > 0 ? priceByVolume[0] : { id: 0, price: 0, volume: 0, unit: "" });
 
     const [quantity, setQuantity] = useState(1);
 
@@ -59,6 +61,7 @@ export default function CardItem(props: {
             title: title,
             price: currentVolume.price,
             link: link,
+            variantId: currentVolume.id,
             volume: currentVolume.volume,
             unit: currentVolume.unit,
             quantity: quantity

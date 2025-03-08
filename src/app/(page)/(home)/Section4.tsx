@@ -2,28 +2,8 @@ import ButtonCategory from "@/app/components/Button/ButtonCategory";
 import Title from "@/app/components/title/Title";
 import Link from "next/link";
 
-export default function Section4() {
-    const data: any = [
-        "Kem chống nắng",
-        "Kem dưỡng ẩm",
-        "Sữa rửa bặt",
-        "Bông tẩy trang",
-        "Sữa rửa mặt SVR",
-        "Mặt nạ",
-        "Hỗ trợ tiêu hóa",
-        "Dầu gội",
-        "Cosrx",
-        "Vaseline",
-        "Cushion",
-        "Dưỡng thể",
-        "Mặt nạ dưỡng",
-        "Chống lão hóa",
-        "Phụ kiện làm sạch",
-        "Kem dưỡng mắt",
-        "Xịt khoáng",
-        "Vetaphil",
-        "Loreal"
-    ];
+export default function Section4(props: any) {
+    const { dataInit } = props;
 
     const bannerImage: any = [
         "/demo/banner-search-1.webp",
@@ -37,8 +17,8 @@ export default function Section4() {
         <>
             <Title title="Tìm kiếm nhiều nhất" link="/products"/>
             <div className="container mx-auto flex flex-wrap justify-center">
-                {data.map((item: string, index: number) => (
-                    <ButtonCategory key={index} text={item} />
+                {dataInit.map((item: any, index: number) => (
+                    <ButtonCategory key={index} text={item.title} slug={item.slug} />
                 ))}
             </div>
             <Link href="/products" className="container mx-auto mt-[40px] grid grid-cols-6 gap-[20px]">

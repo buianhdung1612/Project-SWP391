@@ -40,7 +40,7 @@ export default function MenuShowBrand(props: { text: string, link: Url }) {
                 </Link>
                 {isOpen && (
                     <ul className="bg-white absolute top-[90%] left-0 w-[220px] z-[1030] drop-header">
-                        {data.map((item: any, index: number) => (
+                        {data.slice(0, 13).map((item: any, index: number) => (
                             <Link key={index} href={`/product-category/${item.slug}`}>
                                 <li
                                     className="cursor-pointer py-[8px] pl-[15px] pr-[10px] text-[#222] hover:text-secondary drop-header-item text-[15px] hover:border-l-4 hover:border-solid hover:border-secondary"
