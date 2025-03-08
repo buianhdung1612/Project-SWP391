@@ -9,9 +9,11 @@ import { MdNavigateNext } from "react-icons/md";
 interface CartItem {
     image: string,
     title: string,
-    priceNew: number,
+    price: number,
     link: string,
+    variantId: number,
     volume: number,
+    unit: string,
     quantity: number
 }
 
@@ -73,7 +75,7 @@ export default function CartPage() {
                                         <div onClick={() => handleDeleteItem(index)} className="text-[15px] text-primary hover:text-secondary cursor-pointer mb-[10px]">Xóa</div>
                                     </div>
                                 </div>
-                                <div className="w-[15%] text-[#c90000] text-center text-[16px] font-[600]">{item.priceNew.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
+                                <div className="w-[15%] text-[#c90000] text-center text-[16px] font-[600]">{item.price.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                                 <div className="w-[15%] flex justify-center items-center">
                                     <button
                                         className="hover:text-white text-[14px] w-[28px] h-[28px] text-[#222] flex justify-center items-center border border-solid border-[#e5e5e5]"
@@ -96,7 +98,7 @@ export default function CartPage() {
                                         +
                                     </button>
                                 </div>
-                                <div className="w-[15%] text-[#c90000] text-center text-[16px] font-[600]">{(item.priceNew * item.quantity).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
+                                <div className="w-[15%] text-[#c90000] text-center text-[16px] font-[600]">{(item.price * item.quantity).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                             </div>
                         ))}
                         <div className="flex justify-between mt-[30px]">
