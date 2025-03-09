@@ -24,7 +24,7 @@ export default function DetailProductAdminPage() {
         },
         category: [],
         description: "",
-        discountPercent: 0, 
+        discountPercent: 0,
         featured: false,
         ingredients: "",
         origin: "",
@@ -50,6 +50,8 @@ export default function DetailProductAdminPage() {
 
         fetchInfo();
     }, [id]);
+
+    console.log(data);
 
     return (
         <Container maxWidth="md" sx={{ mt: 4 }}>
@@ -124,22 +126,24 @@ export default function DetailProductAdminPage() {
                         <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mb: 1 }}>
                             Danh mục:
                         </Typography>
-                        <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
-                            {data.category?.map((item: any, index: number) => (
-                                <Typography
-                                    key={index}
-                                    variant="body1"
-                                    sx={{
-                                        color: "#555",
-                                        display: "flex",
-                                        alignItems: "center",
-                                    }}
-                                >
-                                    <span style={{ color: "#4caf50", fontWeight: "bold", marginRight: 8 }}>+</span>
-                                    {item.title || ""}
-                                </Typography>
-                            ))}
-                        </Box>
+                        {data.category && (
+                            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5 }}>
+                                {data.category.map((item: any, index: number) => (
+                                    <Typography
+                                        key={index}
+                                        variant="body1"
+                                        sx={{
+                                            color: "#555",
+                                            display: "flex",
+                                            alignItems: "center",
+                                        }}
+                                    >
+                                        <span style={{ color: "#4caf50", fontWeight: "bold", marginRight: 8 }}>+</span>
+                                        {item.title || ""}
+                                    </Typography>
+                                ))}
+                            </Box>
+                        )}
                     </Box>
                     <Box sx={{ mb: 2 }}>
                         <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mb: 1 }}>
