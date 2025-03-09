@@ -38,8 +38,6 @@ export default function SuccessPage() {
         return <div>Loading...</div>;
     }
 
-    console.log(data);
-
     return (
         <div className="container mx-auto pt-[30px]">
             <div className="flex items-center justify-center">

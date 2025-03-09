@@ -51,8 +51,6 @@ export default function DetailProductAdminPage() {
         fetchInfo();
     }, [id]);
 
-    console.log(data);
-
     return (
         <Container maxWidth="md" sx={{ mt: 4 }}>
             <Card elevation={3}>

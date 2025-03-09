@@ -35,7 +35,6 @@ export default function OrderPage() {
             dispatchOrder(methodChoosen(false));
             return;
         }
-        dispatchOrder(methodChoosen(true));
 
         const provinceData = event.target.province.value.split('+')[1];
         const districtData = event.target.district.value.split('+')[1];

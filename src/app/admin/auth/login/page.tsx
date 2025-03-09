@@ -22,6 +22,10 @@ export default function LoginAdminPage() {
         });
         const dataResponse = await response.json();
         console.log(dataResponse);
+
+        if(dataResponse.code == 200){
+            location.href = "/admin/dashboard"
+        }
        
     };
 

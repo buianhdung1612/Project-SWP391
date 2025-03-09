@@ -18,7 +18,7 @@ export default function Products() {
                             <div className="text-[14px] text-[#333] font-[400]">{item.productVariant.product.title}</div>
                             <div className="text-[12px] text-[#969696] font-[350]">{item.productVariant.volume}{item.productVariant.unit.toLowerCase()}</div>
                         </div>
-                        <div className="text-[14px] w-[73px] text-[#969696] ml-[35px]">{(item.subtotal * (1 - item.productVariant.product.discountPercent/100) * item.quantity).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
+                        <div className="text-[14px] w-[73px] text-[#969696] ml-[35px]">{(item.subtotal * (1 - item.productVariant.product.discountPercent/100)).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
                     </div>
                 ))}
             </div>
