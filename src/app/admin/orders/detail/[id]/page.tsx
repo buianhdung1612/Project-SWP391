@@ -11,9 +11,7 @@ import {
     TableContainer,
     TableHead,
     TableRow,
-    Paper,
-    Card,
-    CardContent,
+    Paper
 } from "@mui/material";
 
 export default function DetailOrderAdmin() {
