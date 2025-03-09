@@ -17,7 +17,7 @@ export default function OrdersAdminPage() {
         brand: []
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/orders';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/orders/show';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 

@@ -33,7 +33,6 @@ export default function DetailBrandAdminPage() {
                 `https://freshskinweb.onrender.com/admin/products/brand/${id}`
             );
             const data = await response.json();
-            console.log(data.data)
             setBrandInfo(data.data);
         };
 

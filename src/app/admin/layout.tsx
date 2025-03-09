@@ -5,6 +5,7 @@ import "../globals.css";
 
 import HeaderAdmin from "../components/header/HeaderAdmin";
 import Sider from "../components/Sider/Sider";
+import { usePathname } from "next/navigation";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -17,14 +18,16 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
 
+  const pathname = usePathname();
+
   return (
     <html lang="en">
       <body
         className={`${inter.className} antialiased body`}
       >
-        <Sider />
+        {!pathname.startsWith("/admin/auth/login") && <Sider />}
         <div className="main">
-          <HeaderAdmin />
+        {!pathname.startsWith("/admin/auth/login") && <HeaderAdmin />}
           <div className="block-main">
             {children}
           </div>

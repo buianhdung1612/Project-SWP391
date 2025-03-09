@@ -111,15 +111,13 @@ export default function AccountAdminPage() {
         }
     }
     
-    // Đổi mật khẩu
-    
 
-    // Xóa một tài khoản
+    // Xóa vĩnh viễn một tài khoản
     const handleDeleteOneAccount = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
+        const path = `${linkApi}/delete/${id}`;
 
         const response = await fetch(path, {
-            method: "PATCH",
+            method: "DELETE",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -181,15 +179,6 @@ export default function AccountAdminPage() {
                         Danh sách
                     </Typography>
                     <Box display="flex" gap={20} flexWrap="wrap">
-                        <Button
-                            variant="contained"
-                            startIcon={<DeleteIcon />}
-                            sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
-                        >
-                            <Link href="/admin/accounts/trash">
-                                Thùng rác
-                            </Link>
-                        </Button>
                         <Button
                             variant="outlined"
                             color="success"
