@@ -1,6 +1,7 @@
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { ReactNode } from "react";
+import Image from "next/image"; // 🟢 Thêm import Image
 import { CiCrop } from "react-icons/ci";
 import { FaBlog, FaBorderNone, FaJoomla, FaObjectGroup, FaTable, FaUsers } from "react-icons/fa";
 import { FaGaugeHigh, FaGear, FaGroupArrowsRotate, FaHurricane } from "react-icons/fa6";
@@ -77,23 +78,35 @@ const menu: Menu[] = [
 
 export default function Sider() {
     return (
-        <>
-            <div className="sider">
-                <Link className="sider__logo" href="/admin/dashboard">
-                    <span className="sider__logo--black">FRESH</span>
-                    <span className="sider__logo--yellow">SKINCARE</span>
+        <div className="fixed left-0 top-0 w-64 min-h-screen bg-[#ffffff] text-black border-r rounded-r-2xl flex flex-col">
+            
+            {/* Logo */}
+            <div className="flex justify-center py-4 border-b">
+                <Link href="/admin/dashboard">
+                    <Image 
+                        src="/demoLogo.png" 
+                        alt="Fresh Skin Logo"
+                        width={150}
+                        height={40}
+                        priority
+                    />
                 </Link>
-                <div className="sider__menu">
-                    <ul>
-                        {menu.map((item: Menu, index: number) => (
-                            <li key={index}>
-                                {item.icon}
-                                <Link href={item.link} className="ml-[15px]">{item.content}</Link>
-                            </li>
-                        ))}
-                    </ul>
-                </div>
             </div>
-        </>
-    )
+
+            {/* Menu */}
+            <ul className="space-y-1 px-4 mt-4 flex-1">
+                {menu.map((item, index) => (
+                    <li key={index}>
+                        <Link 
+                            href={item.link} 
+                            className="flex items-center gap-3 px-5 py-3 rounded-lg hover:bg-green-200 transition duration-200"
+                        >
+                            {item.icon}
+                            <span>{item.content}</span>
+                        </Link>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
 }

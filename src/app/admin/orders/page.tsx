@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Tooltip, Stack, Pagination, Chip } from "@mui/material";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel,FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Tooltip, Stack, Pagination, Chip } from "@mui/material";
 import { BiDetail } from "react-icons/bi";
 
 import { useEffect, useState } from "react";
@@ -195,7 +195,7 @@ export default function OrdersAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" gutterBottom>
                 Trang danh sách đơn hàng
             </Typography>
 

@@ -104,7 +104,7 @@ export default function EditBlogAdminPage() {
 
     return (
         <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" gutterBottom>
                 Trang tạo mới bài viết
             </Typography>
 

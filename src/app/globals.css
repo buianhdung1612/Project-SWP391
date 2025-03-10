@@ -217,13 +217,13 @@ input[type="number"]::-webkit-inner-spin-button {
     padding-left: 50px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    margin: 5px 0; 
-    background-color: #f9f9f9; 
-    transition: background-color 0.3s; 
+    margin: 5px 0; /* Thêm khoảng cách giữa các mục */
+    background-color: #ffffff; /* Màu nền cho các mục */
+    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
 }
 
 .sub-menu ul li:hover {
-    background-color: #eaeaea; 
+    background-color: #eaeaea; /* Màu nền khi hover */
 }
 
 .sub-menu:hover>ul {
@@ -242,67 +242,10 @@ input[type="number"]::-webkit-inner-spin-button {
 .sub-menu ul li:hover>ul {
     display: block;
 }
+
 /* End sub-menu */
 
-/* sub-menu-header */
-.sub-menu-header {
-    position: relative;
-    z-index: 999;
-}
 
-.sub-menu-header ul {
-    position: absolute;
-    left: 0;
-    top: 90%;
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    z-index: 1030;
-    background: white;
-    min-width: 220px;
-    display: none;
-    transition: all 0.3sease-in-out;
-    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
-}
-
-.sub-menu-header ul li {
-    padding: 8px 10px 8px 15px;
-    transition: all 0.2s;
-    color: #222;
-    font-size: 15px;
-}
-
-.sub-menu-header ul li:hover {
-    color: #4e7661; 
-    border-left: 4px solid #4e7661; 
-}
-
-.sub-menu-header:hover>ul {
-    display: block;
-}
-
-.sub-menu-header ul li {
-    position: relative;
-}
-
-.sub-menu-header ul li ul {
-    left: 100%;
-    top: 0;
-}
-
-.sub-menu-header ul li:hover>ul {
-    display: block;
-}
-/* End sub-menu-header */
-
-.drop-header {
-    transition: all 0.3sease-in-out;
-    box-shadow: 0px 0px 15px 0px rgba(0, 0, 0, 0.1);
-}
-
-.drop-header-item {
-    transition: all 0.2s;
-}
 
 /* Body */
 .body {
@@ -312,7 +255,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .body .main {
     flex: 1;
     margin-left: 300px;
-    background-color: #DCE7FF;
+    background-color: #ffffff;
 }
 
 /* End Body */
@@ -323,7 +266,7 @@ input[type="number"]::-webkit-inner-spin-button {
     position: sticky;
     z-index: 999;
     top: 0;
-    background-color: white;
+    background-color: rgb(255, 255, 255);
 }
 
 .header__wrap {
@@ -372,7 +315,7 @@ input[type="number"]::-webkit-inner-spin-button {
     padding-left: 15px;
     padding-right: 15px;
     background-color: color;
-    color: black;
+    color: rgb(12, 11, 11);
 }
 
 .sider a {
@@ -382,18 +325,20 @@ input[type="number"]::-webkit-inner-spin-button {
 .sider__logo {
     font-weight: 650;
     font-size: 26px;
-    border-bottom: solid 0.5px #CCCCCC;
-    padding-bottom: 8px;
-    margin-bottom: 8px;
+    border-bottom: solid 0.5px #ffffff;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
 }
 
 .sider__logo--black {
-    color: black;
+    color: rgb(56, 55, 55);
 }
 
 .sider__menu {
-    margin-top: 15px;
-}
+   margin-top:0px;
+   margin-right: 200px;
+
+   }
 
 .sider__logo--yellow {
     color: #F4B700;
@@ -404,8 +349,8 @@ input[type="number"]::-webkit-inner-spin-button {
     justify-content: start;
     align-items: center;
     width: 270px;
-    padding: 10px 15px;
-    font-size: 18px;
+    padding: 5px 15px;
+    font-size: 17px;
 }
 
 /* End Sider */

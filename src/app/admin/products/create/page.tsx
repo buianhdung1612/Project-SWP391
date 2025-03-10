@@ -149,8 +149,8 @@ export default function CreateProductAdminPage() {
 
 
     return (
-        <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
-            <Typography variant="h4" gutterBottom>
+        <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
+            <Typography variant="h5" gutterBottom>
                 Trang tạo mới sản phẩm
             </Typography>
 

@@ -278,7 +278,7 @@ export default function BlogsCategoryAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" gutterBottom>
                 Trang danh sách danh mục bài viết
             </Typography>
 

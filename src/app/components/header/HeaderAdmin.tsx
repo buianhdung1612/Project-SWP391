@@ -6,7 +6,7 @@ export default function HeaderAdmin() {
         <>
             <div className="header">
                 <div className="header__wrap">
-                    <div className="header__title">WELCOME TO ADMIN PAGE</div>
+                    <div className="header__title text-[#506A65] text-[20px] ml-[20px]"> Admin Page</div>
                     <div className="header__icons">
                         <Link href="/admin/accounts/my-profile" className="header__profile">
                             <img src="/" alt="User Avatar" />

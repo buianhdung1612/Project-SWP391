@@ -133,7 +133,7 @@ export default function PermissionPage() {
 
   return (
     <Box p={3}>
-      <Typography variant="h4" gutterBottom align="center" sx={{ mb: 4 }}>
+      <Typography variant="h5" gutterBottom  sx={{ mb: 4 }}>
         Quản lý phân quyền
       </Typography>
 

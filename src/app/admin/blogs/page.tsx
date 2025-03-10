@@ -277,8 +277,8 @@ export default function BlogsAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
-                Trang danh sách sản phẩm
+            <Typography variant="h5" gutterBottom>
+                Trang danh sách bài viết
             </Typography>
 
             {/* Bộ lọc và Tìm kiếm */}
