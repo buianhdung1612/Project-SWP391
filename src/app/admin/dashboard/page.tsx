@@ -3,9 +3,9 @@ import Chart2 from "@/app/components/Chart/Chart2"
 export default function DashboardAdminPage() {
     return(
         <>
-           <Chart2/>
-           <Chart/>
-         
+           {/* <Chart2/>
+           <Chart/> */}
+           dsa
         </>
     )
 }

@@ -1,9 +1,7 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Tooltip, Stack, Pagination, Chip } from "@mui/material";
 import { BiDetail } from "react-icons/bi";
-import { MdDeleteOutline } from "react-icons/md";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
@@ -14,19 +12,26 @@ export default function OrdersAdminPage() {
         totalItems: 1,
         pageSize: 4,
         currentPage: 1,
-        brand: []
+        orders: [{
+            orderId: "",
+            firstName: "",
+            lastName: "",
+            email: "",
+            phoneNumber: "",
+            orderItems: [],
+            orderDate: ""
+        }]
     });
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/orders/show';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/orders';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
-    const [sort, setSort] = useState("position-desc");
     const [page, setPage] = useState(1);
-    const [changeMulti, setChangeMulti] = useState("active");
+    const [changeMulti, setChangeMulti] = useState("PENDING");
 
 
     useEffect(() => {
@@ -45,7 +50,7 @@ export default function OrdersAdminPage() {
         }
         // Hết Lọc theo trạng thái
 
-        // Tìm kiếm sản phẩm
+        // Tìm kiếm đơn hàng
         const keywordCurrent = urlCurrent.searchParams.get('keyword');
         setKeyword(keywordCurrent ?? "");
 
@@ -55,7 +60,7 @@ export default function OrdersAdminPage() {
         else {
             api.searchParams.delete('keyword');
         }
-        // Hết Tìm kiếm sản phẩm
+        // Hết Tìm kiếm đơn hàng
 
         // Phân trang
         const pageCurrent = urlCurrent.searchParams.get('page');
@@ -69,33 +74,13 @@ export default function OrdersAdminPage() {
         }
         // Hết Phân trang
 
-        // Sắp xếp theo tiêu chí
-        const sortKeyCurrent = urlCurrent.searchParams.get('sortKey');
-        const sortValueCurrent = urlCurrent.searchParams.get('sortValue');
-
-        if (sortKeyCurrent && sortValueCurrent) {
-            setSort(`${sortKeyCurrent}-${sortValueCurrent}`);
-        } else {
-            setSort("position-desc");
-        }
-
-        if (sortKeyCurrent && sortValueCurrent) {
-            api.searchParams.set("sortKey", sortKeyCurrent);
-            api.searchParams.set("sortValue", sortValueCurrent);
-        }
-        else {
-            api.searchParams.delete("sortKey");
-            api.searchParams.delete("sortValue");
-        }
-        // Hết Sắp xếp theo tiêu chí
-
-        const fetchbrands = async () => {
+        const fetchOrders = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
             setData(data.data);
         };
 
-        fetchbrands();
+        fetchOrders();
     }, []);
 
     // Lọc theo trạng thái
@@ -133,7 +118,7 @@ export default function OrdersAdminPage() {
     // Hết Tìm kiếm đơn hàng
 
     // Thay đổi trạng thái 1 đơn hàng
-    const handleChangeStatusOnebrand = async (status: string, dataPath: string) => {
+    const handleChangeStatusOneOrder = async (status: string, dataPath: string) => {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
         const data = {
@@ -165,7 +150,7 @@ export default function OrdersAdminPage() {
 
         const data: any = {
             id: inputChecked,
-            status: statusChange
+            orderStatus: statusChange
         }
 
         const response = await fetch(path, {
@@ -191,44 +176,6 @@ export default function OrdersAdminPage() {
         }
     }
     // Hết Thay đổi trạng thái nhiều đơn hàng
-
-    // Xóa vĩnh viễn một đơn hàng
-    const handleDeleteOnebrand = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
-
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
-            location.reload();
-        }
-    }
-    // Hết Xóa vĩnh viễn một đơn hàng
-
-    // Sắp xếp theo tiêu chí
-    const handleChangeSort = async (event: any) => {
-        const value = event.target.value;
-        const url = new URL(location.href);
-
-        if (value) {
-            const [sortKey, sortValue] = value.split("-");
-            url.searchParams.set("sortKey", sortKey);
-            url.searchParams.set("sortValue", sortValue);
-        }
-        else {
-            url.searchParams.delete("sortKey");
-            url.searchParams.delete("sortValue");
-        }
-
-        location.href = url.href;
-    }
-    // Hết Sắp xếp theo tiêu chí
 
     // Phân trang
     const handlePagination = (event: any, page: number) => {
@@ -262,8 +209,9 @@ export default function OrdersAdminPage() {
                         <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
                         <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
                             <MenuItem value="">Tất cả</MenuItem>
-                            <MenuItem value="active">Hoạt động</MenuItem>
-                            <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+                            <MenuItem value="PENDING">Chờ duyệt</MenuItem>
+                            <MenuItem value="COMPLETED">Đã duyệt</MenuItem>
+                            <MenuItem value="CANCELED">Hủy</MenuItem>
                         </Select>
                     </FormControl>
                     <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
@@ -285,23 +233,6 @@ export default function OrdersAdminPage() {
                     </form>
                 </Box>
             </Paper>
-            {/* Sắp xếp */}
-            <Paper elevation={1} sx={{ p: 2, mb: 3, bgcolor: "white" }}>
-                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                    Sắp xếp
-                </Typography>
-                <Box display="flex" gap={2} flexWrap="wrap">
-                    <FormControl fullWidth sx={{ maxWidth: 300 }}>
-                        <InputLabel id="sort-label" shrink={true}>Sắp xếp</InputLabel>
-                        <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
-                            <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
-                            <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
-                            <MenuItem value="title-desc">Tên người dùng từ Z đến A</MenuItem>
-                            <MenuItem value="title-asc">Tên người dùng từ A đến Z</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Box>
-            </Paper>
 
             {/* Table */}
             <Paper sx={{ backgroundColor: "white", p: 2 }}>
@@ -312,85 +243,76 @@ export default function OrdersAdminPage() {
                     <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
                         <Box display="flex" >
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                <MenuItem value="active">Hoạt động</MenuItem>
-                                <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="soft_deleted">Xóa</MenuItem>
+                                <MenuItem value="PENDING">Chờ duyệt</MenuItem>
+                                <MenuItem value="COMPLETED">Đã duyệt</MenuItem>
+                                <MenuItem value="CANCELED">Hủy</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
                                 Áp dụng
                             </Button>
                         </Box>
                     </form>
-                    <Button
-                        variant="contained"
-                        startIcon={<DeleteIcon />}
-                        sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
-                    >
-                        <Link href="/admin/brands/trash">
-                            Thùng rác
-                        </Link>
-                    </Button>
-                    <Button
-                        variant="outlined"
-                        color="success"
-                        sx={{ borderColor: 'green', color: 'green' }}
-                    >
-                        <Link href="/admin/brands/create">
-                            + Thêm mới
-                        </Link>
-                    </Button>
                 </Box>
                 <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
                     <Table>
                         <TableHead>
                             <TableRow>
                                 <TableCell ></TableCell>
-                                <TableCell>STT</TableCell>
-                                <TableCell>Tình trạng</TableCell>
-                                <TableCell>Họ</TableCell>
-                                <TableCell>Tên</TableCell>
-                                <TableCell>Điện thoại khách</TableCell>
+                                <TableCell>Mã đơn hàng</TableCell>
+                                <TableCell>Ngày đặt</TableCell>
+                                <TableCell>Khách hàng</TableCell>
+                                <TableCell>Điện thoại</TableCell>
                                 <TableCell>Địa chỉ giao hàng</TableCell>
-                                <TableCell>Hành động</TableCell>
+                                <TableCell>Tình trạng</TableCell>
+                                <TableCell>Chi tiết </TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>
-                            {data.brand.map((brand: any, index: number) => (
-                                <TableRow key={brand.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, brand.id)}>
+                            {data.orders.map((order: any, index: number) => (
+                                <TableRow key={order.orderId}>
+                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, order.orderId)}>
                                         <Checkbox />
                                     </TableCell>
-                                    <TableCell>{(data.currentPage - 1) * data.pageSize +  index + 1}</TableCell>
-                                    <TableCell>{brand.title}</TableCell>
+                                    <TableCell>#{order.orderId}</TableCell>
+                                    <TableCell>{order.orderDate}</TableCell>
+                                    <TableCell>{order.firstName} {order.lastName}</TableCell>
+                                    <TableCell>{order.phoneNumber}</TableCell>
+                                    <TableCell>{order.address}</TableCell>
                                     <TableCell>
-                                        {brand.status === "ACTIVE" && (
+                                        {order.orderStatus === "PENDING" && (
                                             <Chip
-                                                label="Hoạt động"
+                                                label="Chờ duyệt"
+                                                color="secondary"
+                                                size="small"
+                                                variant="outlined"
+                                                onClick={() => handleChangeStatusOneOrder("PENDING", `/edit/${order.orderId}`)}
+                                            />
+                                        )}
+                                        {order.orderStatus === "COMPLETED" && (
+                                            <Chip
+                                                label="Đã duyệt"
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${brand.id}`)}
+                                                onClick={() => handleChangeStatusOneOrder("COMPLETED", `/edit/${order.orderId}`)}
                                             />
                                         )}
-                                        {brand.status === "INACTIVE" && (
+                                        {order.orderStatus === "CANCELED" && (
                                             <Chip
-                                                label="Dừng hoạt động"
+                                                label="Hủy"
                                                 color="error"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${brand.id}`)}
+                                                onClick={() => handleChangeStatusOneOrder("INACTIVE", `/edit/${order.orderId}`)}
                                             />
                                         )}
                                     </TableCell>
                                     <TableCell>
                                         <div className="flex">
                                             <Tooltip title="Chi tiết" placement="top">
-                                                <Link href={`/admin/brands/detail/${brand.id}`}>
+                                                <Link href={`/admin/orders/detail/${order.orderId}`}>
                                                     <BiDetail className="text-[25px] text-[#138496] mr-2" />
                                                 </Link>
-                                            </Tooltip>
-                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(brand.id)}>
-                                                <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                             </Tooltip>
                                         </div>
                                     </TableCell>

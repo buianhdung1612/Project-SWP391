@@ -17,7 +17,7 @@ export default function Section4(props: any) {
         <>
             <Title title="Tìm kiếm nhiều nhất" link="/products"/>
             <div className="container mx-auto flex flex-wrap justify-center">
-                {dataInit.map((item: any, index: number) => (
+                {dataInit.slice(0,14).map((item: any, index: number) => (
                     <ButtonCategory key={index} text={item.title} slug={item.slug} />
                 ))}
             </div>
