@@ -273,7 +273,7 @@ export default function OrdersAdminPage() {
                         </TableHead>
                         <TableBody>
                             {data.orders.map((order: any, index: number) => (
-                                <TableRow key={order.orderId}>
+                                <TableRow key={index}>
                                     <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, order.orderId)}>
                                         <Checkbox />
                                     </TableCell>
