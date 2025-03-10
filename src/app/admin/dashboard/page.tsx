@@ -5,6 +5,7 @@ export default function DashboardAdminPage() {
         <>
            {/* <Chart2/>
            <Chart/> */}
+           
            dsa
         </>
     )
