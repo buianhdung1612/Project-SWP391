@@ -7,12 +7,12 @@ import Link from "next/link"
 import { useParams } from "next/navigation"
 import { useEffect, useState } from "react"
 import { MdNavigateNext } from "react-icons/md"
-import { useSearchParams, usePathname } from "next/navigation" // Import useSearchParams and usePathname
+import { useSearchParams, usePathname } from "next/navigation" 
 
 export default function Section2() {
     const { slug } = useParams();
-    const pathname = usePathname(); // Use usePathname to track URL changes
-    const searchParams = useSearchParams(); // Use useSearchParams to get URL query parameters
+    const pathname = usePathname(); 
+    const searchParams = useSearchParams()
 
     const [dataSkinTypes, setDataSkinTypes] = useState([]);
     const [dataProductTypes, setDataProductTypes] = useState([]);
@@ -24,7 +24,7 @@ export default function Section2() {
     const [currentPage, setCurrentPage] = useState(0);
     const [page, setPage] = useState(1);
     const [category, setCategory] = useState<string[]>([]); 
-    const linkApi = `https://freshskinweb.onrender.com/home/${slug}`;
+    const linkApi = `https://freshskinweb.onrender.com/home/search?keyword=${searchParams.get("keyword")}`;
 
     // Hàm fetch dữ liệu sản phẩm
     const fetchData = async () => {

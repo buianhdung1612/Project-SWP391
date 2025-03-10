@@ -45,7 +45,7 @@ export default function ProductsAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" gutterBottom>
                 Trang thể loại da
             </Typography>
 

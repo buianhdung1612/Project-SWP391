@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Tooltip, Stack, Pagination, Chip } from "@mui/material";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel,FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Tooltip, Stack, Pagination, Chip } from "@mui/material";
 import { BiDetail } from "react-icons/bi";
 
 import { useEffect, useState } from "react";
@@ -124,8 +124,10 @@ export default function OrdersAdminPage() {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
         const data = {
-            status: statusChange
+            orderStatus: statusChange
         }
+
+        console.log(data);
         const response = await fetch(path, {
             method: "PATCH",
             headers: {
@@ -197,7 +199,7 @@ export default function OrdersAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" gutterBottom>
                 Trang danh sách đơn hàng
             </Typography>
 
@@ -287,7 +289,6 @@ export default function OrdersAdminPage() {
                                                 color="secondary"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneOrder("PENDING", `/edit/${order.orderId}`)}
                                             />
                                         )}
                                         {order.orderStatus === "COMPLETED" && (
@@ -296,7 +297,6 @@ export default function OrdersAdminPage() {
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
-                                                onClick={() => handleChangeStatusOneOrder("COMPLETED", `/edit/${order.orderId}`)}
                                             />
                                         )}
                                         {order.orderStatus === "CANCELED" && (
@@ -318,12 +318,12 @@ export default function OrdersAdminPage() {
                                             </Tooltip>
                                             {order.orderStatus === "PENDING" && (
                                                 <Tooltip title="Xác nhận" placement="top">
-                                                    <TiTick className="text-[25px] text-green-500 mr-2 cursor-pointer" />
+                                                    <TiTick onClick={() => handleChangeStatusOneOrder("COMPLETED", `/edit/${order.orderId}`)} className="text-[25px] text-green-500 mr-2 cursor-pointer" />
                                                 </Tooltip>
                                             )}
                                             {order.orderStatus === "PENDING" && (
                                                 <Tooltip title="Hủy" placement="top">
-                                                    <MdOutlineCancel className="text-[25px] text-red-500 mr-2 cursor-pointer" />
+                                                    <MdOutlineCancel onClick={() => handleChangeStatusOneOrder("CANCELED", `/edit/${order.orderId}`)} className="text-[25px] text-red-500 mr-2 cursor-pointer" />
                                                 </Tooltip>
                                             )}
                                         </div>

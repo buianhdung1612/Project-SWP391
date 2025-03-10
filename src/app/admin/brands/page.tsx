@@ -277,7 +277,7 @@ export default function BrandsAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" gutterBottom>
                 Trang danh sách thương hiệu
             </Typography>
 

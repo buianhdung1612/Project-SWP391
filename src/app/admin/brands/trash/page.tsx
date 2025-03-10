@@ -295,7 +295,7 @@ export default function BrandsTrashAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" gutterBottom>
+            <Typography variant="h5" gutterBottom>
                 Trang thùng rác thương hiệu sản phẩm
             </Typography>
 

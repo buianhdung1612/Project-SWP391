@@ -52,7 +52,7 @@ export default function RoleAdminPage() {
     return (
         <>
             <Box p={3}>
-                <Typography variant="h4" gutterBottom>
+                <Typography variant="h5" gutterBottom>
                     Nhóm quyền
                 </Typography>
                 <Paper sx={{ backgroundColor: "white", p: 2 }}>

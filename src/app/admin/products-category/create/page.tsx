@@ -65,7 +65,7 @@ export default function CreateProductCategoryAdminPage() {
 
 
     return (
-        <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
+        <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
             <Typography variant="h4" gutterBottom>
                 Trang tạo mới danh mục sản phẩm
             </Typography>

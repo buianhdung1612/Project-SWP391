@@ -63,7 +63,7 @@ export default function EditAccountAdmin() {
     return (
         <>
             <Box sx={{ padding: 3, backgroundColor: "#e3f2fd" }}>
-                <Typography variant="h4" gutterBottom>
+                <Typography variant="h5" gutterBottom>
                     Trang tạo mới tài khoản quản trị
                 </Typography>
 

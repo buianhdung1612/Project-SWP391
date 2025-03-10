@@ -278,7 +278,7 @@ export default function ProductsAdminPage() {
     return (
         <Box p={3}>
             {/* Header */}
-            <Typography variant="h4" fontWeight="bold" gutterBottom>
+            <Typography variant="h5" gutterBottom>
                 Trang danh sách sản phẩm
             </Typography>
 
