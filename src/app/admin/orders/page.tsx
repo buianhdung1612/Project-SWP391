@@ -5,6 +5,8 @@ import { BiDetail } from "react-icons/bi";
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { MdOutlineCancel } from "react-icons/md";
+import { TiTick } from "react-icons/ti";
 
 export default function OrdersAdminPage() {
     const [data, setData] = useState({
@@ -210,7 +212,7 @@ export default function OrdersAdminPage() {
                         <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
                             <MenuItem value="">Tất cả</MenuItem>
                             <MenuItem value="PENDING">Chờ duyệt</MenuItem>
-                            <MenuItem value="COMPLETED">Đã duyệt</MenuItem>
+                            <MenuItem value="COMPLETED">Thành công</MenuItem>
                             <MenuItem value="CANCELED">Hủy</MenuItem>
                         </Select>
                     </FormControl>
@@ -244,7 +246,7 @@ export default function OrdersAdminPage() {
                         <Box display="flex" >
                             <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                 <MenuItem value="PENDING">Chờ duyệt</MenuItem>
-                                <MenuItem value="COMPLETED">Đã duyệt</MenuItem>
+                                <MenuItem value="COMPLETED">Thành công</MenuItem>
                                 <MenuItem value="CANCELED">Hủy</MenuItem>
                             </Select>
                             <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
@@ -290,7 +292,7 @@ export default function OrdersAdminPage() {
                                         )}
                                         {order.orderStatus === "COMPLETED" && (
                                             <Chip
-                                                label="Đã duyệt"
+                                                label="Thành công"
                                                 color="success"
                                                 size="small"
                                                 variant="outlined"
@@ -314,6 +316,16 @@ export default function OrdersAdminPage() {
                                                     <BiDetail className="text-[25px] text-[#138496] mr-2" />
                                                 </Link>
                                             </Tooltip>
+                                            {order.orderStatus === "PENDING" && (
+                                                <Tooltip title="Xác nhận" placement="top">
+                                                    <TiTick className="text-[25px] text-green-500 mr-2 cursor-pointer" />
+                                                </Tooltip>
+                                            )}
+                                            {order.orderStatus === "PENDING" && (
+                                                <Tooltip title="Hủy" placement="top">
+                                                    <MdOutlineCancel className="text-[25px] text-red-500 mr-2 cursor-pointer" />
+                                                </Tooltip>
+                                            )}
                                         </div>
                                     </TableCell>
                                 </TableRow>
