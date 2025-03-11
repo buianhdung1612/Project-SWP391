@@ -5,7 +5,7 @@ import Link from "next/link";
 import { MdNavigateNext } from "react-icons/md";
 
 interface Section2Props {
-    data: any;  // Nhận dữ liệu từ props
+    data: any;  
 }
 
 export default function Section2({ data }: Section2Props) {

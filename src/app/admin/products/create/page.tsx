@@ -136,12 +136,9 @@ export default function CreateProductAdminPage() {
     const handleChangeCheckedSkinType = (event: any) => {
         const id = parseInt(event.target.name);
         setCheckedSkinType((prev) => {
-            // Kiểm tra xem ID đã tồn tại trong mảng chưa
             if (prev.includes(id)) {
-                // Nếu đã tồn tại, xóa ID khỏi mảng
                 return prev.filter((item) => item !== id);
             } else {
-                // Nếu chưa, thêm ID vào mảng
                 return [...prev, id];
             }
         });

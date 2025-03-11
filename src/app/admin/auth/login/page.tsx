@@ -26,9 +26,11 @@ export default function LoginAdminPage() {
         });
         const dataResponse = await response.json();
 
-        if(dataResponse.code == 200){
-            router.push(`/admin/dashboard`);
-        }
+        console.log(dataResponse);
+
+        // if(dataResponse.code == 200){
+        //     router.push(`/admin/dashboard`);
+        // }
        
     };
 

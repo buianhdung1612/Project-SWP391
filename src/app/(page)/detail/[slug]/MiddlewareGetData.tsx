@@ -4,6 +4,7 @@ import React, { createContext } from "react";
 import Section1 from "./Section1";
 import Section2 from "./Section2";
 import SaleCode from "@/app/components/SaleCode/SaleCode";
+import Rating from "./Rating";
 
 interface Variants {
     id: number;
@@ -88,6 +89,7 @@ export default function MiddlewareGetData({ data }: MiddlewareGetDataProps) {
             <Section1 />
             <SaleCode data={dataSale} />
             <Section2 />
+            <Rating/>
         </Context.Provider>
     );
 }

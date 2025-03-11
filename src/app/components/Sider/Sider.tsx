@@ -6,6 +6,7 @@ import { CiCrop } from "react-icons/ci";
 import { FaBlog, FaBorderNone, FaJoomla, FaObjectGroup, FaTable, FaUsers } from "react-icons/fa";
 import { FaGaugeHigh, FaGear, FaGroupArrowsRotate, FaHurricane } from "react-icons/fa6";
 import { TbBrandCampaignmonitor } from "react-icons/tb";
+import { MdOutlineQuiz } from "react-icons/md";
 
 interface Menu {
     content: string,
@@ -48,6 +49,11 @@ const menu: Menu[] = [
         content: "Bài viết",
         icon: <FaBlog />,
         link: "/admin/blogs"
+    },
+    {
+        content: "Bộ câu hỏi",
+        icon: <MdOutlineQuiz />,
+        link: "/admin/quiz"
     },
     {
         content: "Đơn hàng",

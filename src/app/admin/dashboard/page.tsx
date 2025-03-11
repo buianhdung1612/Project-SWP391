@@ -1,5 +1,5 @@
-import Chart from "@/app/components/Chart/Chart";
-import Chart2 from "@/app/components/Chart/Chart2";
+// import Chart from "@/app/components/Chart/Chart";
+// import Chart2 from "@/app/components/Chart/Chart2";
 import { StatCard } from "@/app/components/StatCard/StatCard";
 import { Eye, ShoppingCart, MessageCircle, DollarSign } from "lucide-react";
 
@@ -14,8 +14,8 @@ export default function DashboardAdminPage() {
       </div>
 
       <div className="grid grid-cols-2 gap-4">
-        <Chart2 />
-        <Chart />
+        {/* <Chart2 />
+        <Chart /> */}
       </div>
     </div>
   );
