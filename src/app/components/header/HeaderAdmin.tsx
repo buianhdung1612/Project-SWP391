@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-
+import Image from "next/image"; 
 export default function HeaderAdmin() {
 
     const handleClickLogout = async () => {
@@ -22,7 +22,14 @@ export default function HeaderAdmin() {
         <>
             <div className="header">
                 <div className="header__wrap">
-                    <div className="header__title text-[#506A65] text-[20px] ml-[20px]"> Admin Page</div>
+                <div className="flex items-center justify-center flex-1 mt-[-50px] mr-[-300px]">
+                  <Image 
+                    src="/adminLogo.png"  
+                    alt="Admin Logo"
+                    width={150} 
+                    height={50}  
+                  />
+            </div>
                     <div className="header__icons">
                         <Link href="/admin/accounts/my-profile" className="header__profile">
                             <img src="/" alt="User Avatar" />

@@ -94,8 +94,8 @@ export default function SettingGeneralAdminPage() {
 
     return (
         <>
-            <Box p={3} sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
-                <Typography variant="h4" gutterBottom>
+            <Box p={3} sx={{ padding: 3, backgroundColor: '#ffffff' }}>
+                <Typography variant="h5" gutterBottom>
                     Trang cài đặt chung
                 </Typography>
                 <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>

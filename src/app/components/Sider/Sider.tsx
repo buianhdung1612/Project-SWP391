@@ -78,7 +78,7 @@ const menu: Menu[] = [
 
 export default function Sider() {
     return (
-        <div className="fixed left-0 top-0 w-64 min-h-screen bg-[#ffffff] text-black border-r rounded-r-2xl flex flex-col">
+        <div className="fixed left-0 top-0 w-64 min-h-screen bg-[#D8F3DC] text-black border-r rounded-r-2xl flex flex-col">
             
             {/* Logo */}
             <div className="flex justify-center py-4 border-b">
@@ -109,4 +109,4 @@ export default function Sider() {
             </ul>
         </div>
     );
-}
+} 
