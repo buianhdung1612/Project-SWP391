@@ -1,33 +1,40 @@
 import Banner2 from "@/app/components/Banner/Banner2";
 import Section2 from "./Section2";
+import { useEffect, useState } from "react";
 
-// Sử dụng getServerSideProps để lấy dữ liệu server-side
-export async function getServerSideProps(context: any) {
-    const { query } = context;  // context.query chứa các search params từ URL
-    const { keyword, category, page } = query;
+// Sử dụng useEffect để lấy dữ liệu client-side
+export default function ProductsSearchPage() {
+    const [data, setData] = useState<any>(null);
 
-    const linkApi = `https://freshskinweb.onrender.com/home/search?keyword=${keyword || ''}`;
+    useEffect(() => {
+        const fetchData = async () => {
+            const searchParams = new URLSearchParams(window.location.search);
+            const keyword = searchParams.get("keyword") || "";  // Lấy giá trị của "keyword"
+            const category = searchParams.getAll("category");   // Lấy tất cả các giá trị của "category"
+            const page = searchParams.get("page");              // Lấy giá trị của "page"
+            
+            const linkApi = `https://freshskinweb.onrender.com/home/search?keyword=${keyword}`;
 
-    // Xử lý các category và page
-    const api = new URL(linkApi);
-    if (category) {
-        Array.isArray(category) ? category.forEach((cat) => api.searchParams.append('category', cat)) : api.searchParams.append('category', category);
+            const api = new URL(linkApi);
+
+            // Thêm các category và page vào API nếu có
+            category.forEach((cat) => api.searchParams.append("category", cat));
+            if (page) {
+                api.searchParams.set("page", page);
+            }
+
+            const response = await fetch(api.href);
+            const data = await response.json();
+            setData(data.data); // Set the fetched data to state
+        };
+
+        fetchData();
+    }, []); // The empty dependency array ensures this runs only once after the initial render.
+
+    if (!data) {
+        return <div>Loading...</div>;
     }
-    if (page) {
-        api.searchParams.set('page', page);
-    }
 
-    const response = await fetch(api.href);
-    const data = await response.json();
-
-    return {
-        props: {
-            data: data.data,  // Truyền dữ liệu trả về từ API
-        },
-    };
-}
-
-export default function ProductsSearchPage({ data }: any) {
     return (
         <>
             <Banner2 />
@@ -35,4 +42,3 @@ export default function ProductsSearchPage({ data }: any) {
         </>
     );
 }
-

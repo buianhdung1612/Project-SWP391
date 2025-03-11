@@ -1,11 +1,36 @@
+import { useEffect, useState } from "react";
 import Aside from "@/app/components/Aside/Aside";
 import CardItem from "@/app/components/Card/CardItem";
 import Pagination from "@/app/components/Pagination/Pagination";
 import Link from "next/link";
 import { MdNavigateNext } from "react-icons/md";
 
-export default function Section2({ data }: any) {
-    const { title, skinTypes, categories, brands, products, page } = data;
+interface Section2Props {
+    data: any;  // Nhận dữ liệu từ props
+}
+
+export default function Section2({ data }: Section2Props) {
+    const [dataSkinTypes, setDataSkinTypes] = useState([]);
+    const [dataProductTypes, setDataProductTypes] = useState([]);
+    const [dataBrand, setDataBrand] = useState([]);
+    const [title, setTitle] = useState("");
+    const [products, setProducts] = useState([]);
+    const [isLoading, setIsLoading] = useState(true);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [page, setPage] = useState(1);
+    const [category, setCategory] = useState<string[]>([]);
+
+    useEffect(() => {
+        setDataSkinTypes(data.skinTypes || []);
+        setDataProductTypes(data.categories || []);
+        setDataBrand(data.brands || []);
+        setTitle(data.title || "");
+        setProducts(data.products || []);
+        setTotalPages(data.page?.totalPages || 0);
+        setCurrentPage(data.page?.page || 1);
+        setIsLoading(false);
+    }, [data]);  // Khi data thay đổi, cập nhật lại các trạng thái tương ứng
 
     const finalSkinTypes: string[] = [];
     const finalCategories: string[] = [];
@@ -18,9 +43,9 @@ export default function Section2({ data }: any) {
         "Trên 700.000đ"
     ];
 
-    categories.forEach((item: any) => finalCategories.push(item.title));
-    skinTypes.forEach((item: any) => finalSkinTypes.push(item.type));
-    brands.forEach((item: any) => finalBrands.push(item.title));
+    dataProductTypes.forEach((item: any) => finalCategories.push(item.title));
+    dataSkinTypes.forEach((item: any) => finalSkinTypes.push(item.type));
+    dataBrand.forEach((item: any) => finalBrands.push(item.title));
 
     const dataToShow: any = [
         { title: "Thương hiệu", data: finalBrands },
@@ -28,6 +53,10 @@ export default function Section2({ data }: any) {
         { title: "Chọn mức giá", data: finalPrice },
         { title: "Loại da", data: finalSkinTypes }
     ];
+
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
 
     return (
         <div className="container mx-auto">
@@ -62,7 +91,7 @@ export default function Section2({ data }: any) {
                             />
                         ))}
                     </div>
-                    <Pagination totalPages={page.totalPages} currentPage={page.page} />
+                    <Pagination totalPages={totalPages} currentPage={currentPage} />
                 </div>
             </div>
         </div>
