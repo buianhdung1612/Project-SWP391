@@ -3,11 +3,11 @@
 import Banner2 from "@/app/components/Banner/Banner2";
 import Section2 from "./Section2";
 import { useEffect, useState } from "react";
-import { useSearchParams } from "next/navigation";  // Import useSearchParams thay vì useRouter
+import { useSearchParams } from "next/navigation"; 
 
 export default function ProductsSearchPage() {
     const [data, setData] = useState<any>(null);
-    const searchParams = useSearchParams();  // Sử dụng useSearchParams để lấy các tham số từ URL
+    const searchParams = useSearchParams();  
 
     useEffect(() => {
         const fetchData = async () => {
@@ -27,7 +27,7 @@ export default function ProductsSearchPage() {
         };
 
         fetchData();
-    }, [searchParams]);  // Dependency vào searchParams để tự động fetch khi URL thay đổi
+    }, [searchParams]); 
 
     if (!data) {
         return <div>Loading...</div>;

@@ -13,7 +13,6 @@ export default function HeaderAdmin() {
 
         const dataResponse = await response.json();
         if (dataResponse.code === 200) {
-
             location.href = `/admin/auth/login`;
         }
     }

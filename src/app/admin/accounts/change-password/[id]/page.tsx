@@ -10,7 +10,7 @@ export default function ChangePasswordAdminAccount() {
         event.preventDefault();
 
         const password = event.target.password.value;
-        
+
         const response = await fetch(`https://freshskinweb.onrender.com/admin/account/change-password/${id}`, {
             method: "PATCH",
             headers: {
