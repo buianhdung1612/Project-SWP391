@@ -213,7 +213,7 @@ export default function Section1() {
                                     </div>
                                 </div>
                             ))}
-                            {data && data.length > 0 && (
+                            {data && data.length > 3 && (
                                 <div
                                     className="text-[#000] py-[5px] text-[14px] font-[550] text-center cursor-pointer hover:text-secondary"
                                     onClick={() => handleSearchInSuggest(contentSearch.split("Tìm Kiếm: ")[1])}
