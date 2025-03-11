@@ -2,10 +2,13 @@
 
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
+import { useRouter } from 'next/navigation';
 
 export default function LoginAdminPage() {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+
+    const router = useRouter();
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -15,17 +18,15 @@ export default function LoginAdminPage() {
             headers: {
                 "Content-Type": "application/json"
             },
-            credentials: 'include',
             body: JSON.stringify({
                 username: username,
                 password: password
             })
         });
         const dataResponse = await response.json();
-        console.log(dataResponse);
 
         if(dataResponse.code == 200){
-            location.href = "/admin/dashboard"
+            router.push(`/admin/dashboard`);
         }
        
     };

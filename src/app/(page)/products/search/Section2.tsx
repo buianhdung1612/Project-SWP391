@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import Aside from "@/app/components/Aside/Aside";
 import CardItem from "@/app/components/Card/CardItem";
 import Pagination from "@/app/components/Pagination/Pagination";
 import Link from "next/link";
@@ -10,9 +9,6 @@ interface Section2Props {
 }
 
 export default function Section2({ data }: Section2Props) {
-    const [dataSkinTypes, setDataSkinTypes] = useState([]);
-    const [dataProductTypes, setDataProductTypes] = useState([]);
-    const [dataBrand, setDataBrand] = useState([]);
     const [title, setTitle] = useState("");
     const [products, setProducts] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
@@ -20,37 +16,12 @@ export default function Section2({ data }: Section2Props) {
     const [currentPage, setCurrentPage] = useState(0);
 
     useEffect(() => {
-        setDataSkinTypes(data.skinTypes || []);
-        setDataProductTypes(data.categories || []);
-        setDataBrand(data.brands || []);
         setTitle(data.title || "");
         setProducts(data.products || []);
         setTotalPages(data.page?.totalPages || 0);
         setCurrentPage(data.page?.page || 1);
         setIsLoading(false);
-    }, [data]);  // Khi data thay đổi, cập nhật lại các trạng thái tương ứng
-
-    const finalSkinTypes: string[] = [];
-    const finalCategories: string[] = [];
-    const finalBrands: string[] = [];
-    const finalPrice: string[] = [
-        "Dưới 100.000đ",
-        "Từ 100.000đ - 300.000đ",
-        "Từ 300.000đ - 500.000đ",
-        "Từ 500.000đ - 700.000đ",
-        "Trên 700.000đ"
-    ];
-
-    dataProductTypes.forEach((item: any) => finalCategories.push(item.title));
-    dataSkinTypes.forEach((item: any) => finalSkinTypes.push(item.type));
-    dataBrand.forEach((item: any) => finalBrands.push(item.title));
-
-    const dataToShow: any = [
-        { title: "Thương hiệu", data: finalBrands },
-        { title: "Loại sản phẩm", data: finalCategories },
-        { title: "Chọn mức giá", data: finalPrice },
-        { title: "Loại da", data: finalSkinTypes }
-    ];
+    }, [data]); 
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -66,14 +37,12 @@ export default function Section2({ data }: Section2Props) {
                     </Link>
                 </li>
                 <li className="text-secondary text-[15px] font-[400]">
-                    {title}
+                    Tìm kiếm: {title}
                 </li>
             </ul>
-            <div className="uppercase text-[26px] font-[600] mt-[30px]">{title}</div>
+            <div className="text-[24px] my-[15px] text-[#00090f] font-[450]">Có 13 kết quả tìm kiếm phù hợp</div>
             <div className="flex items-start">
-                <Aside data={dataToShow} />
                 <div className="flex-1 ml-[40px] mt-[15px]">
-                    <div className="font-[400] text-[14px] text-right">Sắp xếp: <span className="text-[14px] font-[600]">Mặc định</span></div>
                     <div className="grid grid-cols-4 gap-[20px] mt-[20px]">
                         {products.map((item: any, index: number) => (
                             <CardItem

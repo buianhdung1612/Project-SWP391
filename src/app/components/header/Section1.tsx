@@ -15,7 +15,103 @@ export default function Section1() {
     const [contentSearch, setContentSearch] = useState("Vui Lòng Nhập Từ Khóa Vào Ô Tìm Kiếm");
     const [subContentSearch, setSubContentSearch] = useState("Đừng bỏ lỡ");
     const [showSuggest, setShowSuggest] = useState(false);
-    const [data, setData] = useState([]);
+    const [data, setData] = useState([
+        {
+            "id": 5,
+            "brand": {
+                "title": "Cocoon"
+            },
+            "title": "Nước Tẩy Trang Bí Đao Cocoon Winter Melon Micellar Water",
+            "slug": "nuoc-tay-trang-bi-ao-cocoon-winter-melon-micellar-water",
+            "thumbnail": [
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741026949/product/nuoc-tay-trang-bi-ao-cocoon-winter-melon-micellar-water_20250303-183549.jpg",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741026950/product/nuoc-tay-trang-bi-ao-cocoon-winter-melon-micellar-water_20250303-183550_2.jpg",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741026951/product/nuoc-tay-trang-bi-ao-cocoon-winter-melon-micellar-water_20250303-183551_3.webp",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741026952/product/nuoc-tay-trang-bi-ao-cocoon-winter-melon-micellar-water_20250303-183551_4.jpg",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741026953/product/nuoc-tay-trang-bi-ao-cocoon-winter-melon-micellar-water_20250303-183553_5.webp"
+            ],
+            "variants": [
+                {
+                    "id": 7,
+                    "price": 116000.0,
+                    "volume": 140,
+                    "unit": "ML"
+                },
+                {
+                    "id": 6,
+                    "price": 179000.0,
+                    "volume": 500,
+                    "unit": "ML"
+                }
+            ],
+            "discountPercent": 30,
+            "benefits": "Hỗ trợ làm sạch da",
+            "deleted": false
+        },
+        {
+            "id": 6,
+            "brand": {
+                "title": "Cocoon"
+            },
+            "title": "Nước dưỡng tóc tinh dầu bưởi",
+            "slug": "nuoc-duong-toc-tinh-dau-buoi",
+            "thumbnail": [
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741027644/product/nuoc-duong-toc-tinh-dau-buoi_20250303-184723.jpg",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741027645/product/nuoc-duong-toc-tinh-dau-buoi_20250303-184724_2.jpg",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741027646/product/nuoc-duong-toc-tinh-dau-buoi_20250303-184726_3.jpg",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741027648/product/nuoc-duong-toc-tinh-dau-buoi_20250303-184727_4.jpg"
+            ],
+            "variants": [
+                {
+                    "id": 8,
+                    "price": 165000.0,
+                    "volume": 140,
+                    "unit": "ML"
+                }
+            ],
+            "discountPercent": 30,
+            "benefits": "Kích thích mọc tóc, giảm gãy rụng. Kiểm soát dầu nhờn, giúp tóc chắc khỏe. Cấp ẩm nhẹ, giảm khô da đầu.",
+            "deleted": false
+        },
+        {
+            "id": 7,
+            "brand": {
+                "title": "SVR"
+            },
+            "title": "Gel Rửa Mặt SVR Không Chứa Xà Phòng Cho Da Dầu",
+            "slug": "gel-rua-mat-svr-khong-chua-xa-phong-cho-da-dau",
+            "thumbnail": [
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741027716/product/gel-rua-mat-svr-khong-chua-xa-phong-cho-da-dau_20250303-184835.webp",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741027717/product/gel-rua-mat-svr-khong-chua-xa-phong-cho-da-dau_20250303-184836_2.webp",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741027717/product/gel-rua-mat-svr-khong-chua-xa-phong-cho-da-dau_20250303-184837_3.jpg",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741027718/product/gel-rua-mat-svr-khong-chua-xa-phong-cho-da-dau_20250303-184838_4.jpg",
+                "https://res.cloudinary.com/dr53sfboy/image/upload/v1741027719/product/gel-rua-mat-svr-khong-chua-xa-phong-cho-da-dau_20250303-184839_5.jpg"
+            ],
+            "variants": [
+                {
+                    "id": 9,
+                    "price": 100000.0,
+                    "volume": 55,
+                    "unit": "ML"
+                },
+                {
+                    "id": 10,
+                    "price": 265000.0,
+                    "volume": 200,
+                    "unit": "ML"
+                },
+                {
+                    "id": 11,
+                    "price": 408000.0,
+                    "volume": 400,
+                    "unit": "ML"
+                }
+            ],
+            "discountPercent": 10,
+            "benefits": "Hỗ trợ làm sạch da",
+            "deleted": false
+        }
+    ]);
 
     const router = useRouter();
     const formRef = useRef<HTMLFormElement | null>(null);
@@ -56,7 +152,6 @@ export default function Section1() {
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
-            // Kiểm tra nếu người dùng click ngoài form
             if (formRef.current && !formRef.current.contains(event.target as Node)) {
                 setShowSuggest(false);
             }
@@ -118,7 +213,7 @@ export default function Section1() {
                                     </div>
                                 </div>
                             ))}
-                            {data && data.length > 0 && (
+                            {data && data.length > 3 && (
                                 <div
                                     className="text-[#000] py-[5px] text-[14px] font-[550] text-center cursor-pointer hover:text-secondary"
                                     onClick={() => handleSearchInSuggest(contentSearch.split("Tìm Kiếm: ")[1])}
