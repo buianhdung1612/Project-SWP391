@@ -1,18 +1,16 @@
-"use client"
+"use client";
 
-import Aside from "@/app/components/Aside/Aside"
-import CardItem from "@/app/components/Card/CardItem"
-import Pagination from "@/app/components/Pagination/Pagination"
-import Link from "next/link"
-import { useParams } from "next/navigation"
-import { useEffect, useState } from "react"
-import { MdNavigateNext } from "react-icons/md"
-import { useSearchParams, usePathname } from "next/navigation" 
+import Aside from "@/app/components/Aside/Aside";
+import CardItem from "@/app/components/Card/CardItem";
+import Pagination from "@/app/components/Pagination/Pagination";
+import Link from "next/link";
+import { MdNavigateNext } from "react-icons/md";
+import { useSearchParams, usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 export default function Section2() {
-    const { slug } = useParams();
-    const pathname = usePathname(); 
-    const searchParams = useSearchParams()
+    const searchParams = useSearchParams();
+    const pathname = usePathname();
 
     const [dataSkinTypes, setDataSkinTypes] = useState([]);
     const [dataProductTypes, setDataProductTypes] = useState([]);
@@ -23,44 +21,44 @@ export default function Section2() {
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
     const [page, setPage] = useState(1);
-    const [category, setCategory] = useState<string[]>([]); 
+    const [category, setCategory] = useState<string[]>([]);
+
     const linkApi = `https://freshskinweb.onrender.com/home/search?keyword=${searchParams.get("keyword")}`;
 
-    // Hàm fetch dữ liệu sản phẩm
     const fetchData = async () => {
-        const urlCurrent = new URL(window.location.href);
-        const api = new URL(linkApi);
+        // Đảm bảo fetch dữ liệu sau khi trang đã được render trên client
+        const categoriesCurrent = searchParams.getAll("category");
 
-        // Tìm kiếm sản phẩm theo danh mục
-        const categoriesCurrent = urlCurrent.searchParams.getAll('category');
-        
-        // Kiểm tra nếu category đã thay đổi
+        // Xử lý thay đổi category
         if (categoriesCurrent.join(",") !== category.join(",")) {
             setCategory(categoriesCurrent);
         }
 
-        categoriesCurrent.forEach(category => {
-            api.searchParams.append('category', category);
+        const api = new URL(linkApi);
+
+        // Thêm các tham số category vào URL nếu có
+        categoriesCurrent.forEach((category) => {
+            api.searchParams.append("category", category);
         });
 
         if (categoriesCurrent.length === 0) {
-            api.searchParams.delete('category');
+            api.searchParams.delete("category");
         }
 
         // Phân trang
-        const pageCurrent = searchParams.get('page');
+        const pageCurrent = searchParams.get("page");
         setPage(pageCurrent ? parseInt(pageCurrent) : 1);
 
         if (pageCurrent) {
-            api.searchParams.set('page', pageCurrent);
-        }
-        else {
-            api.searchParams.delete('page');
+            api.searchParams.set("page", pageCurrent);
+        } else {
+            api.searchParams.delete("page");
         }
 
-        // Fetch data
+        // Fetch dữ liệu từ API
         const response = await fetch(api.href);
         const data = await response.json();
+
         setDataSkinTypes(data.data.skinTypes);
         setDataProductTypes(data.data.categories);
         setDataBrand(data.data.brands);
@@ -72,8 +70,9 @@ export default function Section2() {
     };
 
     useEffect(() => {
+        // Chạy fetchData chỉ sau khi trang được render trên client
         fetchData();
-    }, [slug, page, category, pathname, searchParams]); 
+    }, [searchParams, category, page, pathname]);
 
     // Xử lý dữ liệu từ API
     const finalSkinTypes: string[] = [];
@@ -84,7 +83,7 @@ export default function Section2() {
         "Từ 100.000đ - 300.000đ",
         "Từ 300.000đ - 500.000đ",
         "Từ 500.000đ - 700.000đ",
-        "Trên 700.000đ"
+        "Trên 700.000đ",
     ];
 
     dataProductTypes.forEach((item: any) => finalCategories.push(item.title));
@@ -95,7 +94,7 @@ export default function Section2() {
         { title: "Thương hiệu", data: finalBrands },
         { title: "Loại sản phẩm", data: finalCategories },
         { title: "Chọn mức giá", data: finalPrice },
-        { title: "Loại da", data: finalSkinTypes }
+        { title: "Loại da", data: finalSkinTypes },
     ];
 
     if (isLoading) {
