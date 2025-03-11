@@ -26,17 +26,13 @@ export default function Section2() {
     const linkApi = `https://freshskinweb.onrender.com/home/search?keyword=${searchParams.get("keyword")}`;
 
     const fetchData = async () => {
-        // Đảm bảo fetch dữ liệu sau khi trang đã được render trên client
         const categoriesCurrent = searchParams.getAll("category");
 
-        // Xử lý thay đổi category
         if (categoriesCurrent.join(",") !== category.join(",")) {
             setCategory(categoriesCurrent);
         }
 
         const api = new URL(linkApi);
-
-        // Thêm các tham số category vào URL nếu có
         categoriesCurrent.forEach((category) => {
             api.searchParams.append("category", category);
         });
@@ -45,7 +41,6 @@ export default function Section2() {
             api.searchParams.delete("category");
         }
 
-        // Phân trang
         const pageCurrent = searchParams.get("page");
         setPage(pageCurrent ? parseInt(pageCurrent) : 1);
 
@@ -55,51 +50,40 @@ export default function Section2() {
             api.searchParams.delete("page");
         }
 
-        // Fetch dữ liệu từ API
         const response = await fetch(api.href);
         const data = await response.json();
 
-        setDataSkinTypes(data.data.skinTypes);
-        setDataProductTypes(data.data.categories);
-        setDataBrand(data.data.brands);
-        setTitle(data.data.title);
-        setProducts(data.data.products);
-        setTotalPages(data.data.page.totalPages);
-        setCurrentPage(data.data.page.page);
+        if (!data || !data.data) {
+            console.error("No data received");
+            setIsLoading(false);
+            return; // Dừng hàm nếu không có dữ liệu
+        }
+
+        setDataSkinTypes(data.data.skinTypes || []);
+        setDataProductTypes(data.data.categories || []);
+        setDataBrand(data.data.brands || []);
+        setTitle(data.data.title || "");
+        setProducts(data.data.products || []);
+        setTotalPages(data.data.page.totalPages || 0);
+        setCurrentPage(data.data.page.page || 1);
         setIsLoading(false);
     };
 
     useEffect(() => {
-        // Chạy fetchData chỉ sau khi trang được render trên client
         fetchData();
     }, [searchParams, category, page, pathname]);
 
-    // Xử lý dữ liệu từ API
-    const finalSkinTypes: string[] = [];
-    const finalCategories: string[] = [];
-    const finalBrands: string[] = [];
-    const finalPrice: string[] = [
-        "Dưới 100.000đ",
-        "Từ 100.000đ - 300.000đ",
-        "Từ 300.000đ - 500.000đ",
-        "Từ 500.000đ - 700.000đ",
-        "Trên 700.000đ",
-    ];
-
-    dataProductTypes.forEach((item: any) => finalCategories.push(item.title));
-    dataSkinTypes.forEach((item: any) => finalSkinTypes.push(item.type));
-    dataBrand.forEach((item: any) => finalBrands.push(item.title));
-
-    const data: any = [
-        { title: "Thương hiệu", data: finalBrands },
-        { title: "Loại sản phẩm", data: finalCategories },
-        { title: "Chọn mức giá", data: finalPrice },
-        { title: "Loại da", data: finalSkinTypes },
-    ];
-
     if (isLoading) {
-        return <div>Loading...</div>;
+        return <div>Loading...</div>; // Hoặc một loader khác
     }
+
+    // Xử lý dữ liệu thành một biến
+    const asideData = [
+        { title: "Thương hiệu", data: dataBrand.map((item: any) => item.title) },
+        { title: "Loại sản phẩm", data: dataProductTypes.map((item: any) => item.title) },
+        { title: "Chọn mức giá", data: ["Dưới 100.000đ", "Từ 100.000đ - 300.000đ", "Từ 300.000đ - 500.000đ", "Từ 500.000đ - 700.000đ", "Trên 700.000đ"] },
+        { title: "Loại da", data: dataSkinTypes.map((item: any) => item.type) },
+    ];
 
     return (
         <div className="container mx-auto">
@@ -116,7 +100,7 @@ export default function Section2() {
             </ul>
             <div className="uppercase text-[26px] font-[600] mt-[30px]">{title}</div>
             <div className="flex items-start">
-                <Aside data={data} />
+                <Aside data={asideData} />
                 <div className="flex-1 ml-[40px] mt-[15px]">
                     <div className="font-[400] text-[14px] text-right">Sắp xếp: <span className="text-[14px] font-[600]">Mặc định</span></div>
                     <div className="grid grid-cols-4 gap-[20px] mt-[20px]">
