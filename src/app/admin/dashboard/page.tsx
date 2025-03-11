@@ -9,7 +9,7 @@ export default function DashboardAdminPage() {
       <h1 className="text-2xl font-semibold mb-4">Dashboard</h1>
       
       {/* Thống kê dạng thẻ */}
-      <div className="grid grid-cols-4 gap-4 mb-6">
+      <div className="grid grid-cols-4 gap-4 mb-6 font-bold text-[#374785]" >
         <StatCard value="1,504" label="Daily Views" icon={<Eye />} />
         <StatCard value="80" label="Sales" icon={<ShoppingCart />} />
         <StatCard value="284" label="Comments" icon={<MessageCircle />} />
