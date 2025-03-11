@@ -18,8 +18,6 @@ export default function Section2({ data }: Section2Props) {
     const [isLoading, setIsLoading] = useState(true);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(0);
-    const [page, setPage] = useState(1);
-    const [category, setCategory] = useState<string[]>([]);
 
     useEffect(() => {
         setDataSkinTypes(data.skinTypes || []);
