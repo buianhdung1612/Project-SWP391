@@ -7,6 +7,8 @@ import { FaBlog, FaBorderNone, FaJoomla, FaObjectGroup, FaTable, FaUsers } from 
 import { FaGaugeHigh, FaGear, FaGroupArrowsRotate, FaHurricane } from "react-icons/fa6";
 import { TbBrandCampaignmonitor } from "react-icons/tb";
 import { MdExpandLess, MdExpandMore, MdCategory } from "react-icons/md";
+import { BiCarousel } from "react-icons/bi";
+import { DiHaskell } from "react-icons/di";
 
 interface Menu {
     content: string,
@@ -35,8 +37,8 @@ const subPermission: Menu[] = [
 const menu: Menu[] = [
     { content: "Tổng quan", icon: <FaGaugeHigh />, link: "/admin/dashboard" },
     { content: "Quản lý sản phẩm", icon: <MdCategory />, subMenu: subCategory }, 
-    { content: "Quản lý bài viết", icon: <FaBlog />, subMenu: subBlog }, 
-    { content: "Quản lý quyền", icon: <FaGroupArrowsRotate />, subMenu: subPermission },
+    { content: "Quản lý bài viết", icon: <BiCarousel />, subMenu: subBlog }, 
+    { content: "Quản lý quyền", icon: <DiHaskell />, subMenu: subPermission },
     { content: "Đơn hàng", icon: <FaHurricane />, link: "/admin/orders" },
     { content: "Tài khoản quản trị", icon: <FaUsers />, link: "/admin/accounts" },
     { content: "Cài đặt chung", icon: <FaGear />, link: "/admin/settings/general" }
