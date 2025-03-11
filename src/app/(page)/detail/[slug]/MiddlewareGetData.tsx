@@ -17,7 +17,7 @@ interface Brand {
 interface Category {
     slug: string, 
     title: string,
-    parent: Category
+    parent?: Category
 }
 interface ProductRelated {
     title: string;

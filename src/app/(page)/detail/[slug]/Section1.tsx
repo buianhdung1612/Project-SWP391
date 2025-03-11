@@ -8,6 +8,8 @@ import { Context } from "./MiddlewareGetData";
 export default function Section1() {
     const { productDetail } = useContext(Context);
 
+    console.log(productDetail);
+
     return (
         <>
             <ul className="flex items-center mt-[17px] container mx-auto px-3">
@@ -17,7 +19,7 @@ export default function Section1() {
                         <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
                     </Link>
                 </li>
-                {productDetail.category[0].parent.slug !== "" && (
+                {productDetail.category[0].parent && productDetail.category[0].parent.slug !== "" && (
                     <li>
                         <Link href={`/product-category/${productDetail.category[0].parent.slug}`} className="flex items-center">
                             <span className="text-[#333] text-[15px] font-[400] hover:text-secondary">{productDetail.category[0].parent.title}</span>

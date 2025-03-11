@@ -11,15 +11,14 @@ export default function ProductsSearchPage() {
     useEffect(() => {
         const fetchData = async () => {
             const searchParams = new URLSearchParams(window.location.search);
-            const keyword = searchParams.get("keyword") || "";  // Lấy giá trị của "keyword"
-            const category = searchParams.getAll("category");   // Lấy tất cả các giá trị của "category"
-            const page = searchParams.get("page");              // Lấy giá trị của "page"
+            const keyword = searchParams.get("keyword") || "";  
+            const category = searchParams.getAll("category");   
+            const page = searchParams.get("page");              
             
             const linkApi = `https://freshskinweb.onrender.com/home/search?keyword=${keyword}`;
 
             const api = new URL(linkApi);
 
-            // Thêm các category và page vào API nếu có
             category.forEach((cat) => api.searchParams.append("category", cat));
             if (page) {
                 api.searchParams.set("page", page);
@@ -27,11 +26,11 @@ export default function ProductsSearchPage() {
 
             const response = await fetch(api.href);
             const data = await response.json();
-            setData(data.data); // Set the fetched data to state
+            setData(data.data); 
         };
 
         fetchData();
-    }, []); // The empty dependency array ensures this runs only once after the initial render.
+    }, []); 
 
     if (!data) {
         return <div>Loading...</div>;
