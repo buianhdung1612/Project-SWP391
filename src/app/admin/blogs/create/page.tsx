@@ -67,7 +67,7 @@ export default function CreateBlogAdminPage() {
     }
 
     return (
-        <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
+        <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>
             <Typography variant="h5" gutterBottom>
                 Trang tạo mới bài viết
             </Typography>
