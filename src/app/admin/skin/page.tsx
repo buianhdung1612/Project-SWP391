@@ -55,7 +55,7 @@ export default function ProductsAdminPage() {
                     <Button
                         variant="outlined"
                         color="success"
-                        sx={{ borderColor: 'green', color: 'green', marginLeft: "88%" }}
+                        sx={{ borderColor: '#374785', color: '#374785', marginLeft: "88%" }}
                     >
                         <Link href="/admin/skin/create">
                             + Thêm mới

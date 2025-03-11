@@ -230,7 +230,7 @@ export default function OrdersAdminPage() {
                                     shrink: true,
                                 }}
                             />
-                            <Button variant="contained" color="success" type="submit">
+                            <Button variant="contained" color="success" type="submit" sx={{ backgroundColor: "#374785" }}>
                                 Tìm
                             </Button>
                         </Box>
@@ -251,7 +251,7 @@ export default function OrdersAdminPage() {
                                 <MenuItem value="COMPLETED">Thành công</MenuItem>
                                 <MenuItem value="CANCELED">Hủy</MenuItem>
                             </Select>
-                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
+                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor:'#374785', color: '#ffffff' }}>
                                 Áp dụng
                             </Button>
                         </Box>

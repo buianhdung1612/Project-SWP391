@@ -308,7 +308,7 @@ export default function ProductsAdminPage() {
                                     shrink: true,
                                 }}
                             />
-                            <Button variant="contained" color="success" type="submit">
+                            <Button variant="contained" color="success" type="submit" sx={{ backgroundColor: "#374785" }}>
                                 Tìm
                             </Button>
                         </Box>
@@ -342,13 +342,13 @@ export default function ProductsAdminPage() {
                 </Typography>
                 <Box display="flex" gap={20} flexWrap="wrap">
                     <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
-                        <Box display="flex" >
-                            <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
+                    <Box display="flex"  >
+                            <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)}  >
                                 <MenuItem value="active">Hoạt động</MenuItem>
                                 <MenuItem value="inactive">Dừng hoạt động</MenuItem>
                                 <MenuItem value="soft_deleted">Xóa</MenuItem>
                             </Select>
-                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
+                            <Button variant="contained" color="success"  type="submit" sx={{ width: "120px", backgroundColor:'#374785', color: '#ffffff' }} >
                                 Áp dụng
                             </Button>
                         </Box>
@@ -365,7 +365,7 @@ export default function ProductsAdminPage() {
                     <Button
                         variant="outlined"
                         color="success"
-                        sx={{ borderColor: 'green', color: 'green' }}
+                        sx={{ borderColor: '#374785', color: '#374785' }}
                     >
                         <Link href="/admin/products/create">
                             + Thêm mới

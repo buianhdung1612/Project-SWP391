@@ -1,7 +1,7 @@
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { useState } from "react";  
-import Image from "next/image"; 
+//import Image from "next/image"; 
 import { CiCrop } from "react-icons/ci";
 import { FaBlog, FaBorderNone, FaJoomla, FaObjectGroup, FaTable, FaUsers } from "react-icons/fa";
 import { FaGaugeHigh, FaGear, FaGroupArrowsRotate, FaHurricane } from "react-icons/fa6";
@@ -57,19 +57,10 @@ export default function Sider() {
     };
 
     return (
-        <div className="fixed left-0 top-0 w-64 min-h-screen bg-[#D8F3DC] text-black border-r rounded-r-2xl flex flex-col">
-            
-            {/* Logo */}
-            <div className="flex justify-center py-4 border-b">
-                <Link href="/admin/dashboard">
-                    <Image 
-                        src="/demoLogo.png" 
-                        alt="Fresh Skin Logo"
-                        width={150}
-                        height={40}
-                        priority
-                    />
-                </Link>
+        <div className="fixed left-0 top-0 w-64 min-h-screen bg-[#374785] text-white border-r rounded-r-2xl flex flex-col">
+            {/* Admin Page Title */}
+            <div className="flex justify-center py-4 border-b text-xl font-bold">
+                Admin Page
             </div>
 
             {/* Menu */}
@@ -80,7 +71,7 @@ export default function Sider() {
                             <>
                                 <button 
                                     onClick={() => toggleMenu(item.content)} 
-                                    className="flex items-center justify-between w-full px-5 py-3 rounded-lg hover:bg-green-200 transition duration-200"
+                                    className="flex items-center justify-between w-full px-5 py-3 rounded-lg hover:bg-blue-600 transition duration-200"
                                 >
                                     <div className="flex items-center gap-3">
                                         {item.icon}
@@ -95,7 +86,7 @@ export default function Sider() {
                                             <li key={subIndex}>
                                                 <Link 
                                                     href={subItem.link as Url} 
-                                                    className="flex items-center gap-3 px-5 py-2 rounded-lg hover:bg-green-100 transition duration-200"
+                                                    className="flex items-center gap-3 px-5 py-2 rounded-lg hover:bg-blue-500 transition duration-200"
                                                 >
                                                     {subItem.icon}
                                                     <span>{subItem.content}</span>
@@ -108,7 +99,7 @@ export default function Sider() {
                         ) : (
                             <Link 
                                 href={item.link as Url} 
-                                className="flex items-center gap-3 px-5 py-3 rounded-lg hover:bg-green-200 transition duration-200"
+                                className="flex items-center gap-3 px-5 py-3 rounded-lg hover:bg-blue-600 transition duration-200"
                             >
                                 {item.icon}
                                 <span>{item.content}</span>

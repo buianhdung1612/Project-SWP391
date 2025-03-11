@@ -308,7 +308,7 @@ export default function BlogsCategoryAdminPage() {
                                     shrink: true,
                                 }}
                             />
-                            <Button variant="contained" color="success" type="submit">
+                            <Button variant="contained" color="success" type="submit" sx={{ backgroundColor: "#374785" }}>
                                 Tìm
                             </Button>
                         </Box>
@@ -346,7 +346,7 @@ export default function BlogsCategoryAdminPage() {
                                 <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
                                 <MenuItem value="SOFT_DELETED">Xóa</MenuItem>
                             </Select>
-                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
+                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor:'#374785', color: '#ffffff' }}>
                                 Áp dụng
                             </Button>
                         </Box>
@@ -363,7 +363,7 @@ export default function BlogsCategoryAdminPage() {
                     <Button
                         variant="outlined"
                         color="success"
-                        sx={{ borderColor: 'green', color: 'green' }}
+                        sx={{ borderColor: '#374785', color: '#374785' }}
                     >
                         <Link href="/admin/blogs-category/create">
                             + Thêm mới

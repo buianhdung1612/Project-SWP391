@@ -307,7 +307,7 @@ export default function BrandsAdminPage() {
                                     shrink: true,
                                 }}
                             />
-                            <Button variant="contained" color="success" type="submit">
+                            <Button variant="contained" color="success" type="submit" sx={{ backgroundColor: "#374785" }}>
                                 Tìm
                             </Button>
                         </Box>
@@ -345,7 +345,7 @@ export default function BrandsAdminPage() {
                                 <MenuItem value="inactive">Dừng hoạt động</MenuItem>
                                 <MenuItem value="soft_deleted">Xóa</MenuItem>
                             </Select>
-                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
+                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor:'#374785', color: '#ffffff' }}>
                                 Áp dụng
                             </Button>
                         </Box>
@@ -362,7 +362,7 @@ export default function BrandsAdminPage() {
                     <Button
                         variant="outlined"
                         color="success"
-                        sx={{ borderColor: 'green', color: 'green' }}
+                        sx={{ borderColor: '#374785', color: '#374785' }}
                     >
                         <Link href="/admin/brands/create">
                             + Thêm mới
