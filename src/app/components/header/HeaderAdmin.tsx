@@ -1,44 +1,48 @@
-import Link from "next/link";
+import { FaBell } from "react-icons/fa";
+import { IoSearch } from "react-icons/io5";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
-import Image from "next/image"; 
+
 export default function HeaderAdmin() {
+  const handleClickLogout = async () => {
+    const response = await fetch('https://freshskinweb.onrender.com/auth/logout', {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
 
-    const handleClickLogout = async () => {
-        const response = await fetch('https://freshskinweb.onrender.com/auth/logout', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            }
-        })
-
-        const dataResponse = await response.json();
-        if (dataResponse.code === 200) {
-            location.href = `/admin/auth/login`;
-        }
+    const dataResponse = await response.json();
+    if (dataResponse.code === 200) {
+      location.href = `/admin/auth/login`;
     }
+  };
 
-    return (
-        <>
-            <div className="header">
-                <div className="header__wrap">
-                <div className="flex items-center justify-center flex-1 mt-[-50px] mr-[-300px]">
-                  <Image 
-                    src="/adminLogo.png"  
-                    alt="Admin Logo"
-                    width={150} 
-                    height={50}  
-                  />
-            </div>
-                    <div className="header__icons">
-                        <Link href="/admin/accounts/my-profile" className="header__profile">
-                            <img src="/" alt="User Avatar" />
-                        </Link>
-                        <span onClick={handleClickLogout} className="cursor-pointer">
-                            <FaArrowRightFromBracket className="text-[#6D7587] text-[20px] ml-[20px]" />
-                        </span>
-                    </div>
-                </div>
-            </div>
-        </>
-    )
+  return (
+    <div className="flex items-center justify-between bg-white  p-4  w-full ml-100">
+      {/* Search Bar */}
+      <div className="relative w-80">
+        <input
+          type="text"
+          placeholder="Search"
+          className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-green-400"
+        />
+        <IoSearch className="absolute left-3 top-3 text-gray-500" size={18} />
+      </div>
+      
+      {/* Notification, Language, User Profile, Logout */}
+      <div className="flex items-center space-x-6">
+        {/* Notification */}
+        <div className="relative cursor-pointer">
+          <FaBell size={20} className="text-gray-600" />
+          <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs w-5 h-5 flex items-center justify-center rounded-full">6</span>
+        </div>
+
+
+        {/* Logout */}
+        <span onClick={handleClickLogout} className="cursor-pointer">
+          <FaArrowRightFromBracket className="text-[#6D7587] text-[20px]" />
+        </span>
+      </div>
+    </div>
+  );
 }
