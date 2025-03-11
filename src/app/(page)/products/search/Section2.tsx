@@ -1,74 +1,12 @@
-"use client";
-
 import Aside from "@/app/components/Aside/Aside";
 import CardItem from "@/app/components/Card/CardItem";
 import Pagination from "@/app/components/Pagination/Pagination";
 import Link from "next/link";
 import { MdNavigateNext } from "react-icons/md";
-import { useParams } from "next/navigation";
-import { useSearchParams, usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
 
-export default function Section2() {
-    const { slug } = useParams();  
-    const pathname = usePathname();
-    const searchParams = useSearchParams();  
+export default function Section2({ data }: any) {
+    const { title, skinTypes, categories, brands, products, page } = data;
 
-    const [dataSkinTypes, setDataSkinTypes] = useState([]);
-    const [dataProductTypes, setDataProductTypes] = useState([]);
-    const [dataBrand, setDataBrand] = useState([]);
-    const [title, setTitle] = useState("");
-    const [products, setProducts] = useState([]);
-    const [isLoading, setIsLoading] = useState(true);
-    const [totalPages, setTotalPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
-    const [page, setPage] = useState(1);
-    const [category, setCategory] = useState<string[]>([]);  
-
-    const linkApi = `https://freshskinweb.onrender.com/home/search?keyword=${searchParams.get("keyword")}`;
-
-    const fetchData = async () => {
-        const api = new URL(linkApi);
-
-        const categoriesCurrent = searchParams.getAll('category');
-
-        if (categoriesCurrent.join(",") !== category.join(",")) {
-            setCategory(categoriesCurrent);
-        }
-
-        categoriesCurrent.forEach((category) => {
-            api.searchParams.append('category', category);
-        });
-
-        if (categoriesCurrent.length === 0) {
-            api.searchParams.delete('category');
-        }
-
-        const pageCurrent = searchParams.get('page');
-        setPage(pageCurrent ? parseInt(pageCurrent) : 1);
-
-        if (pageCurrent) {
-            api.searchParams.set('page', pageCurrent);
-        } else {
-            api.searchParams.delete('page');
-        }
-
-        const response = await fetch(api.href);
-        const data = await response.json();
-        setDataSkinTypes(data.data.skinTypes);
-        setDataProductTypes(data.data.categories);
-        setDataBrand(data.data.brands);
-        setTitle(data.data.title);
-        setProducts(data.data.products);
-        setTotalPages(data.data.page.totalPages);
-        setCurrentPage(data.data.page.page);
-        setIsLoading(false);
-    };
-
-    useEffect(() => {
-        fetchData();
-    }, [slug, page, category, pathname, searchParams]); 
-    
     const finalSkinTypes: string[] = [];
     const finalCategories: string[] = [];
     const finalBrands: string[] = [];
@@ -80,20 +18,16 @@ export default function Section2() {
         "Trên 700.000đ"
     ];
 
-    dataProductTypes.forEach((item: any) => finalCategories.push(item.title));
-    dataSkinTypes.forEach((item: any) => finalSkinTypes.push(item.type));
-    dataBrand.forEach((item: any) => finalBrands.push(item.title));
+    categories.forEach((item: any) => finalCategories.push(item.title));
+    skinTypes.forEach((item: any) => finalSkinTypes.push(item.type));
+    brands.forEach((item: any) => finalBrands.push(item.title));
 
-    const data: any = [
+    const dataToShow: any = [
         { title: "Thương hiệu", data: finalBrands },
         { title: "Loại sản phẩm", data: finalCategories },
         { title: "Chọn mức giá", data: finalPrice },
         { title: "Loại da", data: finalSkinTypes }
     ];
-
-    if (isLoading) {
-        return <div>Loading...</div>;
-    }
 
     return (
         <div className="container mx-auto">
@@ -110,7 +44,7 @@ export default function Section2() {
             </ul>
             <div className="uppercase text-[26px] font-[600] mt-[30px]">{title}</div>
             <div className="flex items-start">
-                <Aside data={data} />
+                <Aside data={dataToShow} />
                 <div className="flex-1 ml-[40px] mt-[15px]">
                     <div className="font-[400] text-[14px] text-right">Sắp xếp: <span className="text-[14px] font-[600]">Mặc định</span></div>
                     <div className="grid grid-cols-4 gap-[20px] mt-[20px]">
@@ -128,7 +62,7 @@ export default function Section2() {
                             />
                         ))}
                     </div>
-                    <Pagination totalPages={totalPages} currentPage={currentPage} />
+                    <Pagination totalPages={page.totalPages} currentPage={page.page} />
                 </div>
             </div>
         </div>
