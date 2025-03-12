@@ -5,7 +5,6 @@ import FormOrder from "./FormOrder";
 import Section2 from "./Section2";
 import Link from "next/link";
 import { methodChoosen } from "@/app/(actions)/order";
-import { useRouter } from "next/navigation";
 import { cartReset } from "@/app/(actions)/cart";
 
 interface DataSubmit {
@@ -22,7 +21,6 @@ interface DataSubmit {
 
 export default function OrderPage() {
     const dispatchOrder = useDispatch();
-    const router = useRouter();
 
     const quantity = useSelector((state: any) => state.cartReducer.totalQuantityInit);
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
@@ -78,8 +76,6 @@ export default function OrderPage() {
             if (dataResponseVNPAY.code === 200) {
                 window.location.href = dataResponseVNPAY.data; 
             }
-
-            // router.push(`/order/success/${dataResponse.data.orderId}`);
         }
     }
 
