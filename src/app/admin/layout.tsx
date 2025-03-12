@@ -26,7 +26,6 @@ interface Profile {
   permissions: string[];
 }
 
-// Move the ProfileAdminContext outside of the layout component
 export const ProfileAdminContext = createContext<Profile | undefined>(undefined);
 
 export default function RootLayout({
@@ -91,6 +90,7 @@ export default function RootLayout({
             permissions: info?.role.permission,
           }}
         >
+          {/* Chỉ render Sider và HeaderAdmin nếu không ở trang login */}
           {!pathname.startsWith("/admin/auth/login") && <Sider />}
           <div className="main">
             {!pathname.startsWith("/admin/auth/login") && <HeaderAdmin />}
