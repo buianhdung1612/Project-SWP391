@@ -15,7 +15,7 @@ const inter = Inter({
   subsets: ["latin"],
 });
 
-// Interface của Profile
+// Profile Interface
 interface Profile {
   address: string;
   avatar: string;
@@ -38,7 +38,6 @@ export default function RootLayout({
 }>) {
   const pathname = usePathname();
 
-  // State lưu thông tin người dùng
   const [info, setInfo] = useState({
     address: "",
     avatar: "",
@@ -82,7 +81,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased body`}>
-        {/* Cung cấp context cho các component con */}
+        {/* Chỉ sử dụng Provider ở đây, không export context */}
         <ProfileAdminContext.Provider
           value={{
             address: info?.address,
