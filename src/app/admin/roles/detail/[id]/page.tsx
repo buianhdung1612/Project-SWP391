@@ -1,7 +1,7 @@
 "use client"
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
     Box,
     Container,
@@ -13,6 +13,7 @@ import {
     Grid,
     Paper
 } from "@mui/material";
+import { ProfileAdminContext } from "@/app/admin/layout";
 
 // Định nghĩa kiểu dữ liệu cho Role
 interface RoleData {
@@ -23,6 +24,9 @@ interface RoleData {
 }
 
 export default function DetailRoleAdmin() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
+
     const { id } = useParams();
     const [data, setData] = useState<RoleData>({
         title: "",
@@ -42,16 +46,14 @@ export default function DetailRoleAdmin() {
         fetchRole();
     }, [id]);
 
-    // Màu sắc cho các quyền
     const permissionColors: Record<string, string> = {
-        "view": "#4caf50", // Màu xanh lá cho quyền xem
-        "create": "#ffa500", // Màu cam cho quyền tạo
-        "edit": "#1976d2", // Màu xanh dương cho quyền chỉnh sửa
-        "delete": "#f44336", // Màu đỏ cho quyền xóa
-        "default": "#757575" // Màu xám cho quyền khác
+        "view": "#4caf50",
+        "create": "#ffa500",
+        "edit": "#1976d2",
+        "delete": "#f44336",
+        "default": "#757575"
     };
 
-    // Ánh xạ quyền thành mô tả dễ hiểu
     const permissionLabels: Record<string, string> = {
         "dashboard_view": "Xem trang tổng quan",
         "products-category_view": "Xem danh mục sản phẩm",
@@ -94,17 +96,16 @@ export default function DetailRoleAdmin() {
         "settings_view": "Xem cài đặt"
     };
 
-    // Hàm render màu sắc quyền
     const renderPermission = (permission: string) => {
-        const action = permission.split("_")[1]; // Lấy action như create, edit, view, delete
+        const action = permission.split("_")[1];
         const color = permissionColors[action] || permissionColors.default;
-        const label = permissionLabels[permission] || permission; // Lấy mô tả quyền
+        const label = permissionLabels[permission] || permission;
 
         return (
             <Grid item xs={12} sm={6} md={4} key={permission}>
                 <Paper sx={{ backgroundColor: color, padding: 1, textAlign: "center", borderRadius: 1 }}>
                     <Typography variant="body2" sx={{ color: "#fff" }}>
-                        {label.toUpperCase()} {/* Hiển thị mô tả quyền */}
+                        {label.toUpperCase()}
                     </Typography>
                 </Paper>
             </Grid>
@@ -113,84 +114,86 @@ export default function DetailRoleAdmin() {
 
     return (
         <Container maxWidth="md" sx={{ mt: 4 }}>
-            <Card elevation={3}>
-                <CardContent>
-                    {/* Tên vai trò */}
-                    <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: "bold", textAlign: "center" }}>
-                        {data.title}
-                    </Typography>
+            {permissions?.includes("roles_view") && (
+                <Card elevation={3}>
+                    <CardContent>
+                        {/* Tên vai trò */}
+                        <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: "bold", textAlign: "center" }}>
+                            {data.title}
+                        </Typography>
 
-                    {/* Trạng thái */}
-                    <Box sx={{ textAlign: "center", mb: 2 }}>
-                        <Chip
-                            label={data.status === "ACTIVE" ? "Đang hoạt động" : "Không hoạt động"}
-                            color={data.status === "ACTIVE" ? "success" : "error"}
-                            sx={{ fontSize: "1rem", fontWeight: "bold" }}
-                        />
-                    </Box>
-
-                    <Divider sx={{ my: 2 }} />
-
-                    {/* Mô tả vai trò */}
-                    <Box sx={{ mb: 2 }}>
-                        <Box sx={{ display: "flex", alignItems: "center" }}>
-                            <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mr: 1 }}>
-                                Mô tả:
-                            </Typography>
-                            <div dangerouslySetInnerHTML={{ __html: data.description }}></div>
+                        {/* Trạng thái */}
+                        <Box sx={{ textAlign: "center", mb: 2 }}>
+                            <Chip
+                                label={data.status === "ACTIVE" ? "Đang hoạt động" : "Không hoạt động"}
+                                color={data.status === "ACTIVE" ? "success" : "error"}
+                                sx={{ fontSize: "1rem", fontWeight: "bold" }}
+                            />
                         </Box>
-                    </Box>
 
-                    <Divider sx={{ my: 2 }} />
+                        <Divider sx={{ my: 2 }} />
 
-                    {/* Quyền của vai trò */}
-                    <Typography variant="h6" sx={{ fontWeight: "bold", color: "#555", mb: 2 }}>
-                        Quyền của vai trò
-                    </Typography>
+                        {/* Mô tả vai trò */}
+                        <Box sx={{ mb: 2 }}>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                                <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mr: 1 }}>
+                                    Mô tả:
+                                </Typography>
+                                <div dangerouslySetInnerHTML={{ __html: data.description }}></div>
+                            </Box>
+                        </Box>
 
-                    <Grid container spacing={2}>
-                        {data.permission.includes("dashboard_view") && renderPermission("dashboard_view")}
-                        {data.permission.includes("products-category_view") && renderPermission("products-category_view")}
-                        {data.permission.includes("products-category_create") && renderPermission("products-category_create")}
-                        {data.permission.includes("products-category_edit") && renderPermission("products-category_edit")}
-                        {data.permission.includes("products-category_delete") && renderPermission("products-category_delete")}
-                        {data.permission.includes("products_view") && renderPermission("products_view")}
-                        {data.permission.includes("products_create") && renderPermission("products_create")}
-                        {data.permission.includes("products_edit") && renderPermission("products_edit")}
-                        {data.permission.includes("products_delete") && renderPermission("products_delete")}
-                        {data.permission.includes("brands_view") && renderPermission("brands_view")}
-                        {data.permission.includes("brands_create") && renderPermission("brands_create")}
-                        {data.permission.includes("brands_edit") && renderPermission("brands_edit")}
-                        {data.permission.includes("brands_delete") && renderPermission("brands_delete")}
-                        {data.permission.includes("skin_view") && renderPermission("skin_view")}
-                        {data.permission.includes("skin_create") && renderPermission("skin_create")}
-                        {data.permission.includes("skin_edit") && renderPermission("skin_edit")}
-                        {data.permission.includes("skin_delete") && renderPermission("skin_delete")}
-                        {data.permission.includes("blogs-category_view") && renderPermission("blogs-category_view")}
-                        {data.permission.includes("blogs-category_create") && renderPermission("blogs-category_create")}
-                        {data.permission.includes("blogs-category_edit") && renderPermission("blogs-category_edit")}
-                        {data.permission.includes("blogs-category_delete") && renderPermission("blogs-category_delete")}
-                        {data.permission.includes("blogs_view") && renderPermission("blogs_view")}
-                        {data.permission.includes("blogs_create") && renderPermission("blogs_create")}
-                        {data.permission.includes("blogs_edit") && renderPermission("blogs_edit")}
-                        {data.permission.includes("blogs_delete") && renderPermission("blogs_delete")}
-                        {data.permission.includes("orders_view") && renderPermission("orders_view")}
-                        {data.permission.includes("orders_confirm") && renderPermission("orders_confirm")}
-                        {data.permission.includes("orders_delete") && renderPermission("orders_delete")}
-                        {data.permission.includes("roles_view") && renderPermission("roles_view")}
-                        {data.permission.includes("roles_create") && renderPermission("roles_create")}
-                        {data.permission.includes("roles_edit") && renderPermission("roles_edit")}
-                        {data.permission.includes("roles_delete") && renderPermission("roles_delete")}
-                        {data.permission.includes("roles_permissions") && renderPermission("roles_permissions")}
-                        {data.permission.includes("accounts_view") && renderPermission("accounts_view")}
-                        {data.permission.includes("accounts_create") && renderPermission("accounts_create")}
-                        {data.permission.includes("accounts_edit") && renderPermission("accounts_edit")}
-                        {data.permission.includes("accounts_delete") && renderPermission("accounts_delete")}
-                        {data.permission.includes("settings_edit") && renderPermission("settings_edit")}
-                        {data.permission.includes("settings_view") && renderPermission("settings_view")}
-                    </Grid>
-                </CardContent>
-            </Card>
+                        <Divider sx={{ my: 2 }} />
+
+                        {/* Quyền của vai trò */}
+                        <Typography variant="h6" sx={{ fontWeight: "bold", color: "#555", mb: 2 }}>
+                            Quyền của vai trò
+                        </Typography>
+
+                        <Grid container spacing={2}>
+                            {data.permission.includes("dashboard_view") && renderPermission("dashboard_view")}
+                            {data.permission.includes("products-category_view") && renderPermission("products-category_view")}
+                            {data.permission.includes("products-category_create") && renderPermission("products-category_create")}
+                            {data.permission.includes("products-category_edit") && renderPermission("products-category_edit")}
+                            {data.permission.includes("products-category_delete") && renderPermission("products-category_delete")}
+                            {data.permission.includes("products_view") && renderPermission("products_view")}
+                            {data.permission.includes("products_create") && renderPermission("products_create")}
+                            {data.permission.includes("products_edit") && renderPermission("products_edit")}
+                            {data.permission.includes("products_delete") && renderPermission("products_delete")}
+                            {data.permission.includes("brands_view") && renderPermission("brands_view")}
+                            {data.permission.includes("brands_create") && renderPermission("brands_create")}
+                            {data.permission.includes("brands_edit") && renderPermission("brands_edit")}
+                            {data.permission.includes("brands_delete") && renderPermission("brands_delete")}
+                            {data.permission.includes("skin_view") && renderPermission("skin_view")}
+                            {data.permission.includes("skin_create") && renderPermission("skin_create")}
+                            {data.permission.includes("skin_edit") && renderPermission("skin_edit")}
+                            {data.permission.includes("skin_delete") && renderPermission("skin_delete")}
+                            {data.permission.includes("blogs-category_view") && renderPermission("blogs-category_view")}
+                            {data.permission.includes("blogs-category_create") && renderPermission("blogs-category_create")}
+                            {data.permission.includes("blogs-category_edit") && renderPermission("blogs-category_edit")}
+                            {data.permission.includes("blogs-category_delete") && renderPermission("blogs-category_delete")}
+                            {data.permission.includes("blogs_view") && renderPermission("blogs_view")}
+                            {data.permission.includes("blogs_create") && renderPermission("blogs_create")}
+                            {data.permission.includes("blogs_edit") && renderPermission("blogs_edit")}
+                            {data.permission.includes("blogs_delete") && renderPermission("blogs_delete")}
+                            {data.permission.includes("orders_view") && renderPermission("orders_view")}
+                            {data.permission.includes("orders_confirm") && renderPermission("orders_confirm")}
+                            {data.permission.includes("orders_delete") && renderPermission("orders_delete")}
+                            {data.permission.includes("roles_view") && renderPermission("roles_view")}
+                            {data.permission.includes("roles_create") && renderPermission("roles_create")}
+                            {data.permission.includes("roles_edit") && renderPermission("roles_edit")}
+                            {data.permission.includes("roles_delete") && renderPermission("roles_delete")}
+                            {data.permission.includes("roles_permissions") && renderPermission("roles_permissions")}
+                            {data.permission.includes("accounts_view") && renderPermission("accounts_view")}
+                            {data.permission.includes("accounts_create") && renderPermission("accounts_create")}
+                            {data.permission.includes("accounts_edit") && renderPermission("accounts_edit")}
+                            {data.permission.includes("accounts_delete") && renderPermission("accounts_delete")}
+                            {data.permission.includes("settings_edit") && renderPermission("settings_edit")}
+                            {data.permission.includes("settings_view") && renderPermission("settings_view")}
+                        </Grid>
+                    </CardContent>
+                </Card>
+            )}
         </Container>
     );
 }

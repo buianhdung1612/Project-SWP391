@@ -73,8 +73,13 @@ export default function OrderPage() {
 
         if (dataResponse.code == 200) {
             dispatchOrder(cartReset());
-            router.push(`/order/success/${dataResponse.data.orderId}`);
-            
+            const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
+            const dataResponseVNPAY = await responseVNPAY.json();
+            if (dataResponseVNPAY.code === 200) {
+                window.location.href = dataResponseVNPAY.data; 
+            }
+
+            // router.push(`/order/success/${dataResponse.data.orderId}`);
         }
     }
 

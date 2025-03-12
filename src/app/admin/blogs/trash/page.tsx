@@ -3,11 +3,14 @@
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
 import { MdDeleteOutline, MdOutlineSettingsBackupRestore } from "react-icons/md";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { IoReturnDownBackOutline } from "react-icons/io5";
+import { ProfileAdminContext } from "../../layout";
 
 export default function BlogTrashAdminPage() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
@@ -290,201 +293,206 @@ export default function BlogTrashAdminPage() {
     // Hết phân trang
 
     return (
-        <Box p={3}>
-            {/* Header */}
-            <Typography variant="h5" gutterBottom>
-                Trang thùng rác thương hiệu sản phẩm
-            </Typography>
+        <>
+            {permissions?.includes("blogs_edit") && permissions?.includes("blogs_view") && (
+                <Box p={3}>
 
-            {/* Bộ lọc và Tìm kiếm */}
-            <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: "white" }} >
-                <Typography variant="subtitle1" fontWeight="bold" marginBottom={2} gutterBottom>
-                    Bộ lọc và Tìm kiếm
-                </Typography>
-                <Box display="flex" flexWrap="wrap">
-                    <FormControl sx={{ width: '30%', marginRight: '20px' }} >
-                        <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
-                        <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
-                            <MenuItem value="">Tất cả</MenuItem>
-                            <MenuItem value="active">Hoạt động</MenuItem>
-                            <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
-                        <Box display="flex">
-                            <TextField
-                                label="Nhập từ khóa..."
+                    {/* Header */}
+                    <Typography variant="h5" gutterBottom>
+                        Trang thùng rác thương hiệu sản phẩm
+                    </Typography>
+
+                    {/* Bộ lọc và Tìm kiếm */}
+                    <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: "white" }} >
+                        <Typography variant="subtitle1" fontWeight="bold" marginBottom={2} gutterBottom>
+                            Bộ lọc và Tìm kiếm
+                        </Typography>
+                        <Box display="flex" flexWrap="wrap">
+                            <FormControl sx={{ width: '30%', marginRight: '20px' }} >
+                                <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
+                                <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
+                                    <MenuItem value="">Tất cả</MenuItem>
+                                    <MenuItem value="active">Hoạt động</MenuItem>
+                                    <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
+                                <Box display="flex">
+                                    <TextField
+                                        label="Nhập từ khóa..."
+                                        variant="outlined"
+                                        fullWidth
+                                        name="keyword"
+                                        defaultValue={keyword}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                    <Button variant="contained" color="success" type="submit">
+                                        Tìm
+                                    </Button>
+                                </Box>
+                            </form>
+                        </Box>
+                    </Paper>
+                    {/* Sắp xếp */}
+                    <Paper elevation={1} sx={{ p: 2, mb: 3, bgcolor: "white" }}>
+                        <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                            Sắp xếp
+                        </Typography>
+                        <Box display="flex" gap={2} flexWrap="wrap">
+                            <FormControl fullWidth sx={{ maxWidth: 300 }}>
+                                <InputLabel id="sort-label" shrink={true}>Sắp xếp</InputLabel>
+                                <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
+                                    <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
+                                    <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
+                                    <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
+                                    <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
+                                </Select>
+                            </FormControl>
+                        </Box>
+                    </Paper>
+
+                    {/* Table */}
+                    <Paper sx={{ backgroundColor: "white", p: 2 }}>
+                        <Typography variant="h6" gutterBottom sx={{ marginLeft: "20px" }}>
+                            Danh sách
+                        </Typography>
+                        <Box display="flex" gap={20} flexWrap="wrap">
+                            <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
+                                <Box display="flex" >
+                                    <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
+                                        <MenuItem value="active">Hoạt động</MenuItem>
+                                        <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+                                        <MenuItem value="restored">Khôi phục</MenuItem>
+                                        <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
+                                    </Select>
+                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
+                                        Áp dụng
+                                    </Button>
+                                </Box>
+                            </form>
+                            <Button
                                 variant="outlined"
-                                fullWidth
-                                name="keyword"
-                                defaultValue={keyword}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <Button variant="contained" color="success" type="submit">
-                                Tìm
+                                color="success"
+                                sx={{ borderColor: 'green', color: 'green' }}
+                            >
+                                <Link href="/admin/blogs" className="flex items-center">
+                                    <IoReturnDownBackOutline className="text-[25px] mr-[5px]" />
+                                    Danh sách bài viết
+                                </Link>
                             </Button>
                         </Box>
-                    </form>
-                </Box>
-            </Paper>
-            {/* Sắp xếp */}
-            <Paper elevation={1} sx={{ p: 2, mb: 3, bgcolor: "white" }}>
-                <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
-                    Sắp xếp
-                </Typography>
-                <Box display="flex" gap={2} flexWrap="wrap">
-                    <FormControl fullWidth sx={{ maxWidth: 300 }}>
-                        <InputLabel id="sort-label" shrink={true}>Sắp xếp</InputLabel>
-                        <Select labelId="sort-label" label="Sắp xếp" value={sort} displayEmpty onChange={handleChangeSort}>
-                            <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
-                            <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
-                            <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
-                            <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
-                        </Select>
-                    </FormControl>
-                </Box>
-            </Paper>
-
-            {/* Table */}
-            <Paper sx={{ backgroundColor: "white", p: 2 }}>
-                <Typography variant="h6" gutterBottom sx={{ marginLeft: "20px" }}>
-                    Danh sách
-                </Typography>
-                <Box display="flex" gap={20} flexWrap="wrap">
-                    <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
-                        <Box display="flex" >
-                            <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                <MenuItem value="active">Hoạt động</MenuItem>
-                                <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                <MenuItem value="restored">Khôi phục</MenuItem>
-                                <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
-                            </Select>
-                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
-                                Áp dụng
-                            </Button>
-                        </Box>
-                    </form>
-                    <Button
-                        variant="outlined"
-                        color="success"
-                        sx={{ borderColor: 'green', color: 'green' }}
-                    >
-                        <Link href="/admin/blogs" className="flex items-center">
-                            <IoReturnDownBackOutline className="text-[25px] mr-[5px]" />
-                            Danh sách bài viết
-                        </Link>
-                    </Button>
-                </Box>
-                <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell ></TableCell>
-                                <TableCell>STT</TableCell>
-                                <TableCell>Hình ảnh</TableCell>
-                                <TableCell>Tiêu đề</TableCell>
-                                <TableCell>Trạng thái</TableCell>
-                                <TableCell>Vị trí</TableCell>
-                                {/* <TableCell>Tạo bởi</TableCell> */}
-                                {/* <TableCell>Cập nhật bởi</TableCell> */}
-                                <TableCell>Hành động</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {data.blogs.map((blog: any, index: number) => (
-                                <TableRow key={blog.id}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, blog.id)}>
-                                        <Checkbox />
-                                    </TableCell>
-                                    <TableCell>{(data.currentPage - 1) * data.pageSize + index + 1}</TableCell>
-                                    <TableCell>
-                                        <img
-                                            src={blog.thumbnail}
-                                            alt={blog.title}
-                                            style={{ width: 100, height: 100, objectFit: "cover" }}
-                                        />
-                                    </TableCell>
-                                    <TableCell>{blog.title}</TableCell>
-                                    <TableCell>
-                                        {blog.status === "ACTIVE" && (
-                                            <Chip
-                                                label="Hoạt động"
-                                                color="success"
-                                                size="small"
-                                                variant="outlined"
-                                                onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${blog.id}`)}
-                                            />
-                                        )}
-                                        {blog.status === "INACTIVE" && (
-                                            <Chip
-                                                label="Dừng hoạt động"
-                                                color="error"
-                                                size="small"
-                                                variant="outlined"
-                                                onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${blog.id}`)}
-                                            />
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        <Typography variant="body2">
-                                            {blog.position}
-                                        </Typography>
-                                    </TableCell>
-                                    {/* <TableCell>
-                                    {brand.createdBy}
-                                    <br />
-                                    {brand.createdAt}
-                                </TableCell>
-                                <TableCell>
-                                    {brand.updatedBy}
-                                    <br />
-                                    {brand.updatedAt}
-                                </TableCell> */}
-                                    <TableCell>
-                                        <div className="flex">
-                                            <Tooltip title="Khôi phục" placement="top">
-                                                <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOnebrand(blog.id)} />
-                                            </Tooltip>
-                                            <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(blog.id)}>
-                                                <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
-                                            </Tooltip>
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
+                        <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell ></TableCell>
+                                        <TableCell>STT</TableCell>
+                                        <TableCell>Hình ảnh</TableCell>
+                                        <TableCell>Tiêu đề</TableCell>
+                                        <TableCell>Trạng thái</TableCell>
+                                        <TableCell>Vị trí</TableCell>
+                                        {/* <TableCell>Tạo bởi</TableCell> */}
+                                        {/* <TableCell>Cập nhật bởi</TableCell> */}
+                                        <TableCell>Hành động</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data.blogs.map((blog: any, index: number) => (
+                                        <TableRow key={blog.id}>
+                                            <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, blog.id)}>
+                                                <Checkbox />
+                                            </TableCell>
+                                            <TableCell>{(data.currentPage - 1) * data.pageSize + index + 1}</TableCell>
+                                            <TableCell>
+                                                <img
+                                                    src={blog.thumbnail}
+                                                    alt={blog.title}
+                                                    style={{ width: 100, height: 100, objectFit: "cover" }}
+                                                />
+                                            </TableCell>
+                                            <TableCell>{blog.title}</TableCell>
+                                            <TableCell>
+                                                {blog.status === "ACTIVE" && (
+                                                    <Chip
+                                                        label="Hoạt động"
+                                                        color="success"
+                                                        size="small"
+                                                        variant="outlined"
+                                                        onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${blog.id}`)}
+                                                    />
+                                                )}
+                                                {blog.status === "INACTIVE" && (
+                                                    <Chip
+                                                        label="Dừng hoạt động"
+                                                        color="error"
+                                                        size="small"
+                                                        variant="outlined"
+                                                        onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${blog.id}`)}
+                                                    />
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                <Typography variant="body2">
+                                                    {blog.position}
+                                                </Typography>
+                                            </TableCell>
+                                            {/* <TableCell>
+                                   {brand.createdBy}
+                                   <br />
+                                   {brand.createdAt}
+                               </TableCell>
+                               <TableCell>
+                                   {brand.updatedBy}
+                                   <br />
+                                   {brand.updatedAt}
+                               </TableCell> */}
+                                            <TableCell>
+                                                <div className="flex">
+                                                    <Tooltip title="Khôi phục" placement="top">
+                                                        <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOnebrand(blog.id)} />
+                                                    </Tooltip>
+                                                    <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(blog.id)}>
+                                                        <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
+                                                    </Tooltip>
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
 
 
-            {/* Pagination */}
-            <Stack spacing={2} marginTop={2}>
-                <Pagination
-                    count={data.totalPages}
-                    color="primary"
-                    page={page}
-                    variant="outlined"
-                    shape="rounded"
-                    siblingCount={1}
-                    sx={{
-                        '& .MuiPaginationItem-root': {
-                            backgroundColor: 'white',
-                            color: 'blue',
-                            '&:hover': {
-                                backgroundColor: '#e0e0e0',
-                            },
-                        },
-                        '& .Mui-selected': {
-                            backgroundColor: 'blue',
-                            color: 'white',
-                        },
-                    }}
-                    onChange={handlePagination}
-                />
-            </Stack>
-        </Box>
+                    {/* Pagination */}
+                    <Stack spacing={2} marginTop={2}>
+                        <Pagination
+                            count={data.totalPages}
+                            color="primary"
+                            page={page}
+                            variant="outlined"
+                            shape="rounded"
+                            siblingCount={1}
+                            sx={{
+                                '& .MuiPaginationItem-root': {
+                                    backgroundColor: 'white',
+                                    color: 'blue',
+                                    '&:hover': {
+                                        backgroundColor: '#e0e0e0',
+                                    },
+                                },
+                                '& .Mui-selected': {
+                                    backgroundColor: 'blue',
+                                    color: 'white',
+                                },
+                            }}
+                            onChange={handlePagination}
+                        />
+                    </Stack>
+                </Box>
+            )}
+        </>
     );
 }

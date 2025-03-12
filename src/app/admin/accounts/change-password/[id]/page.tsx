@@ -1,9 +1,13 @@
 "use client"
 
+import { ProfileAdminContext } from "@/app/admin/layout";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useParams } from "next/navigation";
+import { useContext } from "react";
 
 export default function ChangePasswordAdminAccount() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
     const { id } = useParams();
 
     const handleSubmit = async (event: any) => {
@@ -30,28 +34,30 @@ export default function ChangePasswordAdminAccount() {
 
     return (
         <>
-            <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
-                <Typography variant="h5" gutterBottom>
-                    Trang đổi mật khẩu
-                </Typography>
+            {permissions?.includes("accounts_edit") && (
+                <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
+                    <Typography variant="h5" gutterBottom>
+                        Trang đổi mật khẩu
+                    </Typography>
 
-                <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label="Mật khẩu mới"
-                            name='password'
-                            variant="outlined"
-                            type="password"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                            Đổi mật khẩu
-                        </Button>
-                    </form>
-                </Paper>
-            </Box>
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Mật khẩu mới"
+                                name='password'
+                                variant="outlined"
+                                type="password"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                            />
+                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
+                                Đổi mật khẩu
+                            </Button>
+                        </form>
+                    </Paper>
+                </Box>
+            )}
         </>
     )
 }

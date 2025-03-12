@@ -1,14 +1,17 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel,FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Tooltip, Stack, Pagination, Chip } from "@mui/material";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Tooltip, Stack, Pagination, Chip } from "@mui/material";
 import { BiDetail } from "react-icons/bi";
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { MdOutlineCancel } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
+import { ProfileAdminContext } from "../layout";
 
 export default function OrdersAdminPage() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
     const [data, setData] = useState({
         totalPages: 1,
         totalItems: 1,
@@ -197,169 +200,173 @@ export default function OrdersAdminPage() {
     // Hết phân trang
 
     return (
-        <Box p={3}>
-            {/* Header */}
-            <Typography variant="h5" gutterBottom>
-                Trang danh sách đơn hàng
-            </Typography>
+        <>
+            {permissions?.includes("orders_confirm") && permissions.includes("orders_delete") && (
+                <Box p={3}>
+                    {/* Header */}
+                    <Typography variant="h5" gutterBottom>
+                        Trang danh sách đơn hàng
+                    </Typography>
 
-            {/* Bộ lọc và Tìm kiếm */}
-            <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: "white" }} >
-                <Typography variant="subtitle1" fontWeight="bold" marginBottom={2} gutterBottom>
-                    Bộ lọc và Tìm kiếm
-                </Typography>
-                <Box display="flex" flexWrap="wrap">
-                    <FormControl sx={{ width: '30%', marginRight: '20px' }} >
-                        <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
-                        <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
-                            <MenuItem value="">Tất cả</MenuItem>
-                            <MenuItem value="PENDING">Chờ duyệt</MenuItem>
-                            <MenuItem value="COMPLETED">Thành công</MenuItem>
-                            <MenuItem value="CANCELED">Hủy</MenuItem>
-                        </Select>
-                    </FormControl>
-                    <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
-                        <Box display="flex">
-                            <TextField
-                                label="Nhập từ khóa..."
-                                variant="outlined"
-                                fullWidth
-                                name="keyword"
-                                defaultValue={keyword}
-                                InputLabelProps={{
-                                    shrink: true,
-                                }}
-                            />
-                            <Button variant="contained" color="success" type="submit" sx={{ backgroundColor: "#374785" }}>
-                                Tìm
-                            </Button>
+                    {/* Bộ lọc và Tìm kiếm */}
+                    <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: "white" }} >
+                        <Typography variant="subtitle1" fontWeight="bold" marginBottom={2} gutterBottom>
+                            Bộ lọc và Tìm kiếm
+                        </Typography>
+                        <Box display="flex" flexWrap="wrap">
+                            <FormControl sx={{ width: '30%', marginRight: '20px' }} >
+                                <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
+                                <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
+                                    <MenuItem value="">Tất cả</MenuItem>
+                                    <MenuItem value="PENDING">Chờ duyệt</MenuItem>
+                                    <MenuItem value="COMPLETED">Thành công</MenuItem>
+                                    <MenuItem value="CANCELED">Hủy</MenuItem>
+                                </Select>
+                            </FormControl>
+                            <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
+                                <Box display="flex">
+                                    <TextField
+                                        label="Nhập từ khóa..."
+                                        variant="outlined"
+                                        fullWidth
+                                        name="keyword"
+                                        defaultValue={keyword}
+                                        InputLabelProps={{
+                                            shrink: true,
+                                        }}
+                                    />
+                                    <Button variant="contained" color="success" type="submit" sx={{ backgroundColor: "#374785" }}>
+                                        Tìm
+                                    </Button>
+                                </Box>
+                            </form>
                         </Box>
-                    </form>
-                </Box>
-            </Paper>
+                    </Paper>
 
-            {/* Table */}
-            <Paper sx={{ backgroundColor: "white", p: 2 }}>
-                <Typography variant="h6" gutterBottom sx={{ marginLeft: "20px" }}>
-                    Danh sách
-                </Typography>
-                <Box display="flex" gap={20} flexWrap="wrap">
-                    <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
-                        <Box display="flex" >
-                            <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                <MenuItem value="PENDING">Chờ duyệt</MenuItem>
-                                <MenuItem value="COMPLETED">Thành công</MenuItem>
-                                <MenuItem value="CANCELED">Hủy</MenuItem>
-                            </Select>
-                            <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor:'#374785', color: '#ffffff' }}>
-                                Áp dụng
-                            </Button>
+                    {/* Table */}
+                    <Paper sx={{ backgroundColor: "white", p: 2 }}>
+                        <Typography variant="h6" gutterBottom sx={{ marginLeft: "20px" }}>
+                            Danh sách
+                        </Typography>
+                        <Box display="flex" gap={20} flexWrap="wrap">
+                            <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
+                                <Box display="flex" >
+                                    <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
+                                        <MenuItem value="PENDING">Chờ duyệt</MenuItem>
+                                        <MenuItem value="COMPLETED">Thành công</MenuItem>
+                                        <MenuItem value="CANCELED">Hủy</MenuItem>
+                                    </Select>
+                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor: '#374785', color: '#ffffff' }}>
+                                        Áp dụng
+                                    </Button>
+                                </Box>
+                            </form>
                         </Box>
-                    </form>
-                </Box>
-                <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell ></TableCell>
-                                <TableCell>Mã đơn hàng</TableCell>
-                                <TableCell>Ngày đặt</TableCell>
-                                <TableCell>Khách hàng</TableCell>
-                                <TableCell>Điện thoại</TableCell>
-                                <TableCell>Địa chỉ giao hàng</TableCell>
-                                <TableCell>Tình trạng</TableCell>
-                                <TableCell>Chi tiết </TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            {data.orders.map((order: any, index: number) => (
-                                <TableRow key={index}>
-                                    <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, order.orderId)}>
-                                        <Checkbox />
-                                    </TableCell>
-                                    <TableCell>#{order.orderId}</TableCell>
-                                    <TableCell>{order.orderDate}</TableCell>
-                                    <TableCell>{order.firstName} {order.lastName}</TableCell>
-                                    <TableCell>{order.phoneNumber}</TableCell>
-                                    <TableCell>{order.address}</TableCell>
-                                    <TableCell>
-                                        {order.orderStatus === "PENDING" && (
-                                            <Chip
-                                                label="Chờ duyệt"
-                                                color="secondary"
-                                                size="small"
-                                                variant="outlined"
-                                            />
-                                        )}
-                                        {order.orderStatus === "COMPLETED" && (
-                                            <Chip
-                                                label="Thành công"
-                                                color="success"
-                                                size="small"
-                                                variant="outlined"
-                                            />
-                                        )}
-                                        {order.orderStatus === "CANCELED" && (
-                                            <Chip
-                                                label="Hủy"
-                                                color="error"
-                                                size="small"
-                                                variant="outlined"
-                                                onClick={() => handleChangeStatusOneOrder("INACTIVE", `/edit/${order.orderId}`)}
-                                            />
-                                        )}
-                                    </TableCell>
-                                    <TableCell>
-                                        <div className="flex">
-                                            <Tooltip title="Chi tiết" placement="top">
-                                                <Link href={`/admin/orders/detail/${order.orderId}`}>
-                                                    <BiDetail className="text-[25px] text-[#138496] mr-2" />
-                                                </Link>
-                                            </Tooltip>
-                                            {order.orderStatus === "PENDING" && (
-                                                <Tooltip title="Xác nhận" placement="top">
-                                                    <TiTick onClick={() => handleChangeStatusOneOrder("COMPLETED", `/edit/${order.orderId}`)} className="text-[25px] text-green-500 mr-2 cursor-pointer" />
-                                                </Tooltip>
-                                            )}
-                                            {order.orderStatus === "PENDING" && (
-                                                <Tooltip title="Hủy" placement="top">
-                                                    <MdOutlineCancel onClick={() => handleChangeStatusOneOrder("CANCELED", `/edit/${order.orderId}`)} className="text-[25px] text-red-500 mr-2 cursor-pointer" />
-                                                </Tooltip>
-                                            )}
-                                        </div>
-                                    </TableCell>
-                                </TableRow>
-                            ))}
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Paper>
+                        <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell ></TableCell>
+                                        <TableCell>Mã đơn hàng</TableCell>
+                                        <TableCell>Ngày đặt</TableCell>
+                                        <TableCell>Khách hàng</TableCell>
+                                        <TableCell>Điện thoại</TableCell>
+                                        <TableCell>Địa chỉ giao hàng</TableCell>
+                                        <TableCell>Tình trạng</TableCell>
+                                        <TableCell>Chi tiết </TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data.orders.map((order: any, index: number) => (
+                                        <TableRow key={index}>
+                                            <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, order.orderId)}>
+                                                <Checkbox />
+                                            </TableCell>
+                                            <TableCell>#{order.orderId}</TableCell>
+                                            <TableCell>{order.orderDate}</TableCell>
+                                            <TableCell>{order.firstName} {order.lastName}</TableCell>
+                                            <TableCell>{order.phoneNumber}</TableCell>
+                                            <TableCell>{order.address}</TableCell>
+                                            <TableCell>
+                                                {order.orderStatus === "PENDING" && (
+                                                    <Chip
+                                                        label="Chờ duyệt"
+                                                        color="secondary"
+                                                        size="small"
+                                                        variant="outlined"
+                                                    />
+                                                )}
+                                                {order.orderStatus === "COMPLETED" && (
+                                                    <Chip
+                                                        label="Thành công"
+                                                        color="success"
+                                                        size="small"
+                                                        variant="outlined"
+                                                    />
+                                                )}
+                                                {order.orderStatus === "CANCELED" && (
+                                                    <Chip
+                                                        label="Hủy"
+                                                        color="error"
+                                                        size="small"
+                                                        variant="outlined"
+                                                        onClick={() => handleChangeStatusOneOrder("INACTIVE", `/edit/${order.orderId}`)}
+                                                    />
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                <div className="flex">
+                                                    <Tooltip title="Chi tiết" placement="top">
+                                                        <Link href={`/admin/orders/detail/${order.orderId}`}>
+                                                            <BiDetail className="text-[25px] text-[#138496] mr-2" />
+                                                        </Link>
+                                                    </Tooltip>
+                                                    {order.orderStatus === "PENDING" && (
+                                                        <Tooltip title="Xác nhận" placement="top">
+                                                            <TiTick onClick={() => handleChangeStatusOneOrder("COMPLETED", `/edit/${order.orderId}`)} className="text-[25px] text-green-500 mr-2 cursor-pointer" />
+                                                        </Tooltip>
+                                                    )}
+                                                    {order.orderStatus === "PENDING" && (
+                                                        <Tooltip title="Hủy" placement="top">
+                                                            <MdOutlineCancel onClick={() => handleChangeStatusOneOrder("CANCELED", `/edit/${order.orderId}`)} className="text-[25px] text-red-500 mr-2 cursor-pointer" />
+                                                        </Tooltip>
+                                                    )}
+                                                </div>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Paper>
 
-            {/* Pagination */}
-            <Stack spacing={2} marginTop={2}>
-                <Pagination
-                    count={data.totalPages}
-                    color="primary"
-                    page={page}
-                    variant="outlined"
-                    shape="rounded"
-                    siblingCount={1}
-                    sx={{
-                        '& .MuiPaginationItem-root': {
-                            backgroundColor: 'white',
-                            color: 'blue',
-                            '&:hover': {
-                                backgroundColor: '#e0e0e0',
-                            },
-                        },
-                        '& .Mui-selected': {
-                            backgroundColor: 'blue',
-                            color: 'white',
-                        },
-                    }}
-                    onChange={handlePagination}
-                />
-            </Stack>
-        </Box>
+                    {/* Pagination */}
+                    <Stack spacing={2} marginTop={2}>
+                        <Pagination
+                            count={data.totalPages}
+                            color="primary"
+                            page={page}
+                            variant="outlined"
+                            shape="rounded"
+                            siblingCount={1}
+                            sx={{
+                                '& .MuiPaginationItem-root': {
+                                    backgroundColor: 'white',
+                                    color: 'blue',
+                                    '&:hover': {
+                                        backgroundColor: '#e0e0e0',
+                                    },
+                                },
+                                '& .Mui-selected': {
+                                    backgroundColor: 'blue',
+                                    color: 'white',
+                                },
+                            }}
+                            onChange={handlePagination}
+                        />
+                    </Stack>
+                </Box>
+            )}
+        </>
     );
 }

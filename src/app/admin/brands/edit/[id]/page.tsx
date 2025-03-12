@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React, { useEffect, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
     Box,
     Typography,
@@ -15,6 +15,7 @@ import {
 } from "@mui/material";
 import { useParams } from "next/navigation";
 import UploadImage from "@/app/components/Upload/UploadImage";
+import { ProfileAdminContext } from "@/app/admin/layout";
 
 const TinyEditor = dynamic(() => import("../../../../../../TinyEditor"), {
     ssr: false,
@@ -29,6 +30,8 @@ interface DataSubmit {
 }
 
 export default function EditBrandtAdminPage() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
     const { id } = useParams();
     const [description, setDescription] = useState("");
     const [images, setImages] = useState<(string | File)[]>([]);
@@ -104,104 +107,108 @@ export default function EditBrandtAdminPage() {
     };
 
     return (
-        <Box sx={{ padding: 3, backgroundColor: "#e3f2fd" }}>
-            <Typography variant="h5" gutterBottom>
-                Trang chỉnh sửa sản phẩm
-            </Typography>
-
-            <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Tên thương hiệu"
-                        name="title"
-                        variant="outlined"
-                        fullWidth
-                        sx={{ marginBottom: 3 }}
-                        required
-                        value={brandInfo.title}
-                        onChange={(e) =>
-                            setBrandInfo({ ...brandInfo, title: e.target.value })
-                        }
-                    />
-                    <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                        <RadioGroup
-                            value={brandInfo.featured.toString()}
-                            name="featured"
-                            onChange={(e) =>
-                                setBrandInfo({ ...brandInfo, featured: e.target.value === "true" })
-                            }
-                            row
-                        >
-                            <FormControlLabel
-                                value="true"
-                                control={<Radio />}
-                                label="Nổi bật"
-                            />
-                            <FormControlLabel
-                                value="false"
-                                control={<Radio />}
-                                label="Không nổi bật"
-                            />
-                        </RadioGroup>
-                    </FormControl>
-                    <Typography variant="h6" gutterBottom>
-                        Hình ảnh
+        <>
+            {permissions?.includes("brands_edit") && (
+                <Box sx={{ padding: 3, backgroundColor: "#e3f2fd" }}>
+                    <Typography variant="h5" gutterBottom>
+                        Trang chỉnh sửa sản phẩm
                     </Typography>
-                    <UploadImage
-                        label="Thêm hình ảnh"
-                        id="upload-images"
-                        name="images"
-                        defaultImages={images.filter((img) => typeof img === "string") as string[]}
-                        onImageChange={handleImageChange}
-                    />
-                    <h4>Mô tả</h4>
-                    <TinyEditor
-                        value={description}
-                        onEditorChange={(content: string) => setDescription(content)}
-                    />
-                    <TextField
-                        label="Vị trí (tự động tăng)"
-                        name="position"
-                        variant="outlined"
-                        fullWidth
-                        type="number"
-                        sx={{ marginBottom: 2, marginTop: 2 }}
-                        value={brandInfo.position}
-                        onChange={(e) =>
-                            setBrandInfo({ ...brandInfo, position: parseInt(e.target.value) })
-                        }
-                    />
-                    <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                        <RadioGroup
-                            value={brandInfo.status}
-                            name="status"
-                            onChange={(e) =>
-                                setBrandInfo({ ...brandInfo, status: e.target.value })
-                            }
-                            row
-                        >
-                            <FormControlLabel
-                                value="ACTIVE"
-                                control={<Radio />}
-                                label="Hoạt động"
+
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Tên thương hiệu"
+                                name="title"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                                value={brandInfo.title}
+                                onChange={(e) =>
+                                    setBrandInfo({ ...brandInfo, title: e.target.value })
+                                }
                             />
-                            <FormControlLabel
-                                value="INACTIVE"
-                                control={<Radio />}
-                                label="Dừng hoạt động"
+                            <FormControl fullWidth sx={{ marginBottom: 3 }}>
+                                <RadioGroup
+                                    value={brandInfo.featured.toString()}
+                                    name="featured"
+                                    onChange={(e) =>
+                                        setBrandInfo({ ...brandInfo, featured: e.target.value === "true" })
+                                    }
+                                    row
+                                >
+                                    <FormControlLabel
+                                        value="true"
+                                        control={<Radio />}
+                                        label="Nổi bật"
+                                    />
+                                    <FormControlLabel
+                                        value="false"
+                                        control={<Radio />}
+                                        label="Không nổi bật"
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                            <Typography variant="h6" gutterBottom>
+                                Hình ảnh
+                            </Typography>
+                            <UploadImage
+                                label="Thêm hình ảnh"
+                                id="upload-images"
+                                name="images"
+                                defaultImages={images.filter((img) => typeof img === "string") as string[]}
+                                onImageChange={handleImageChange}
                             />
-                        </RadioGroup>
-                    </FormControl>
-                    <Button
-                        type="submit"
-                        variant="contained"
-                        color="primary"
-                        sx={{ width: "100%" }}
-                    >
-                        Cập nhật thương hiệu
-                    </Button>
-                </form>
-            </Paper>
-        </Box>
+                            <h4>Mô tả</h4>
+                            <TinyEditor
+                                value={description}
+                                onEditorChange={(content: string) => setDescription(content)}
+                            />
+                            <TextField
+                                label="Vị trí (tự động tăng)"
+                                name="position"
+                                variant="outlined"
+                                fullWidth
+                                type="number"
+                                sx={{ marginBottom: 2, marginTop: 2 }}
+                                value={brandInfo.position}
+                                onChange={(e) =>
+                                    setBrandInfo({ ...brandInfo, position: parseInt(e.target.value) })
+                                }
+                            />
+                            <FormControl fullWidth sx={{ marginBottom: 3 }}>
+                                <RadioGroup
+                                    value={brandInfo.status}
+                                    name="status"
+                                    onChange={(e) =>
+                                        setBrandInfo({ ...brandInfo, status: e.target.value })
+                                    }
+                                    row
+                                >
+                                    <FormControlLabel
+                                        value="ACTIVE"
+                                        control={<Radio />}
+                                        label="Hoạt động"
+                                    />
+                                    <FormControlLabel
+                                        value="INACTIVE"
+                                        control={<Radio />}
+                                        label="Dừng hoạt động"
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                sx={{ width: "100%" }}
+                            >
+                                Cập nhật thương hiệu
+                            </Button>
+                        </form>
+                    </Paper>
+                </Box>
+            )}
+        </>
     );
 }

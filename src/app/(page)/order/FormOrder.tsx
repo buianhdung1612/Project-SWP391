@@ -51,7 +51,7 @@ export default function FormOrder() {
         }
     };
 
-    const handleRadioBankChange = (event: any) => {
+    const handleRadioBankChange = async (event: any) => {
         if (event.target.checked) {
             setBank(true);
             setMeeting(false);

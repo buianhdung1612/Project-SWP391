@@ -3,6 +3,8 @@
 import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
+import Cookies from 'js-cookie';
+
 
 export default function LoginAdminPage() {
     const [username, setUsername] = useState('');
@@ -25,12 +27,12 @@ export default function LoginAdminPage() {
             })
         });
         const dataResponse = await response.json();
+        const token = dataResponse.data.token;
 
-        console.log(dataResponse);
-
-        // if(dataResponse.code == 200){
-        //     router.push(`/admin/dashboard`);
-        // }
+        if(dataResponse.code == 200){
+            Cookies.set('token', token, { expires: 1 });
+            router.push(`/admin/dashboard`);
+        }
        
     };
 

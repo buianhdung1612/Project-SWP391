@@ -1,9 +1,10 @@
 "use client"
 
+import { ProfileAdminContext } from "@/app/admin/layout";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import dynamic from 'next/dynamic';
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 const TinyEditor = dynamic(() => import('../../../../../../TinyEditor'), {
     ssr: false
 });
@@ -13,7 +14,9 @@ interface Data {
     description: string
 }
 
-export default function EditRoleAdmin () {
+export default function EditRoleAdmin() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
     const [description, setDescription] = useState('');
     const { id } = useParams();
 
@@ -67,27 +70,29 @@ export default function EditRoleAdmin () {
                     Trang chỉnh sửa nhóm quyền
                 </Typography>
 
-                <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label="Tiêu đề nhóm quyền"
-                            name='title'
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                            value={roleInfo.title}
-                            onChange={(e) =>
-                                setRoleInfo({ ...roleInfo, title: e.target.value })
-                            }
-                        />
-                        <h4>Mô tả nhóm quyền</h4>
-                        <TinyEditor value={description} onEditorChange={(description: string) => setDescription(description)} />
-                        <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                            Cập nhật
-                        </Button>
-                    </form>
-                </Paper>
+                {permissions?.includes("roles_edit") && (
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Tiêu đề nhóm quyền"
+                                name='title'
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                                value={roleInfo.title}
+                                onChange={(e) =>
+                                    setRoleInfo({ ...roleInfo, title: e.target.value })
+                                }
+                            />
+                            <h4>Mô tả nhóm quyền</h4>
+                            <TinyEditor value={description} onEditorChange={(description: string) => setDescription(description)} />
+                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
+                                Cập nhật
+                            </Button>
+                        </form>
+                    </Paper>
+                )}
             </Box >
         </>
     )

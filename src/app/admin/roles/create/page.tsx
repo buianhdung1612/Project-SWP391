@@ -2,7 +2,8 @@
 
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import dynamic from 'next/dynamic';
-import { useState } from "react";
+import { useContext, useState } from "react";
+import { ProfileAdminContext } from "../../layout";
 const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
     ssr: false
 });
@@ -12,7 +13,10 @@ interface Data {
     description: string
 }
 
-export default function CreateRoleAdmin () {
+export default function CreateRoleAdmin() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
+
     const [content, setContent] = useState('');
 
     const handleSubmit = async (event: any) => {
@@ -44,23 +48,25 @@ export default function CreateRoleAdmin () {
                     Trang tạo mới nhóm quyền
                 </Typography>
 
-                <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label="Tiêu đề nhóm quyền"
-                            name='title'
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <h4>Mô tả nhóm quyền</h4>
-                        <TinyEditor value={content} onEditorChange={(content: string) => setContent(content)} />
-                        <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                            Tạo mới
-                        </Button>
-                    </form>
-                </Paper>
+                {permissions?.includes("roles_create") && (
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Tiêu đề nhóm quyền"
+                                name='title'
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                            />
+                            <h4>Mô tả nhóm quyền</h4>
+                            <TinyEditor value={content} onEditorChange={(content: string) => setContent(content)} />
+                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
+                                Tạo mới
+                            </Button>
+                        </form>
+                    </Paper>
+                )}
             </Box >
         </>
     )

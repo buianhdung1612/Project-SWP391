@@ -1,10 +1,13 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, InputLabel, Select, MenuItem } from '@mui/material';
 import UploadImage from "@/app/components/Upload/UploadImage";
+import { ProfileAdminContext } from "@/app/admin/layout";
 
 export default function EditAccountAdmin() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
     const [listRoles, setListRoles] = useState([]);
     const [roleCurrent, setRoleCurrent] = useState('');
 
@@ -62,94 +65,96 @@ export default function EditAccountAdmin() {
 
     return (
         <>
-            <Box sx={{ padding: 3, backgroundColor: "#e3f2fd" }}>
-                <Typography variant="h5" gutterBottom>
-                    Trang tạo mới tài khoản quản trị
-                </Typography>
+            {permissions?.includes("accounts_edit") && (
+                <Box sx={{ padding: 3, backgroundColor: "#e3f2fd" }}>
+                    <Typography variant="h5" gutterBottom>
+                        Trang tạo mới tài khoản quản trị
+                    </Typography>
 
-                <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                    <form onSubmit={handleSubmit}>
-                        <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
-                            <InputLabel shrink={true}>-- Chọn nhóm quyền --</InputLabel>
-                            <Select
-                                value={roleCurrent}
-                                onChange={(e) => setRoleCurrent(e.target.value)}
-                                label=" Chọn nhóm quyền --"
-                                displayEmpty
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                        <form onSubmit={handleSubmit}>
+                            <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
+                                <InputLabel shrink={true}>-- Chọn nhóm quyền --</InputLabel>
+                                <Select
+                                    value={roleCurrent}
+                                    onChange={(e) => setRoleCurrent(e.target.value)}
+                                    label=" Chọn nhóm quyền --"
+                                    displayEmpty
+                                >
+                                    <MenuItem value="">
+                                        -- Chọn nhóm quyền --
+                                    </MenuItem>
+                                    {listRoles.map((item: any, index: number) => (
+                                        <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+                                    ))}
+
+                                </Select>
+                            </FormControl>
+                            <TextField
+                                label="Họ"
+                                name="firstname"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                            />
+                            <TextField
+                                label="Tên"
+                                name="lastname"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                            />
+                            <TextField
+                                label="Email"
+                                name="email"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                                type="email"
+                            />
+                            <TextField
+                                label="Số điện thoại"
+                                name="phone"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                            />
+                            <UploadImage
+                                label="Ảnh đại diện"
+                                id="images"
+                                name="images"
+                                onImageChange={handleImageChange}
+                            />
+                            <FormControl fullWidth sx={{ marginBottom: 3 }}>
+                                <RadioGroup defaultValue="ACTIVE" name="status" row>
+                                    <FormControlLabel
+                                        value="ACTIVE"
+                                        control={<Radio />}
+                                        label="Hoạt động"
+                                    />
+                                    <FormControlLabel
+                                        value="INACTIVE"
+                                        control={<Radio />}
+                                        label="Dừng hoạt động"
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                sx={{ width: "100%" }}
                             >
-                                <MenuItem value="">
-                                    -- Chọn nhóm quyền --
-                                </MenuItem>
-                                {listRoles.map((item: any, index: number) => (
-                                    <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
-                                ))}
-
-                            </Select>
-                        </FormControl>
-                        <TextField
-                            label="Họ"
-                            name="firstname"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <TextField
-                            label="Tên"
-                            name="lastname"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <TextField
-                            label="Email"
-                            name="email"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                            type="email"
-                        />
-                        <TextField
-                            label="Số điện thoại"
-                            name="phone"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <UploadImage
-                            label="Ảnh đại diện"
-                            id="images"
-                            name="images"
-                            onImageChange={handleImageChange}
-                        />
-                        <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                            <RadioGroup defaultValue="ACTIVE" name="status" row>
-                                <FormControlLabel
-                                    value="ACTIVE"
-                                    control={<Radio />}
-                                    label="Hoạt động"
-                                />
-                                <FormControlLabel
-                                    value="INACTIVE"
-                                    control={<Radio />}
-                                    label="Dừng hoạt động"
-                                />
-                            </RadioGroup>
-                        </FormControl>
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            sx={{ width: "100%" }}
-                        >
-                            Cập nhật thông tin
-                        </Button>
-                    </form>
-                </Paper>
-            </Box>
+                                Cập nhật thông tin
+                            </Button>
+                        </form>
+                    </Paper>
+                </Box>
+            )}
         </>
     )
 }

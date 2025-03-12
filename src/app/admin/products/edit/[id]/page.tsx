@@ -3,12 +3,13 @@ import dynamic from 'next/dynamic';
 const TinyEditor = dynamic(() => import('../../../../../../TinyEditor'), {
     ssr: false
 });
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, FormGroup, Checkbox, InputLabel, Select, MenuItem } from '@mui/material';
 import { MdDeleteForever } from 'react-icons/md';
 import UploadImage from '@/app/components/Upload/UploadImage';
 import { useParams } from 'next/navigation';
 import SubCategory from '@/app/components/Sub-Category/SubCategory';
+import { ProfileAdminContext } from '@/app/admin/layout';
 
 interface InputField {
     volume: number;
@@ -18,6 +19,8 @@ interface InputField {
 type SkinType = 'oily' | 'dry' | 'combination' | 'sensitive' | 'normal';
 
 export default function EditProductAdminPage() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
     const { id } = useParams();
 
     // Quản lý mặc định
@@ -207,190 +210,192 @@ export default function EditProductAdminPage() {
                 Trang chỉnh sửa sản phẩm
             </Typography>
 
-            <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                <form onSubmit={handleSubmit}>
-                    <TextField
-                        label="Tên sản phẩm"
-                        name='title'
-                        variant="outlined"
-                        fullWidth
-                        sx={{ marginBottom: 3 }}
-                        required
-                        value={productInfo.title}
-                        onChange={(e) => setProductInfo({ ...productInfo, title: e.target.value })}
-                    />
-                    <div className='mb-6 sub-menu'>
-                        <Typography className='border border-solid border-[#BFBFBF] rounded-[5px] p-[10px]'>Chọn danh mục sản phẩm</Typography>
-                        <SubCategory items={listCategory} onCheckedChange={handleCheckedChange} defaultCheckedIds={inputCheckedCategory} />
-                    </div>
-                    <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
-                        <InputLabel shrink={true}>-- Chọn thương hiệu --</InputLabel>
-                        <Select
-                            value={brandCurrent}
-                            onChange={handleChangeBrand}
-                            label=" Chọn thương hiệu --"
-                            displayEmpty
-                        >
-                            <MenuItem value="">
-                                -- Chọn thương hiệu --
-                            </MenuItem>
-                            {listBrand.map((item: any, index: number) => (
-                                <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+            {permissions?.includes("products_edit") && (
+                <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                    <form onSubmit={handleSubmit}>
+                        <TextField
+                            label="Tên sản phẩm"
+                            name='title'
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 3 }}
+                            required
+                            value={productInfo.title}
+                            onChange={(e) => setProductInfo({ ...productInfo, title: e.target.value })}
+                        />
+                        <div className='mb-6 sub-menu'>
+                            <Typography className='border border-solid border-[#BFBFBF] rounded-[5px] p-[10px]'>Chọn danh mục sản phẩm</Typography>
+                            <SubCategory items={listCategory} onCheckedChange={handleCheckedChange} defaultCheckedIds={inputCheckedCategory} />
+                        </div>
+                        <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
+                            <InputLabel shrink={true}>-- Chọn thương hiệu --</InputLabel>
+                            <Select
+                                value={brandCurrent}
+                                onChange={handleChangeBrand}
+                                label=" Chọn thương hiệu --"
+                                displayEmpty
+                            >
+                                <MenuItem value="">
+                                    -- Chọn thương hiệu --
+                                </MenuItem>
+                                {listBrand.map((item: any, index: number) => (
+                                    <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+                                ))}
+                            </Select>
+                        </FormControl>
+                        <FormControl fullWidth sx={{ marginBottom: 3 }}>
+                            <RadioGroup
+                                value={productInfo.featured.toString()}
+                                name="featured"
+                                onChange={handleChangeFeatured}
+                                row
+                            >
+                                <FormControlLabel value="true" control={<Radio />} label="Nổi bật" />
+                                <FormControlLabel value="false" control={<Radio />} label="Không nổi bật" />
+                            </RadioGroup>
+                        </FormControl>
+                        <h4>Mô tả</h4>
+                        <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
+                        <UploadImage label='Chọn ảnh' id="images" name="images" onImageChange={handleImageChange} defaultImages={defaultImages} />
+                        <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
+                            {inputs.map((input, index: number) => (
+                                <Box key={`${input.volume}-${input.price}-${index}`} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
+                                    <TextField
+                                        label="Dung tích (ml)"
+                                        type='number'
+                                        variant="outlined"
+                                        size="small"
+                                        value={input.volume}
+                                        onChange={(e) => handleInputChange(index, 'volume', e.target.value)}
+                                        sx={{ mr: 1, width: "150px" }}
+                                    />
+                                    <Typography variant="h6">:</Typography>
+                                    <TextField
+                                        label="Giá"
+                                        type='number'
+                                        variant="outlined"
+                                        size="small"
+                                        value={input.price}
+                                        onChange={(e) => handleInputChange(index, 'price', e.target.value)}
+                                        sx={{ ml: 1, width: "150px" }}
+                                    />
+                                    <MdDeleteForever onClick={() => handleRemoveInput(index)} className='text-red-400 text-[25px] ml-[10px] cursor-pointer' />
+                                </Box>
                             ))}
-                        </Select>
-                    </FormControl>
-                    <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                        <RadioGroup
-                            value={productInfo.featured.toString()}
-                            name="featured"
-                            onChange={handleChangeFeatured}
-                            row
-                        >
-                            <FormControlLabel value="true" control={<Radio />} label="Nổi bật" />
-                            <FormControlLabel value="false" control={<Radio />} label="Không nổi bật" />
-                        </RadioGroup>
-                    </FormControl>
-                    <h4>Mô tả</h4>
-                    <TinyEditor value={description} onEditorChange={(content: string) => setDescription(content)} />
-                    <UploadImage label='Chọn ảnh' id="images" name="images" onImageChange={handleImageChange} defaultImages={defaultImages} />
-                    <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-                        {inputs.map((input, index: number) => (
-                            <Box key={`${input.volume}-${input.price}-${index}`} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                                <TextField
-                                    label="Dung tích (ml)"
-                                    type='number'
-                                    variant="outlined"
-                                    size="small"
-                                    value={input.volume}
-                                    onChange={(e) => handleInputChange(index, 'volume', e.target.value)}
-                                    sx={{ mr: 1, width: "150px" }}
-                                />
-                                <Typography variant="h6">:</Typography>
-                                <TextField
-                                    label="Giá"
-                                    type='number'
-                                    variant="outlined"
-                                    size="small"
-                                    value={input.price}
-                                    onChange={(e) => handleInputChange(index, 'price', e.target.value)}
-                                    sx={{ ml: 1, width: "150px" }}
-                                />
-                                <MdDeleteForever onClick={() => handleRemoveInput(index)} className='text-red-400 text-[25px] ml-[10px] cursor-pointer' />
-                            </Box>
-                        ))}
-                        <Button variant="contained" onClick={handleAddInput}>
-                            Thêm
+                            <Button variant="contained" onClick={handleAddInput}>
+                                Thêm
+                            </Button>
+                        </Box>
+                        <TextField
+                            label="% Giảm giá"
+                            name='discount'
+                            variant="outlined"
+                            fullWidth
+                            type="number"
+                            sx={{ marginBottom: 2 }}
+                            required
+                            value={productInfo.discountPercent}
+                            onChange={(e) => setProductInfo({ ...productInfo, discountPercent: parseFloat(e.target.value) })}
+                        />
+                        <FormGroup row>
+                            <FormControlLabel
+                                control={<Checkbox checked={checked.oily} onChange={handleChange} name="oily" />}
+                                label="Da dầu"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={checked.dry} onChange={handleChange} name="dry" />}
+                                label="Da khô"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={checked.combination} onChange={handleChange} name="combination" />}
+                                label="Da hỗn hợp"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={checked.sensitive} onChange={handleChange} name="sensitive" />}
+                                label="Da nhạy cảm"
+                            />
+                            <FormControlLabel
+                                control={<Checkbox checked={checked.normal} onChange={handleChange} name="normal" />}
+                                label="Da bình thường"
+                            />
+                        </FormGroup>
+                        <TextField
+                            label="Xuất sứ"
+                            name='origin'
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 2, marginTop: 2 }}
+                            required
+                            value={productInfo.origin}
+                            onChange={(e) => setProductInfo({ ...productInfo, origin: e.target.value })}
+                        />
+                        <TextField
+                            label="Thành phần"
+                            name='ingredients'
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 2, marginTop: 2 }}
+                            required
+                            value={productInfo.ingredients}
+                            onChange={(e) => setProductInfo({ ...productInfo, ingredients: e.target.value })}
+                        />
+                        <TextField
+                            label="Hướng dẫn sử dụng"
+                            name='usageInstructions'
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 2, marginTop: 2 }}
+                            required
+                            value={productInfo.usageInstructions}
+                            onChange={(e) => setProductInfo({ ...productInfo, usageInstructions: e.target.value })}
+                        />
+                        <TextField
+                            label="Lợi ích"
+                            name='benefits'
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 2, marginTop: 2 }}
+                            required
+                            value={productInfo.benefits}
+                            onChange={(e) => setProductInfo({ ...productInfo, benefits: e.target.value })}
+                        />
+                        <TextField
+                            label="Vấn đề da"
+                            name='skinIssues'
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 2, marginTop: 2 }}
+                            required
+                            value={productInfo.skinIssues}
+                            onChange={(e) => setProductInfo({ ...productInfo, skinIssues: e.target.value })}
+                        />
+                        <TextField
+                            label="Vị trí (tự động tăng)"
+                            name='position'
+                            variant="outlined"
+                            fullWidth
+                            type="number"
+                            sx={{ marginBottom: 2, marginTop: 2 }}
+                            value={productInfo.position}
+                            onChange={(e) => setProductInfo({ ...productInfo, position: parseInt(e.target.value) })}
+                        />
+                        <FormControl fullWidth sx={{ marginBottom: 3 }}>
+                            <RadioGroup
+                                value={productInfo.status}
+                                name="status"
+                                onChange={handleChangeStatus}
+                                row
+                            >
+                                <FormControlLabel value="ACTIVE" control={<Radio />} label="Hoạt động" />
+                                <FormControlLabel value="INACTIVE" control={<Radio />} label="Dừng hoạt động" />
+                            </RadioGroup>
+                        </FormControl>
+                        <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
+                            Cập nhật sản phẩm
                         </Button>
-                    </Box>
-                    <TextField
-                        label="% Giảm giá"
-                        name='discount'
-                        variant="outlined"
-                        fullWidth
-                        type="number"
-                        sx={{ marginBottom: 2 }}
-                        required
-                        value={productInfo.discountPercent}
-                        onChange={(e) => setProductInfo({ ...productInfo, discountPercent: parseFloat(e.target.value) })}
-                    />
-                    <FormGroup row>
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.oily} onChange={handleChange} name="oily" />}
-                            label="Da dầu"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.dry} onChange={handleChange} name="dry" />}
-                            label="Da khô"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.combination} onChange={handleChange} name="combination" />}
-                            label="Da hỗn hợp"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.sensitive} onChange={handleChange} name="sensitive" />}
-                            label="Da nhạy cảm"
-                        />
-                        <FormControlLabel
-                            control={<Checkbox checked={checked.normal} onChange={handleChange} name="normal" />}
-                            label="Da bình thường"
-                        />
-                    </FormGroup>
-                    <TextField
-                        label="Xuất sứ"
-                        name='origin'
-                        variant="outlined"
-                        fullWidth
-                        sx={{ marginBottom: 2, marginTop: 2 }}
-                        required
-                        value={productInfo.origin}
-                        onChange={(e) => setProductInfo({ ...productInfo, origin: e.target.value })}
-                    />
-                    <TextField
-                        label="Thành phần"
-                        name='ingredients'
-                        variant="outlined"
-                        fullWidth
-                        sx={{ marginBottom: 2, marginTop: 2 }}
-                        required
-                        value={productInfo.ingredients}
-                        onChange={(e) => setProductInfo({ ...productInfo, ingredients: e.target.value })}
-                    />
-                    <TextField
-                        label="Hướng dẫn sử dụng"
-                        name='usageInstructions'
-                        variant="outlined"
-                        fullWidth
-                        sx={{ marginBottom: 2, marginTop: 2 }}
-                        required
-                        value={productInfo.usageInstructions}
-                        onChange={(e) => setProductInfo({ ...productInfo, usageInstructions: e.target.value })}
-                    />
-                    <TextField
-                        label="Lợi ích"
-                        name='benefits'
-                        variant="outlined"
-                        fullWidth
-                        sx={{ marginBottom: 2, marginTop: 2 }}
-                        required
-                        value={productInfo.benefits}
-                        onChange={(e) => setProductInfo({ ...productInfo, benefits: e.target.value })}
-                    />
-                    <TextField
-                        label="Vấn đề da"
-                        name='skinIssues'
-                        variant="outlined"
-                        fullWidth
-                        sx={{ marginBottom: 2, marginTop: 2 }}
-                        required
-                        value={productInfo.skinIssues}
-                        onChange={(e) => setProductInfo({ ...productInfo, skinIssues: e.target.value })}
-                    />
-                    <TextField
-                        label="Vị trí (tự động tăng)"
-                        name='position'
-                        variant="outlined"
-                        fullWidth
-                        type="number"
-                        sx={{ marginBottom: 2, marginTop: 2 }}
-                        value={productInfo.position}
-                        onChange={(e) => setProductInfo({ ...productInfo, position: parseInt(e.target.value) })}
-                    />
-                    <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                        <RadioGroup
-                            value={productInfo.status}
-                            name="status"
-                            onChange={handleChangeStatus}
-                            row
-                        >
-                            <FormControlLabel value="ACTIVE" control={<Radio />} label="Hoạt động" />
-                            <FormControlLabel value="INACTIVE" control={<Radio />} label="Dừng hoạt động" />
-                        </RadioGroup>
-                    </FormControl>
-                    <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                        Cập nhật sản phẩm
-                    </Button>
-                </form>
-            </Paper>
+                    </form>
+                </Paper>
+            )}
         </Box>
     );
 }

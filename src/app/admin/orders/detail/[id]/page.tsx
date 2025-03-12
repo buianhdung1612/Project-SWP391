@@ -1,7 +1,7 @@
 "use client";
 
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import {
     Box,
     Typography,
@@ -13,8 +13,11 @@ import {
     TableRow,
     Paper
 } from "@mui/material";
+import { ProfileAdminContext } from "@/app/admin/layout";
 
 export default function DetailOrderAdmin() {
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
     const { id } = useParams();
     const [data, setData] = useState({
         firstName: "",
@@ -40,73 +43,77 @@ export default function DetailOrderAdmin() {
     }, [id]);
 
     return (
-        <Box sx={{ padding: 2 }}>
-            <Typography variant="h4" gutterBottom>
-                Chi tiết đơn hàng <span style={{ color: "#3f51b5", fontWeight: "bold" }}>#{data.orderId}</span>
-            </Typography>
-            <Box sx={{ padding: 2, backgroundColor: "#f5f5f5", borderRadius: 1, marginBottom: 3 }}>
-                <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                    Thông tin người dùng
-                </Typography>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell>Họ và tên</TableCell>
-                                <TableCell>Địa chỉ</TableCell>
-                                <TableCell>SĐT</TableCell>
-                                <TableCell>Email</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell>{data.firstName} {data.lastName}</TableCell>
-                                <TableCell>{data.address}</TableCell>
-                                <TableCell>{data.phoneNumber}</TableCell>
-                                <TableCell>{data.email}</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
-            </Box>
+        <>
+            {permissions?.includes("orders_view") && (
+                <Box sx={{ padding: 2 }}>
+                    <Typography variant="h4" gutterBottom>
+                        Chi tiết đơn hàng <span style={{ color: "#3f51b5", fontWeight: "bold" }}>#{data.orderId}</span>
+                    </Typography>
+                    <Box sx={{ padding: 2, backgroundColor: "#f5f5f5", borderRadius: 1, marginBottom: 3 }}>
+                        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                            Thông tin người dùng
+                        </Typography>
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>Họ và tên</TableCell>
+                                        <TableCell>Địa chỉ</TableCell>
+                                        <TableCell>SĐT</TableCell>
+                                        <TableCell>Email</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell>{data.firstName} {data.lastName}</TableCell>
+                                        <TableCell>{data.address}</TableCell>
+                                        <TableCell>{data.phoneNumber}</TableCell>
+                                        <TableCell>{data.email}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Box>
 
-            <Box sx={{ padding: 2, backgroundColor: "#f5f5f5", borderRadius: 1 }}>
-            <Typography variant="h6" sx={{ marginBottom: 2 }}>
-                Danh sách sản phẩm trong đơn
-            </Typography>
-            <TableContainer component={Paper}>
-                <Table>
-                    <TableHead>
-                        <TableRow>
-                            <TableCell>STT</TableCell>
-                            <TableCell>Ảnh</TableCell>
-                            <TableCell>Tên</TableCell>
-                            <TableCell>Giá</TableCell>
-                            <TableCell>Số lượng</TableCell>
-                            <TableCell>Tổng tiền</TableCell>
-                        </TableRow>
-                    </TableHead>
-                    <TableBody>
-                        {data.orderItems.map((item: any, index: number) => (
-                            <TableRow key={index}>
-                                <TableCell>{index + 1}</TableCell>
-                                <TableCell>
-                                    <img src={item.productVariant.product.thumbnail[0]} alt={item.name} style={{ width: 100, height: 'auto' }} />
-                                </TableCell>
-                                <TableCell>{item.productVariant.product.title}</TableCell>
-                                <TableCell>{(item.productVariant.price * (1 - item.productVariant.product.discountPercent/100)).toLocaleString("en-US")}<sup>đ</sup></TableCell>
-                                <TableCell>{item.quantity}</TableCell>
-                                <TableCell>{(item.subtotal * (1 - item.productVariant.product.discountPercent/100)).toLocaleString("en-US")}<sup>đ</sup></TableCell>
-                            </TableRow>
-                        ))}
-                    </TableBody>
-                </Table>
-            </TableContainer>
-            <Typography variant="h5" sx={{ marginTop: 3, textAlign: "right" }}>
-                Tổng đơn hàng: {data.totalPrice.toLocaleString("en-US")}<sup>đ</sup>
-            </Typography>
-        </Box>
+                    <Box sx={{ padding: 2, backgroundColor: "#f5f5f5", borderRadius: 1 }}>
+                        <Typography variant="h6" sx={{ marginBottom: 2 }}>
+                            Danh sách sản phẩm trong đơn
+                        </Typography>
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell>STT</TableCell>
+                                        <TableCell>Ảnh</TableCell>
+                                        <TableCell>Tên</TableCell>
+                                        <TableCell>Giá</TableCell>
+                                        <TableCell>Số lượng</TableCell>
+                                        <TableCell>Tổng tiền</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    {data.orderItems.map((item: any, index: number) => (
+                                        <TableRow key={index}>
+                                            <TableCell>{index + 1}</TableCell>
+                                            <TableCell>
+                                                <img src={item.productVariant.product.thumbnail[0]} alt={item.name} style={{ width: 100, height: 'auto' }} />
+                                            </TableCell>
+                                            <TableCell>{item.productVariant.product.title}</TableCell>
+                                            <TableCell>{(item.productVariant.price * (1 - item.productVariant.product.discountPercent / 100)).toLocaleString("en-US")}<sup>đ</sup></TableCell>
+                                            <TableCell>{item.quantity}</TableCell>
+                                            <TableCell>{(item.subtotal * (1 - item.productVariant.product.discountPercent / 100)).toLocaleString("en-US")}<sup>đ</sup></TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                        <Typography variant="h5" sx={{ marginTop: 3, textAlign: "right" }}>
+                            Tổng đơn hàng: {data.totalPrice.toLocaleString("en-US")}<sup>đ</sup>
+                        </Typography>
+                    </Box>
 
-        </Box>
+                </Box>
+            )}
+        </>
     );
 }

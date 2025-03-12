@@ -1,20 +1,12 @@
 import { FaBell } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
+import Cookies from 'js-cookie';
 
 export default function HeaderAdmin() {
   const handleClickLogout = async () => {
-    const response = await fetch('https://freshskinweb.onrender.com/auth/logout', {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-
-    const dataResponse = await response.json();
-    if (dataResponse.code === 200) {
-      location.href = `/admin/auth/login`;
-    }
+    Cookies.remove('token');
+    location.href = "/admin/auth/login"
   };
 
   return (
