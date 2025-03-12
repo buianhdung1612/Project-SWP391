@@ -26,8 +26,7 @@ interface Profile {
   permissions: string[];
 }
 
-const token = Cookies.get("token");
-
+// Move the ProfileAdminContext outside of the layout component
 export const ProfileAdminContext = createContext<Profile | undefined>(undefined);
 
 export default function RootLayout({
@@ -47,13 +46,15 @@ export default function RootLayout({
     phone: "",
     role: {
       title: "",
-      permission: []
-    }
+      permission: [],
+    },
   });
 
   useEffect(() => {
     if (!pathname.startsWith("/admin/auth/login")) {
-      const fetchSettings = async () => {
+      const fetchProfile = async () => {
+        const token = Cookies.get("token");
+
         const response = await fetch(
           "https://freshskinweb.onrender.com/auth/getUser",
           {
@@ -67,21 +68,19 @@ export default function RootLayout({
           }
         );
         const data = await response.json();
-        setInfo(data.data); 
+        setInfo(data.data);
       };
 
-      fetchSettings();
+      fetchProfile();
     }
   }, [pathname]);
-
-  console.log(info);
 
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased body`}>
         <ProfileAdminContext.Provider
           value={{
-            address: info?.address, 
+            address: info?.address,
             avatar: info?.avatar,
             createdAt: info?.createdAt,
             email: info?.email,
@@ -89,7 +88,7 @@ export default function RootLayout({
             lastName: info?.lastName,
             phone: info?.phone,
             roleTitle: info?.role.title,
-            permissions: info?.role.permission
+            permissions: info?.role.permission,
           }}
         >
           {!pathname.startsWith("/admin/auth/login") && <Sider />}
