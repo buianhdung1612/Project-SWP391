@@ -74,6 +74,8 @@ export default function RootLayout({
     }
   }, [pathname]);
 
+  console.log(info);
+
   return (
     <html lang="en">
       <body className={`${inter.className} antialiased body`}>

@@ -54,30 +54,6 @@ export default function SettingGeneralAdminPage() {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        const dataSetting: any = {
-            websiteName: data.websiteName,
-            logo: data.logo,
-            phone: data.phone,
-            email: data.email,
-            address: data.address,
-            copyright: data.copyright,
-            facebook: data.facebook,
-            twitter: data.twitter,
-            youtube: data.youtube,
-            instagram: data.instagram,
-            policy1: data.policy1,
-            policy2: data.policy2,
-            policy3: data.policy3,
-            policy4: data.policy4,
-            policy5: data.policy5,
-            policy6: data.policy6,
-            support1: data.support1,
-            support2: data.support2,
-            support3: data.support3,
-            support4: data.support4,
-            support5: data.support5
-        }
-
         const response = await fetch('https://freshskinweb.onrender.com/setting/edit/1', {
             method: "PATCH",
             headers: {
