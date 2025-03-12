@@ -1,107 +1,124 @@
-"use client";
+"use client"
 
 import { Inter } from "next/font/google";
 import "../globals.css";
-import Cookies from "js-cookie";
-
-import HeaderAdmin from "../components/header/HeaderAdmin";
-import Sider from "../components/Sider/Sider";
+import { Provider } from "react-redux";
 import { usePathname } from "next/navigation";
-import { useEffect, useState, createContext } from "react";
+import Header from "../components/header/Header";
+import Footer from "../components/footer/Footer";
+import { store } from "../store";
+import { createContext, useEffect, useState } from "react";
 
-// Font
 const inter = Inter({
   variable: "--font-inter",
   subsets: ["latin"],
 });
 
-// Profile Interface
-interface Profile {
-  address: string;
-  avatar: string;
-  createdAt: string;
-  email: string;
-  firstName: string;
-  lastName: string;
+interface Setting {
+  websiteName: string;
+  logo: string;
   phone: string;
-  roleTitle: string;
-  permissions: string[];
+  email: string;
+  address: string;
+  copyright: string;
+  facebook: string;
+  twitter: string;
+  youtube: string;
+  instagram: string;
+  policy1: string;
+  policy2: string;
+  policy3: string;
+  policy4: string;
+  policy5: string;
+  policy6: string;
+  support1: string;
+  support2: string;
+  support3: string;
+  support4: string;
+  support5: string;
 }
 
-// Tạo context cho ProfileAdmin
-export const ProfileAdminContext = createContext<Profile | undefined>(undefined);
+export const SettingContext = createContext<Setting | undefined>(undefined);
+
 
 export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  const pathname = usePathname();
 
-  const [info, setInfo] = useState({
-    address: "",
-    avatar: "",
-    createdAt: "",
-    email: "",
-    firstName: "",
-    lastName: "",
-    phone: "",
-    role: {
-      title: "",
-      permission: [],
-    },
+  const [setting, setSetting] = useState({
+    websiteName: '',
+    logo: '',
+    phone: '',
+    email: '',
+    address: '',
+    copyright: '',
+    facebook: '',
+    twitter: '',
+    youtube: '',
+    instagram: '',
+    policy1: '',
+    policy2: '',
+    policy3: '',
+    policy4: '',
+    policy5: '',
+    policy6: '',
+    support1: '',
+    support2: '',
+    support3: '',
+    support4: '',
+    support5: ''
   });
 
-  // Fetch thông tin người dùng khi trang thay đổi
   useEffect(() => {
-    if (!pathname.startsWith("/admin/auth/login")) {
-      const fetchProfile = async () => {
-        const token = Cookies.get("token");
+    const fetchSettings = async () => {
+      const response = await fetch('https://freshskinweb.onrender.com/setting/show');
+      const data = await response.json();
+      setSetting(data.data[0]);
+    };
 
-        const response = await fetch(
-          "https://freshskinweb.onrender.com/auth/getUser",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              token: token,
-            }),
-          }
-        );
-        const data = await response.json();
-        setInfo(data.data);
-      };
+    fetchSettings();
+  }, []);
 
-      fetchProfile();
-    }
-  }, [pathname]);
+  const pathname = usePathname();
 
   return (
     <html lang="en">
-      <body className={`${inter.className} antialiased body`}>
-        {/* Chỉ sử dụng Provider ở đây, không export context */}
-        <ProfileAdminContext.Provider
-          value={{
-            address: info?.address,
-            avatar: info?.avatar,
-            createdAt: info?.createdAt,
-            email: info?.email,
-            firstName: info?.firstName,
-            lastName: info?.lastName,
-            phone: info?.phone,
-            roleTitle: info?.role.title,
-            permissions: info?.role.permission,
+      <body
+        className={`${inter.className} antialiased`}
+      >
+        <SettingContext.Provider
+          value={ {
+              websiteName: setting.websiteName,
+              logo: setting.logo,
+              phone: setting.phone,
+              email: setting.email,
+              address: setting.address,
+              copyright: setting.copyright,
+              facebook: setting.facebook,
+              twitter: setting.twitter,
+              youtube: setting.youtube,
+              instagram: setting.instagram,
+              policy1: setting.policy1,
+              policy2: setting.policy2,
+              policy3: setting.policy3,
+              policy4: setting.policy4,
+              policy5: setting.policy5,
+              policy6: setting.policy6,
+              support1: setting.support1,
+              support2: setting.support2,
+              support3: setting.support3,
+              support4: setting.support4,
+              support5: setting.support5,
           }}
         >
-          {/* Chỉ render Sider và HeaderAdmin nếu không phải trang login */}
-          {!pathname.startsWith("/admin/auth/login") && <Sider />}
-          <div className="main">
-            {!pathname.startsWith("/admin/auth/login") && <HeaderAdmin />}
-            <div className="block-main">{children}</div>
-          </div>
-        </ProfileAdminContext.Provider>
+          <Provider store={store}>
+            {!pathname.startsWith("/order") && <Header />}
+            {children}
+            {!pathname.startsWith("/order") && <Footer />}
+          </Provider>
+        </SettingContext.Provider>
       </body>
     </html>
   );
