@@ -25,13 +25,13 @@ export default function DashboardAdminPage() {
 
           <div className="bg-white shadow-md rounded-lg p-6 h-96 flex items-center justify-center w-full w-full">
 
-            <p className="text-gray-400 mx-auto"><Chart /></p>
+            <div className="text-gray-400 mx-auto"><Chart /></div>
 
           </div>
 
           <div className="bg-white shadow-md rounded-lg p-6 h-96 flex items-center justify-center w-full">
 
-            <p className="text-gray-400"><Chart2 /></p>
+            <div className="text-gray-400"><Chart2 /></div>
 
           </div>
 
