@@ -33,16 +33,20 @@ const subPermission: Menu[] = [
     { content: "Nhóm quyền", icon: <FaGroupArrowsRotate />, link: "/admin/roles" },
     { content: "Phân quyền", icon: <FaObjectGroup />, link: "/admin/roles/permissions" }
 ];
+const subUserManagement: Menu[] = [
+    { content: "Tài khoản quản trị", icon: <FaUsers />, link: "/admin/accounts" },
+    { content: "Tài khoản người dùng", icon: <FaUsers />, link: "/admin/users" }
+];
+
 
 const menu: Menu[] = [
     { content: "Tổng quan", icon: <FaGaugeHigh />, link: "/admin/dashboard" },
     { content: "Quản lý sản phẩm", icon: <MdCategory />, subMenu: subCategory },
     { content: "Quản lý bài viết", icon: <BiCarousel />, subMenu: subBlog },
     { content: "Quản lý quyền", icon: <DiHaskell />, subMenu: subPermission },
+    { content: "Quản lý người dùng", icon: <FaUsers />, subMenu: subUserManagement },
     { content: "Đơn hàng", icon: <FaHurricane />, link: "/admin/orders" },
     { content: "Bộ câu hỏi", icon: <MdOutlineQuiz />, link: "/admin/quiz" },
-    { content: "Tài khoản quản trị", icon: <FaUsers />, link: "/admin/accounts" },
-    { content: "Tài khoản người dùng", icon: <FaUsers />, link: "/admin/users" },
     { content: "Cài đặt chung", icon: <FaGear />, link: "/admin/settings/general" }
 ];
 

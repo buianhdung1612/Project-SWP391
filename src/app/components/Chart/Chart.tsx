@@ -1,53 +1,70 @@
 "use client";
 import { useEffect, useState } from "react";
-import { Line } from "react-chartjs-2";
+import { Bar } from "react-chartjs-2";
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Title,
   Tooltip,
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Title, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
+
 type ChartData = {
-  labels: number[];
+  labels: string[];
   datasets: {
     label: string;
     data: number[];
-    borderColor: string;
-    borderWidth: number;
-    fill: boolean;
+    backgroundColor: string;
   }[];
 };
 
-const LineChartComponent = () => {
+// type BackendResponse = {
+//    labels: string[];
+//    totalPrice: number[];
+//    amount: number[];
+//  };
+
+const BarChartComponent = () => {
   const [chartData, setChartData] = useState<ChartData | null>(null);
+  type Order = {
+    orderId: string;
+    totalPrice: number;
+    totalAmount: number;
+  };
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch(""); // Thay URL backend của bạn
+        const response = await fetch("https://freshskinweb.onrender.com/admin/orders");
         const result = await response.json();
+    
+        if (!result.data || !result.data.orders) {
+          throw new Error("Dữ liệu API không hợp lệ");
+        }
+    
+        const orders: Order[] = result.data.orders;
+    
+        // Trích xuất labels (ID đơn hàng) và dữ liệu cho totalPrice, totalAmount
+        const labels = orders.map((order) => `Order ${order.orderId}`);
+        const totalPrices = orders.map((order) => order.totalPrice);
+        const totalAmounts = orders.map((order) => order.totalAmount);
+    
         setChartData({
-          labels: result.labels, // Dữ liệu trục X từ backend
+          labels,
           datasets: [
             {
-              label: "Dataset 1",
-              data: result.dataset1, // Dữ liệu từ backend
-              borderColor: "#AA0000",
-              borderWidth: 4,
-              fill: false,
+              label: "Total Price",
+              data: totalPrices,
+              backgroundColor: "#1565C0",
             },
             {
-              label: "Dataset 2",
-              data: result.dataset2, // Dữ liệu từ backend
-              borderColor: "#4d79ff",
-              borderWidth: 4,
-              fill: false,
+              label: "Amount",
+              data: totalAmounts,
+              backgroundColor: "#FF5733",
             },
           ],
         });
@@ -55,6 +72,7 @@ const LineChartComponent = () => {
         console.error("Lỗi khi tải dữ liệu:", error);
       }
     };
+    
 
     fetchData();
   }, []);
@@ -70,10 +88,14 @@ const LineChartComponent = () => {
   };
 
   return (
-    <div style={{ width: "1000px", height: "300px", margin: "auto", padding: "10px" }}>
-      {chartData ? <Line data={chartData} options={options} /> : <p>Loading...</p>}
+    <div style={{ width: "550px", height: "350px", margin: "auto", padding: "10px" }}>
+      {chartData ? (
+        <Bar data={chartData} options={options} />
+      ) : (
+        <p>Loading...</p>
+      )}
     </div>
   );
 };
 
-export default LineChartComponent;
+export default BarChartComponent;

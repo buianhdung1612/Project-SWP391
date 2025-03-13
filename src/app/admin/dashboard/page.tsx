@@ -1,5 +1,5 @@
-// import Chart from "@/app/components/Chart/Chart";
-// import Chart2 from "@/app/components/Chart/Chart2";
+import Chart from "@/app/components/Chart/Chart";
+import Chart2 from "@/app/components/Chart/Chart2";
 import { StatCard } from "@/app/components/StatCard/StatCard";
 import { Eye, ShoppingCart, MessageCircle, DollarSign } from "lucide-react";
 
@@ -22,13 +22,21 @@ export default function DashboardAdminPage() {
 
         {/* Placeholder cho biểu đồ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div className="bg-white shadow-md rounded-lg p-6 h-96 flex items-center justify-center w-full">
-            <p className="text-gray-400">Chart 1</p>
+
+          <div className="bg-white shadow-md rounded-lg p-6 h-96 flex items-center justify-center w-full w-full">
+
+            <p className="text-gray-400 mx-auto"><Chart /></p>
+
           </div>
+
           <div className="bg-white shadow-md rounded-lg p-6 h-96 flex items-center justify-center w-full">
-            <p className="text-gray-400">Chart 2</p>
+
+            <p className="text-gray-400"><Chart2 /></p>
+
           </div>
+
         </div>
+
       </div>
     </>
   );
