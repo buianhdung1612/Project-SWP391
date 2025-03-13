@@ -5,7 +5,7 @@ import { CiCrop } from "react-icons/ci";
 import { FaBlog, FaBorderNone, FaJoomla, FaObjectGroup, FaTable, FaUsers } from "react-icons/fa";
 import { FaGaugeHigh, FaGear, FaGroupArrowsRotate, FaHurricane } from "react-icons/fa6";
 import { TbBrandCampaignmonitor } from "react-icons/tb";
-import { MdExpandLess, MdExpandMore, MdCategory } from "react-icons/md";
+import { MdExpandLess, MdExpandMore, MdCategory, MdOutlineQuiz } from "react-icons/md";
 import { BiCarousel } from "react-icons/bi";
 import { DiHaskell } from "react-icons/di";
 import { ProfileAdminContext } from "@/app/admin/layout";
@@ -40,6 +40,7 @@ const menu: Menu[] = [
     { content: "Quản lý bài viết", icon: <BiCarousel />, subMenu: subBlog },
     { content: "Quản lý quyền", icon: <DiHaskell />, subMenu: subPermission },
     { content: "Đơn hàng", icon: <FaHurricane />, link: "/admin/orders" },
+    { content: "Bộ câu hỏi", icon: <MdOutlineQuiz />, link: "/admin/quiz" },
     { content: "Tài khoản quản trị", icon: <FaUsers />, link: "/admin/accounts" },
     { content: "Cài đặt chung", icon: <FaGear />, link: "/admin/settings/general" }
 ];

@@ -1,12 +1,15 @@
 "use client"
 
 import Banner2 from "@/app/components/Banner/Banner2";
-// import Pagination from "@/app/components/Pagination/Pagination";
+import Pagination from "@/app/components/Pagination/Pagination";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
 
 export default function BlogPage() {
+    const searchParams = useSearchParams();
+
     const [data, setData] = useState([
         {
             title: "",
@@ -23,6 +26,10 @@ export default function BlogPage() {
             ]
         }
     ]);
+
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(0);
+    const [page, setPage] = useState(1);
 
     const [dataCurrent, setDataCurrent] = useState({
         title: "",
@@ -41,34 +48,57 @@ export default function BlogPage() {
 
     const [isLoading, setIsLoading] = useState(true);
 
+    const linkApi = `https://freshskinweb.onrender.com/home/blogs`;
+
     useEffect(() => {
         const fetchBlogs = async () => {
             const cachedData = sessionStorage.getItem('blogData');
             if (cachedData) {
                 const data = JSON.parse(cachedData);
-                setData(data.featuredBlogCategory);
-                setDataCurrent(data.featuredBlogCategory[0]);
+                setData(data.data.blog_category);
+                setDataCurrent(data.data.blog_category[0]);
+                setTotalPages(data.data.page.totalPages);
+                setCurrentPage(data.data.page.page);
                 setIsLoading(false);
                 return;
             }
 
-            const response = await fetch('https://freshskinweb.onrender.com/home');
+            const urlCurrent = new URL(window.location.href);
+            const api = new URL(linkApi);
+
+            // Phân trang
+            const pageCurrent = urlCurrent.searchParams.get('page');
+            setPage(pageCurrent ? parseInt(pageCurrent) : 1);
+
+            if (pageCurrent) {
+                api.searchParams.set('page', pageCurrent);
+            }
+            else {
+                api.searchParams.delete('page');
+            }
+
+            const response = await fetch(api.href);
             const data = await response.json();
 
             sessionStorage.setItem('blogData', JSON.stringify(data));
 
-            setData(data.featuredBlogCategory);
-            setDataCurrent(data.featuredBlogCategory[0]);
+            setData(data.data.blog_category);
+            setDataCurrent(data.data.blog_category[0]);
+            setTotalPages(data.data.page.totalPages);
+            setCurrentPage(data.data.page.currentPage);
             setIsLoading(false);
         };
 
         fetchBlogs();
-    }, []);
+    }, [page, searchParams]);
 
     if (isLoading) {
         return <div>Loading...</div>;
     }
 
+    console.log(totalPages);
+    console.log(page);
+    console.log(dataCurrent);
     return (
         <>
             <ul className="flex items-center mt-[17px] container mx-auto px-3">
@@ -144,7 +174,7 @@ export default function BlogPage() {
                     ))}
                 </div>
             </div>
-            {/* <Pagination /> */}
+            <Pagination totalPages={totalPages} currentPage={currentPage} />
         </>
     )
 }

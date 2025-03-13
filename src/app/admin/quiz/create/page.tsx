@@ -20,31 +20,32 @@ export default function CreateQuizAdminPage() {
         event.preventDefault();
 
         const data = {
-            title: event.target.title.value,
-            questions: questions.map(q => ({
-                question: q.question,
-                answers: q.answers.map(a => ({
+            groupName: event.target.title.value,
+            description: event.target.description.value,
+            skinQuestionsEntities: questions.map(q => ({
+                questionText: q.question,
+                skinAnswers: q.answers.map(a => ({
                     skinOption: a.skinOption,
-                    score: a.score ? Number(a.score) : 0,
+                    answerScore: a.score ? Number(a.score) : 0,
                 })),
             })),
         }
 
         console.log(data);
 
-        // const response = await fetch('https://freshskinweb.onrender.com/admin/skintypes/create', {
-        //     method: "POST",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify(data)
-        // });
+        const response = await fetch('https://freshskinweb.onrender.com/admin/question/group/create', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
 
-        // const dataResponse = await response.json();
+        const dataResponse = await response.json();
 
-        // if (dataResponse.code == 200) {
-        //     location.reload();
-        // }
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
     }
 
     // Questions and answers state
@@ -100,6 +101,14 @@ export default function CreateQuizAdminPage() {
                         <TextField
                             label="Bộ đề"
                             name="title"
+                            variant="outlined"
+                            fullWidth
+                            sx={{ marginBottom: 3 }}
+                            required
+                        />
+                        <TextField
+                            label="Mô tả bộ đề"
+                            name="description"
                             variant="outlined"
                             fullWidth
                             sx={{ marginBottom: 3 }}

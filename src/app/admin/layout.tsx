@@ -54,20 +54,27 @@ export default function RootLayout({
       const fetchProfile = async () => {
         const token = Cookies.get("token");
 
-        const response = await fetch(
-          "https://freshskinweb.onrender.com/auth/getUser",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              token: token,
-            }),
-          }
-        );
-        const data = await response.json();
-        setInfo(data.data);
+        if (token) {
+          const response = await fetch(
+            "https://freshskinweb.onrender.com/auth/getUser",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                token: token,
+              }),
+            }
+          );
+
+          const data = await response.json();
+          setInfo(data.data);
+        }
+        else{
+          location.href = "/admin/auth/login"
+        }
+
       };
 
       fetchProfile();
@@ -90,7 +97,6 @@ export default function RootLayout({
             permissions: info?.role.permission,
           }}
         >
-          {/* Chỉ render Sider và HeaderAdmin nếu không ở trang login */}
           {!pathname.startsWith("/admin/auth/login") && <Sider />}
           <div className="main">
             {!pathname.startsWith("/admin/auth/login") && <HeaderAdmin />}

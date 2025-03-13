@@ -30,7 +30,7 @@ export default function LoginAdminPage() {
         const token = dataResponse.data.token;
 
         if(dataResponse.code == 200){
-            Cookies.set('token', token, { expires: 1 });
+            Cookies.set('token', token);
             router.push(`/admin/dashboard`);
         }
        
