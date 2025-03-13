@@ -42,6 +42,7 @@ const menu: Menu[] = [
     { content: "Đơn hàng", icon: <FaHurricane />, link: "/admin/orders" },
     { content: "Bộ câu hỏi", icon: <MdOutlineQuiz />, link: "/admin/quiz" },
     { content: "Tài khoản quản trị", icon: <FaUsers />, link: "/admin/accounts" },
+    { content: "Tài khoản người dùng", icon: <FaUsers />, link: "/admin/users" },
     { content: "Cài đặt chung", icon: <FaGear />, link: "/admin/settings/general" }
 ];
 

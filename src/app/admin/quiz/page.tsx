@@ -45,8 +45,7 @@ export default function QuizAdminPage() {
         const fetchQuiz = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
-            console.log(data.data);
-            setData(data.data);
+            setData(data.data.QuestionGroup);
         };
 
         fetchQuiz();
@@ -109,7 +108,7 @@ export default function QuizAdminPage() {
     }
     // Hết Thay đổi trạng thái 1 sản phẩm
 
-    // Xóa một sản phẩm
+    // Xóa vĩnh viễn 1 bộ đề
     const handleDeleteOneQuiz = async (id: number) => {
         const path = `${linkApi}/delete/${id}`;
 
@@ -126,7 +125,7 @@ export default function QuizAdminPage() {
             location.reload();
         }
     }
-    // Hết Xóa một sản phẩm
+    // Hết Xóa vĩnh viễn 1 bộ đề
 
     return (
         <Box p={3}>
@@ -198,7 +197,7 @@ export default function QuizAdminPage() {
                             {data.map((item: any, index: number) => (
                                 <TableRow key={item.id}>
                                     <TableCell>{index + 1}</TableCell>
-                                    <TableCell>{item.groupName}</TableCell>
+                                    <TableCell>{item.title}</TableCell>
                                     <TableCell>{item.description}</TableCell>
                                     <TableCell>
                                         {item.status === "ACTIVE" && (

@@ -1,23 +1,26 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Tooltip } from "@mui/material";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Tooltip, Checkbox } from "@mui/material";
 import { BiDetail } from "react-icons/bi";
-import { MdDeleteOutline, MdEditNote, MdOutlineChangeCircle } from "react-icons/md";
+import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { ProfileAdminContext } from "../layout";
+import DeleteIcon from "@mui/icons-material/Delete";
 
-export default function AccountAdminPage() {
+export default function UserAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
-    
+
     const [data, setData] = useState([]);
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/account';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/users';
 
+    const [inputChecked, setInputChecked] = useState<number[]>([]);
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
+    const [changeMulti, setChangeMulti] = useState("active");
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);
@@ -50,7 +53,7 @@ export default function AccountAdminPage() {
         const fetchAccounts = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
-            setData(data.data.accounts);
+            setData(data.data.users);
         };
 
         fetchAccounts();
@@ -89,6 +92,42 @@ export default function AccountAdminPage() {
         location.href = url.href;
     }
     // Hết Tìm kiếm sản phẩm
+
+    // Thay đổi trạng thái nhiều tài khoản
+    const handleChangeMulti = async (event: any) => {
+        event.preventDefault();
+
+        const statusChange = changeMulti;
+        const path = `${linkApi}/change-multi`;
+
+        const data: any = {
+            id: inputChecked,
+            status: statusChange
+        }
+
+        const response = await fetch(path, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
+
+    const handleInputChecked = (event: any, id: number) => {
+        if (event.target.checked) {
+            setInputChecked(prev => [...prev, id]);
+        } else {
+            setInputChecked(prev => prev.filter(id => id !== id));
+        }
+    }
+    // Hết Thay đổi trạng thái nhiều tài khoản
 
     // Thay đổi trạng thái 1 tài khoản
     const handleChangeStatusOneAccount = async (status: string, dataPath: string) => {
@@ -136,7 +175,7 @@ export default function AccountAdminPage() {
 
     return (
         <>
-            {permissions?.includes("accounts_view") && permissions?.includes("accounts_edit")  && (
+            {permissions?.includes("accounts_view") && permissions?.includes("accounts_edit") && (
                 <Box p={3}>
                     {/* Header */}
                     <Typography variant="h5" gutterBottom>
@@ -183,13 +222,25 @@ export default function AccountAdminPage() {
                             Danh sách
                         </Typography>
                         <Box display="flex" gap={20} flexWrap="wrap">
+                            <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
+                                <Box display="flex" >
+                                    <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
+                                        <MenuItem value="active">Hoạt động</MenuItem>
+                                        <MenuItem value="inactive">Dừng hoạt động</MenuItem>
+                                        <MenuItem value="soft_deleted">Xóa</MenuItem>
+                                    </Select>
+                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor: '#374785', color: '#ffffff' }}>
+                                        Áp dụng
+                                    </Button>
+                                </Box>
+                            </form>
                             <Button
-                                variant="outlined"
-                                color="success"
-                                sx={{ borderColor: '#374785', color: '#374785' }}
+                                variant="contained"
+                                startIcon={<DeleteIcon />}
+                                sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
                             >
-                                <Link href="/admin/accounts/create">
-                                    + Thêm mới
+                                <Link href="/admin/brands/trash">
+                                    Thùng rác
                                 </Link>
                             </Button>
                         </Box>
@@ -197,12 +248,13 @@ export default function AccountAdminPage() {
                             <Table>
                                 <TableHead>
                                     <TableRow>
+                                        <TableCell ></TableCell>
                                         <TableCell>STT</TableCell>
                                         <TableCell>Avatar</TableCell>
                                         <TableCell>Họ</TableCell>
                                         <TableCell>Tên</TableCell>
-                                        <TableCell>Nhóm quyền</TableCell>
-                                        <TableCell>Email</TableCell>
+                                        <TableCell>Tên tài khoản</TableCell>
+                                        <TableCell>Số điện thoại</TableCell>
                                         <TableCell>Trạng thái</TableCell>
                                         <TableCell>Hành động</TableCell>
                                     </TableRow>
@@ -210,6 +262,9 @@ export default function AccountAdminPage() {
                                 <TableBody>
                                     {data.map((account: any, index: number) => (
                                         <TableRow key={index}>
+                                            <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, account.id)}>
+                                                <Checkbox />
+                                            </TableCell>
                                             <TableCell>{index + 1}</TableCell>
                                             <TableCell>
                                                 <img
@@ -219,8 +274,8 @@ export default function AccountAdminPage() {
                                             </TableCell>
                                             <TableCell>{account.firstName}</TableCell>
                                             <TableCell>{account.lastName}</TableCell>
-                                            <TableCell>{account.role?.title || ""}</TableCell>
-                                            <TableCell>{account.email}</TableCell>
+                                            <TableCell>{account.username}</TableCell>
+                                            <TableCell>{account.phone}</TableCell>
                                             <TableCell>
                                                 {account.status === "ACTIVE" && (
                                                     <Chip
@@ -251,11 +306,6 @@ export default function AccountAdminPage() {
                                                     <Tooltip title="Sửa" placement="top">
                                                         <Link href={`/admin/accounts/edit/${account.userID}`}>
                                                             <MdEditNote className="text-[25px] text-[#E0A800]" />
-                                                        </Link>
-                                                    </Tooltip>
-                                                    <Tooltip title="Đổi mật khẩu" placement="top">
-                                                        <Link href={`/admin/accounts/change-password/${account.userID}`}>
-                                                            <MdOutlineChangeCircle className="text-[25px] text-[#E0A800]" />
                                                         </Link>
                                                     </Tooltip>
                                                     <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneAccount(account.userID)}>

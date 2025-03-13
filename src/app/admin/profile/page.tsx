@@ -6,7 +6,7 @@ import { Card, CardContent, Typography, Button, Avatar, Grid, Box, Divider } fro
 import EditIcon from '@mui/icons-material/Edit';
 import Link from "next/link";
 
-export default function Profile() {
+export default function ProfileAdmin() {
     const dataProfile = useContext(ProfileAdminContext);
 
     return (
