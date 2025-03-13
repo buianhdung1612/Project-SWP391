@@ -6,7 +6,7 @@ import { MdDeleteForever } from "react-icons/md";
 
 interface Answer {
     skinOption: string;
-    score: number;
+    answerScore: number;
 }
 
 interface Question {
@@ -14,8 +14,7 @@ interface Question {
     answers: Answer[];
 }
 
-export default function CreateQuizAdminPage() {
-
+export default function EditQuizAdminPage() {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
@@ -26,7 +25,7 @@ export default function CreateQuizAdminPage() {
                 questionText: q.question,
                 skinAnswers: q.answers.map(a => ({
                     skinOption: a.skinOption,
-                    answerScore: a.score ? Number(a.score) : 0,
+                    answerScore: a.answerScore ? Number(a.answerScore) : 0,
                 })),
             })),
         }
@@ -47,13 +46,13 @@ export default function CreateQuizAdminPage() {
     }
 
     const [questions, setQuestions] = useState<Question[]>([
-        { question: "", answers: [{ skinOption: "", score: 0 }] }
+        { question: "", answers: [{ skinOption: "", answerScore: 0 }] }
     ]);
 
     const handleAddQuestion = () => {
         setQuestions([
             ...questions,
-            { question: "", answers: [{ skinOption: "", score: 0 }] }
+            { question: "", answers: [{ skinOption: "", answerScore: 0 }] }
         ]);
     };
 
@@ -69,14 +68,14 @@ export default function CreateQuizAdminPage() {
         } else if (field === "answerskinOption" && answerIndex !== undefined) {
             newQuestions[index].answers[answerIndex].skinOption = value as string;
         } else if (field === "answerscore" && answerIndex !== undefined) {
-            newQuestions[index].answers[answerIndex].score = value ? parseFloat(value as string) : 0;
+            newQuestions[index].answers[answerIndex].answerScore = value ? parseFloat(value as string) : 0;
         }
         setQuestions(newQuestions);
     };
 
     const handleAddAnswer = (questionIndex: number) => {
         const newQuestions = [...questions];
-        newQuestions[questionIndex].answers.push({ skinOption: "", score: 0 });
+        newQuestions[questionIndex].answers.push({ skinOption: "", answerScore: 0 });
         setQuestions(newQuestions);
     };
 
@@ -142,7 +141,7 @@ export default function CreateQuizAdminPage() {
                                                 type="number"
                                                 variant="outlined"
                                                 size="small"
-                                                value={answer.score}
+                                                value={answer.answerScore}
                                                 onChange={(e) => handleInputChange(questionIndex, 'answerscore', e.target.value, answerIndex)}
                                                 sx={{ ml: 1, width: "100px" }}
                                             />

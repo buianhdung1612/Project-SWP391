@@ -45,7 +45,8 @@ export default function QuizAdminPage() {
         const fetchQuiz = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
-            setData(data.data.content);
+            console.log(data.data);
+            setData(data.data);
         };
 
         fetchQuiz();
@@ -109,7 +110,7 @@ export default function QuizAdminPage() {
     // Hết Thay đổi trạng thái 1 sản phẩm
 
     // Xóa một sản phẩm
-    const handleDeleteOneSkinType = async (id: number) => {
+    const handleDeleteOneQuiz = async (id: number) => {
         const path = `${linkApi}/delete/${id}`;
 
         const response = await fetch(path, {
@@ -241,9 +242,9 @@ export default function QuizAdminPage() {
                                                     <MdEditNote className="text-[25px] text-[#E0A800]" />
                                                 </Link>
                                             </Tooltip>
-                                            {/* <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOnebrand(item.id)}>
+                                            <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneQuiz(item.id)}>
                                                 <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
-                                            </Tooltip> */}
+                                            </Tooltip>
                                         </div>
                                     </TableCell>
                                 </TableRow>

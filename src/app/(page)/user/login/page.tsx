@@ -10,6 +10,11 @@ import { MdNavigateNext } from "react-icons/md";
 export default function LoginPage() {
     const [resetPassword, setResetPassword] = useState(false);
 
+    const handleSubmitLogin = (event: any) => {
+        event.preventDefault();
+       
+    }
+
     return (
         <>
             <div className="bg-[#F6F6F6] pb-[50px] pt-[15px]">
@@ -25,7 +30,7 @@ export default function LoginPage() {
                     </li>
                 </ul>
                 <div className="container mx-auto w-[432px] bg-[#fff] p-[10px]">
-                    <form action="" className=" mt-[15px] text-center rounded-[10px] relative">
+                    <form onSubmit={handleSubmitLogin} className=" mt-[15px] text-center rounded-[10px] relative">
                         <h1 className="text-primary text-[26px] font-[400] uppercase mb-[35px] mt-[10px] login">Đăng nhập</h1>
                         <FormInput
                             placeholder="Tên tài khoản"
@@ -57,8 +62,6 @@ export default function LoginPage() {
                     </form>
                     <FormFaceGoogle info="hoặc đăng nhập qua" />
                 </div>
-
-
             </div>
 
         </>
