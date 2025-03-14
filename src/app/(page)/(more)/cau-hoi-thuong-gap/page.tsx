@@ -1,13 +1,18 @@
 "use client";
 
 import { useContext } from "react";
-import { SettingContext } from "../../layout";
+import { SettingProfileContext } from "../../layout";
 import Link from "next/link";
 import { MdNavigateNext } from "react-icons/md";
 
 export default function Support5() {
-    const setting = useContext(SettingContext);
+    const settingProfile = useContext(SettingProfileContext);
 
+    if (!settingProfile) {
+        return null;
+    }
+
+    const { setting } = settingProfile;
     return (
         <>
             <div className="container mx-auto mt-[10px]">
