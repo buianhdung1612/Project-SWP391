@@ -6,10 +6,16 @@ import { ReactNode, useContext } from "react";
 import { FaFacebookF, FaInstagram, FaTwitter, FaYoutube } from "react-icons/fa6";
 import TitleFooter from "../title/TitleFooter";
 import ContentFooter from "./ContentFooter";
-import { SettingContext } from "@/app/(page)/layout";
+import { SettingProfileContext } from "@/app/(page)/layout";
 
 export default function Footer() {
-    const setting = useContext(SettingContext);
+    const settingProfile = useContext(SettingProfileContext);
+
+    if (!settingProfile) {
+        return null; 
+      }
+
+    const { setting } = settingProfile;
 
     interface buttonIcon {
         icon: ReactNode,

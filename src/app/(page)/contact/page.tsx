@@ -2,13 +2,19 @@
 
 import FormInput from "@/app/components/Form/FormInput";
 import { useContext } from "react";
-import { SettingContext } from "../layout";
+import { SettingProfileContext } from "../layout";
 import Link from "next/link";
 import { MdNavigateNext } from "react-icons/md";
 
 export default function ContactPage() {
-    const setting = useContext(SettingContext);
+    const settingProfile = useContext(SettingProfileContext);
 
+    if (!settingProfile) {
+        return null;
+    }
+
+    const { setting } = settingProfile;
+    
     return (
         <>
             <ul className="flex items-center container mx-auto px-3">

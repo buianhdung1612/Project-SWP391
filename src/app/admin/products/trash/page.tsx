@@ -257,7 +257,7 @@ export default function ProductsTrashAdminPage() {
             location.reload();
         }
     }
-    // Hết Xóa một sản phẩm
+    // Hết Khôi phục một sản phẩm
 
     // Sắp xếp theo tiêu chí
     const handleChangeSort = async (event: any) => {

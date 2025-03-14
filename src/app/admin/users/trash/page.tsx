@@ -2,11 +2,12 @@
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Tooltip, Checkbox } from "@mui/material";
 import { BiDetail } from "react-icons/bi";
-import { MdDeleteOutline, MdEditNote } from "react-icons/md";
+import { MdDeleteOutline, MdEditNote, MdOutlineSettingsBackupRestore } from "react-icons/md";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
-import { ProfileAdminContext } from "../layout";
 import DeleteIcon from "@mui/icons-material/Delete";
+import { ProfileAdminContext } from "../../layout";
+import { IoReturnDownBackOutline } from "react-icons/io5";
 
 export default function UserAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
@@ -14,7 +15,7 @@ export default function UserAdminPage() {
 
     const [data, setData] = useState([]);
 
-    const linkApi = 'https://freshskinweb.onrender.com/admin/users';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/users/trash';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
     // Hiển thị lựa chọn mặc định
@@ -106,7 +107,6 @@ export default function UserAdminPage() {
         }
 
         console.log(data);
-
         const response = await fetch(path, {
             method: "PATCH",
             headers: {
@@ -116,8 +116,6 @@ export default function UserAdminPage() {
         });
 
         const dataResponse = await response.json();
-
-        console.log(dataResponse)
 
         if (dataResponse.code == 200) {
             location.reload();
@@ -157,11 +155,28 @@ export default function UserAdminPage() {
         }
     }
 
-    // Xóa một tài khoản
-    const handleDeleteOneAccount = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
+    // Xóa vĩnh viễn một sản phẩm
+    const handleDeleteOneUser = async (id: number) => {
+        const path = `${linkApi}/delete/${id}`;
 
-        console.log(path);
+        const response = await fetch(path, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json"
+            },
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            location.reload();
+        }
+    }
+    // Hết Xóa một sản phẩm
+
+    // Khôi phục một sản phẩm
+    const handleRestoreOneUser = async (id: number) => {
+        const path = `${linkApi}/restore/${id}`;
 
         const response = await fetch(path, {
             method: "PATCH",
@@ -176,7 +191,7 @@ export default function UserAdminPage() {
             location.reload();
         }
     }
-    // Hết Xóa một tài khoản
+    // Hết Khôi phục một sản phẩm
 
     return (
         <>
@@ -184,7 +199,7 @@ export default function UserAdminPage() {
                 <Box p={3}>
                     {/* Header */}
                     <Typography variant="h5" gutterBottom>
-                        Trang danh sách tài khoản người dùng
+                        Trang thùng rác tài khoản người dùng
                     </Typography>
 
                     {/* Bộ lọc và Tìm kiếm */}
@@ -229,10 +244,11 @@ export default function UserAdminPage() {
                         <Box display="flex" gap={20} flexWrap="wrap">
                             <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
                                 <Box display="flex" >
-                                    <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
+                                <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                         <MenuItem value="ACTIVE">Hoạt động</MenuItem>
                                         <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
-                                        <MenuItem value="SOFT_DELETED">Xóa</MenuItem>
+                                        <MenuItem value="RESTORED">Khôi phục</MenuItem>
+                                        <MenuItem value="DELETE-DESTROY">Xóa vĩnh viễn</MenuItem>
                                     </Select>
                                     <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor: '#374785', color: '#ffffff' }}>
                                         Áp dụng
@@ -240,12 +256,13 @@ export default function UserAdminPage() {
                                 </Box>
                             </form>
                             <Button
-                                variant="contained"
-                                startIcon={<DeleteIcon />}
-                                sx={{ backgroundColor: '#757575', '&:hover': { backgroundColor: '#616161' } }}
+                                variant="outlined"
+                                color="success"
+                                sx={{ borderColor: 'green', color: 'green' }}
                             >
-                                <Link href="/admin/users/trash">
-                                    Thùng rác
+                                <Link href="/admin/users" className="flex items-center">
+                                    <IoReturnDownBackOutline className="text-[25px] mr-[5px]" />
+                                    Danh sách tài khoản
                                 </Link>
                             </Button>
                         </Box>
@@ -303,12 +320,10 @@ export default function UserAdminPage() {
                                             </TableCell>
                                             <TableCell>
                                                 <div className="flex">
-                                                    <Tooltip title="Chi tiết" placement="top">
-                                                        <Link href={`/admin/users/detail/${account.userID}`}>
-                                                            <BiDetail className="text-[25px] text-[#138496] mr-2" />
-                                                        </Link>
+                                                    <Tooltip title="Khôi phục" placement="top">
+                                                        <MdOutlineSettingsBackupRestore className="text-[25px] text-blue-500 cursor-pointer" onClick={() => handleRestoreOneUser(account.userID)} />
                                                     </Tooltip>
-                                                    <Tooltip title="Xóa" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneAccount(account.userID)}>
+                                                    <Tooltip title="Xóa vĩnh viễn" placement="top" className="cursor-pointer" onClick={() => handleDeleteOneUser(account.userID)}>
                                                         <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
                                                     </Tooltip>
                                                 </div>

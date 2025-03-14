@@ -27,7 +27,6 @@ export default function LoginAdminPage() {
             })
         });
         const dataResponse = await response.json();
-        console.log(dataResponse);
         const token = dataResponse.data.token;
 
         if(dataResponse.code == 200){

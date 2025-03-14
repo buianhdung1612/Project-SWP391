@@ -8,6 +8,7 @@ import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import { store } from "../store";
 import { createContext, useEffect, useState } from "react";
+import Cookies from "js-cookie";
 
 const inter = Inter({
   variable: "--font-inter",
@@ -38,8 +39,24 @@ interface Setting {
   support5: string;
 }
 
-export const SettingContext = createContext<Setting | undefined>(undefined);
+interface Profile {
+  address: string;
+  avatar: string;
+  createdAt: string;
+  email: string;
+  firstName: string;
+  lastName: string;
+  phone: string;
+  username: string;
+  orders: string[];
+}
 
+interface SettingProfile {
+  setting: Setting;
+  profile: Profile;
+}
+
+export const SettingProfileContext = createContext<SettingProfile | undefined>(undefined);
 
 export default function RootLayout({
   children,
@@ -70,6 +87,19 @@ export default function RootLayout({
     support4: '',
     support5: ''
   });
+  const [profile, setProfile] = useState({
+    address: "",
+    avatar: "",
+    createdAt: "",
+    email: "",
+    firstName: "",
+    lastName: "",
+    phone: "",
+    username: "",
+    orders: []
+  });
+
+  const pathname = usePathname();
 
   useEffect(() => {
     const fetchSettings = async () => {
@@ -79,46 +109,57 @@ export default function RootLayout({
     };
 
     fetchSettings();
+
+    if (!pathname.startsWith("/user/login") && !pathname.startsWith("/user/register")) {
+      const fetchProfile = async () => {
+        const tokenUser = Cookies.get("tokenUser");
+
+        if (tokenUser) {
+          const response = await fetch(
+            "https://freshskinweb.onrender.com/auth/getUser",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                token: tokenUser,
+              }),
+            }
+          );
+
+          const data = await response.json();
+          setProfile(data.data);
+        }
+      };
+
+      fetchProfile();
+    }
   }, []);
 
-  const pathname = usePathname();
+  console.log(profile);
+  console.log(setting);
+
 
   return (
     <html lang="en">
       <body
         className={`${inter.className} antialiased`}
       >
-        <SettingContext.Provider
-          value={ {
-              websiteName: setting.websiteName,
-              logo: setting.logo,
-              phone: setting.phone,
-              email: setting.email,
-              address: setting.address,
-              copyright: setting.copyright,
-              facebook: setting.facebook,
-              twitter: setting.twitter,
-              youtube: setting.youtube,
-              instagram: setting.instagram,
-              policy1: setting.policy1,
-              policy2: setting.policy2,
-              policy3: setting.policy3,
-              policy4: setting.policy4,
-              policy5: setting.policy5,
-              policy6: setting.policy6,
-              support1: setting.support1,
-              support2: setting.support2,
-              support3: setting.support3,
-              support4: setting.support4,
-              support5: setting.support5,
-          }}
+        <SettingProfileContext.Provider
+          value={
+            {
+              setting,
+              profile
+            }
+          }
         >
           <Provider store={store}>
             {!pathname.startsWith("/order") && <Header />}
             {children}
             {!pathname.startsWith("/order") && <Footer />}
           </Provider>
-        </SettingContext.Provider>
+        </SettingProfileContext.Provider>
       </body>
     </html>
   );

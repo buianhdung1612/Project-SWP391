@@ -6,13 +6,34 @@ import FormInput from "@/app/components/Form/FormInput";
 import Link from "next/link";
 import { useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
+import Cookies from 'js-cookie';
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const [resetPassword, setResetPassword] = useState(false);
+    const router = useRouter();
 
-    const handleSubmitLogin = (event: any) => {
+    const handleSubmitLogin = async (event: any) => {
         event.preventDefault();
-       
+
+        const response = await fetch('https://freshskinweb.onrender.com/auth/login', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                username: event.target.username.value,
+                password: event.target.password.value
+            })
+        });
+        const dataResponse = await response.json();
+        const token = dataResponse.data.token;
+
+        if(dataResponse.code == 200){
+            Cookies.set('tokenUser', token);
+            router.push(`/`);
+        }
     }
 
     return (
@@ -34,7 +55,7 @@ export default function LoginPage() {
                         <h1 className="text-primary text-[26px] font-[400] uppercase mb-[35px] mt-[10px] login">Đăng nhập</h1>
                         <FormInput
                             placeholder="Tên tài khoản"
-                            name="account"
+                            name="username"
                         />
                         <FormInput
                             type="password"

@@ -18,15 +18,12 @@ export default function RegisterPage() {
         const request = {
             username: formData.get("username"),
             password: formData.get("password"),
-            firstName: formData.get("firstname"),
-            lastName: formData.get("lastname"),
+            firstName: formData.get("firstName"),
+            lastName: formData.get("lastName"),
             phone: formData.get("phone"),
             address: formData.get("address"),
         };
         
-        formData.forEach((value, key) => {
-            console.log(key, value);
-        });
         formData.append("request", JSON.stringify(request));
 
         const response = await fetch('https://freshskinweb.onrender.com/admin/account/create', {
@@ -35,7 +32,6 @@ export default function RegisterPage() {
         });
 
         const dataResponse = await response.json();
-        console.log(dataResponse);
 
         if (dataResponse.code == 200) {
             router.push("/user/login");

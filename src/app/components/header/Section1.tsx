@@ -2,15 +2,25 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useRef, useState } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { CiHeart } from "react-icons/ci";
 import { FaRegCircleUser } from "react-icons/fa6";
 import MenuMoreItem from "./MenuMoreItem";
 import Cart from "../Cart/Cart";
 import { useRouter } from "next/navigation";
 import { IoSearchOutline } from "react-icons/io5";
+import { SettingProfileContext } from "@/app/(page)/layout";
+import { FaRegUserCircle } from "react-icons/fa";
 
 export default function Section1() {
+    const settingProfile = useContext(SettingProfileContext);
+
+    if (!settingProfile) {
+        return null;
+    }
+
+    const { profile } = settingProfile;
+
     const [openMore, setOpenMore] = useState(false);
     const [contentSearch, setContentSearch] = useState("Vui Lòng Nhập Từ Khóa Vào Ô Tìm Kiếm");
     const [subContentSearch, setSubContentSearch] = useState("Đừng bỏ lỡ");
@@ -271,12 +281,21 @@ export default function Section1() {
                         )}
                         <span className="ml-[15px]">|</span>
                     </button>
-                    <Link href="/user/login">
-                        <div className="flex items-center ml-[15px]">
-                            <FaRegCircleUser className="text-[28px]" />
-                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Đăng Nhập</span>
-                        </div>
-                    </Link>
+                    {profile.firstName !== "" ? (
+                        <Link href="/user/profile">
+                            <div className="flex items-center ml-[15px]">
+                                <FaRegUserCircle className="text-[28px]" />
+                                <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Tài khoản</span>
+                            </div>
+                        </Link>
+                    ) : (
+                        <Link href="/user/login">
+                            <div className="flex items-center ml-[15px]">
+                                <FaRegCircleUser className="text-[28px]" />
+                                <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Đăng Nhập</span>
+                            </div>
+                        </Link>
+                    )}
                     <Link href="/favorite">
                         <div className="flex items-center ml-[15px] relative">
                             <CiHeart className="text-[32px]" />
