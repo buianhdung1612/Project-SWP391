@@ -6,8 +6,11 @@ import Section2 from "./Section2";
 import Link from "next/link";
 import { methodChoosen } from "@/app/(actions)/order";
 import { cartReset } from "@/app/(actions)/cart";
+import { useContext } from "react";
+import { SettingProfileContext } from "../layout";
 
 interface DataSubmit {
+    userId?: number,
     email: string,
     firstName: string,
     lastName: string,
@@ -25,6 +28,14 @@ export default function OrderPage() {
     const quantity = useSelector((state: any) => state.cartReducer.totalQuantityInit);
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
     const products = useSelector((state: any) => (state.cartReducer.products));
+
+    const settingProfile = useContext(SettingProfileContext);
+            
+    if (!settingProfile) {
+        return null;
+    }
+
+    const { profile } = settingProfile;
 
     const handleSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -47,36 +58,72 @@ export default function OrderPage() {
             })
         ))
 
-        const data: DataSubmit = {  
-            firstName: event.target.firstname.value,
-            lastName: event.target.lastname.value,
-            email: event.target.email.value,
-            address: dataAddress,
-            phoneNumber: event.target.phone.value,
-            totalAmount: quantity,
-            totalPrice: totalPrice + 40000,
-            paymentMethod: event.target.method.value,
-            orderItems: dataProducts
-        }
-
-        const response = await fetch('https://freshskinweb.onrender.com/home/order/create', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
-            dispatchOrder(cartReset());
-            const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
-            const dataResponseVNPAY = await responseVNPAY.json();
-            if (dataResponseVNPAY.code === 200) {
-                window.location.href = dataResponseVNPAY.data; 
+        if(profile.userID !== 0){
+            const data: DataSubmit = {  
+                userId: profile.userID,
+                firstName: event.target.firstName.value,
+                lastName: event.target.lastName.value,
+                email: event.target.email.value,
+                address: dataAddress,
+                phoneNumber: event.target.phone.value,
+                totalAmount: quantity,
+                totalPrice: totalPrice + 40000,
+                paymentMethod: event.target.method.value,
+                orderItems: dataProducts
             }
+
+            const response = await fetch('https://freshskinweb.onrender.com/home/order/create', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+    
+            const dataResponse = await response.json();
+    
+            if (dataResponse.code == 200) {
+                dispatchOrder(cartReset());
+                const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
+                const dataResponseVNPAY = await responseVNPAY.json();
+                if (dataResponseVNPAY.code === 200) {
+                    window.location.href = dataResponseVNPAY.data; 
+                }
+            }
+
         }
+        else{
+            const data: DataSubmit = {  
+                firstName: event.target.firstName.value,
+                lastName: event.target.lastName.value,
+                email: event.target.email.value,
+                address: dataAddress,
+                phoneNumber: event.target.phone.value,
+                totalAmount: quantity,
+                totalPrice: totalPrice + 40000,
+                paymentMethod: event.target.method.value,
+                orderItems: dataProducts
+            }
+
+            const response = await fetch('https://freshskinweb.onrender.com/home/order/create', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
+    
+            const dataResponse = await response.json();
+    
+            if (dataResponse.code == 200) {
+                dispatchOrder(cartReset());
+                const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
+                const dataResponseVNPAY = await responseVNPAY.json();
+                if (dataResponseVNPAY.code === 200) {
+                    window.location.href = dataResponseVNPAY.data; 
+                }
+            }
+        }        
     }
 
     return (

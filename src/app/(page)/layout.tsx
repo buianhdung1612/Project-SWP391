@@ -40,6 +40,7 @@ interface Setting {
 }
 
 interface Profile {
+  userID: number,
   address: string;
   avatar: string;
   createdAt: string;
@@ -89,6 +90,7 @@ export default function RootLayout({
   });
 
   const [profile, setProfile] = useState({
+    userID: 0,
     address: "",
     avatar: "",
     createdAt: "",
@@ -106,7 +108,6 @@ export default function RootLayout({
     const fetchSettings = async () => {
       const response = await fetch('https://freshskinweb.onrender.com/setting/show');
       const data = await response.json();
-      console.log(data);
 
       setSetting(data.data[0]);
     };
@@ -132,7 +133,6 @@ export default function RootLayout({
           );
 
           const data = await response.json();
-          console.log(data);
           setProfile(data.data);
         }
         else{
@@ -153,6 +153,7 @@ export default function RootLayout({
           value={{
             setting,
             profile: profile || {
+              userID: 0,
               address: '',
               avatar: '',
               createdAt: '',

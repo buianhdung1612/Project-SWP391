@@ -66,7 +66,7 @@ export default function Sider() {
         <div className="fixed left-0 top-0 w-64 min-h-screen bg-[#374785] text-white border-r rounded-r-2xl flex flex-col">
             {/* Admin Page Title */}
             <div className="flex justify-center py-4 border-b text-xl font-bold">
-                Admin Page
+                Fresh Skin
             </div>
 
             {/* Menu */}

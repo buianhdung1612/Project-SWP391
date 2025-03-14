@@ -1,12 +1,13 @@
 "use client"
 
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { FaCaretDown } from "react-icons/fa6";
 import FormInputCheckout from "@/app/components/Form/FormInputCheckout";
 import TitleCheckout from "@/app/components/title/TitleCheckout";
 import { FaMoneyBillAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { provinceChoosen } from "../../(actions)/order";
+import { SettingProfileContext } from "../layout";
 
 export default function FormOrder() {
     const methodChoosen = useSelector((state: any) => state.orderReducer.methodChoosen);
@@ -23,8 +24,18 @@ export default function FormOrder() {
         fetchProvince();
     }, []);
 
+    const [meeting, setMeeting] = useState(false);
+    const [bank, setBank] = useState(false);
     const [dataDistrict, setDataDistrict] = useState([]);
     const [dataWard, setDataWard] = useState([]);
+
+    const settingProfile = useContext(SettingProfileContext);
+        
+        if (!settingProfile) {
+            return null;
+        }
+    
+    const { profile } = settingProfile;
 
     const handleChangeProvince = async (event: any) => {
         const url = (event.target.value.split('+'))[0];
@@ -41,8 +52,7 @@ export default function FormOrder() {
         setDataWard(data.wards);
     }
 
-    const [meeting, setMeeting] = useState(false);
-    const [bank, setBank] = useState(false);
+    
 
     const handleRadioMeetingChange = (event: any) => {
         if (event.target.checked) {
@@ -73,11 +83,31 @@ export default function FormOrder() {
             <div className="w-full grid grid-cols-2 gap-[28px]">
                 <div className="">
                     <TitleCheckout text="Thông tin nhận hàng" />
-                    <FormInputCheckout label="Email" type="email" name="email" id="email" required />
-                    <FormInputCheckout label="Họ" name="firstname" id="firstname" required />
-                    <FormInputCheckout label="Tên" name="lastname" id="lastname" required />
-                    <FormInputCheckout label="Số điện thoại (tùy chọn)" name="phone" id="phone" />
-                    <FormInputCheckout label="Địa chỉ (tùy chọn)" name="address" id="address" />
+                    {profile.email !== "" ? (
+                        <FormInputCheckout label="Email" type="email" name="email" id="email" required value={profile.email}/>
+                    ) : (
+                        <FormInputCheckout label="Email" type="email" name="email" id="email" required/>
+                    )}
+                    {profile.firstName !== "" ? (
+                        <FormInputCheckout label="Họ" name="firstName" id="firstName" required value={profile.firstName}/>
+                    ) : (
+                        <FormInputCheckout label="Họ" name="firstName" id="firstName" required/>
+                    )}
+                    {profile.lastName !== "" ? (
+                        <FormInputCheckout label="Tên" name="lastName" id="lastName" required value={profile.lastName}/>
+                    ) : (
+                        <FormInputCheckout label="Tên" name="lastName" id="lastName" required/>
+                    )}
+                    {profile.phone !== "" ? (
+                        <FormInputCheckout label="Số điện thoại (tùy chọn)" name="phone" id="phone" value={profile.phone}/>
+                    ) : (
+                        <FormInputCheckout label="Số điện thoại (tùy chọn)" name="phone" id="phone"/>
+                    )}
+                    {profile.address !== "" ? (
+                        <FormInputCheckout label="Địa chỉ (tùy chọn)" name="address" id="address" value={profile.address}/>
+                    ) : (
+                        <FormInputCheckout label="Địa chỉ (tùy chọn)" name="address" id="address"/>
+                    )}
                     <div className="relative">
                         <label htmlFor="province" className="text-[13px] font-[300] text-[#999] absolute top-[5px] left-[11px]">Tỉnh thành</label>
                         <select
