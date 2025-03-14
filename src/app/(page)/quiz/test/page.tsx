@@ -1,136 +1,102 @@
 "use client"
 
 import QuizQuestion from "@/app/components/Quiz/QuizQuestion";
-import { useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { IoChevronBack, IoChevronForwardOutline } from "react-icons/io5";
 import { SiTicktick } from "react-icons/si";
 import { useSelector } from "react-redux";
+import { SettingProfileContext } from "../../layout";
+
+type QuestionData = {
+    question: string;
+    name: string;
+    answerA?: string;
+    answerB?: string;
+    answerC?: string;
+    answerD?: string;
+    valueA?: string; 
+    valueB?: string;
+    valueC?: string;
+    valueD?: string;
+};
+
+type Answer = {
+    option: string;
+    score: number;
+};
+
+type Question = {
+    questionText: string;
+    answers: Answer[];
+};
+
+type Quiz = {
+    questions: Question[];
+    id: number;
+};
 
 export default function QuizQuestionPage() {
     const [currentQuestion, setCurrentQuestion] = useState(1);
     const listAnswers = useSelector((state: any) => state.quizReducer);
+    const [choosenQuiz, setChoosenQuiz] = useState<Quiz>({
+        questions: [],
+        id: 0
+    });
+    const [isLoading, setIsLoading] = useState(true);
 
-    const data: any = [
-        {
-            question: "01. Giới tính của bạn là gì?",
-            answerA: "Nam",
-            answerB: "Nữ",
-            name: "q1",
-            valueA: "q1a",
-            valueB: "q1b",
-            valueC: "q1c",
-            valueD: "q1d",
-            valueE: "q1e",
-        },
-        {
-            question: "02. Độ tuổi của bạn là bao nhiêu?",
-            answerA: "Dưới 25",
-            answerB: "Từ 25 đến 40",
-            answerC: "Từ 40 đến 50",
-            answerD: "Trên 50",
-            name: "q2",
-            valueA: "q2a",
-            valueB: "q2b",
-            valueC: "q2c",
-            valueD: "q2d"
-        },
-        {
-            question: "03. Da của bạn trông như thế nào vào buổi chiều?",
-            answerA: "Trán, mũi và căm bị bóng dầu nhưng phân còn lại trên mặt bình thường hoặc khô.",
-            answerB: "Da của tôi không bị bóng, khá khô và có cảm giác căng ở một số khu vực.",
-            answerC: "Toàn bộ khuôn mặt tôi bị bóng, có cảm giác nhờn dầu và dễ bị mụn.",
-            answerD: "Da của tôi mềm mại và cảm thấy dễ chịu khi chạm vào.",
-            answerE: "Da của tôi bị khô và tôi có thể nhận thấy một số nếp nhăn.",
-            name: "q3",
-            valueA: "q3a",
-            valueB: "q3b",
-            valueC: "q3c",
-            valueD: "q3d",
-            valueE: "q3e",
-        },
-        {
-            question: "04. Vùng trán của bạn trông ra sao?",
-            answerA: "Da bóng nhờn và không được mịn. Có mụn nhỏ hoặc mụn đầu đen.",
-            answerB: "Tôi nhận thấy một vài vết bong tróc dọc theo đường chân tóc và lông mày.",
-            answerC: "Da mịn và láng mượt, không có dấu hiệu bong tróc.",
-            answerD: "Da khá phẳng mịn, với một vài nếp nhăn nhẹ.",
-            answerE: "Điều đầu tiên tôi nhận thấy là các nếp nhăn rõ rệt.",
-            name: "q4",
-            valueA: "q4a",
-            valueB: "q4b",
-            valueC: "q4c",
-            valueD: "q4d",
-            valueE: "q4e",
-        },
-        {
-            question: "05. Phần má và vùng dưới mắt của bạn trông như thế nào?",
-            answerA: "Lỗ chân lông nở rộng và có mụn đầu đen hoặc đốm mụn trắng.",
-            answerB: "Hầu như không có vết nhăn dễ thấy nào, chỉ có một số vùng da khô.",
-            answerC: "Da nhẵn mịn với lỗ chân lông se khít.",
-            answerD: "Có các nếp nhăn rõ rệt và da khá khô.",
-            answerE: "Da bị kích ứng, khô và có cảm giác căng.",
-            name: "q5",
-            valueA: "q5a",
-            valueB: "q5b",
-            valueC: "q5c",
-            valueD: "q5d",
-            valueE: "q5e",
-        },
-        {
-            question: "06. Da của bạn có dễ gặp các vấn đề như thâm hay đỏ rát không?",
-            answerA: "Có, nhưng chỉ ở vùng chữ T (trán, mũi, căm).",
-            answerB: "Da hơi đỏ, có chút tấy và không đều độ ẩm.",
-            answerC: "Có, tôi thường xuyên gặp phải.",
-            answerD: "Đôi khi.",
-            answerE: "Hầu như không bao giờ.",
-            name: "q6",
-            valueA: "q6a",
-            valueB: "q6b",
-            valueC: "q6c",
-            valueD: "q6d",
-            valueE: "q6e",
-        },
-        {
-            question: "07. Điều gì là quan trọng nhất với bạn khi chọn sản phẩm chăm sóc da?",
-            answerA: "Sản phẩm giúp đối phó với bóng dầu nhưng vẫn dưỡng ẩm.",
-            answerB: "Sản phẩm làm dịu và nuôi dưỡng da sâu từ bên trong.",
-            answerC: "Sản phẩm thẩm thấu nhanh và cải thiện da nhanh chóng.",
-            answerD: "Sản phẩm giữ cho da mịn màng và mềm mại.",
-            answerE: "Sản phẩm ngăn ngừa các dấu hiệu lão hóa sớm.",
-            name: "q7",
-            valueA: "q7a",
-            valueB: "q7b",
-            valueC: "q7c",
-            valueD: "q7d",
-            valueE: "q7e",
-        },
-        {
-            question: "08. Da của bạn có dễ hình thành nếp nhăn không?",
-            answerA: "Có, tôi bị nếp nhăn quanh mắt hoặc khóe miệng.",
-            answerB: "Tôi có một vài vết hằn do da khô.",
-            answerC: "Không, tôi hầu như không có nếp nhăn.",
-            answerD: "Không hẳn, da tôi lão hóa chậm.",
-            name: "q8",
-            valueA: "q8a",
-            valueB: "q8b",
-            valueC: "q8c",
-            valueD: "q8d"
-        },
-        {
-            question: "09. Da mặt bạn thay đổi ra sao trong 5 năm qua?",
-            answerA: "Da bóng dầu nhiều hơn ở vùng chữ T.",
-            answerB: "Da dễ bong tróc và thường cảm thấy căng.",
-            answerC: "Da có nhiều khuyết điểm hơn so với trước.",
-            answerD: "Da tôi vẫn ổn định và dễ chăm sóc.",
-            answerE: "Da tôi có vẻ mỏng đi, kém đàn hồi và có thêm nếp nhăn.",
-            name: "q9",
-            valueA: "q9a",
-            valueB: "q9b",
-            valueC: "q9c",
-            valueD: "q9d",
-            valueE: "q9e",
+
+    useEffect(() => {
+        const fetchQuiz = async () => {
+            const response = await fetch("https://freshskinweb.onrender.com/admin/question/group");
+            const dataResponse = await response.json();
+            if (dataResponse.data.QuestionGroup.length > 0) {
+                const randomIndex = Math.floor(Math.random() * dataResponse.data.QuestionGroup.length);
+                setChoosenQuiz(dataResponse.data.QuestionGroup[randomIndex]);
+            }
+            setIsLoading(false);
+        };
+
+        fetchQuiz();
+    }, []);
+
+    const settingProfile = useContext(SettingProfileContext);
+        
+    if (!settingProfile) {
+        return null;
+    }
+
+    const { profile } = settingProfile;
+
+    const data: QuestionData[] = [];
+
+    choosenQuiz.questions.forEach((item: any, index: number) => {        
+        const dataOneQuestion: QuestionData  = {
+            question: item.questionText,
+            name: `q${index+1}`,
         }
-    ]
+
+        item.answers.forEach((answer: any, answerIndex: number) => {
+            if(answerIndex == 0){
+                dataOneQuestion["answerA"] = answer.option;
+                dataOneQuestion["valueA"] = `q${index+1}a`;
+            }
+            if(answerIndex == 1){
+                dataOneQuestion["answerB"] = answer.option;
+                dataOneQuestion["valueB"] = `q${index+1}b`;
+            }
+            if(answerIndex == 2){
+                dataOneQuestion["answerC"] = answer.option;
+                dataOneQuestion["valueC"] = `q${index+1}c`;
+            }
+            if(answerIndex == 3){
+                dataOneQuestion["answerD"] = answer.option;
+                dataOneQuestion["valueD"] = `q${index+1}d`;
+            }
+        })
+
+        data.push(dataOneQuestion);
+    })
+        
 
     const handlePreviousQuestion = () => {
         if (currentQuestion > 1) {
@@ -145,10 +111,61 @@ export default function QuizQuestionPage() {
     }
 
 
-    const handleSubmitQuiz = () => {
-        console.log(listAnswers);
-        
+    const handleSubmitQuiz = async (event: any) => {
+        event.preventDefault();
+        let totalScore: number = 0;
 
+        for(const answer in listAnswers){
+            const answerResult = listAnswers[answer];
+            const question: number = parseInt(answerResult[1]);
+            const res: string = answerResult[answerResult.length - 1];
+            const currentQuestion = choosenQuiz.questions[question-1];
+            if(res == "a"){
+                const currentAnswer = currentQuestion.answers[0];
+                totalScore += currentAnswer.score;
+            }
+            else if(res == "b"){
+                const currentAnswer = currentQuestion.answers[1];
+                totalScore += currentAnswer.score;
+            }
+            else if(res == "c"){
+                const currentAnswer = currentQuestion.answers[2];
+                totalScore += currentAnswer.score;
+            }
+            else{
+                const currentAnswer = currentQuestion.answers[3];
+                totalScore += currentAnswer.score;
+            }          
+        }
+
+        const a = {
+            user: profile.userID,
+            questionGroup: choosenQuiz.id,
+            totalScore: totalScore
+        }
+
+        console.log(a);
+
+        const response = await fetch('https://freshskinweb.onrender.com/admin/skin/result/create', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                user: profile.userID,
+                questionGroup: choosenQuiz.id,
+                totalScore: totalScore
+            })
+        });
+
+        const dataResponse = await response.json();
+
+        console.log(dataResponse);
+
+    }
+
+    if (isLoading) {
+        return <div>Loading...</div>;
     }
 
     return (
@@ -159,13 +176,11 @@ export default function QuizQuestionPage() {
                 answerB={data[currentQuestion - 1].answerB}
                 answerC={data[currentQuestion - 1].answerC}
                 answerD={data[currentQuestion - 1].answerD}
-                answerE={data[currentQuestion - 1].answerE}
                 name={data[currentQuestion - 1].name}
                 valueA={data[currentQuestion - 1].valueA}
                 valueB={data[currentQuestion - 1].valueB}
                 valueC={data[currentQuestion - 1].valueC}
                 valueD={data[currentQuestion - 1].valueD}
-                valueE={data[currentQuestion - 1].valueE}
             />
             <div className="border-t-4 border-solid border-[#f7f9fc] mt-[100px] flex justify-center pt-[22px]">
                 <div className="w-[568px] flex justify-end h-[40px]">

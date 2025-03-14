@@ -13,20 +13,6 @@ import { SettingProfileContext } from "@/app/(page)/layout";
 import { FaRegUserCircle } from "react-icons/fa";
 
 export default function Section1() {
-    const settingProfile = useContext(SettingProfileContext);
-
-    const profile  = settingProfile?.profile ?? {
-        address: "",
-        avatar: "",
-        createdAt: "",
-        email: "",
-        firstName: "",
-        lastName: "",
-        phone: "",
-        username: "",
-        orders: []
-    };
-
     const [openMore, setOpenMore] = useState(false);
     const [contentSearch, setContentSearch] = useState("Vui Lòng Nhập Từ Khóa Vào Ô Tìm Kiếm");
     const [subContentSearch, setSubContentSearch] = useState("Đừng bỏ lỡ");
@@ -180,6 +166,14 @@ export default function Section1() {
         };
     }, []);
 
+    const settingProfile = useContext(SettingProfileContext);
+    
+    if (!settingProfile) {
+        return null;
+    }
+
+    const { profile } = settingProfile;
+
     return (
         <div className="container mx-auto flex items-center py-[10px]">
             {/* Logo */}
@@ -241,12 +235,22 @@ export default function Section1() {
             </form>
             {/* Menu */}
             <div className="flex-1 flex items-center">
-                <Link href="/quiz">
-                    <div className="flex items-center">
-                        <img src="testing.png" width={28} height={28} />
-                        <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Loại Da Của Bạn</span>
-                    </div>
-                </Link>
+                {profile.username !== "" ? (
+                    <Link href="/quiz">
+                        <div className="flex items-center">
+                            <img src="testing.png" width={28} height={28} />
+                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Loại Da Của Bạn</span>
+                        </div>
+                    </Link>
+                ) : (
+                    <Link href="/user/login">
+                        <div className="flex items-center">
+                            <img src="testing.png" width={28} height={28} />
+                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Loại Da Của Bạn</span>
+                        </div>
+                    </Link>
+                )}
+                
                 <Link href="/blogs">
                     <div className="flex items-center ml-[15px]">
                         <img src="note-book 1.png" width={28} height={28} />

@@ -13,7 +13,6 @@ const initialState = {
 export const quizReducer = (state = initialState, action: any) => {
     switch (action.type) {
         case "ANSWER_QUESTION":
-            // Tìm key tương ứng với action.question
             const entry = Object.entries(state).find(([key]) => key === action.question);
 
             if (entry) {
