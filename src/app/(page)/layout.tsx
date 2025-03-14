@@ -50,6 +50,7 @@ interface Profile {
   phone: string;
   username: string;
   orders: string[];
+  skinType: string;
 }
 
 interface SettingProfile {
@@ -99,7 +100,8 @@ export default function RootLayout({
     lastName: "",
     phone: "",
     username: "",
-    orders: []
+    orders: [],
+    skinType: ""
   });
 
   const pathname = usePathname();
@@ -162,14 +164,15 @@ export default function RootLayout({
               lastName: '',
               phone: '',
               username: '',
-              orders: []
+              orders: [],
+              skinType: ""
             }
           }}
         >
           <Provider store={store}>
-            {!pathname.startsWith("/order") && <Header />}
+            {!pathname.startsWith("/order") && pathname != "/quiz/result" && <Header />}
             {children}
-            {!pathname.startsWith("/order") && <Footer />}
+            {!pathname.startsWith("/order") && pathname != "/quiz/result" && <Footer />}
           </Provider>
         </SettingProfileContext.Provider>
       </body>

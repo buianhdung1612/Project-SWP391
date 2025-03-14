@@ -6,6 +6,7 @@ import { IoChevronBack, IoChevronForwardOutline } from "react-icons/io5";
 import { SiTicktick } from "react-icons/si";
 import { useSelector } from "react-redux";
 import { SettingProfileContext } from "../../layout";
+import { useRouter } from "next/navigation";
 
 type QuestionData = {
     question: string;
@@ -36,6 +37,7 @@ type Quiz = {
 };
 
 export default function QuizQuestionPage() {
+    const router = useRouter();
     const [currentQuestion, setCurrentQuestion] = useState(1);
     const listAnswers = useSelector((state: any) => state.quizReducer);
     const [choosenQuiz, setChoosenQuiz] = useState<Quiz>({
@@ -138,14 +140,6 @@ export default function QuizQuestionPage() {
             }          
         }
 
-        const a = {
-            user: profile.userID,
-            questionGroup: choosenQuiz.id,
-            totalScore: totalScore
-        }
-
-        console.log(a);
-
         const response = await fetch('https://freshskinweb.onrender.com/admin/skin/result/create', {
             method: "POST",
             headers: {
@@ -160,7 +154,9 @@ export default function QuizQuestionPage() {
 
         const dataResponse = await response.json();
 
-        console.log(dataResponse);
+        if(dataResponse.code == 200){
+            router.push("/quiz/result")
+        }
 
     }
 

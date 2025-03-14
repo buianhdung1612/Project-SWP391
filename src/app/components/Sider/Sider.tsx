@@ -64,12 +64,10 @@ export default function Sider() {
 
     return (
         <div className="fixed left-0 top-0 w-64 min-h-screen bg-[#374785] text-white border-r rounded-r-2xl flex flex-col">
-            {/* Admin Page Title */}
             <div className="flex justify-center py-4 border-b text-xl font-bold">
                 Fresh Skin
             </div>
 
-            {/* Menu */}
             <ul className="space-y-1 px-4 mt-4 flex-1">
                 {menu.map((item, index) => {
                     if (
