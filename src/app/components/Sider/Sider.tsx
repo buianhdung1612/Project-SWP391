@@ -5,7 +5,7 @@ import { CiCrop } from "react-icons/ci";
 import { FaBlog, FaBorderNone, FaJoomla, FaObjectGroup, FaTable, FaUsers,FaUserFriends } from "react-icons/fa";
 import { FaGaugeHigh, FaGear, FaGroupArrowsRotate, FaHurricane } from "react-icons/fa6";
 import { TbBrandCampaignmonitor } from "react-icons/tb";
-import { MdExpandLess, MdExpandMore, MdCategory, MdOutlineQuiz } from "react-icons/md";
+import { MdExpandLess, MdExpandMore, MdCategory, MdOutlineQuiz, MdOutlineSwitchAccount } from "react-icons/md";
 import { BiCarousel } from "react-icons/bi";
 import { DiHaskell } from "react-icons/di";
 import { ProfileAdminContext } from "@/app/admin/layout";
@@ -34,7 +34,7 @@ const subPermission: Menu[] = [
     { content: "Phân quyền", icon: <FaObjectGroup />, link: "/admin/roles/permissions" }
 ];
 const subUserManagement: Menu[] = [
-    { content: "Tài khoản quản trị", icon: <FaUsers />, link: "/admin/accounts" },
+    { content: "Tài khoản quản trị", icon: <MdOutlineSwitchAccount />, link: "/admin/accounts" },
     { content: "Tài khoản người dùng", icon: <FaUsers />, link: "/admin/users" }
 ];
 
@@ -44,7 +44,7 @@ const menu: Menu[] = [
     { content: "Quản lý sản phẩm", icon: <MdCategory />, subMenu: subCategory },
     { content: "Quản lý bài viết", icon: <BiCarousel />, subMenu: subBlog },
     { content: "Quản lý quyền", icon: <DiHaskell />, subMenu: subPermission },
-    { content: "Quản lý người dùng", icon: <FaUserFriends />, subMenu: subUserManagement },
+    { content: "Quản lý tài khoản", icon: <FaUserFriends />, subMenu: subUserManagement },
     { content: "Đơn hàng", icon: <FaHurricane />, link: "/admin/orders" },
     { content: "Bộ câu hỏi", icon: <MdOutlineQuiz />, link: "/admin/quiz" },
     { content: "Cài đặt chung", icon: <FaGear />, link: "/admin/settings/general" }

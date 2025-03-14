@@ -20,13 +20,13 @@ export default function CreateQuizAdminPage() {
         event.preventDefault();
 
         const data = {
-            groupName: event.target.title.value,
+            title: event.target.title.value,
             description: event.target.description.value,
-            skinQuestionsEntities: questions.map(q => ({
+            questions: questions.map(q => ({
                 questionText: q.question,
-                skinAnswers: q.answers.map(a => ({
+                answers: q.answers.map(a => ({
                     skinOption: a.skinOption,
-                    answerScore: a.score ? Number(a.score) : 0,
+                    score: a.score ? Number(a.score) : 0,
                 })),
             })),
         }
