@@ -32,27 +32,27 @@ export default function RoleAdminPage() {
     // Xóa một quyền
     const handleDeleteOneRole = async (id: number) => {
         const confirm: boolean = window.confirm("Bạn có chắc muốn xóa thể loại da này vĩnh viễn không?");
-        if(confirm){
-        const path = `${linkApi}/delete/${id}`;
+        if (confirm) {
+            const path = `${linkApi}/delete/${id}`;
 
-        const response = await fetch(path, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
+            const response = await fetch(path, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            });
+
+            const dataResponse = await response.json();
+
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
             }
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code === 200) {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("error");
         }
-    }
     }
     // Hết Xóa một quyền
 
@@ -63,11 +63,11 @@ export default function RoleAdminPage() {
 
     return (
         <>
-         {alertMessage && (
-                                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                                    {alertMessage}
-                                </Alert>
-                            )}
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )}
             {permissions?.includes("roles_view") && permissions.includes("roles_edit") && (
                 <Box p={3}>
                     <Typography variant="h5" gutterBottom>

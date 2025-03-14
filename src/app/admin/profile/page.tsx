@@ -1,14 +1,22 @@
 "use client";
 
-import React, { useContext } from "react";
+import React, { useContext,useState } from "react";
 import { ProfileAdminContext } from "../layout";
 import { Card, CardContent, Typography, Button, Avatar, Grid, Box, Divider } from "@mui/material";
 import EditIcon from '@mui/icons-material/Edit';
 import Link from "next/link";
-
+import Alert from '@mui/material/Alert';
 export default function ProfileAdmin() {
     const dataProfile = useContext(ProfileAdminContext);
-
+   const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+     {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
     return (
         <Box sx={{ padding: 3, display: 'flex', justifyContent: 'center', backgroundColor: '#f4f6f8' }}>
             <Card sx={{

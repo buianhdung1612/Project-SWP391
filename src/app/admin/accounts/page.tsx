@@ -6,7 +6,7 @@ import { MdDeleteOutline, MdEditNote, MdOutlineChangeCircle } from "react-icons/
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { ProfileAdminContext } from "../layout";
-
+import Alert from '@mui/material/Alert';
 export default function AccountAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -18,7 +18,15 @@ export default function AccountAdminPage() {
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
-
+ const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     useEffect(() => {
         const urlCurrent = new URL(location.href);
         const api = new URL(linkApi);

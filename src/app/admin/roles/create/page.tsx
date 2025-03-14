@@ -4,6 +4,7 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import dynamic from 'next/dynamic';
 import { useContext, useState } from "react";
 import { ProfileAdminContext } from "../../layout";
+import Alert from '@mui/material/Alert';
 const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
     ssr: false
 });
@@ -40,9 +41,18 @@ export default function CreateRoleAdmin() {
             location.reload();
         }
     }
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     return (
         <>
+
             <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
                 <Typography variant="h5" gutterBottom>
                     Trang tạo mới nhóm quyền

@@ -4,6 +4,7 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useContext, useEffect, useState } from "react";
 import dynamic from "next/dynamic";
 import { ProfileAdminContext } from "../../layout";
+import Alert from '@mui/material/Alert';
 const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
     ssr: false
 });
@@ -35,7 +36,15 @@ export default function SettingGeneralAdminPage() {
         support5: '',
         support6: ''
     });
-
+const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     useEffect(() => {
         const fetchSettings = async () => {
             const response = await fetch('https://freshskinweb.onrender.com/setting/show');

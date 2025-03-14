@@ -6,7 +6,7 @@ import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import { BiDetail } from "react-icons/bi";
-
+import Alert from '@mui/material/Alert';
 export default function QuizAdminPage() {
     const [data, setData] = useState([]);
 
@@ -102,31 +102,54 @@ export default function QuizAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     // Hết Thay đổi trạng thái 1 sản phẩm
 
     // Xóa vĩnh viễn 1 bộ đề
     const handleDeleteOneQuiz = async (id: number) => {
-        const path = `${linkApi}/delete/${id}`;
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn bài viết này không?");
+        if(confirm){
+            const path = `${linkApi}/delete/${id}`;
 
-        const response = await fetch(path, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
+            const response = await fetch(path, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+    
+            const dataResponse = await response.json();
+    
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
 
-        const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
-            location.reload();
         }
+        
     }
     // Hết Xóa vĩnh viễn 1 bộ đề
-
+const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+ {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
     return (
         <Box p={3}>
             {/* Header */}

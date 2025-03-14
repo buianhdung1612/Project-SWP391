@@ -1,10 +1,11 @@
 "use client"
 
 import { ProfileAdminContext } from "@/app/admin/layout";
+import {useState} from "react";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useContext } from "react";
-
+import Alert from '@mui/material/Alert';
 export default function ChangePasswordAdminAccount() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -14,7 +15,15 @@ export default function ChangePasswordAdminAccount() {
         event.preventDefault();
 
         const password = event.target.password.value;
-
+        const [alertMessage, setAlertMessage] = useState<string>("");
+        const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+        {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
         const response = await fetch(`https://freshskinweb.onrender.com/admin/account/change-password/${id}`, {
             method: "PATCH",
             headers: {

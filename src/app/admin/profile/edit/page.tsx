@@ -2,7 +2,7 @@
 import { useContext, useState } from "react";
 import { ProfileAdminContext } from "../../layout";
 import Cookies from "js-cookie";
-
+import Alert from '@mui/material/Alert';
 interface Profile {
     firstName: string;
     lastName: string;
@@ -12,12 +12,21 @@ interface Profile {
 
 export default function EditProfileAdmin() {
     const dataProfile = useContext(ProfileAdminContext);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+        const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [formData, setFormData] = useState<Profile>({
         firstName: dataProfile?.firstName ?? "",
         lastName: dataProfile?.lastName ?? "",
         email: dataProfile?.email ?? "",
         phone: dataProfile?.phone ?? ""
     });
+    {
+                alertMessage && (
+                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                        {alertMessage}
+                    </Alert>
+                )
+            }
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;

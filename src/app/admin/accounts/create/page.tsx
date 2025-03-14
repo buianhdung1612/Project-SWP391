@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, InputLabel, Select, MenuItem } from '@mui/material';
 import UploadImage from "@/app/components/Upload/UploadImage";
 import { ProfileAdminContext } from "../../layout";
-
+import Alert from '@mui/material/Alert';
 export default function CreateAccountAdmin() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -22,7 +22,15 @@ export default function CreateAccountAdmin() {
     }, []);
 
     const [images, setImages] = useState<(File)[]>([]);
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     const handleImageChange = (newImages: (File)[]) => {
         setImages(newImages);
     };

@@ -2,6 +2,7 @@
 
 import dynamic from "next/dynamic";
 import React, { useContext, useState } from "react";
+import Alert from '@mui/material/Alert';
 import {
     Box,
     Typography,
@@ -24,7 +25,8 @@ export default function CreateBrandAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const [description, setDescription] = useState("");
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [images, setImages] = useState<(File)[]>([]);
 
     const handleImageChange = (newImages: (File)[]) => {
@@ -51,6 +53,13 @@ export default function CreateBrandAdminPage() {
                 formData.append("thumbnail", image);
             }
         });
+        {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
 
         const response = await fetch(
             "https://freshskinweb.onrender.com/admin/products/brand/create",

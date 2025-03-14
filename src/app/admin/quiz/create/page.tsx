@@ -3,7 +3,7 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
-
+import Alert from '@mui/material/Alert';
 interface Answer {
     option: string;
     score: number;
@@ -15,7 +15,8 @@ interface Question {
 }
 
 export default function CreateQuizAdminPage() {
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
@@ -30,7 +31,13 @@ export default function CreateQuizAdminPage() {
                 })),
             })),
         }
-
+        {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
         const response = await fetch('https://freshskinweb.onrender.com/admin/question/group/create', {
             method: "POST",
             headers: {

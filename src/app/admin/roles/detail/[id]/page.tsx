@@ -2,6 +2,7 @@
 
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
+import Alert from '@mui/material/Alert';
 import {
     Box,
     Container,
@@ -45,7 +46,15 @@ export default function DetailRoleAdmin() {
 
         fetchRole();
     }, [id]);
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     const permissionColors: Record<string, string> = {
         "view": "#4caf50",
         "create": "#ffa500",

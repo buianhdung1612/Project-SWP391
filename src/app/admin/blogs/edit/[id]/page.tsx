@@ -10,7 +10,7 @@ import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, For
 // import UploadImage from '@/app/components/Upload/UploadImage';
 import { useParams } from 'next/navigation';
 import { ProfileAdminContext } from '@/app/admin/layout';
-
+import Alert from '@mui/material/Alert';
 export default function EditBlogAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -19,13 +19,19 @@ export default function EditBlogAdminPage() {
     const [content, setContent] = useState('');
     const [categoryCurrent, setCategoryCurrent] = useState('');
     const [listCategory, setListCategory] = useState([]);
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [data, setData] = useState({
         title: "",
         position: 0,
         status: "ACTIVE",
         featured: false
     })
+     {alertMessage && (
+                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                        {alertMessage}
+                    </Alert>
+                )}
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -106,6 +112,7 @@ export default function EditBlogAdminPage() {
     }
 
     return (
+        
         <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>
             <Typography variant="h5" gutterBottom>
                 Trang tạo mới bài viết

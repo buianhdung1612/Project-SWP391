@@ -1,7 +1,8 @@
 "use client"
 
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
-
+import Alert from '@mui/material/Alert';
+import {useState} from "react";
 interface SkinType {
     type: string,
     description: string
@@ -31,7 +32,15 @@ export default function CreateTypeSkinAdminPage() {
             location.reload();
         }
     }
-
+const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     return (
         <>
             <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>

@@ -4,7 +4,7 @@ import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { MdDeleteForever } from "react-icons/md";
-
+import Alert from '@mui/material/Alert';
 interface Answer {
   option: string;
   score: number;
@@ -27,7 +27,7 @@ export default function EditQuizAdminPage() {
       );
       const result = await response.json();
       const groupData = result.data;
-
+    
       const mappedQuestions = groupData.questions.map((question: any) => ({
         question: question.questionText,
         answers: question.answers.map((answer: any) => ({
@@ -42,7 +42,15 @@ export default function EditQuizAdminPage() {
 
     fetchInfo();
   }, [id]);
-
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+ {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
   // Hàm tối ưu hóa để xử lý thay đổi input
   const handleInputChange = useCallback(
     (index: number, field: "question" | "answeroption" | "answerscore", value: string | number, answerIndex?: number) => {

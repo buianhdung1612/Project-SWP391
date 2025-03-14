@@ -4,7 +4,7 @@ import { useContext, useEffect, useState } from "react";
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, InputLabel, Select, MenuItem } from '@mui/material';
 import UploadImage from "@/app/components/Upload/UploadImage";
 import { ProfileAdminContext } from "@/app/admin/layout";
-
+import Alert from '@mui/material/Alert';
 export default function EditAccountAdmin() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -30,7 +30,15 @@ export default function EditAccountAdmin() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-
+ const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
         const formData = new FormData(event.currentTarget);
 
         const request = {

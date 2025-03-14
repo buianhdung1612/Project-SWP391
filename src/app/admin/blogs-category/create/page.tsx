@@ -7,14 +7,15 @@ import React, { useContext, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio } from '@mui/material';
 import UploadImage from '@/app/components/Upload/UploadImage';
 import { ProfileAdminContext } from '../../layout';
-
+import Alert from '@mui/material/Alert';
 
 export default function CreateBlogCategoryAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     // Mô tả TinyMCE
     const [description, setDescription] = useState('');
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     // Ảnh Files
     const [images, setImages] = useState<File[]>([]);
     const handleImageChange = (newImages: File[]) => {
@@ -33,7 +34,13 @@ export default function CreateBlogCategoryAdminPage() {
             featured: formData.get("featured") === "true",
             status: formData.get("status")
         };
-
+        {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
 
         formData.append("request", JSON.stringify(request));
 

@@ -10,7 +10,7 @@ import UploadImage from '@/app/components/Upload/UploadImage';
 import { useParams } from 'next/navigation';
 import SubCategory from '@/app/components/Sub-Category/SubCategory';
 import { ProfileAdminContext } from '@/app/admin/layout';
-
+import Alert from '@mui/material/Alert';
 interface InputField {
     volume: number;
     price: number;
@@ -46,7 +46,8 @@ export default function EditProductAdminPage() {
         featured: false,
         status: "ACTIVE"
     });
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     useEffect(() => {
         const fetchCategories = async () => {
             const response = await fetch('https://freshskinweb.onrender.com/admin/products/category/show');
@@ -75,7 +76,13 @@ export default function EditProductAdminPage() {
         fetchBrands();
         fetchProduct();
     }, []);
-
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     // Variants
     const [inputs, setInputs] = useState<InputField[]>([
         { volume: 0, price: 0 }

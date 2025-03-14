@@ -7,7 +7,7 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { ProfileAdminContext } from "../layout";
 import DeleteIcon from "@mui/icons-material/Delete";
-
+import Alert from '@mui/material/Alert';
 export default function UserAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -123,7 +123,15 @@ export default function UserAdminPage() {
             location.reload();
         }
     }
-
+ const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     const handleInputChecked = (event: any, id: number) => {
         if (event.target.checked) {
             setInputChecked(prev => [...prev, id]);

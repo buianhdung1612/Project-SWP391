@@ -4,12 +4,20 @@ import { ProfileAdminContext } from "@/app/admin/layout";
 import { Box, Card, CardContent, Chip, Container, Divider, Typography } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-
+import Alert from '@mui/material/Alert';
 export default function DetailAccountAdmin() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const { id } = useParams();
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     const [data, setData] = useState({
         role: {
             title: ""

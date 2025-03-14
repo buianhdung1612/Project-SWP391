@@ -16,7 +16,7 @@ import {
 import { useParams } from "next/navigation";
 import UploadImage from "@/app/components/Upload/UploadImage";
 import { ProfileAdminContext } from "@/app/admin/layout";
-
+import Alert from '@mui/material/Alert';
 const TinyEditor = dynamic(() => import("../../../../../../TinyEditor"), {
     ssr: false,
 });
@@ -29,9 +29,12 @@ interface DataSubmit {
     status: string;
 }
 
+
 export default function EditBrandtAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const { id } = useParams();
     const [description, setDescription] = useState("");
     const [images, setImages] = useState<(string | File)[]>([]);
@@ -43,6 +46,13 @@ export default function EditBrandtAdminPage() {
         featured: false,
         status: "ACTIVE",
     });
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
 
     useEffect(() => {
         const fetchBrand = async () => {

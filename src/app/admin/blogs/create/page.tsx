@@ -7,7 +7,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, MenuItem, InputLabel, Select } from '@mui/material';
 import UploadImage from '@/app/components/Upload/UploadImage';
 import { ProfileAdminContext } from '../../layout';
-
+import Alert from '@mui/material/Alert';
 export default function CreateBlogAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -15,7 +15,8 @@ export default function CreateBlogAdminPage() {
     const [categoryCurrent, setCategoryCurrent] = useState('');
     const [listCategory, setListCategory] = useState([]);
     const [loading, setLoading] = useState(false); // Thêm trạng thái loading
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     useEffect(() => {
         const fetchCategories = async () => {
             const response = await fetch('https://freshskinweb.onrender.com/admin/blogs/category/show');
@@ -82,6 +83,11 @@ export default function CreateBlogAdminPage() {
             setLoading(false); // Kết thúc request
         }
     };
+      {alertMessage && (
+                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                        {alertMessage}
+                    </Alert>
+                )}
 
     return (
         <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>

@@ -9,6 +9,7 @@ import { MdDeleteForever } from 'react-icons/md';
 import UploadImage from '@/app/components/Upload/UploadImage';
 import SubCategory from '@/app/components/Sub-Category/SubCategory';
 import { ProfileAdminContext } from '../../layout';
+import Alert from '@mui/material/Alert';
 
 interface InputField {
     price: number;
@@ -19,7 +20,8 @@ interface InputField {
 export default function CreateProductAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [description, setDescription] = useState('');
     const [ingredients, setIngredients] = useState('');
     const [usageInstructions, setUsageInstructions] = useState('');
@@ -50,6 +52,13 @@ export default function CreateProductAdminPage() {
         fetchBrands();
         fetchSkintypes();
     }, []);
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
 
     const [inputCheckedCategory, setInputCheckedCategory] = useState<number[]>([]);
 

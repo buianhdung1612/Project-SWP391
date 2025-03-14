@@ -36,7 +36,13 @@ export default function ProductsAdminPage() {
                 "Content-Type": "application/json"
             },
         });
-
+ {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
         const dataResponse = await response.json();
 
        

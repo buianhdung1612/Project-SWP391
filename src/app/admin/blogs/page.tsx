@@ -201,7 +201,7 @@ export default function BlogsAdminPage() {
     // Xóa một sản phẩm
     const handleDeleteOneblog = async (id: number) => {
         const confirm: boolean = window.confirm("Bạn có chắc muốn xóa bài viết này không?");
-        if(confirm){
+        if (confirm) {
             const path = `${linkApi}/deleteT/${id}`;
 
             const response = await fetch(path, {
@@ -210,9 +210,9 @@ export default function BlogsAdminPage() {
                     "Content-Type": "application/json"
                 },
             });
-    
+
             const dataResponse = await response.json();
-    
+
             if (dataResponse.code === 200) {
                 setAlertMessage(dataResponse.message);
                 setAlertSeverity("success");
@@ -222,7 +222,7 @@ export default function BlogsAdminPage() {
                 setAlertSeverity("error");
             }
         }
-        
+
     }
     // Hết Xóa một sản phẩm
 
@@ -295,14 +295,14 @@ export default function BlogsAdminPage() {
     // Hết phân trang    
 
     return (
-        <> 
-         {alertMessage && (
-                        <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                            {alertMessage}
-                        </Alert>
-                    )}
+        <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )}
 
-        
+
             {permissions?.includes("blogs_view") && permissions.includes("blogs_edit") && (
                 <Box p={3}>
                     {/* Header */}

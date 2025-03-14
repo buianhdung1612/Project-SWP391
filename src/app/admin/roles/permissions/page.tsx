@@ -3,7 +3,7 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useEffect, useState, ChangeEvent, useContext } from "react";
 import { ProfileAdminContext } from "../../layout";
-
+import Alert from '@mui/material/Alert';
 // Định nghĩa kiểu cho PermissionItem
 interface PermissionItem {
   dataName: string;
@@ -23,7 +23,15 @@ interface PermissionProps {
   roles: Role[];
   onCheckboxChange: (roleId: string, permissionName: string, checked: boolean) => void;
 }
-
+const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
 // Component Permission: Render các dòng permission dựa trên danh sách roles có trạng thái permission cập nhật
 function Permission({ permissions, roles, onCheckboxChange }: PermissionProps) {
   return (

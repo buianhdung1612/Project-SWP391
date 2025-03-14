@@ -8,7 +8,7 @@ import { useContext, useEffect, useState } from "react";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { ProfileAdminContext } from "../../layout";
 import { IoReturnDownBackOutline } from "react-icons/io5";
-
+import Alert from '@mui/material/Alert';
 export default function UserAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -22,7 +22,15 @@ export default function UserAdminPage() {
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
     const [changeMulti, setChangeMulti] = useState("ACTIVE");
-
+ const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     useEffect(() => {
         const urlCurrent = new URL(location.href);
         const api = new URL(linkApi);

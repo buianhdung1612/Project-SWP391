@@ -8,9 +8,11 @@ import Link from "next/link";
 import { MdOutlineCancel } from "react-icons/md";
 import { TiTick } from "react-icons/ti";
 import { ProfileAdminContext } from "../layout";
-
+import Alert from '@mui/material/Alert';
 export default function OrdersAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const permissions = dataProfile?.permissions;
     const [data, setData] = useState({
         totalPages: 1,
@@ -38,6 +40,13 @@ export default function OrdersAdminPage() {
     const [page, setPage] = useState(1);
     const [changeMulti, setChangeMulti] = useState("PENDING");
 
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);

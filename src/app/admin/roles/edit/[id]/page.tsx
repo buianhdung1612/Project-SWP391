@@ -4,6 +4,7 @@ import { ProfileAdminContext } from "@/app/admin/layout";
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import dynamic from 'next/dynamic';
 import { useParams } from "next/navigation";
+import Alert from '@mui/material/Alert';
 import { useContext, useEffect, useState } from "react";
 const TinyEditor = dynamic(() => import('../../../../../../TinyEditor'), {
     ssr: false
@@ -39,7 +40,15 @@ export default function EditRoleAdmin() {
 
         fetchBrand();
     }, []);
-
+const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+ {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 

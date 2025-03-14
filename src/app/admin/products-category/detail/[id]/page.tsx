@@ -2,6 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
+import Alert from '@mui/material/Alert';
 import {
     Box,
     Container,
@@ -18,7 +19,8 @@ import { ProfileAdminContext } from "@/app/admin/layout";
 export default function DetailBrandAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const { id } = useParams();
 
     const [data, setData] = useState({
@@ -45,7 +47,13 @@ export default function DetailBrandAdminPage() {
 
         fetchBrand();
     }, [id]);
-
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     return (
         <Container maxWidth="md" sx={{ mt: 4 }}>
             {permissions?.includes("products-category_view") && (

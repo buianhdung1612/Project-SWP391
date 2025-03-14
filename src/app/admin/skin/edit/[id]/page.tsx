@@ -3,7 +3,7 @@
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
-
+import Alert from '@mui/material/Alert';
 interface SkinType {
     type: string,
     description: string
@@ -16,7 +16,15 @@ export default function EditTypeSkinAdminPage() {
         type: "",
         description: ""
     })
-
+ const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/admin/skintypes/${id}`);

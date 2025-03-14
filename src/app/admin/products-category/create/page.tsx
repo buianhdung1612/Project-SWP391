@@ -8,7 +8,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, FormControlLabel, Radio, InputLabel, Select, MenuItem } from '@mui/material';
 import UploadImage from '@/app/components/Upload/UploadImage';
 import { ProfileAdminContext } from '../../layout';
-
+import Alert from '@mui/material/Alert';
 export default function CreateProductCategoryAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -28,7 +28,8 @@ export default function CreateProductCategoryAdminPage() {
     }, []);
 
     const [images, setImages] = useState<(File)[]>([]);
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const handleImageChange = (newImages: (File)[]) => {
         setImages(newImages);
     };
@@ -70,6 +71,13 @@ export default function CreateProductCategoryAdminPage() {
 
     return (
         <>
+        {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
             {permissions?.includes("products-category_create") && (
                 <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
                     <Typography variant="h4" gutterBottom>
