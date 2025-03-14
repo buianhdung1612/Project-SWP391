@@ -32,6 +32,9 @@ export default function QuizResultPage() {
                         Khám phá lộ trình và sản phẩm phù hợp
                     </Link>
                 </button>
+                <Link href="/">
+                    Trở về trang chủ
+                </Link>
             </div>
         </div>
     );

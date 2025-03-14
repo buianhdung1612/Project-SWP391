@@ -43,7 +43,6 @@ export default function HomePage() {
 
     const response = await fetch(`https://freshskinweb.onrender.com/home`);
     const data = await response.json();
-    console.log(data.Top7ProductFlashSale)
 
     sessionStorage.setItem('homeData', JSON.stringify(data));
 
@@ -65,6 +64,8 @@ export default function HomePage() {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+
+  console.log(dataFeaturedBlogCategory);
 
   return (
     <>
