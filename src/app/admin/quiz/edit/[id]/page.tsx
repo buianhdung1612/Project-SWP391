@@ -19,8 +19,6 @@ export default function EditQuizAdminPage() {
   const { id } = useParams();
   const [data, setData] = useState<any>(null); 
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [title, setTitle] = useState<string>(''); 
-  const [description, setDescription] = useState<string>('');
 
   useEffect(() => {
     const fetchInfo = async () => {
