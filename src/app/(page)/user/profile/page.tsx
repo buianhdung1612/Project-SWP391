@@ -13,7 +13,6 @@ export default function ProfileUser() {
     }
 
     const { profile } = settingProfile;
-    console.log(profile)
 
     return (
         <>

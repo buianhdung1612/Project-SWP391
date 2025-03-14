@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import { Inter } from "next/font/google";
 import "../globals.css";
@@ -87,6 +87,7 @@ export default function RootLayout({
     support4: '',
     support5: ''
   });
+
   const [profile, setProfile] = useState({
     address: "",
     avatar: "",
@@ -105,6 +106,8 @@ export default function RootLayout({
     const fetchSettings = async () => {
       const response = await fetch('https://freshskinweb.onrender.com/setting/show');
       const data = await response.json();
+      console.log(data);
+
       setSetting(data.data[0]);
     };
 
@@ -113,6 +116,7 @@ export default function RootLayout({
     if (!pathname.startsWith("/user/login") && !pathname.startsWith("/user/register")) {
       const fetchProfile = async () => {
         const tokenUser = Cookies.get("tokenUser");
+        console.log(tokenUser);
 
         if (tokenUser) {
           const response = await fetch(
@@ -123,13 +127,17 @@ export default function RootLayout({
                 "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                token: tokenUser,
+                token: tokenUser
               }),
             }
           );
 
           const data = await response.json();
+          console.log(data);
           setProfile(data.data);
+        }
+        else{
+          location.href = "/user/login"
         }
       };
 
@@ -137,22 +145,26 @@ export default function RootLayout({
     }
   }, []);
 
-  console.log(profile);
-  console.log(setting);
-
-
   return (
     <html lang="en">
       <body
         className={`${inter.className} antialiased`}
       >
         <SettingProfileContext.Provider
-          value={
-            {
-              setting,
-              profile
+          value={{
+            setting,
+            profile: profile || {
+              address: '',
+              avatar: '',
+              createdAt: '',
+              email: '',
+              firstName: '',
+              lastName: '',
+              phone: '',
+              username: '',
+              orders: []
             }
-          }
+          }}
         >
           <Provider store={store}>
             {!pathname.startsWith("/order") && <Header />}
