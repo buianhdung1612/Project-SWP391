@@ -2,11 +2,11 @@
 
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { MdDeleteForever } from "react-icons/md";
 
 interface Answer {
-  skinOption: string;
+  option: string;
   score: number;
 }
 
@@ -31,19 +31,37 @@ export default function EditQuizAdminPage() {
       const mappedQuestions = groupData.questions.map((question: any) => ({
         question: question.questionText,
         answers: question.answers.map((answer: any) => ({
-          skinOption: answer.score ? answer.score.toString() : "",
+          option: answer.option ? answer.option.toString() : "",
           score: answer.score,
         })),
       }));
 
       setQuestions(mappedQuestions);
       setData(groupData);
-      setTitle(groupData.title); 
-      setDescription(groupData.description); 
     };
 
     fetchInfo();
   }, [id]);
+
+  // Hàm tối ưu hóa để xử lý thay đổi input
+  const handleInputChange = useCallback(
+    (index: number, field: "question" | "answeroption" | "answerscore", value: string | number, answerIndex?: number) => {
+      setQuestions((prevQuestions) => {
+        const newQuestions = [...prevQuestions];
+        if (field === "question") {
+          newQuestions[index][field] = value as string;
+        } else if (field === "answeroption" && answerIndex !== undefined) {
+          newQuestions[index].answers[answerIndex].option = value as string;
+        } else if (field === "answerscore" && answerIndex !== undefined) {
+          newQuestions[index].answers[answerIndex].score = value
+            ? parseFloat(value as string)
+            : 0;
+        }
+        return newQuestions;
+      });
+    },
+    []
+  );
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
@@ -54,7 +72,7 @@ export default function EditQuizAdminPage() {
       questions: questions.map((q) => ({
         questionText: q.question,
         answers: q.answers.map((a) => ({
-          skinOption: a.skinOption,
+          option: a.option,
           score: a.score ? Number(a.score) : 0,
         })),
       })),
@@ -78,55 +96,45 @@ export default function EditQuizAdminPage() {
     }
   };
 
-  const handleInputChange = (
-    index: number,
-    field: "question" | "answerskinOption" | "answerscore",
-    value: string | number,
-    answerIndex?: number
-  ) => {
-    const newQuestions = [...questions];
-    if (field === "question") {
-      newQuestions[index][field] = value as string;
-    } else if (field === "answerskinOption" && answerIndex !== undefined) {
-      newQuestions[index].answers[answerIndex].skinOption = value as string;
-    } else if (field === "answerscore" && answerIndex !== undefined) {
-      newQuestions[index].answers[answerIndex].score = value
-        ? parseFloat(value as string)
-        : 0;
-    }
-    setQuestions(newQuestions);
-  };
-
-  const handleAddQuestion = () => {
-    setQuestions([
-      ...questions,
-      { question: "", answers: [{ skinOption: "", score: 0 }] },
+  const handleAddQuestion = useCallback(() => {
+    setQuestions((prevQuestions) => [
+      ...prevQuestions,
+      { question: "", answers: [{ option: "", score: 0 }] },
     ]);
-  };
+  }, []);
 
-  const handleRemoveQuestion = (indexRemove: number) => {
-    const newQuestions = questions.filter((_, index) => index !== indexRemove);
-    setQuestions(newQuestions);
-  };
-
-  const handleAddAnswer = (questionIndex: number) => {
-    const newQuestions = [...questions];
-    newQuestions[questionIndex].answers.push({ skinOption: "", score: 0 });
-    setQuestions(newQuestions);
-  };
-
-  const handleRemoveAnswer = (questionIndex: number, answerIndex: number) => {
-    const newQuestions = [...questions];
-    newQuestions[questionIndex].answers = newQuestions[questionIndex].answers.filter(
-      (_, index) => index !== answerIndex
+  const handleRemoveQuestion = useCallback((indexRemove: number) => {
+    setQuestions((prevQuestions) =>
+      prevQuestions.filter((_, index) => index !== indexRemove)
     );
-    setQuestions(newQuestions);
-  };
+  }, []);
+
+  const handleAddAnswer = useCallback((questionIndex: number) => {
+    setQuestions((prevQuestions) => {
+      const newQuestions = [...prevQuestions];
+      newQuestions[questionIndex].answers.push({ option: "", score: 0 });
+      return newQuestions;
+    });
+  }, []);
+
+  const handleRemoveAnswer = useCallback((questionIndex: number, answerIndex: number) => {
+    setQuestions((prevQuestions) => {
+      const newQuestions = [...prevQuestions];
+      newQuestions[questionIndex].answers = newQuestions[questionIndex].answers.filter(
+        (_, index) => index !== answerIndex
+      );
+      return newQuestions;
+    });
+  }, []);
+
+  if (!data) {
+    return <Typography>Loading...</Typography>;
+  }
 
   return (
     <Box sx={{ padding: 3, backgroundColor: "#ffffff" }}>
       <Typography variant="h5" gutterBottom>
-        Trang tạo mới bộ câu hỏi
+        Trang chỉnh sửa bộ câu hỏi
       </Typography>
 
       {data && (
@@ -138,7 +146,7 @@ export default function EditQuizAdminPage() {
               variant="outlined"
               fullWidth
               sx={{ marginBottom: 3 }}
-              value={data.title} 
+              value={data.title}
               onChange={(e) => 
                 setData((prevData: any) => ({
                   ...prevData,
@@ -153,12 +161,12 @@ export default function EditQuizAdminPage() {
               variant="outlined"
               fullWidth
               sx={{ marginBottom: 3 }}
-              value={data.description} 
+              value={data.description}
               onChange={(e) => 
                 setData((prevData: any) => ({
                   ...prevData,
                   description: e.target.value,
-                })) 
+                }))
               }
               required
             />
@@ -195,11 +203,11 @@ export default function EditQuizAdminPage() {
                         label="Đáp án"
                         variant="outlined"
                         size="small"
-                        value={answer.skinOption}
+                        value={answer.option}
                         onChange={(e) =>
                           handleInputChange(
                             questionIndex,
-                            "answerskinOption",
+                            "answeroption",
                             e.target.value,
                             answerIndex
                           )

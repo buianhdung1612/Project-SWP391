@@ -5,7 +5,7 @@ import { useState } from "react";
 import { MdDeleteForever } from "react-icons/md";
 
 interface Answer {
-    skinOption: string;
+    option: string;
     score: number;
 }
 
@@ -25,7 +25,7 @@ export default function CreateQuizAdminPage() {
             questions: questions.map(q => ({
                 questionText: q.question,
                 answers: q.answers.map(a => ({
-                    skinOption: a.skinOption,
+                    option: a.option,
                     score: a.score ? Number(a.score) : 0,
                 })),
             })),
@@ -47,13 +47,13 @@ export default function CreateQuizAdminPage() {
     }
 
     const [questions, setQuestions] = useState<Question[]>([
-        { question: "", answers: [{ skinOption: "", score: 0 }] }
+        { question: "", answers: [{ option: "", score: 0 }] }
     ]);
 
     const handleAddQuestion = () => {
         setQuestions([
             ...questions,
-            { question: "", answers: [{ skinOption: "", score: 0 }] }
+            { question: "", answers: [{ option: "", score: 0 }] }
         ]);
     };
 
@@ -62,12 +62,12 @@ export default function CreateQuizAdminPage() {
         setQuestions(newQuestions);
     };
 
-    const handleInputChange = (index: number, field: 'question' | 'answerskinOption' | 'answerscore', value: string | number, answerIndex?: number) => {
+    const handleInputChange = (index: number, field: 'question' | 'answeroption' | 'answerscore', value: string | number, answerIndex?: number) => {
         const newQuestions = [...questions];
         if (field === "question") {
             newQuestions[index][field] = value as string;
-        } else if (field === "answerskinOption" && answerIndex !== undefined) {
-            newQuestions[index].answers[answerIndex].skinOption = value as string;
+        } else if (field === "answeroption" && answerIndex !== undefined) {
+            newQuestions[index].answers[answerIndex].option = value as string;
         } else if (field === "answerscore" && answerIndex !== undefined) {
             newQuestions[index].answers[answerIndex].score = value ? parseFloat(value as string) : 0;
         }
@@ -76,7 +76,7 @@ export default function CreateQuizAdminPage() {
 
     const handleAddAnswer = (questionIndex: number) => {
         const newQuestions = [...questions];
-        newQuestions[questionIndex].answers.push({ skinOption: "", score: 0 });
+        newQuestions[questionIndex].answers.push({ option: "", score: 0 });
         setQuestions(newQuestions);
     };
 
@@ -132,8 +132,8 @@ export default function CreateQuizAdminPage() {
                                                 label="Đáp án"
                                                 variant="outlined"
                                                 size="small"
-                                                value={answer.skinOption}
-                                                onChange={(e) => handleInputChange(questionIndex, 'answerskinOption', e.target.value, answerIndex)}
+                                                value={answer.option}
+                                                onChange={(e) => handleInputChange(questionIndex, 'answeroption', e.target.value, answerIndex)}
                                                 sx={{ mr: 1, width: "700px" }}
                                             />
                                             <Typography variant="h6">:</Typography>
