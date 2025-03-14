@@ -4,7 +4,7 @@ import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, 
 import DeleteIcon from "@mui/icons-material/Delete";
 import { BiDetail } from "react-icons/bi";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
-
+import Alert from '@mui/material/Alert';
 import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { ProfileAdminContext } from "../layout";
@@ -20,7 +20,8 @@ export default function ProductsAdminPage() {
         currentPage: 1,
         products: []
     });
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const linkApi = 'https://freshskinweb.onrender.com/admin/products';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
@@ -153,9 +154,13 @@ export default function ProductsAdminPage() {
         });
 
         const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     // Hết Thay đổi trạng thái 1 sản phẩm
@@ -183,8 +188,13 @@ export default function ProductsAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
@@ -199,20 +209,29 @@ export default function ProductsAdminPage() {
 
     // Xóa một sản phẩm
     const handleDeleteOneProduct = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa sản phẩm này không?");
+        if (confirm) {
+            const path = `${linkApi}/deleteT/${id}`;
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
 
-        const dataResponse = await response.json();
+            const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
         }
+
     }
     // Hết Xóa một sản phẩm
 
@@ -281,6 +300,11 @@ export default function ProductsAdminPage() {
 
     return (
         <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )}
             {permissions?.includes("products_view") && permissions.includes("products_edit") && (
                 <Box p={3}>
                     {/* Header */}

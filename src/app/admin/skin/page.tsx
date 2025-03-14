@@ -2,13 +2,14 @@
 
 import { Box, Typography, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Tooltip } from "@mui/material";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
-
+import Alert from '@mui/material/Alert';
 import { useEffect, useState } from "react";
 import Link from "next/link";
 
 export default function ProductsAdminPage() {
     const [data, setData] = useState([]);
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const linkApiShow = 'https://freshskinweb.onrender.com/admin/skintypes/show';
     const linkApi = 'https://freshskinweb.onrender.com/admin/skintypes';
 
@@ -25,6 +26,8 @@ export default function ProductsAdminPage() {
 
     // Xóa một sản phẩm
     const handleDeleteOneSkinType = async (id: number) => {
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa thể loại da này vĩnh viễn không?");
+        if(confirm){
         const path = `${linkApi}/delete/${id}`;
 
         const response = await fetch(path, {
@@ -36,13 +39,21 @@ export default function ProductsAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+       
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
+    }
     }
     // Hết Xóa một sản phẩm
 
     return (
+        
         <Box p={3}>
             {/* Header */}
             <Typography variant="h5" gutterBottom>

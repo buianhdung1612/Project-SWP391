@@ -14,6 +14,7 @@ export default function CreateBlogAdminPage() {
     const [content, setContent] = useState('');
     const [categoryCurrent, setCategoryCurrent] = useState('');
     const [listCategory, setListCategory] = useState([]);
+    const [loading, setLoading] = useState(false); // Thêm trạng thái loading
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -37,37 +38,50 @@ export default function CreateBlogAdminPage() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        
+        if (loading) return; // Nếu đang gửi request, không làm gì cả
 
-        const formData = new FormData(event.currentTarget);
+        setLoading(true); // Bắt đầu gửi request
+        try {
+            const formData = new FormData(event.currentTarget);
 
-        const request = {
-            title: formData.get("title"),
-            content: content,
-            position: formData.get("position"),
-            status: formData.get("status"),
-            featured: formData.get("featured") === "true",
-            categoryID: categoryCurrent
-        };
+            const request = {
+                title: formData.get("title"),
+                content: content,
+                position: formData.get("position"),
+                status: formData.get("status"),
+                featured: formData.get("featured") === "true",
+                categoryID: categoryCurrent
+            };
 
-        formData.append("request", JSON.stringify(request));
+            formData.append("request", JSON.stringify(request));
 
-        images.forEach((image) => {
-            if (image instanceof File) {
-                formData.append("thumbnail", image);
+            images.forEach((image) => {
+                if (image instanceof File) {
+                    formData.append("thumbnail", image);
+                }
+            });
+
+            const response = await fetch('https://freshskinweb.onrender.com/admin/blogs/create', {
+                method: "POST",
+                body: formData
+            });
+
+            const dataResponse = await response.json();
+
+            if (dataResponse.code === 200) {
+                alert("Bài viết đã được tạo thành công!");
+                location.reload();
+            } else {
+                alert("Có lỗi xảy ra. Vui lòng thử lại!");
             }
-        });
-
-        const response = await fetch('https://freshskinweb.onrender.com/admin/blogs/create', {
-            method: "POST",
-            body: formData
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
-            location.reload();
+        } catch (error) {
+            alert("Lỗi khi gửi dữ liệu!");
+            console.error(error);
+        } finally {
+            setLoading(false); // Kết thúc request
         }
-    }
+    };
 
     return (
         <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>
@@ -100,15 +114,10 @@ export default function CreateBlogAdminPage() {
                                 {listCategory.map((item: any, index: number) => (
                                     <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
                                 ))}
-
                             </Select>
                         </FormControl>
                         <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                            <RadioGroup
-                                defaultValue={false}
-                                name="featured"
-                                row
-                            >
+                            <RadioGroup defaultValue={false} name="featured" row>
                                 <FormControlLabel value={true} control={<Radio />} label="Nổi bật" />
                                 <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
                             </RadioGroup>
@@ -129,23 +138,24 @@ export default function CreateBlogAdminPage() {
                             type="number"
                             sx={{ marginBottom: 2, marginTop: 2 }}
                         />
-                        {/* <UploadImage/> */}
                         <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                            <RadioGroup
-                                defaultValue="ACTIVE"
-                                name="status"
-                                row
-                            >
+                            <RadioGroup defaultValue="ACTIVE" name="status" row>
                                 <FormControlLabel value="ACTIVE" control={<Radio />} label="Hoạt động" />
                                 <FormControlLabel value="INACTIVE" control={<Radio />} label="Dừng hoạt động" />
                             </RadioGroup>
                         </FormControl>
-                        <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                            Tạo bài viết
+                        <Button 
+                            type='submit' 
+                            variant="contained" 
+                            color="primary" 
+                            sx={{ width: '100%' }}
+                            disabled={loading} // Vô hiệu hóa khi đang gửi request
+                        >
+                            {loading ? "Đang tạo bài viết..." : "Tạo bài viết"}
                         </Button>
                     </form>
                 </Paper>
             )}
-        </Box >
+        </Box>
     );
 }

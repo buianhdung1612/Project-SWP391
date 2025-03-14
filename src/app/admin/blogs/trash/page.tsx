@@ -2,7 +2,7 @@
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
 import { MdDeleteOutline, MdOutlineSettingsBackupRestore } from "react-icons/md";
-
+import Alert from '@mui/material/Alert';
 import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { IoReturnDownBackOutline } from "react-icons/io5";
@@ -18,6 +18,8 @@ export default function BlogTrashAdminPage() {
         currentPage: 1,
         blogs: []
     });
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/blogs/trash';
 
@@ -138,7 +140,6 @@ export default function BlogTrashAdminPage() {
     const handleChangeStatusOnebrand = async (status: string, dataPath: string) => {
         const statusChange = status;
         const path = `${linkApi}${dataPath}`;
-
         const data = {
             status: statusChange
         }
@@ -153,8 +154,13 @@ export default function BlogTrashAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     // Hết Thay đổi trạng thái 1 sản phẩm
@@ -166,25 +172,33 @@ export default function BlogTrashAdminPage() {
         const statusChange = changeMulti;
 
         if (statusChange == "delete-destroy") {
-            const path = `${linkApi}/delete`;
+            const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn những bài viết này không?");
+            if(confirm){
+                const path = `${linkApi}/delete`;
 
-            const data: any = {
-                id: inputChecked
-            }
-
-            const response = await fetch(path, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            const dataResponse = await response.json();
-
-            if (dataResponse.code == 200) {
-                location.reload();
-            }
+                const data: any = {
+                    id: inputChecked
+                }
+    
+                const response = await fetch(path, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
+    
+                const dataResponse = await response.json();
+    
+                if (dataResponse.code === 200) {
+                    setAlertMessage(dataResponse.message);
+                    setAlertSeverity("success");
+                    setTimeout(() => location.reload(), 2000);
+                } else {
+                    setAlertMessage(dataResponse.message);
+                    setAlertSeverity("error");
+                }
+            };
 
             return;
         }
@@ -206,8 +220,13 @@ export default function BlogTrashAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
@@ -222,39 +241,56 @@ export default function BlogTrashAdminPage() {
 
     // Xóa vĩnh viễn một sản phẩm
     const handleDeleteOnebrand = async (id: number) => {
-        const path = `${linkApi}/delete/${id}`;
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn sản phẩm này không?");
+        if (confirm) {
+            const path = `${linkApi}/delete/${id}`;
 
-        const response = await fetch(path, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
+            const response = await fetch(path, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
 
-        const dataResponse = await response.json();
+            const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
         }
     }
     // Hết Xóa một sản phẩm
 
     // Khôi phục một sản phẩm
     const handleRestoreOnebrand = async (id: number) => {
-        const path = `${linkApi}/restore/${id}`;
+        const confirm: boolean = window.confirm("Bạn có chắc muốn khôi phục sản phẩm này không?");
+        if( confirm){
+            const path = `${linkApi}/restore/${id}`;
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
-            location.reload();
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+    
+            const dataResponse = await response.json();
+    
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
         }
+       
     }
     // Hết Xóa một sản phẩm
 
@@ -294,6 +330,12 @@ export default function BlogTrashAdminPage() {
 
     return (
         <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )}
+
             {permissions?.includes("blogs_edit") && permissions?.includes("blogs_view") && (
                 <Box p={3}>
 

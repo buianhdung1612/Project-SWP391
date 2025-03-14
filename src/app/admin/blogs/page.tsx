@@ -4,13 +4,15 @@ import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, 
 import DeleteIcon from "@mui/icons-material/Delete";
 import { BiDetail } from "react-icons/bi";
 import { MdDeleteOutline, MdEditNote } from "react-icons/md";
-
+import Alert from '@mui/material/Alert';
 import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { ProfileAdminContext } from "../layout";
 
 export default function BlogsAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const permissions = dataProfile?.permissions;
     const [data, setData] = useState({
         totalPages: 1,
@@ -152,8 +154,13 @@ export default function BlogsAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     // Hết Thay đổi trạng thái 1 sản phẩm
@@ -161,16 +168,12 @@ export default function BlogsAdminPage() {
     // Thay đổi trạng thái nhiều sản phẩm
     const handleChangeMulti = async (event: any) => {
         event.preventDefault();
-
         const statusChange = changeMulti;
-
         const path = `${linkApi}/change-multi`;
-
         const data: any = {
             id: inputChecked,
             status: statusChange
         }
-
         const response = await fetch(path, {
             method: "PATCH",
             headers: {
@@ -197,20 +200,29 @@ export default function BlogsAdminPage() {
 
     // Xóa một sản phẩm
     const handleDeleteOneblog = async (id: number) => {
-        const path = `${linkApi}/deleteT/${id}`;
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa bài viết này không?");
+        if(confirm){
+            const path = `${linkApi}/deleteT/${id}`;
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
-            location.reload();
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
+    
+            const dataResponse = await response.json();
+    
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
         }
+        
     }
     // Hết Xóa một sản phẩm
 
@@ -238,7 +250,12 @@ export default function BlogsAdminPage() {
         const dataResponse = await response.json();
 
         if (dataResponse.code === 200) {
-            location.reload();
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     };
     // Hết Thay đổi vị trí sản phẩm
@@ -278,7 +295,14 @@ export default function BlogsAdminPage() {
     // Hết phân trang    
 
     return (
-        <>
+        <> 
+         {alertMessage && (
+                        <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                            {alertMessage}
+                        </Alert>
+                    )}
+
+        
             {permissions?.includes("blogs_view") && permissions.includes("blogs_edit") && (
                 <Box p={3}>
                     {/* Header */}

@@ -6,13 +6,14 @@ import { MdDeleteOutline, MdEditNote } from "react-icons/md";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { ProfileAdminContext } from "../layout";
-
+import Alert from '@mui/material/Alert';
 export default function RoleAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const linkApi = 'https://freshskinweb.onrender.com/admin/roles';
 
     useEffect(() => {
@@ -30,6 +31,8 @@ export default function RoleAdminPage() {
 
     // Xóa một quyền
     const handleDeleteOneRole = async (id: number) => {
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa thể loại da này vĩnh viễn không?");
+        if(confirm){
         const path = `${linkApi}/delete/${id}`;
 
         const response = await fetch(path, {
@@ -41,9 +44,15 @@ export default function RoleAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
+    }
     }
     // Hết Xóa một quyền
 
@@ -54,6 +63,11 @@ export default function RoleAdminPage() {
 
     return (
         <>
+         {alertMessage && (
+                                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                                    {alertMessage}
+                                </Alert>
+                            )}
             {permissions?.includes("roles_view") && permissions.includes("roles_edit") && (
                 <Box p={3}>
                     <Typography variant="h5" gutterBottom>

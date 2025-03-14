@@ -2,7 +2,7 @@
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Chip, Tooltip, Stack, Pagination } from "@mui/material";
 import { MdDeleteOutline, MdOutlineSettingsBackupRestore } from "react-icons/md";
-
+import Alert from '@mui/material/Alert';
 import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { IoReturnDownBackOutline } from "react-icons/io5";
@@ -19,7 +19,8 @@ export default function ProductsTrashAdminPage() {
         currentPage: 1,
         products: []
     });
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const linkApi = 'https://freshskinweb.onrender.com/admin/products/trash';
 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
@@ -154,8 +155,13 @@ export default function ProductsTrashAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     // Hết Thay đổi trạng thái 1 sản phẩm
@@ -167,24 +173,33 @@ export default function ProductsTrashAdminPage() {
         const statusChange = changeMulti;
 
         if (statusChange == "delete-destroy") {
-            const path = `${linkApi}/delete`;
+            const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn những sản phẩm này không?");
+            if (confirm) {
+                const path = `${linkApi}/delete`;
 
-            const data: any = {
-                id: inputChecked
-            }
+                const data: any = {
+                    id: inputChecked
+                }
 
-            const response = await fetch(path, {
-                method: "DELETE",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
+                const response = await fetch(path, {
+                    method: "DELETE",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify(data)
+                });
 
-            const dataResponse = await response.json();
+                const dataResponse = await response.json();
 
-            if (dataResponse.code == 200) {
-                location.reload();
+                if (dataResponse.code === 200) {
+                    setAlertMessage(dataResponse.message);
+                    setAlertSeverity("success");
+                    setTimeout(() => location.reload(), 2000);
+                } else {
+                    setAlertMessage(dataResponse.message);
+                    setAlertSeverity("error");
+                }
+
             }
 
             return;
@@ -207,8 +222,13 @@ export default function ProductsTrashAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
@@ -223,20 +243,28 @@ export default function ProductsTrashAdminPage() {
 
     // Xóa vĩnh viễn một sản phẩm
     const handleDeleteOneProduct = async (id: number) => {
-        const path = `${linkApi}/delete/${id}`;
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn bài viết này không?");
+        if (confirm) {
+            const path = `${linkApi}/delete/${id}`;
 
-        const response = await fetch(path, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
+            const response = await fetch(path, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
 
-        const dataResponse = await response.json();
-
-        if (dataResponse.code == 200) {
-            location.reload();
+            const dataResponse = await response.json();
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
         }
+
     }
     // Hết Xóa một sản phẩm
 
@@ -295,6 +323,11 @@ export default function ProductsTrashAdminPage() {
 
     return (
         <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )}
             {permissions?.includes("products_view") && permissions.includes("products_edit") && (
                 <Box p={3}>
                     {/* Header */}
