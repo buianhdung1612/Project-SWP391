@@ -15,11 +15,17 @@ import { FaRegUserCircle } from "react-icons/fa";
 export default function Section1() {
     const settingProfile = useContext(SettingProfileContext);
 
-    if (!settingProfile) {
-        return null;
-    }
-
-    const { profile } = settingProfile;
+    const profile  = settingProfile?.profile ?? {
+        address: "",
+        avatar: "",
+        createdAt: "",
+        email: "",
+        firstName: "",
+        lastName: "",
+        phone: "",
+        username: "",
+        orders: []
+    };
 
     const [openMore, setOpenMore] = useState(false);
     const [contentSearch, setContentSearch] = useState("Vui Lòng Nhập Từ Khóa Vào Ô Tìm Kiếm");
@@ -282,26 +288,17 @@ export default function Section1() {
                     <Link href="/user/profile">
                         <div className="flex items-center ml-[15px]">
                             <FaRegUserCircle className="text-[28px]" />
-                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Tài khoản</span>
                         </div>
                     </Link>
                 ) : (
                     <Link href="/login">
                         <div className="flex items-center ml-[15px]">
                             <FaRegCircleUser className="text-[28px]" />
-                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Đăng Nhập</span>
                         </div>
                     </Link>
                 )}
-                <Link href="/favorite">
-                    <div className="flex items-center ml-[15px] relative">
-                        <CiHeart className="text-[32px]" />
-                        <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">0</span>
-                    </div>
-                </Link>
-                <div className="relative">
-                    <Cart />
-                </div>
+                <Cart />
+                <CiHeart className="text-[22px] text-[#4e4e4e] ml-[20px]" />
             </div>
         </div>
     );
