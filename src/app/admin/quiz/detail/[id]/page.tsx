@@ -18,7 +18,7 @@ import {
 } from "@mui/material";
 
 interface Answer {
-  skinOption: string;
+  option: string;
   score: number;
 }
 
@@ -43,7 +43,7 @@ export default function DetailQuizAdmin() {
       const mappedQuestions = groupData.questions.map((question: any) => ({
         question: question.questionText,
         answers: question.answers.map((answer: any) => ({
-          skinOption: answer.score ? answer.score.toString() : "",
+          option: answer.option ? answer.option.toString() : "",
           score: answer.score,
         })),
       }));
@@ -98,7 +98,7 @@ export default function DetailQuizAdmin() {
               {question.answers.map((answer, answerIndex) => (
                 <ListItem key={answerIndex}>
                   <ListItemText
-                    primary={answer.skinOption}
+                    primary={answer.option}
                     secondary={`Điểm: ${answer.score}`}
                   />
                 </ListItem>
