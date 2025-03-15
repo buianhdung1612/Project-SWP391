@@ -35,8 +35,6 @@ export default function DetailQuizAdmin() {
   const { id } = useParams();
   const [data, setData] = useState<any>(null);
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [alertMessage, setAlertMessage] = useState<string>("");
-  const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
   useEffect(() => {
     const fetchInfo = async () => {
       const response = await fetch(
@@ -55,14 +53,7 @@ export default function DetailQuizAdmin() {
 
       setQuestions(mappedQuestions);
       setData(groupData);
-    }; {
-      alertMessage && (
-        <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-          {alertMessage}
-        </Alert>
-      )
-    }
-
+    }; 
     fetchInfo();
   }, [id]);
 

@@ -10,20 +10,13 @@ export default function ChangePasswordAdminAccount() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const { id } = useParams();
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
         const password = event.target.password.value;
-        const [alertMessage, setAlertMessage] = useState<string>("");
-        const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-        {
-            alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                    {alertMessage}
-                </Alert>
-            )
-        }
+        
         const response = await fetch(`https://freshskinweb.onrender.com/admin/account/change-password/${id}`, {
             method: "PATCH",
             headers: {
@@ -36,13 +29,25 @@ export default function ChangePasswordAdminAccount() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
     return (
         <>
+        {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
             {permissions?.includes("accounts_edit") && (
                 <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
                     <Typography variant="h5" gutterBottom>

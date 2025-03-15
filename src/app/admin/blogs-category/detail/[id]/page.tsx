@@ -2,7 +2,6 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Alert from '@mui/material/Alert';
 import {
     Box,
     Container,
@@ -20,8 +19,6 @@ export default function DetailBlogCategoryAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const { id } = useParams();
-    const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [categoryInfo, setCategoryInfo] = useState({
         title: "",
         description: "",
@@ -32,13 +29,7 @@ export default function DetailBlogCategoryAdminPage() {
         createdAt: ""
     });
     const [showFullDescription, setShowFullDescription] = useState(false);
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+
 
     useEffect(() => {
         const fetchBrand = async () => {

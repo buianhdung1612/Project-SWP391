@@ -2,7 +2,7 @@
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Tooltip, Checkbox } from "@mui/material";
 import { BiDetail } from "react-icons/bi";
-import { MdDeleteOutline, MdEditNote } from "react-icons/md";
+import { MdDeleteOutline } from "react-icons/md";
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { ProfileAdminContext } from "../layout";
@@ -123,15 +123,8 @@ export default function UserAdminPage() {
             location.reload();
         }
     }
- const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
     const handleInputChecked = (event: any, id: number) => {
         if (event.target.checked) {
             setInputChecked(prev => [...prev, id]);
@@ -160,8 +153,14 @@ export default function UserAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
@@ -180,14 +179,27 @@ export default function UserAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+       
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     // Hết Xóa một tài khoản
 
     return (
         <>
+         {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
             {permissions?.includes("accounts_view") && permissions?.includes("accounts_edit") && (
                 <Box p={3}>
                     {/* Header */}

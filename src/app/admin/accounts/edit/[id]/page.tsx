@@ -10,7 +10,8 @@ export default function EditAccountAdmin() {
     const permissions = dataProfile?.permissions;
     const [listRoles, setListRoles] = useState([]);
     const [roleCurrent, setRoleCurrent] = useState('');
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -30,15 +31,7 @@ export default function EditAccountAdmin() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
- const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+   
         const formData = new FormData(event.currentTarget);
 
         const request = {
@@ -66,13 +59,25 @@ export default function EditAccountAdmin() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
     return (
-        <>
+        <> 
+         {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
             {permissions?.includes("accounts_edit") && (
                 <Box sx={{ padding: 3, backgroundColor: "#e3f2fd" }}>
                     <Typography variant="h5" gutterBottom>

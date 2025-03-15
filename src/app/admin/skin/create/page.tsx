@@ -9,7 +9,8 @@ interface SkinType {
 }
 
 export default function CreateTypeSkinAdminPage() {
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
@@ -28,21 +29,25 @@ export default function CreateTypeSkinAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
-const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    {
+    
+    return (
+        <>
+        {
         alertMessage && (
             <Alert severity={alertSeverity} sx={{ mb: 2 }}>
                 {alertMessage}
             </Alert>
         )
     }
-    return (
-        <>
             <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
                 <Typography variant="h5" gutterBottom>
                     Trang tạo mới thể loại da

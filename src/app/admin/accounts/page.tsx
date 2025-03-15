@@ -18,15 +18,9 @@ export default function AccountAdminPage() {
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
- const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity ] = useState<"success" | "error" | "info" | "warning">("info");
+    
     useEffect(() => {
         const urlCurrent = new URL(location.href);
         const api = new URL(linkApi);
@@ -117,8 +111,13 @@ export default function AccountAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
@@ -136,14 +135,26 @@ export default function AccountAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     // Hết Xóa một tài khoản
 
     return (
         <>
+        {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
             {permissions?.includes("accounts_view") && permissions?.includes("accounts_edit")  && (
                 <Box p={3}>
                     {/* Header */}

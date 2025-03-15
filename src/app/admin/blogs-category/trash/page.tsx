@@ -332,6 +332,11 @@ export default function BrandsTrashAdminPage() {
 
     return (
         <>
+        {alertMessage && (
+                        <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                            {alertMessage}
+                        </Alert>
+                    )}
             {permissions?.includes("blogs-category_view") && permissions.includes("blogs-category_edit") && (
                 <Box p={3}>
 

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
+// import { Bold } from "lucide-react";
 
 const RevenueChart = () => {
   const [chartData, setChartData] = useState<{
@@ -79,11 +80,11 @@ const RevenueChart = () => {
   }, []);
 
   return (
-    <div style={{ width: "500px", height: "350px", margin: "auto" }}>
-    <h2  style={{ fontSize: "11px" }}>Biểu đồ doanh thu theo ngày</h2>
+    <div style={{ width: "500px", height: "300px", margin: "auto" }}>
+    {/* <h2  style={{ fontSize: "20px" }}>Biểu đồ doanh thu theo ngày</h2> */}
       {chartData ? <Bar data={chartData} options={chartOptions} /> : <p>Đang tải dữ liệu...</p>}
     </div>
   );
 };
 
-export default RevenueChart;
+export default RevenueChart; 

@@ -22,6 +22,8 @@ export default function EditProductAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const { id } = useParams();
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
 
     // Quản lý mặc định
     const [description, setDescription] = useState('');
@@ -46,8 +48,6 @@ export default function EditProductAdminPage() {
         featured: false,
         status: "ACTIVE"
     });
-    const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     useEffect(() => {
         const fetchCategories = async () => {
             const response = await fetch('https://freshskinweb.onrender.com/admin/products/category/show');
@@ -76,13 +76,7 @@ export default function EditProductAdminPage() {
         fetchBrands();
         fetchProduct();
     }, []);
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+    
     // Variants
     const [inputs, setInputs] = useState<InputField[]>([
         { volume: 0, price: 0 }
@@ -207,11 +201,23 @@ export default function EditProductAdminPage() {
         const dataResponse = await response.json();
 
         if (dataResponse.code === 200) {
-            location.reload();
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     };
 
     return (
+        <>{
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
         <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
             <Typography variant="h4" gutterBottom>
                 Trang chỉnh sửa sản phẩm
@@ -404,5 +410,6 @@ export default function EditProductAdminPage() {
                 </Paper>
             )}
         </Box>
+        </>
     );
 }

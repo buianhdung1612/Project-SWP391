@@ -52,13 +52,7 @@ export default function CreateProductAdminPage() {
         fetchBrands();
         fetchSkintypes();
     }, []);
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+
 
     const [inputCheckedCategory, setInputCheckedCategory] = useState<number[]>([]);
 
@@ -116,7 +110,12 @@ export default function CreateProductAdminPage() {
 
         const dataResponse = await response.json();
         if (dataResponse.code === 200) {
-            location.reload();
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
@@ -159,6 +158,13 @@ export default function CreateProductAdminPage() {
 
 
     return (
+        <>{
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
         <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>
             <Typography variant="h5" gutterBottom>
                 Trang tạo mới sản phẩm
@@ -320,5 +326,6 @@ export default function CreateProductAdminPage() {
                 </Paper>
             )}
         </Box >
+        </>
     );
 }

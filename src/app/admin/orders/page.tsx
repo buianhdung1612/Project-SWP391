@@ -40,13 +40,6 @@ export default function OrdersAdminPage() {
     const [page, setPage] = useState(1);
     const [changeMulti, setChangeMulti] = useState("PENDING");
 
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);
@@ -150,8 +143,13 @@ export default function OrdersAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     // Hết Thay đổi trạng thái 1 đơn hàng
@@ -179,8 +177,13 @@ export default function OrdersAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
@@ -210,6 +213,13 @@ export default function OrdersAdminPage() {
 
     return (
         <>
+         {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
             {permissions?.includes("orders_confirm") && permissions.includes("orders_delete") && (
                 <Box p={3}>
                     {/* Header */}

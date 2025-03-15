@@ -22,9 +22,14 @@ interface PermissionProps {
   onCheckboxChange: (roleId: string, permissionName: string, checked: boolean) => void;
 }
 
+<<<<<<< HEAD
+=======
+// Component Permission: Render các dòng permission dựa trên danh sách roles có trạng thái permission cập nhật
+>>>>>>> 80b953dc8047c1c6f53d688c6d0cb693aafb4367
 function Permission({ permissions, roles, onCheckboxChange }: PermissionProps) {
   return (
     <>
+   
       {permissions.map((item, index) => (
         <tr key={index} data-name={item.dataName}>
           <td style={{ padding: "12px" }}>{item.dataContent}</td>
