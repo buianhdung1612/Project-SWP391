@@ -103,83 +103,84 @@ export default function CreateQuizAdminPage() {
 
     return (
         <>
-            <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
-                <Typography variant="h5" gutterBottom>
-                    Trang tạo mới bộ câu hỏi
-                </Typography>
+            {permissions?.includes("quiz_create") && (
+                <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
+                    <Typography variant="h5" gutterBottom>
+                        Trang tạo mới bộ câu hỏi
+                    </Typography>
 
-                <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label="Bộ đề"
-                            name="title"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <TextField
-                            label="Mô tả bộ đề"
-                            name="description"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-                            {questions.map((question, questionIndex) => (
-                                <Box key={questionIndex} sx={{ marginBottom: 3 }}>
-                                    <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
-                                        <TextField
-                                            label="Câu hỏi"
-                                            variant="outlined"
-                                            size="small"
-                                            value={question.question}
-                                            onChange={(e) => handleInputChange(questionIndex, 'question', e.target.value)}
-                                            sx={{ width: "80%", mr: 5 }}
-                                        />
-                                        <MdDeleteForever onClick={() => handleRemoveQuestion(questionIndex)} className='text-red-400 text-[25px] ml-[10px] cursor-scoreer' />
-
-                                    </Box>
-                                    {question.answers.map((answer, answerIndex) => (
-                                        <Box key={answerIndex} sx={{ display: 'flex', alignItems: 'center', mb: 2, pl: 5 }}>
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Bộ đề"
+                                name="title"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                            />
+                            <TextField
+                                label="Mô tả bộ đề"
+                                name="description"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                            />
+                            <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
+                                {questions.map((question, questionIndex) => (
+                                    <Box key={questionIndex} sx={{ marginBottom: 3 }}>
+                                        <Box sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                             <TextField
-                                                label="Đáp án"
+                                                label="Câu hỏi"
                                                 variant="outlined"
                                                 size="small"
-                                                value={answer.option}
-                                                onChange={(e) => handleInputChange(questionIndex, 'answeroption', e.target.value, answerIndex)}
-                                                sx={{ mr: 1, width: "700px" }}
+                                                value={question.question}
+                                                onChange={(e) => handleInputChange(questionIndex, 'question', e.target.value)}
+                                                sx={{ width: "80%", mr: 5 }}
                                             />
-                                            <Typography variant="h6">:</Typography>
-                                            <TextField
-                                                label="Điểm"
-                                                type="number"
-                                                variant="outlined"
-                                                size="small"
-                                                value={answer.score}
-                                                onChange={(e) => handleInputChange(questionIndex, 'answerscore', e.target.value, answerIndex)}
-                                                sx={{ ml: 1, width: "100px" }}
-                                            />
-                                            <MdDeleteForever onClick={() => handleRemoveAnswer(questionIndex, answerIndex)} className='text-red-400 text-[25px] ml-[20px] cursor-scoreer' />
-                                            <Button variant="contained" sx={{ marginLeft: 5 }} onClick={() => handleAddAnswer(questionIndex)}>
-                                                Thêm đáp án
-                                            </Button>
+                                            <MdDeleteForever onClick={() => handleRemoveQuestion(questionIndex)} className='text-red-400 text-[25px] ml-[10px] cursor-scoreer' />
+
                                         </Box>
-                                    ))}
-                                    <Button variant="contained" onClick={handleAddQuestion}>
-                                        Thêm câu hỏi
-                                    </Button>
-                                </Box>
-                            ))}
-                        </Box>
-                        <Button type="submit" variant="contained" color="primary" sx={{ width: '100%' }}>
-                            Tạo mới bộ đề
-                        </Button>
-                    </form>
-                </Paper>
-            </Box>
-
+                                        {question.answers.map((answer, answerIndex) => (
+                                            <Box key={answerIndex} sx={{ display: 'flex', alignItems: 'center', mb: 2, pl: 5 }}>
+                                                <TextField
+                                                    label="Đáp án"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    value={answer.option}
+                                                    onChange={(e) => handleInputChange(questionIndex, 'answeroption', e.target.value, answerIndex)}
+                                                    sx={{ mr: 1, width: "700px" }}
+                                                />
+                                                <Typography variant="h6">:</Typography>
+                                                <TextField
+                                                    label="Điểm"
+                                                    type="number"
+                                                    variant="outlined"
+                                                    size="small"
+                                                    value={answer.score}
+                                                    onChange={(e) => handleInputChange(questionIndex, 'answerscore', e.target.value, answerIndex)}
+                                                    sx={{ ml: 1, width: "100px" }}
+                                                />
+                                                <MdDeleteForever onClick={() => handleRemoveAnswer(questionIndex, answerIndex)} className='text-red-400 text-[25px] ml-[20px] cursor-scoreer' />
+                                                <Button variant="contained" sx={{ marginLeft: 5 }} onClick={() => handleAddAnswer(questionIndex)}>
+                                                    Thêm đáp án
+                                                </Button>
+                                            </Box>
+                                        ))}
+                                        <Button variant="contained" onClick={handleAddQuestion}>
+                                            Thêm câu hỏi
+                                        </Button>
+                                    </Box>
+                                ))}
+                            </Box>
+                            <Button type="submit" variant="contained" color="primary" sx={{ width: '100%' }}>
+                                Tạo mới bộ đề
+                            </Button>
+                        </form>
+                    </Paper>
+                </Box>
+            )}
         </>
     );
 }

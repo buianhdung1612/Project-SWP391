@@ -46,13 +46,13 @@ export default function EditQuizAdminPage() {
 
     fetchInfo();
   }, [id]);
- {
-            alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                    {alertMessage}
-                </Alert>
-            )
-        }
+  {
+    alertMessage && (
+      <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+        {alertMessage}
+      </Alert>
+    )
+  }
   // Hàm tối ưu hóa để xử lý thay đổi input
   const handleInputChange = useCallback(
     (index: number, field: "question" | "answeroption" | "answerscore", value: string | number, answerIndex?: number) => {
@@ -105,10 +105,10 @@ export default function EditQuizAdminPage() {
       setAlertMessage(dataResponse.message);
       setAlertSeverity("success");
       setTimeout(() => location.reload(), 2000);
-  } else {
+    } else {
       setAlertMessage(dataResponse.message);
       setAlertSeverity("error");
-  }
+    }
   };
 
   const handleAddQuestion = useCallback(() => {
@@ -147,130 +147,134 @@ export default function EditQuizAdminPage() {
   }
 
   return (
-    <Box sx={{ padding: 3, backgroundColor: "#ffffff" }}>
-      <Typography variant="h5" gutterBottom>
-        Trang chỉnh sửa bộ câu hỏi
-      </Typography>
+    <>
+      {permissions?.includes("quiz_edit") && (
+        <Box sx={{ padding: 3, backgroundColor: "#ffffff" }}>
+          <Typography variant="h5" gutterBottom>
+            Trang chỉnh sửa bộ câu hỏi
+          </Typography>
 
-      {data && (
-        <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-          <form onSubmit={handleSubmit}>
-            <TextField
-              label="Bộ đề"
-              name="title"
-              variant="outlined"
-              fullWidth
-              sx={{ marginBottom: 3 }}
-              value={data.title}
-              onChange={(e) => 
-                setData((prevData: any) => ({
-                  ...prevData,
-                  title: e.target.value,
-                }))
-              }
-              required
-            />
-            <TextField
-              label="Mô tả bộ đề"
-              name="description"
-              variant="outlined"
-              fullWidth
-              sx={{ marginBottom: 3 }}
-              value={data.description}
-              onChange={(e) => 
-                setData((prevData: any) => ({
-                  ...prevData,
-                  description: e.target.value,
-                }))
-              }
-              required
-            />
-            <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-              {questions.map((question, questionIndex) => (
-                <Box key={questionIndex} sx={{ marginBottom: 3 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
-                    <TextField
-                      label="Câu hỏi"
-                      variant="outlined"
-                      size="small"
-                      value={question.question}
-                      onChange={(e) =>
-                        handleInputChange(questionIndex, "question", e.target.value)
-                      }
-                      sx={{ width: "80%", mr: 5 }}
-                    />
-                    <MdDeleteForever
-                      onClick={() => handleRemoveQuestion(questionIndex)}
-                      className="text-red-400 text-[25px] ml-[10px] cursor-pointer"
-                    />
-                  </Box>
-                  {question.answers.map((answer, answerIndex) => (
-                    <Box
-                      key={answerIndex}
-                      sx={{
-                        display: "flex",
-                        alignItems: "center",
-                        mb: 2,
-                        pl: 5,
-                      }}
-                    >
-                      <TextField
-                        label="Đáp án"
-                        variant="outlined"
-                        size="small"
-                        value={answer.option}
-                        onChange={(e) =>
-                          handleInputChange(
-                            questionIndex,
-                            "answeroption",
-                            e.target.value,
-                            answerIndex
-                          )
-                        }
-                        sx={{ mr: 1, width: "700px" }}
-                      />
-                      <Typography variant="h6">:</Typography>
-                      <TextField
-                        label="Điểm"
-                        type="number"
-                        variant="outlined"
-                        size="small"
-                        value={answer.score}
-                        onChange={(e) =>
-                          handleInputChange(
-                            questionIndex,
-                            "answerscore",
-                            e.target.value,
-                            answerIndex
-                          )
-                        }
-                        sx={{ ml: 1, width: "100px" }}
-                      />
-                      <MdDeleteForever
-                        onClick={() => handleRemoveAnswer(questionIndex, answerIndex)}
-                        className="text-red-400 text-[25px] ml-[20px] cursor-pointer"
-                      />
-                      <Button
-                        variant="contained"
-                        sx={{ marginLeft: 5 }}
-                        onClick={() => handleAddAnswer(questionIndex)}
-                      >
-                        Thêm đáp án
+          {data && (
+            <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+              <form onSubmit={handleSubmit}>
+                <TextField
+                  label="Bộ đề"
+                  name="title"
+                  variant="outlined"
+                  fullWidth
+                  sx={{ marginBottom: 3 }}
+                  value={data.title}
+                  onChange={(e) =>
+                    setData((prevData: any) => ({
+                      ...prevData,
+                      title: e.target.value,
+                    }))
+                  }
+                  required
+                />
+                <TextField
+                  label="Mô tả bộ đề"
+                  name="description"
+                  variant="outlined"
+                  fullWidth
+                  sx={{ marginBottom: 3 }}
+                  value={data.description}
+                  onChange={(e) =>
+                    setData((prevData: any) => ({
+                      ...prevData,
+                      description: e.target.value,
+                    }))
+                  }
+                  required
+                />
+                <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
+                  {questions.map((question, questionIndex) => (
+                    <Box key={questionIndex} sx={{ marginBottom: 3 }}>
+                      <Box sx={{ display: "flex", alignItems: "center", mb: 2 }}>
+                        <TextField
+                          label="Câu hỏi"
+                          variant="outlined"
+                          size="small"
+                          value={question.question}
+                          onChange={(e) =>
+                            handleInputChange(questionIndex, "question", e.target.value)
+                          }
+                          sx={{ width: "80%", mr: 5 }}
+                        />
+                        <MdDeleteForever
+                          onClick={() => handleRemoveQuestion(questionIndex)}
+                          className="text-red-400 text-[25px] ml-[10px] cursor-pointer"
+                        />
+                      </Box>
+                      {question.answers.map((answer, answerIndex) => (
+                        <Box
+                          key={answerIndex}
+                          sx={{
+                            display: "flex",
+                            alignItems: "center",
+                            mb: 2,
+                            pl: 5,
+                          }}
+                        >
+                          <TextField
+                            label="Đáp án"
+                            variant="outlined"
+                            size="small"
+                            value={answer.option}
+                            onChange={(e) =>
+                              handleInputChange(
+                                questionIndex,
+                                "answeroption",
+                                e.target.value,
+                                answerIndex
+                              )
+                            }
+                            sx={{ mr: 1, width: "700px" }}
+                          />
+                          <Typography variant="h6">:</Typography>
+                          <TextField
+                            label="Điểm"
+                            type="number"
+                            variant="outlined"
+                            size="small"
+                            value={answer.score}
+                            onChange={(e) =>
+                              handleInputChange(
+                                questionIndex,
+                                "answerscore",
+                                e.target.value,
+                                answerIndex
+                              )
+                            }
+                            sx={{ ml: 1, width: "100px" }}
+                          />
+                          <MdDeleteForever
+                            onClick={() => handleRemoveAnswer(questionIndex, answerIndex)}
+                            className="text-red-400 text-[25px] ml-[20px] cursor-pointer"
+                          />
+                          <Button
+                            variant="contained"
+                            sx={{ marginLeft: 5 }}
+                            onClick={() => handleAddAnswer(questionIndex)}
+                          >
+                            Thêm đáp án
+                          </Button>
+                        </Box>
+                      ))}
+                      <Button variant="contained" onClick={handleAddQuestion}>
+                        Thêm câu hỏi
                       </Button>
                     </Box>
                   ))}
-                  <Button variant="contained" onClick={handleAddQuestion}>
-                    Thêm câu hỏi
-                  </Button>
                 </Box>
-              ))}
-            </Box>
-            <Button type="submit" variant="contained" color="primary" sx={{ width: "100%" }}>
-              Chỉnh sửa bộ đề
-            </Button>
-          </form>
-        </Paper>
+                <Button type="submit" variant="contained" color="primary" sx={{ width: "100%" }}>
+                  Chỉnh sửa bộ đề
+                </Button>
+              </form>
+            </Paper>
+          )}
+        </Box>
       )}
-    </Box>
+    </>
   );
 }
