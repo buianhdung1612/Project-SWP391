@@ -6,6 +6,13 @@ import { useDispatch, useSelector } from "react-redux";
 import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../(actions)/cart";
 import { MdNavigateNext } from "react-icons/md";
 
+interface PriceByVolume {
+    id: number,
+    volume: number,
+    price: number,
+    unit: string
+}
+
 interface CartItem {
     image: string,
     title: string,
@@ -65,11 +72,11 @@ export default function CartPage() {
                             {products.map((item: CartItem, index: number) => (
                                 <div key={index} className={"border border-solid border-[#ebebeb] border-t-0 p-[10px] flex items-center " + (index == products.length - 1 ? "rounded-bl-[10px] rounded-br-[10px]" : "")} >
                                     <div className="w-[55%] flex items-center">
-                                        <Link href="/detail/12" className="w-[109px] aspect-square">
+                                        <Link href={item.link} className="w-[109px] aspect-square">
                                             <img src={item.image} className="w-full h-full object-cover" />
                                         </Link>
                                         <div className="flex-1 ml-[20px]">
-                                            <Link href="/detail/12">
+                                            <Link href={item.link}>
                                                 <div className="text-[15px] font-[500] mb-[4px] cursor-pointer text-textColor hover:text-secondary">{item.title}</div>
                                             </Link>
                                             <div className="text-[14px] text-textColor mb-[2px]">{item.volume}ml</div>

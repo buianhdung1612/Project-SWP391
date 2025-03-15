@@ -95,10 +95,6 @@ export default function BlogPage() {
     if (isLoading) {
         return <div>Loading...</div>;
     }
-
-    console.log(totalPages);
-    console.log(page);
-    console.log(dataCurrent);
     return (
         <>
             <ul className="flex items-center mt-[17px] container mx-auto px-3">

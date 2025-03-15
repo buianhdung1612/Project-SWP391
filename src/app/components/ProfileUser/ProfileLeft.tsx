@@ -36,8 +36,8 @@ export default function ProfileLeft() {
                         Đơn hàng của bạn
                     </Link>
                 </div>
-                <div className={`text-[#212B25] hover:text-secondary cursor-pointer text-[14px] font-[400] mb-[15px] ` + (pathname == "/user/change-password" ? "text-secondary" : "")}>
-                    <Link href="/user/change-passsword">
+                <div className={`text-[#212B25] hover:text-secondary cursor-pointer text-[14px] font-[400] mb-[15px] ` + (pathname == "/user/changePassword" ? "text-secondary" : "")}>
+                    <Link href="/user/changePasssword">
                         Đổi mật khẩu
                     </Link></div>
                 <button onClick={handleClickLogout} className="text-[#212B25] hover:text-secondary cursor-pointer text-[14px] font-[400] mb-[15px]">Đăng xuất</button>

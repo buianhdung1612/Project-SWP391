@@ -73,11 +73,12 @@ export default function Sider() {
                     if (
                         item.content === "Tổng quan" && !permissions.includes("dashboard_view") ||
                         item.content === "Đơn hàng" && !permissions.includes("orders_view") ||
-                        item.content === "Tài khoản quản trị" && !permissions.includes("roles_view") ||
+                        item.content === "Quản lý tài khoản" && !permissions.includes("accounts_view") ||
                         item.content === "Cài đặt chung" && !permissions.includes("settings_view") ||
                         item.content === "Quản lý sản phẩm" && !permissions.includes("products_view") && !permissions.includes("products-category_view") &&  !permissions.includes("brands_view") && !permissions.includes("skin_view") ||
                         item.content === "Quản lý bài viết" && !permissions.includes("blogs_view") && !permissions.includes("blogs-category_view") || 
-                        item.content === "Quản lý quyền" && !permissions.includes("roles_view") && !permissions.includes("roles_permissions")
+                        item.content === "Quản lý quyền" && !permissions.includes("roles_view") && !permissions.includes("roles_permissions") ||
+                        item.content === "Bộ câu hỏi" && !permissions.includes("quiz_view")
                     ) {
                         return null;
                     }
@@ -108,7 +109,9 @@ export default function Sider() {
                                                     (subItem.content === "Danh mục bài viết" && !permissions.includes("blogs-category_view")) ||
                                                     (subItem.content === "Bài viết" && !permissions.includes("blogs_view")) ||
                                                     (subItem.content === "Nhóm quyền" && !permissions.includes("roles_view")) ||
-                                                    (subItem.content === "Phân quyền" && !permissions.includes("roles_permissions"))
+                                                    (subItem.content === "Phân quyền" && !permissions.includes("roles_permissions")) ||
+                                                    (subItem.content === "Tài khoản quản trị" && !permissions.includes("accounts_view")) ||
+                                                    (subItem.content === "Tài khoản người dùng" && !permissions.includes("accounts_view"))
                                                 ) {
                                                     return null;
                                                 }

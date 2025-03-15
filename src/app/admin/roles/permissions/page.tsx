@@ -3,7 +3,6 @@
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useEffect, useState, ChangeEvent, useContext } from "react";
 import { ProfileAdminContext } from "../../layout";
-import Alert from '@mui/material/Alert';
 // Định nghĩa kiểu cho PermissionItem
 interface PermissionItem {
   dataName: string;
@@ -17,22 +16,12 @@ interface Role {
   permission: string[];
 }
 
-// Định nghĩa kiểu cho props của component Permission
 interface PermissionProps {
   permissions: PermissionItem[];
   roles: Role[];
   onCheckboxChange: (roleId: string, permissionName: string, checked: boolean) => void;
 }
-const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
-// Component Permission: Render các dòng permission dựa trên danh sách roles có trạng thái permission cập nhật
+
 function Permission({ permissions, roles, onCheckboxChange }: PermissionProps) {
   return (
     <>
@@ -66,7 +55,6 @@ export default function PermissionPage() {
   const permissions = dataProfile?.permissions;
   const [listRoles, setListRoles] = useState<Role[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  // State lưu permission của từng role dạng object: { roleId: [permission1, permission2, ...] }
   const [updatedRoles, setUpdatedRoles] = useState<Record<string, string[]>>({});
 
   useEffect(() => {
@@ -74,7 +62,6 @@ export default function PermissionPage() {
       try {
         const response = await fetch("https://freshskinweb.onrender.com/admin/roles");
         const data = await response.json();
-        // Giả sử data.data chứa danh sách role, mỗi role có cấu trúc: { roleId, title, permission: [] }
         const roles: Role[] = data.data;
         setListRoles(roles);
 
@@ -436,7 +423,7 @@ export default function PermissionPage() {
                 onCheckboxChange={handleCheckboxChange}
               />
 
-              {/* Tài khoản quản trị */}
+              {/* Tài khoản */}
               <tr>
                 <td
                   style={{
@@ -446,7 +433,7 @@ export default function PermissionPage() {
                   }}
                   colSpan={listRoles.length + 1}
                 >
-                  Tài khoản quản trị
+                  Tài khoản
                 </td>
               </tr>
               <Permission
@@ -459,6 +446,33 @@ export default function PermissionPage() {
                   { dataName: "accounts_create", dataContent: "Thêm mới" },
                   { dataName: "accounts_edit", dataContent: "Chỉnh sửa" },
                   { dataName: "accounts_delete", dataContent: "Xóa" },
+                ]}
+                onCheckboxChange={handleCheckboxChange}
+              />
+
+              {/* Quiz */}
+              <tr>
+                <td
+                  style={{
+                    fontWeight: "bold",
+                    padding: "12px",
+                    backgroundColor: "#e1f5fe",
+                  }}
+                  colSpan={listRoles.length + 1}
+                >
+                  Quiz
+                </td>
+              </tr>
+              <Permission
+                roles={listRoles.map((role) => ({
+                  ...role,
+                  permission: updatedRoles[role.roleId] || [],
+                }))}
+                permissions={[
+                  { dataName: "quiz_view", dataContent: "Xem" },
+                  { dataName: "quiz_create", dataContent: "Thêm mới" },
+                  { dataName: "quiz_edit", dataContent: "Chỉnh sửa" },
+                  { dataName: "quiz_delete", dataContent: "Xóa" },
                 ]}
                 onCheckboxChange={handleCheckboxChange}
               />

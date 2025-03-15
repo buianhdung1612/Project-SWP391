@@ -5,12 +5,6 @@ import CardItem from "@/app/components/Card/CardItem";
 import Title from "@/app/components/title/Title";
 import { useState } from "react";
 
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/css';
-import 'swiper/css/navigation';
-import '../../(page)/swiper.css';
-import { Navigation } from 'swiper/modules';
-
 export default function Section9(props: any) {
     const { dataInit = [] } = props;
 
@@ -47,27 +41,19 @@ export default function Section9(props: any) {
                     </button>
                 ))}
             </div>
-
-            <Swiper
-                navigation={true}
-                modules={[Navigation]}
-                className="mySwiper container mx-auto"
-                spaceBetween={20}
-                slidesPerView={5}
-            >
-                {data.map((item: any, index: number) => (
-                    <SwiperSlide key={index}>
-                        <CardItem
-                            image={item.thumbnail}
-                            brand={item.brand.title}
-                            title={item.title}
-                            link={`/detail/${item.slug}`}
-                            priceByVolume={item.variants}
-                            discount={item.discountPercent}
-                        />
-                    </SwiperSlide>
+            <div className="flex-1 grid grid-cols-5 gap-[20px] container mx-auto">
+                {data.slice(0, 5).map((item: any, index: number) => (
+                    <CardItem
+                        key={index}
+                        image={item.thumbnail}
+                        brand={item.brand.title}
+                        title={item.title}
+                        link={`/detail/${item.slug}`}
+                        priceByVolume={item.variants}
+                        discount={item.discountPercent}
+                    />
                 ))}
-            </Swiper>
+            </div>
             <ButtonSeeAll />
         </>
     )

@@ -12,19 +12,23 @@ export default function QuizQuestion(props: any) {
 
     const [valueCurrent, setValueCurrent] = useState("");
 
-    // Thiết lập valueCurrent từ answerCurrent mỗi khi answerCurrent hoặc name thay đổi
     useEffect(() => {
-        setValueCurrent(answerCurrent || ""); // Nếu không có giá trị hiện tại, đặt thành chuỗi rỗng
+        setValueCurrent(answerCurrent || ""); 
     }, [answerCurrent, name]);
 
     const handleChange = (event: any) => {
         const selectedValue = event.target.value;
         dispatchQuiz(quizAnswer(name, selectedValue));
-        setValueCurrent(selectedValue); // Cập nhật valueCurrent
+        setValueCurrent(selectedValue);
     }
 
     return (
         <>
+            <ul className="flex items-center mt-[17px] container mx-auto pl-[20px]">
+                <li className="text-secondary text-[15px] font-[400]">
+                    Câu hỏi {valueA[1]}/9
+                </li>
+            </ul>
             <div className="h-[52vh]">
                 <div className="max-w-[900px] flex justify-center mx-auto px-[16px] pt-[30px] pb-[30px]">
                     <div className="text-[18px] text-[#262626] font-[700]">{question}</div>

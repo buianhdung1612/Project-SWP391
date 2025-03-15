@@ -1,19 +1,19 @@
 "use client"
 
 import Link from "next/link";
-// import { useContext } from "react";
+import { useContext } from "react";
 import { MdNavigateNext } from "react-icons/md";
-// import { SettingProfileContext } from "../../layout";
+import { SettingProfileContext } from "../../layout";
 import ProfileLeft from "@/app/components/ProfileUser/ProfileLeft";
 
 export default function ChangePasswordPage() {
-    // const settingProfile = useContext(SettingProfileContext);
+    const settingProfile = useContext(SettingProfileContext);
     
-    // if (!settingProfile) {
-    //     return null;
-    // }
+    if (!settingProfile) {
+        return null;
+    }
 
-    // const { profile } = settingProfile;
+    const { profile } = settingProfile;
 
     return(
         <>
