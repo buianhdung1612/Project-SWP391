@@ -20,7 +20,8 @@ export default function EditRoleAdmin() {
     const permissions = dataProfile?.permissions;
     const [description, setDescription] = useState('');
     const { id } = useParams();
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [roleInfo, setRoleInfo] = useState({
         title: "",
         position: 0,
@@ -40,15 +41,8 @@ export default function EditRoleAdmin() {
 
         fetchBrand();
     }, []);
-const [alertMessage, setAlertMessage] = useState<string>("");
-  const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
- {
-            alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                    {alertMessage}
-                </Alert>
-            )
-        }
+
+ 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
@@ -68,12 +62,24 @@ const [alertMessage, setAlertMessage] = useState<string>("");
         const dataResponse = await response.json();
 
         if (dataResponse.code === 200) {
-            location.reload();
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
     return (
         <>
+        {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
             <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
                 <Typography variant="h4" gutterBottom>
                     Trang chỉnh sửa nhóm quyền

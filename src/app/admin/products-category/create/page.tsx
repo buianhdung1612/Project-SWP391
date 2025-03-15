@@ -12,7 +12,8 @@ import Alert from '@mui/material/Alert';
 export default function CreateProductCategoryAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [description, setDescription] = useState('');
     const [categoryCurrent, setCategoryCurrent] = useState("");
     const [listCategory, setListCategory] = useState([]);
@@ -28,8 +29,6 @@ export default function CreateProductCategoryAdminPage() {
     }, []);
 
     const [images, setImages] = useState<(File)[]>([]);
-    const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const handleImageChange = (newImages: (File)[]) => {
         setImages(newImages);
     };
@@ -63,8 +62,13 @@ export default function CreateProductCategoryAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 

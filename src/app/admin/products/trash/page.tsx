@@ -270,6 +270,8 @@ export default function ProductsTrashAdminPage() {
 
     // Khôi phục một sản phẩm
     const handleRestoreOneProduct = async (id: number) => {
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn bài viết này không?");
+        if (confirm) {
         const path = `${linkApi}/restore/${id}`;
 
         const response = await fetch(path, {
@@ -281,9 +283,15 @@ export default function ProductsTrashAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
+    }
     }
     // Hết Khôi phục một sản phẩm
 

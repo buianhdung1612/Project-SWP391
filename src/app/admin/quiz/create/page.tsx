@@ -31,13 +31,6 @@ export default function CreateQuizAdminPage() {
                 })),
             })),
         }
-        {
-            alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                    {alertMessage}
-                </Alert>
-            )
-        }
         const response = await fetch('https://freshskinweb.onrender.com/admin/question/group/create', {
             method: "POST",
             headers: {
@@ -48,8 +41,13 @@ export default function CreateQuizAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
@@ -95,6 +93,13 @@ export default function CreateQuizAdminPage() {
 
     return (
         <>
+        {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
             <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
                 <Typography variant="h5" gutterBottom>
                     Trang tạo mới bộ câu hỏi

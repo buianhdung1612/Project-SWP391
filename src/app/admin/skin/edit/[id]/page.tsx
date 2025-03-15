@@ -16,15 +16,9 @@ export default function EditTypeSkinAdminPage() {
         type: "",
         description: ""
     })
- const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+   
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/admin/skintypes/${id}`);
@@ -53,13 +47,25 @@ export default function EditTypeSkinAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     
     return (
         <>
+         {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
             <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
                 <Typography variant="h5" gutterBottom>
                     Trang chỉnh sửa thể loại da

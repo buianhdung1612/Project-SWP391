@@ -2,7 +2,6 @@
 
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-import Alert from '@mui/material/Alert';
 import {
     Box,
     Typography,
@@ -17,8 +16,7 @@ import {
 import { ProfileAdminContext } from "@/app/admin/layout";
 
 export default function DetailOrderAdmin() {
-    const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const { id } = useParams();
@@ -44,13 +42,7 @@ export default function DetailOrderAdmin() {
 
         fetchDetailOrder();
     }, [id]);
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+   
 
     return (
         <>

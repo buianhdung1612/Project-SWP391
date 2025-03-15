@@ -9,7 +9,8 @@ import { BiDetail } from "react-icons/bi";
 import Alert from '@mui/material/Alert';
 export default function QuizAdminPage() {
     const [data, setData] = useState([]);
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const linkApi = 'https://freshskinweb.onrender.com/admin/question/group';
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
@@ -141,16 +142,16 @@ export default function QuizAdminPage() {
         
     }
     // Hết Xóa vĩnh viễn 1 bộ đề
-const [alertMessage, setAlertMessage] = useState<string>("");
-  const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
- {
+
+ 
+    return (
+        <>{
             alertMessage && (
                 <Alert severity={alertSeverity} sx={{ mb: 2 }}>
                     {alertMessage}
                 </Alert>
             )
         }
-    return (
         <Box p={3}>
             {/* Header */}
             <Typography variant="h5" gutterBottom>
@@ -276,5 +277,6 @@ const [alertMessage, setAlertMessage] = useState<string>("");
                 </TableContainer>
             </Paper>
         </Box>
+        </>
     );
 }

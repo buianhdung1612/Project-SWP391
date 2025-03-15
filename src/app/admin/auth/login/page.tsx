@@ -4,7 +4,7 @@ import React, { useState } from 'react';
 import { TextField, Button, Box, Typography } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
-import Alert from '@mui/material/Alert';
+
 
 export default function LoginAdminPage() {
     const [username, setUsername] = useState('');
@@ -35,15 +35,6 @@ export default function LoginAdminPage() {
         }
        
     };
- const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
     return (
         <Box
             sx={{

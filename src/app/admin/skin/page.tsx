@@ -36,13 +36,7 @@ export default function ProductsAdminPage() {
                 "Content-Type": "application/json"
             },
         });
- {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+ 
         const dataResponse = await response.json();
 
        
@@ -59,6 +53,13 @@ export default function ProductsAdminPage() {
     // Hết Xóa một sản phẩm
 
     return (
+       <>{
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
         
         <Box p={3}>
             {/* Header */}
@@ -126,5 +127,6 @@ export default function ProductsAdminPage() {
                 </TableContainer>
             </Paper>
         </Box>
+        </>
     );
 }

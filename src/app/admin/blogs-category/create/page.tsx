@@ -34,13 +34,7 @@ export default function CreateBlogCategoryAdminPage() {
             featured: formData.get("featured") === "true",
             status: formData.get("status")
         };
-        {
-            alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                    {alertMessage}
-                </Alert>
-            )
-        }
+    
 
         formData.append("request", JSON.stringify(request));
 
@@ -57,13 +51,26 @@ export default function CreateBlogCategoryAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+       
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
     return (
         <>
+         {
+            alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )
+        }
             {permissions?.includes("blogs-category_view") && (
                 <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
                     <Typography variant="h5" gutterBottom>

@@ -27,11 +27,6 @@ export default function EditBlogAdminPage() {
         status: "ACTIVE",
         featured: false
     })
-     {alertMessage && (
-                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                        {alertMessage}
-                    </Alert>
-                )}
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -106,13 +101,23 @@ export default function EditBlogAdminPage() {
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+      
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
 
     return (
-        
+       <> {alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )}
         <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>
             <Typography variant="h5" gutterBottom>
                 Trang tạo mới bài viết
@@ -196,5 +201,6 @@ export default function EditBlogAdminPage() {
                 </Paper>
             )}
         </Box >
+        </>
     );
 }

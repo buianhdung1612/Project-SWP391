@@ -2,7 +2,6 @@
 
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
-import Alert from '@mui/material/Alert';
 import {
     Box,
     Container,
@@ -19,8 +18,6 @@ import { ProfileAdminContext } from "@/app/admin/layout";
 export default function DetailProductAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
-    const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const { id } = useParams();
 
     const [data, setData] = useState({
@@ -56,13 +53,7 @@ export default function DetailProductAdminPage() {
 
         fetchInfo();
     }, [id]);
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+   
     return (
         <>
             {permissions?.includes("products_view") && (

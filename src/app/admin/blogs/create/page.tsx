@@ -70,12 +70,15 @@ export default function CreateBlogAdminPage() {
 
             const dataResponse = await response.json();
 
-            if (dataResponse.code === 200) {
-                alert("Bài viết đã được tạo thành công!");
-                location.reload();
-            } else {
-                alert("Có lỗi xảy ra. Vui lòng thử lại!");
-            }
+           
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
+        }
         } catch (error) {
             alert("Lỗi khi gửi dữ liệu!");
             console.error(error);
@@ -83,13 +86,14 @@ export default function CreateBlogAdminPage() {
             setLoading(false); // Kết thúc request
         }
     };
-      {alertMessage && (
-                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                        {alertMessage}
-                    </Alert>
-                )}
+      
 
     return (
+        <>{alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )}
         <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>
             <Typography variant="h5" gutterBottom>
                 Trang tạo mới bài viết
@@ -163,5 +167,6 @@ export default function CreateBlogAdminPage() {
                 </Paper>
             )}
         </Box>
+        </>
     );
 }

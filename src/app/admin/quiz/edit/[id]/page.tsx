@@ -19,7 +19,8 @@ export default function EditQuizAdminPage() {
   const { id } = useParams();
   const [data, setData] = useState<any>(null); 
   const [questions, setQuestions] = useState<Question[]>([]);
-
+  const [alertMessage, setAlertMessage] = useState<string>("");
+  const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
   useEffect(() => {
     const fetchInfo = async () => {
       const response = await fetch(
@@ -42,15 +43,6 @@ export default function EditQuizAdminPage() {
 
     fetchInfo();
   }, [id]);
-  const [alertMessage, setAlertMessage] = useState<string>("");
-  const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
- {
-            alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                    {alertMessage}
-                </Alert>
-            )
-        }
   // Hàm tối ưu hóa để xử lý thay đổi input
   const handleInputChange = useCallback(
     (index: number, field: "question" | "answeroption" | "answerscore", value: string | number, answerIndex?: number) => {
@@ -100,8 +92,13 @@ export default function EditQuizAdminPage() {
     const dataResponse = await response.json();
 
     if (dataResponse.code === 200) {
-      location.reload();
-    }
+      setAlertMessage(dataResponse.message);
+      setAlertSeverity("success");
+      setTimeout(() => location.reload(), 2000);
+  } else {
+      setAlertMessage(dataResponse.message);
+      setAlertSeverity("error");
+  }
   };
 
   const handleAddQuestion = useCallback(() => {
@@ -140,6 +137,13 @@ export default function EditQuizAdminPage() {
   }
 
   return (
+ <>{
+     alertMessage && (
+       <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+         {alertMessage}
+       </Alert>
+     )
+   }
     <Box sx={{ padding: 3, backgroundColor: "#ffffff" }}>
       <Typography variant="h5" gutterBottom>
         Trang chỉnh sửa bộ câu hỏi
@@ -265,5 +269,6 @@ export default function EditQuizAdminPage() {
         </Paper>
       )}
     </Box>
+    </>
   );
 }

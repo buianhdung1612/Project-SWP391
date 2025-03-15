@@ -11,6 +11,8 @@ const TinyEditor = dynamic(() => import('../../../../../TinyEditor'), {
 
 export default function SettingGeneralAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const permissions = dataProfile?.permissions;
     const [data, setData] = useState({
         websiteName: '',
@@ -36,15 +38,7 @@ export default function SettingGeneralAdminPage() {
         support5: '',
         support6: ''
     });
-const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+    
     useEffect(() => {
         const fetchSettings = async () => {
             const response = await fetch('https://freshskinweb.onrender.com/setting/show');
@@ -73,13 +67,25 @@ const [alertMessage, setAlertMessage] = useState<string>("");
 
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     };
 
     return (
         <>
+        {
+        alertMessage && (
+            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+            </Alert>
+        )
+    }
             <Box p={3} sx={{ padding: 3, backgroundColor: '#ffffff' }}>
                 <Typography variant="h5" gutterBottom>
                     Trang cài đặt chung
