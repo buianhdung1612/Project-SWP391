@@ -9,20 +9,21 @@ import { ProfileAdminContext } from "@/app/admin/layout";
 export default function HeaderAdmin() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [hasNewNotification, setHasNewNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState(""); // Thêm state lưu tin nhắn
-  const [showPopup, setShowPopup] = useState(false); // Trạng thái hiển thị popup
+  const [notificationMessage, setNotificationMessage] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
   const dataProfile = useContext(ProfileAdminContext);
   let pingInterval: NodeJS.Timeout | null = null;
 
   useEffect(() => {
+    let isMounted = true; // Biến kiểm tra component còn mounted không
+
     const connectWebSocket = () => {
       const Socket = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
 
       Socket.onopen = () => {
-        console.log(" WebSocket đã kết nối!");
+        console.log("✅ WebSocket đã kết nối!");
         setSocket(Socket);
 
-        // Gửi ping giữ kết nối sống
         pingInterval = setInterval(() => {
           if (Socket.readyState === WebSocket.OPEN) {
             console.log("📡 Gửi ping...");
@@ -32,37 +33,39 @@ export default function HeaderAdmin() {
       };
 
       Socket.onmessage = (event) => {
-        console.log(" Nhận thông báo từ BE:", event.data);
-        setHasNewNotification(true);
-        setNotificationMessage(event.data); // Lưu tin nhắn từ BE
-        setShowPopup(true); // Hiển thị popup thông báo
+        if (!isMounted) return; // Nếu component bị unmount thì không cập nhật state
 
-        // Ẩn popup sau 3 giây
+        console.log("📩 Nhận thông báo:", event.data);
+        setNotificationMessage(event.data);
+        setHasNewNotification(true);
+        setShowPopup(true);
+
         setTimeout(() => {
           setShowPopup(false);
         }, 3000);
       };
 
       Socket.onclose = () => {
-        console.log(" WebSocket bị mất kết nối, thử lại sau 3 giây...");
+        console.log("❌ WebSocket mất kết nối, thử lại sau 3 giây...");
         setTimeout(connectWebSocket, 3000);
       };
 
       Socket.onerror = (error) => {
-        console.error("Lỗi WebSocket:", error);
+        console.error("⚠️ Lỗi WebSocket:", error);
       };
     };
 
     connectWebSocket();
 
     return () => {
+      isMounted = false; // Đánh dấu component unmount
       console.log("🔌 Đóng kết nối WebSocket!");
       if (socket) socket.close();
       if (pingInterval) clearInterval(pingInterval);
     };
   }, []);
 
-  const handleClickLogout = async () => {
+  const handleClickLogout = () => {
     Cookies.remove("token");
     location.href = "/admin/auth/login";
   };
@@ -84,6 +87,7 @@ export default function HeaderAdmin() {
             className={`text-gray-600 text-[20px] cursor-pointer hover:text-green-400 ${
               hasNewNotification ? "animate-bounce text-red-500" : ""
             }`}
+            onClick={() => setHasNewNotification(false)} // Reset khi nhấn chuông
           />
           {hasNewNotification && (
             <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
@@ -108,7 +112,7 @@ export default function HeaderAdmin() {
       {/* Popup thông báo */}
       {showPopup && (
         <div className="fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg animate-slide-in">
-           {notificationMessage}
+          {notificationMessage}
         </div>
       )}
     </div>
