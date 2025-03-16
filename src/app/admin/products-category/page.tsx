@@ -401,8 +401,8 @@ export default function ProductsCategoryAdminPage() {
                                 </Link>
                             </Button>
                         </Box>
-                        <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
-                            <Table>
+                        <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
+                        <Table stickyHeader >
                                 <TableHead>
                                     <TableRow>
                                         <TableCell ></TableCell>

@@ -1,42 +1,58 @@
-import BlogDetail from "@/app/(page)/blogs/detail/[slug]/page";
-import BlogItem from "@/app/components/Blog/BlogItem";
+"use client";
+
+import { useEffect, useState } from "react";
 import Chart from "@/app/components/Chart/Chart";
 import Chart2 from "@/app/components/Chart/Chart2";
 import { StatCard } from "@/app/components/StatCard/StatCard";
 import { Eye, ShoppingCart, CheckCircle, MessageCircle, DollarSign, ShoppingBag, User2Icon, FileText, Clock, CheckSquare } from "lucide-react";
 
 export default function DashboardAdminPage() {
-  const topSellingProducts = [
-    { name: "Kem dưỡng ẩm", price: "350.000 VND" },
-    { name: "Sữa rửa mặt", price: "220.000 VND" },
-    { name: "Toner làm dịu da", price: "280.000 VND" },
-    { name: "Serum vitamin C", price: "450.000 VND" },
-    { name: "Mặt nạ dưỡng da", price: "150.000 VND" },
-    { name: "Kem chống nắng", price: "370.000 VND" },
-    { name: "Tinh chất phục hồi da", price: "480.000 VND" },
-    { name: "Sữa tẩy trang", price: "260.000 VND" },
-    { name: "Bộ sản phẩm dưỡng da", price: "890.000 VND" },
-    { name: "Gel trị mụn", price: "320.000 VND" }
-  ];
+  const [topSellingProducts, setTopSellingProducts] = useState<{ name: string; price: string }[]>([]);
+  const [stats, setStats] = useState({
+    views: "0",
+    users: "0",
+    sales: "0",
+    revenue: "$0",
+    comments: "0",
+    pending: "0",
+    approved: "0",
+    cancelled: "0",
+    completed: "0",
+    posts: "0",
+  });
+
+  useEffect(() => {
+    async function fetchData() {
+      try {
+        const res = await fetch("/api/dashboard");
+        const data = await res.json();
+        setStats(data.stats);
+        setTopSellingProducts(data.topSellingProducts);
+      } catch (error) {
+        console.error("Error fetching dashboard data:", error);
+      }
+    }
+    fetchData();
+  }, []);
 
   return (
     <>
       <div className="p-6 bg-gray-100 w-full">
-        <h1 className="text-2xl  mb-4">Dashboard</h1>
+        <h1 className="text-2xl mb-4">Dashboard</h1>
 
         {/* Thống kê dạng thẻ */}
         <div className="grid grid-cols-5 gap-6 mb-6 font-bold text-[#374785]">
-        <StatCard value="1,504" label="Lượt xem" icon={<Eye className='text-blue-500' />} />
-        <StatCard value="40" label="Tổng người dùng" icon={<User2Icon className='text-indigo-500' />} />
-        <StatCard value="80" label="Lượt bán" icon={<ShoppingCart className='text-green-500' />} />
-        <StatCard value="$7,842" label="Doanh thu" icon={<DollarSign className='text-yellow-500' />} />
-        <StatCard value="284" label="Bình luận" icon={<MessageCircle className='text-purple-500' />} />
-        <StatCard value="12/23" label="Chờ duyệt" icon={<Clock className='text-orange-500' />} />
-        <StatCard value="30" label="Đã duyệt" icon={<CheckCircle className='text-blue-500' />} />
-        <StatCard value="30" label="Đơn hủy" icon={<ShoppingBag className='text-red-500' />} />
-        <StatCard value="80" label="Hoàn thành" icon={<CheckSquare className='text-green-500' />} />
-        <StatCard value="40" label="Bài viết" icon={<FileText className='text-gray-500' />} />
-      </div>
+          <StatCard value={stats.views} label="Lượt xem" icon={<Eye className='text-blue-500' />} />
+          <StatCard value={stats.users} label="Tổng người dùng" icon={<User2Icon className='text-indigo-500' />} />
+          <StatCard value={stats.sales} label="Lượt bán" icon={<ShoppingCart className='text-green-500' />} />
+          <StatCard value={stats.revenue} label="Doanh thu" icon={<DollarSign className='text-yellow-500' />} />
+          <StatCard value={stats.comments} label="Bình luận" icon={<MessageCircle className='text-purple-500' />} />
+          <StatCard value={stats.pending} label="Chờ duyệt" icon={<Clock className='text-orange-500' />} />
+          <StatCard value={stats.approved} label="Đã duyệt" icon={<CheckCircle className='text-blue-500' />} />
+          <StatCard value={stats.cancelled} label="Đơn hủy" icon={<ShoppingBag className='text-red-500' />} />
+          <StatCard value={stats.completed} label="Hoàn thành" icon={<CheckSquare className='text-green-500' />} />
+          <StatCard value={stats.posts} label="Bài viết" icon={<FileText className='text-gray-500' />} />
+        </div>
 
         {/* Placeholder cho biểu đồ */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">

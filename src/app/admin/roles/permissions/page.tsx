@@ -19,17 +19,20 @@ interface Role {
 interface PermissionProps {
   permissions: PermissionItem[];
   roles: Role[];
-  onCheckboxChange: (roleId: string, permissionName: string, checked: boolean) => void;
+  onCheckboxChange: (
+    roleId: string,
+    permissionName: string,
+    checked: boolean
+  ) => void;
 }
 
-<<<<<<< HEAD
-=======
-// Component Permission: Render các dòng permission dựa trên danh sách roles có trạng thái permission cập nhật
->>>>>>> 80b953dc8047c1c6f53d688c6d0cb693aafb4367
+// <<<<<<< HEAD
+// =======
+// // Component Permission: Render các dòng permission dựa trên danh sách roles có trạng thái permission cập nhật
+// >>>>>>> 80b953dc8047c1c6f53d688c6d0cb693aafb4367
 function Permission({ permissions, roles, onCheckboxChange }: PermissionProps) {
   return (
     <>
-   
       {permissions.map((item, index) => (
         <tr key={index} data-name={item.dataName}>
           <td style={{ padding: "12px" }}>{item.dataContent}</td>
@@ -43,7 +46,11 @@ function Permission({ permissions, roles, onCheckboxChange }: PermissionProps) {
                   data-id={role.roleId}
                   checked={isChecked}
                   onChange={(e: ChangeEvent<HTMLInputElement>) =>
-                    onCheckboxChange(role.roleId, item.dataName, e.target.checked)
+                    onCheckboxChange(
+                      role.roleId,
+                      item.dataName,
+                      e.target.checked
+                    )
                   }
                 />
               </td>
@@ -60,12 +67,16 @@ export default function PermissionPage() {
   const permissions = dataProfile?.permissions;
   const [listRoles, setListRoles] = useState<Role[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(true);
-  const [updatedRoles, setUpdatedRoles] = useState<Record<string, string[]>>({});
+  const [updatedRoles, setUpdatedRoles] = useState<Record<string, string[]>>(
+    {}
+  );
 
   useEffect(() => {
     const fetchRoles = async () => {
       try {
-        const response = await fetch("https://freshskinweb.onrender.com/admin/roles");
+        const response = await fetch(
+          "https://freshskinweb.onrender.com/admin/roles"
+        );
         const data = await response.json();
         const roles: Role[] = data.data;
         setListRoles(roles);
@@ -87,7 +98,11 @@ export default function PermissionPage() {
   }, []);
 
   // Hàm xử lý khi checkbox thay đổi
-  const handleCheckboxChange = (roleId: string, permissionName: string, checked: boolean) => {
+  const handleCheckboxChange = (
+    roleId: string,
+    permissionName: string,
+    checked: boolean
+  ) => {
     setUpdatedRoles((prev) => {
       const rolePermissions = prev[roleId] || [];
       let newPermissions: string[];
@@ -98,7 +113,9 @@ export default function PermissionPage() {
           : [...rolePermissions, permissionName];
       } else {
         // Nếu bỏ check thì loại bỏ permission đó
-        newPermissions = rolePermissions.filter((name) => name !== permissionName);
+        newPermissions = rolePermissions.filter(
+          (name) => name !== permissionName
+        );
       }
       return { ...prev, [roleId]: newPermissions };
     });
@@ -111,19 +128,24 @@ export default function PermissionPage() {
   // Hàm gửi dữ liệu cập nhật permission lên server
   const handleClick = async () => {
     // Chuẩn bị dữ liệu dạng mảng: [{ roleId, permission: [...] }, ...]
-    const dataFinal = Object.entries(updatedRoles).map(([roleId, permission]) => ({
-      roleId,
-      permission,
-    }));
+    const dataFinal = Object.entries(updatedRoles).map(
+      ([roleId, permission]) => ({
+        roleId,
+        permission,
+      })
+    );
 
     try {
-      const response = await fetch("https://freshskinweb.onrender.com/admin/roles/add-permission", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(dataFinal),
-      });
+      const response = await fetch(
+        "https://freshskinweb.onrender.com/admin/roles/add-permission",
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(dataFinal),
+        }
+      );
       const dataResponse = await response.json();
       if (dataResponse.code === 200) {
         // Reload trang hoặc thông báo thành công
@@ -169,6 +191,8 @@ export default function PermissionPage() {
                     textAlign: "left",
                     padding: "12px",
                     backgroundColor: "#f5f5f5",
+                  
+              
                   }}
                 >
                   Tính năng
@@ -208,7 +232,9 @@ export default function PermissionPage() {
                   ...role,
                   permission: updatedRoles[role.roleId] || [],
                 }))}
-                permissions={[{ dataName: "dashboard_view", dataContent: "Xem" }]}
+                permissions={[
+                  { dataName: "dashboard_view", dataContent: "Xem" },
+                ]}
                 onCheckboxChange={handleCheckboxChange}
               />
 
@@ -232,8 +258,14 @@ export default function PermissionPage() {
                 }))}
                 permissions={[
                   { dataName: "products-category_view", dataContent: "Xem" },
-                  { dataName: "products-category_create", dataContent: "Thêm mới" },
-                  { dataName: "products-category_edit", dataContent: "Chỉnh sửa" },
+                  {
+                    dataName: "products-category_create",
+                    dataContent: "Thêm mới",
+                  },
+                  {
+                    dataName: "products-category_edit",
+                    dataContent: "Chỉnh sửa",
+                  },
                   { dataName: "products-category_delete", dataContent: "Xóa" },
                 ]}
                 onCheckboxChange={handleCheckboxChange}
@@ -340,7 +372,10 @@ export default function PermissionPage() {
                 }))}
                 permissions={[
                   { dataName: "blogs-category_view", dataContent: "Xem" },
-                  { dataName: "blogs-category_create", dataContent: "Thêm mới" },
+                  {
+                    dataName: "blogs-category_create",
+                    dataContent: "Thêm mới",
+                  },
                   { dataName: "blogs-category_edit", dataContent: "Chỉnh sửa" },
                   { dataName: "blogs-category_delete", dataContent: "Xóa" },
                 ]}
