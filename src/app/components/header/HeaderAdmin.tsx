@@ -9,18 +9,20 @@ import { ProfileAdminContext } from "@/app/admin/layout";
 export default function HeaderAdmin() {
   const [socket, setSocket] = useState<WebSocket | null>(null);
   const [hasNewNotification, setHasNewNotification] = useState(false);
+  const [notificationMessage, setNotificationMessage] = useState(""); // Thêm state lưu tin nhắn
+  const [showPopup, setShowPopup] = useState(false); // Trạng thái hiển thị popup
   const dataProfile = useContext(ProfileAdminContext);
-  let pingInterval: NodeJS.Timeout | null = null; // Giữ kết nối sống
+  let pingInterval: NodeJS.Timeout | null = null;
 
   useEffect(() => {
     const connectWebSocket = () => {
       const Socket = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
 
       Socket.onopen = () => {
-        console.log("✅ WebSocket đã kết nối!");
+        console.log(" WebSocket đã kết nối!");
         setSocket(Socket);
 
-        // Gửi ping mỗi 30 giây để giữ kết nối sống
+        // Gửi ping giữ kết nối sống
         pingInterval = setInterval(() => {
           if (Socket.readyState === WebSocket.OPEN) {
             console.log("📡 Gửi ping...");
@@ -30,28 +32,35 @@ export default function HeaderAdmin() {
       };
 
       Socket.onmessage = (event) => {
-        console.log("📩 Nhận thông báo từ BE:", event.data);
+        console.log(" Nhận thông báo từ BE:", event.data);
         setHasNewNotification(true);
+        setNotificationMessage(event.data); // Lưu tin nhắn từ BE
+        setShowPopup(true); // Hiển thị popup thông báo
+
+        // Ẩn popup sau 3 giây
+        setTimeout(() => {
+          setShowPopup(false);
+        }, 3000);
       };
 
       Socket.onclose = () => {
-        console.log("❌ WebSocket bị mất kết nối, thử lại sau 3 giây...");
+        console.log(" WebSocket bị mất kết nối, thử lại sau 3 giây...");
         setTimeout(connectWebSocket, 3000);
       };
 
       Socket.onerror = (error) => {
-        console.error("⚠️ Lỗi WebSocket:", error);
+        console.error("Lỗi WebSocket:", error);
       };
     };
 
-    connectWebSocket(); // Khởi tạo WebSocket lần đầu
+    connectWebSocket();
 
     return () => {
       console.log("🔌 Đóng kết nối WebSocket!");
       if (socket) socket.close();
       if (pingInterval) clearInterval(pingInterval);
     };
-  }, []); // Chỉ chạy một lần khi component mount
+  }, []);
 
   const handleClickLogout = async () => {
     Cookies.remove("token");
@@ -95,6 +104,13 @@ export default function HeaderAdmin() {
           <FaArrowRightFromBracket className="text-[#6D7587] text-[20px] hover:text-red-500" />
         </span>
       </div>
+
+      {/* Popup thông báo */}
+      {showPopup && (
+        <div className="fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg animate-slide-in">
+           {notificationMessage}
+        </div>
+      )}
     </div>
   );
 }
