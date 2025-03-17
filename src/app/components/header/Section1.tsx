@@ -292,14 +292,14 @@ export default function Section1() {
                     <Link href="/user/profile">
                         <div className="flex items-center ml-[15px]">
                             <FaRegUserCircle className="text-[28px]" />
-                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Tài khoản</span>
+                            <span className="text-[12px] font-[600] ml-[3px] hover:text-primary">Tài khoản</span>
                         </div>
                     </Link>
                 ) : (
                     <Link href="/user/login">
                         <div className="flex items-center ml-[15px]">
                             <FaRegCircleUser className="text-[28px]" />
-                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Đăng Nhập</span>
+                            <span className="text-[12px] font-[600] ml-[3px] hover:text-primary">Đăng Nhập</span>
                         </div>
                     </Link>
                 )}

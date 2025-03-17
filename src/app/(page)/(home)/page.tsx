@@ -23,6 +23,7 @@ export default function HomePage() {
   const [dataBeautyTrends, setDataBeautyTrends] = useState([]);
   const [dataTop3ProductFeature, setDataTop3ProductFeature] = useState([]);
   const [allCategory, setAllCategory] = useState([]);
+  const [top10ProductSeller, setTop10ProductSeller] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
 
   const fetchData = async () => {
@@ -37,6 +38,7 @@ export default function HomePage() {
       setDataBeautyTrends(data.BeautyTrends);
       setDataTop3ProductFeature(data.Top3ProductFeature);
       setAllCategory(data.AllCategory);
+      setTop10ProductSeller(data.Top10ProductSeller);
       setIsLoading(false);
       return;
     }
@@ -65,14 +67,12 @@ export default function HomePage() {
     return <div>Loading...</div>;
   }
 
-  console.log(dataFeaturedBlogCategory);
-
   return (
     <>
       <Banner />
       <Section1 dataInit={dataFeaturedProductCategory} />
       <Section2 dataInit={dataTop7ProductFlashSale} />
-      <Section3 />
+      <Section3 dataInit={top10ProductSeller}/>
       <Section4 dataInit={allCategory} />
       <Section5 dataInit={dataFreshSkinSlogan} />
       <Banner2 />

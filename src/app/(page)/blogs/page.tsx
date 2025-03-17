@@ -6,34 +6,15 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
+import SeeMore from "./SeeMore";
 
 export default function BlogPage() {
     const searchParams = useSearchParams();
 
-    const [data, setData] = useState([
-        {
-            title: "",
-            slug: "",
-            blogs: [
-                {
-                    title: "",
-                    content: "",
-                    thumbnail: [],
-                    slug: "",
-                    author: "",
-                    createdAt: ""
-                }
-            ]
-        }
-    ]);
-
-    const [totalPages, setTotalPages] = useState(0);
-    const [currentPage, setCurrentPage] = useState(0);
+    // Hiển thị mặc định
     const [page, setPage] = useState(1);
 
     const [dataCurrent, setDataCurrent] = useState({
-        title: "",
-        slug: "",
         blogs: [
             {
                 title: "",
@@ -43,26 +24,30 @@ export default function BlogPage() {
                 author: "",
                 createdAt: ""
             }
-        ]
+        ],
+        blogCategory: {
+            title: "",
+            slug: ""
+        },
+        pageDetail: {
+            totalItems: 0,
+            totalPages: 0,
+            pageSize: 0,
+            page: 0
+        }
     });
+    const [categories, setCategories] = useState([{
+        title: "",
+        slug: "",
+        blogs: []
+    }])
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const linkApi = `https://freshskinweb.onrender.com/home/blogs`;
+    const linkApi = `https://freshskinweb.onrender.com/home/blogs/category/tin-tuc`;
 
     useEffect(() => {
-        const fetchBlogs = async () => {
-            const cachedData = sessionStorage.getItem('blogData');
-            if (cachedData) {
-                const data = JSON.parse(cachedData);
-                setData(data.data.blog_category);
-                setDataCurrent(data.data.blog_category[0]);
-                setTotalPages(data.data.page.totalPages);
-                setCurrentPage(data.data.page.page);
-                setIsLoading(false);
-                return;
-            }
-
+        const fetchBlogsByCategory = async () => {
             const urlCurrent = new URL(window.location.href);
             const api = new URL(linkApi);
 
@@ -80,17 +65,12 @@ export default function BlogPage() {
             const response = await fetch(api.href);
             const data = await response.json();
 
-            sessionStorage.setItem('blogData', JSON.stringify(data));
-
-            setData(data.data.blog_category);
-            setDataCurrent(data.data.blog_category[0]);
-            setTotalPages(data.data.page.totalPages);
-            setCurrentPage(data.data.page.currentPage);
+            setDataCurrent(data.data);
             setIsLoading(false);
         };
 
-        fetchBlogs();
-    }, [page, searchParams]);
+        fetchBlogsByCategory();
+    }, []);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -110,7 +90,7 @@ export default function BlogPage() {
             </ul>
             <Banner2 />
             <div className="container mx-auto mb-[35px]">
-                <div className="uppercase text-center p-[20px] text-[18px] font-[550] text-textColor">{dataCurrent.title}</div>
+                <div className="uppercase text-center p-[20px] text-[18px] font-[550] text-textColor">{dataCurrent.blogCategory.title}</div>
                 <div className="w-full flex">
                     <div className="w-[50%] h-[400px] px-[10px] relative">
                         <Link href={`/blogs/detail/${dataCurrent.blogs[0].slug}`}>
@@ -155,22 +135,9 @@ export default function BlogPage() {
                         ))}
                     </div>
                 </div>
-                <div className="flex-1 px-[10px]">
-                    {data.map((item: any, index: number) => (
-                        <div key={index}>
-                            <div onClick={() => setDataCurrent(data[index])} className={`cursor-pointer text-[18px] font-[600] pb-[8px] border-b border-solid border-secondary ` + (dataCurrent.title == item.title ? "text-primary" : "text-textColor")}>
-                                {item.title}
-                            </div>
-                            <div className="mt-[8px]">
-                                {item.blogs.slice(0, 3).map((item: any, index: number) => (
-                                    <Link href={`/blogs/detail/${item.slug}`} key={index} className=" block text-textColor hover:text-secondary text-[14px] mb-[10px] font-[500]">{item.title}</Link>
-                                ))}
-                            </div>
-                        </div>
-                    ))}
-                </div>
+                <SeeMore title={dataCurrent.blogCategory.title}/>
             </div>
-            <Pagination totalPages={totalPages} currentPage={currentPage} />
+            <Pagination totalPages={dataCurrent.pageDetail.totalPages} currentPage={dataCurrent.pageDetail.page} />
         </>
     )
 }

@@ -53,6 +53,7 @@ export default function RootLayout({
     if (!pathname.startsWith("/admin/auth/login")) {
       const fetchProfile = async () => {
         const token = Cookies.get("token");
+        console.log(token);
 
         if (token) {
           const response = await fetch(

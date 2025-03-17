@@ -1,6 +1,18 @@
+"use client"
+
+import { useContext } from "react";
 import { FaStar } from "react-icons/fa6";
+import { SettingProfileContext } from "../../layout";
 
 export default function Rating() {
+    const settingProfile = useContext(SettingProfileContext);
+
+    if (!settingProfile) {
+        return null;
+    }
+
+    const { profile } = settingProfile;
+
     return (
         <>
             <div className="container mx-auto">
@@ -90,6 +102,10 @@ export default function Rating() {
                                 </div>
                                 <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">107 Rất hài lòng</span>
                             </div>
+                        </div>
+                        <div className="flex-1 text-center">
+                            <div className="text-[13px]">Chia sẻ nhận xét của bạn về sản phẩm này</div>
+                            <button className="text-[15px] mt-[15px] font-bold text-white bg-[#F26800] h-[34px] px-[10px] rounded-[3px]">Viết Bình luận</button>
                         </div>
                     </div>
                 </div>

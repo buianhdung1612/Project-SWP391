@@ -18,6 +18,7 @@ export default function MenuShowBrand(props: { text: string, link: Url }) {
         const fetchData = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/home`);
             const data = await response.json();
+            console.log(data);
             setData(data.AllBrand);
         };
 
