@@ -75,7 +75,7 @@ export default function Section11(props: any) {
                 ))}
             </div>
 
-            <ButtonSeeAll link="/blogs" />
+            <ButtonSeeAll link="/blogs/tin-tuc" />
         </>
     );
 }

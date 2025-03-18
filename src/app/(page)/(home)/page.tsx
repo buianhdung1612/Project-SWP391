@@ -45,7 +45,6 @@ export default function HomePage() {
 
     const response = await fetch(`https://freshskinweb.onrender.com/home`);
     const data = await response.json();
-
     sessionStorage.setItem('homeData', JSON.stringify(data));
 
     setDataFeaturedBlogCategory(data.featuredBlogCategory);
@@ -66,7 +65,7 @@ export default function HomePage() {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-
+  
   return (
     <>
       <Banner />

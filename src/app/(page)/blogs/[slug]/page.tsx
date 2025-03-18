@@ -3,13 +3,13 @@
 import Banner2 from "@/app/components/Banner/Banner2";
 import Pagination from "@/app/components/Pagination/Pagination";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
-import SeeMore from "./SeeMore";
+import SeeMore from "../SeeMore";
+import { useParams } from "next/navigation";
 
 export default function BlogPage() {
-    const searchParams = useSearchParams();
+    const { slug } = useParams();
 
     // Hiển thị mặc định
     const [page, setPage] = useState(1);
@@ -36,41 +36,29 @@ export default function BlogPage() {
             page: 0
         }
     });
-    const [categories, setCategories] = useState([{
-        title: "",
-        slug: "",
-        blogs: []
-    }])
 
     const [isLoading, setIsLoading] = useState(true);
 
-    const linkApi = `https://freshskinweb.onrender.com/home/blogs/category/tin-tuc`;
+    const linkApi = `https://freshskinweb.onrender.com/home/blogs/category/${slug}`;
 
     useEffect(() => {
         const fetchBlogsByCategory = async () => {
-            const urlCurrent = new URL(window.location.href);
+            const urlCurrent = new URL(location.href);
             const api = new URL(linkApi);
-
-            // Phân trang
+    
             const pageCurrent = urlCurrent.searchParams.get('page');
             setPage(pageCurrent ? parseInt(pageCurrent) : 1);
-
-            if (pageCurrent) {
-                api.searchParams.set('page', pageCurrent);
-            }
-            else {
-                api.searchParams.delete('page');
-            }
-
+    
+            api.searchParams.set('page', pageCurrent || '1');
             const response = await fetch(api.href);
             const data = await response.json();
-
+            console.log(data);
             setDataCurrent(data.data);
             setIsLoading(false);
         };
-
+    
         fetchBlogsByCategory();
-    }, []);
+    }, [slug, page]);
 
     if (isLoading) {
         return <div>Loading...</div>;

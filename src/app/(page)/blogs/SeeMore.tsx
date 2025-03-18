@@ -1,10 +1,12 @@
 "use client"
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export default function SeeMore(props: any) {
     const { title = "" } = props;
+    const router = useRouter();
 
     const [categories, setCategories] = useState([{
         title: "",
@@ -15,17 +17,21 @@ export default function SeeMore(props: any) {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            const response = await fetch("https://freshskinweb.onrender.com/home");
-            const data = await response.json();
-
-            console.log(data);
-            setCategories(data.featuredBlogCategory);
+        const cachedData = sessionStorage.getItem("categories");
+        if (cachedData) {
+            setCategories(JSON.parse(cachedData));
             setIsLoading(false);
-        };
+        } else {
+            const fetchCategories = async () => {
+                const response = await fetch("https://freshskinweb.onrender.com/home");
+                const data = await response.json();
+                setCategories(data.featuredBlogCategory);
+                sessionStorage.setItem("categories", JSON.stringify(data.featuredBlogCategory));
+                setIsLoading(false);
+            };
 
-
-        fetchCategories();
+            fetchCategories();
+        }
     }, []);
 
     if (isLoading) {
@@ -37,7 +43,7 @@ export default function SeeMore(props: any) {
             <div className="flex-1 px-[10px]">
                 {categories.map((item: any, index: number) => (
                     <div key={index}>
-                        <div className={`cursor-pointer text-[18px] font-[600] pb-[8px] border-b border-solid border-secondary ` + (title == item.title ? "text-primary" : "text-textColor")}>
+                        <div onClick={() => router.push(`/blogs/${item.slug}`)}  className={`cursor-pointer text-[18px] font-[600] pb-[8px] border-b border-solid border-secondary ` + (title == item.title ? "text-primary" : "text-textColor")}>
                             {item.title}
                         </div>
                         <div className="mt-[8px]">
