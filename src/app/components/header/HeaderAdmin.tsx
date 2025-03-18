@@ -1,73 +1,167 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, useRef } from "react";
 import { FaBell } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
 import { FaArrowRightFromBracket } from "react-icons/fa6";
 import Cookies from "js-cookie";
 import Link from "next/link";
 import { ProfileAdminContext } from "@/app/admin/layout";
+import { Trash2 } from "lucide-react";
+import dayjs from "dayjs";
+import relativeTime from "dayjs/plugin/relativeTime";
+import "dayjs/locale/vi";
+
+dayjs.extend(relativeTime);
+dayjs.locale("vi");
+
+interface Notification {
+  id: number;
+  message: string;
+  time: string;
+  isRead: boolean;
+  image: string;
+}
 
 export default function HeaderAdmin() {
-  const [socket, setSocket] = useState<WebSocket | null>(null);
-  const [hasNewNotification, setHasNewNotification] = useState(false);
-  const [notificationMessage, setNotificationMessage] = useState("");
-  const [showPopup, setShowPopup] = useState(false);
+  const [unreadCount, setUnreadCount] = useState<number>(0);
+  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const dataProfile = useContext(ProfileAdminContext);
-  let pingInterval: NodeJS.Timeout | null = null;
+  const wsRef = useRef<WebSocket | null>(null);
+
+  // 🚀 Fetch danh sách thông báo từ API
+  const fetchNotifications = async () => {
+    try {
+      const res = await fetch("https://freshskinweb.onrender.com/admin/notify/review");
+      const data: Notification[] = await res.json();
+      // Lọc bỏ thông báo không hợp lệ nếu cần
+      const validNotifications = data.filter((n: Notification) => n.id && n.message);
+      setNotifications(validNotifications);
+      setUnreadCount(validNotifications.filter((n: Notification) => !n.isRead).length);
+    } catch (error) {
+      console.error("❌ Lỗi khi fetch thông báo:", error);
+    }
+  };
 
   useEffect(() => {
-    let isMounted = true; // Biến kiểm tra component còn mounted không
+    fetchNotifications();
+  }, []);
 
-    const connectWebSocket = () => {
-      const Socket = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
+  useEffect(() => {
+    function connectWebSocket() {
+      if (wsRef.current) return;
 
-      Socket.onopen = () => {
+      const ws = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
+
+      ws.onopen = () => {
         console.log("✅ WebSocket đã kết nối!");
-        setSocket(Socket);
-
-        pingInterval = setInterval(() => {
-          if (Socket.readyState === WebSocket.OPEN) {
-            console.log("📡 Gửi ping...");
-            Socket.send("ping");
-          }
-        }, 30000);
+        wsRef.current = ws;
       };
 
-      Socket.onmessage = (event) => {
-        if (!isMounted) return; // Nếu component bị unmount thì không cập nhật state
-
+      ws.onmessage = (event) => {
         console.log("📩 Nhận thông báo:", event.data);
-        setNotificationMessage(event.data);
-        setHasNewNotification(true);
-        setShowPopup(true);
-
-        setTimeout(() => {
-          setShowPopup(false);
-        }, 3000);
+        try {
+          const data: Notification = JSON.parse(event.data);
+          if (!data.id || !data.message) return;
+          setNotifications((prev: Notification[]) => [data, ...prev]);
+          setUnreadCount((prev: number) => prev + 1);
+        } catch (error) {
+          console.error("❌ Lỗi xử lý WebSocket:", error);
+        }
       };
 
-      Socket.onclose = () => {
-        console.log("❌ WebSocket mất kết nối, thử lại sau 3 giây...");
-        setTimeout(connectWebSocket, 3000);
+      ws.onclose = () => {
+        console.log("❌ WebSocket mất kết nối, thử lại sau 5 giây...");
+        wsRef.current = null;
+        setTimeout(connectWebSocket, 5000);
       };
-
-      Socket.onerror = (error) => {
-        console.error("⚠️ Lỗi WebSocket:", error);
-      };
-    };
+    }
 
     connectWebSocket();
 
     return () => {
-      isMounted = false; // Đánh dấu component unmount
-      console.log("🔌 Đóng kết nối WebSocket!");
-      if (socket) socket.close();
-      if (pingInterval) clearInterval(pingInterval);
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
     };
   }, []);
 
   const handleClickLogout = () => {
     Cookies.remove("token");
     location.href = "/admin/auth/login";
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
+  };
+
+  const markAsRead = async (id?: number) => {
+    if (!id) {
+      console.error("❌ Lỗi: ID thông báo bị thiếu!");
+      return;
+    }
+
+    try {
+      await fetch(`https://freshskinweb.onrender.com/admin/notify/update/${id}`, { method: "GET" });
+
+      setNotifications((prev: Notification[]) =>
+        prev.map((n: Notification) => (n.id === id ? { ...n, isRead: true } : n))
+      );
+      setUnreadCount((prev: number) => Math.max(prev - 1, 0));
+    } catch (error) {
+      console.error("❌ Lỗi cập nhật trạng thái đã đọc:", error);
+    }
+  };
+
+  const removeNotification = async (id?: number, e?: React.MouseEvent) => {
+    if (e) e.stopPropagation();
+    if (!id) {
+      console.error("❌ Lỗi: ID thông báo bị thiếu!");
+      return;
+    }
+
+    try {
+      const response = await fetch(`https://freshskinweb.onrender.com/admin/notify/review/delete/${id}`, {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setNotifications((prev: Notification[]) => prev.filter((n: Notification) => n.id !== id));
+      } else {
+        console.error(`❌ Lỗi xóa thông báo ID ${id}:`, response.statusText);
+      }
+    } catch (error) {
+      console.error("❌ Lỗi khi xóa thông báo:", error);
+    }
+  };
+
+  const clearAllNotifications = async () => {
+    try {
+      const response = await fetch("https://freshskinweb.onrender.com/admin/notify/review/deleteAll", {
+        method: "DELETE",
+      });
+
+      if (response.ok) {
+        setNotifications([]);
+        setUnreadCount(0);
+      } else {
+        console.error("❌ Lỗi xóa tất cả thông báo:", response.statusText);
+      }
+    } catch (error) {
+      console.error("❌ Lỗi khi xóa tất cả thông báo:", error);
+    }
+  };
+
+  const formatRelativeTime = (timestamp: string): string => {
+    const time = dayjs(timestamp);
+    const now = dayjs();
+
+    if (now.diff(time, "minute") < 1) return "Vừa xong";
+    if (now.diff(time, "hour") < 1) return `${now.diff(time, "minute")} phút trước`;
+    if (now.diff(time, "day") < 1) return `${now.diff(time, "hour")} giờ trước`;
+    if (now.diff(time, "day") === 1) return "Hôm qua";
+
+    return time.format("DD/MM/YYYY");
   };
 
   return (
@@ -82,39 +176,90 @@ export default function HeaderAdmin() {
       </div>
 
       <div className="flex items-center space-x-6">
+        {/* 🔔 Chuông thông báo */}
         <div className="relative">
           <FaBell
             className={`text-gray-600 text-[20px] cursor-pointer hover:text-green-400 ${
-              hasNewNotification ? "animate-bounce text-red-500" : ""
+              unreadCount > 0 ? "animate-bounce text-red-500" : ""
             }`}
-            onClick={() => setHasNewNotification(false)} // Reset khi nhấn chuông
+            onClick={toggleDropdown}
           />
-          {hasNewNotification && (
-            <span className="absolute top-0 right-0 w-2 h-2 bg-red-500 rounded-full"></span>
+          {unreadCount > 0 && (
+            <span className="absolute top-0 right-0 w-3 h-3 bg-red-500 rounded-full text-white text-xs flex items-center justify-center">
+              {unreadCount}
+            </span>
           )}
         </div>
 
+        {/* 📩 Dropdown thông báo */}
+        {isDropdownOpen && (
+          <div className="absolute right-5 top-14 w-80 bg-white shadow-lg rounded-md overflow-hidden border border-gray-300 z-50">
+            <div className="px-4 py-2 flex justify-between items-center bg-gray-100">
+              <span className="font-semibold">Thông báo</span>
+              {notifications.length > 0 && (
+                <button onClick={clearAllNotifications} className="text-red-500 text-sm hover:underline">
+                  Xóa tất cả
+                </button>
+              )}
+            </div>
+            {notifications.length === 0 ? (
+              <div className="p-4 text-gray-500 text-center">Không có thông báo</div>
+            ) : (
+              <ul className="max-h-60 overflow-y-auto">
+                {notifications.map((notification, index) => {
+                  const notificationId = notification.id ?? index;
+                  const message = notification.message || "Không có nội dung";
+                  return (
+                    <li
+                      key={notificationId}
+                      className={`px-4 py-2 border-b flex justify-between items-center hover:bg-gray-100 cursor-pointer ${
+                        notification.isRead ? "" : "bg-gray-200"
+                      }`}
+                      onClick={() => notification.id && markAsRead(notification.id)}
+                    >
+                      <div className="flex items-center space-x-2">
+                        {!notification.isRead && (
+                          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
+                        )}
+                        <div>
+                          <p className="text-sm">{message}</p>
+                          <p className="text-xs text-gray-500">{formatRelativeTime(notification.time)}</p>
+                        </div>
+                      </div>
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (notification.id) {
+                            removeNotification(notification.id, e);
+                          }
+                        }}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <Trash2 className="w-4 h-4" />
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            )}
+          </div>
+        )}
+
+        {/* 👤 Avatar Admin */}
         {dataProfile?.avatar && (
           <Link href="/admin/profile" className="w-[40px] aspect-square">
-            <img
-              src={dataProfile.avatar}
-              className="w-full h-full object-cover rounded-full"
-              alt="Avatar"
-            />
+            <img src={dataProfile.avatar} className="w-full h-full object-cover rounded-full" alt="Avatar" />
           </Link>
         )}
 
-        <span onClick={handleClickLogout} className="cursor-pointer">
+        {/* 🚪 Nút Đăng xuất */}
+        <span
+          onClick={handleClickLogout}
+          className="cursor-pointer"
+        >
           <FaArrowRightFromBracket className="text-[#6D7587] text-[20px] hover:text-red-500" />
         </span>
       </div>
-
-      {/* Popup thông báo */}
-      {showPopup && (
-        <div className="fixed top-5 right-5 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg animate-slide-in">
-          {notificationMessage}
-        </div>
-      )}
     </div>
   );
 }
