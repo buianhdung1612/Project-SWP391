@@ -31,26 +31,40 @@ export default function HeaderAdmin() {
   // 🚀 Fetch danh sách thông báo từ API
   const fetchNotifications = async () => {
     try {
+      console.log("📌 dataProfile:", dataProfile);
+
+      if (!dataProfile || !dataProfile.roleId) {
+        console.error("❌ Lỗi: Role ID không tồn tại hoặc chưa được gán.");
+        return;
+      }
+
+      const roleId = dataProfile.roleId;
+      // console.log("🔗 Fetching URL:", `https://freshskinweb.onrender.com/admin/notify/${roleId}`);
       const res = await fetch(
-        "https://freshskinweb.onrender.com/admin/notify/review"
+        `https://freshskinweb.onrender.com/admin/notify/${roleId}`
       );
+
+      if (!res.ok) {
+        const errorData = await res.json();
+        console.error(`🚨 HTTP Error ${res.status}:`, errorData);
+        return;
+      }
+
       const data: Notification[] = await res.json();
-      // Lọc bỏ thông báo không hợp lệ nếu cần
-      const validNotifications = data.filter(
-        (n: Notification) => n.id && n.message
-      );
-      setNotifications(validNotifications);
-      setUnreadCount(
-        validNotifications.filter((n: Notification) => !n.isRead).length
-      );
+      setNotifications(data);
+      setUnreadCount(data.filter((n) => !n.isRead).length);
     } catch (error) {
       console.error("❌ Lỗi khi fetch thông báo:", error);
     }
   };
 
   useEffect(() => {
-    fetchNotifications();
-  }, []);
+    if (dataProfile?.roleId) {
+      fetchNotifications();
+    } else {
+      console.warn("⚠️ Chưa có dataProfile, đợi cập nhật...");
+    }
+  }, [dataProfile]);
 
   useEffect(() => {
     function connectWebSocket() {
@@ -133,7 +147,7 @@ export default function HeaderAdmin() {
 
     try {
       const response = await fetch(
-        `https://freshskinweb.onrender.com/admin/notify/review/delete/${id}`,
+        `https://freshskinweb.onrender.com/admin/notify/delete/${id}`,
         {
           method: "DELETE",
         }
@@ -153,23 +167,50 @@ export default function HeaderAdmin() {
 
   const clearAllNotifications = async () => {
     try {
+      // 🔍 Lọc danh sách ID thông báo đã đọc
+      const readNotificationIds = notifications
+        ?.filter((n) => n.isRead)
+        ?.map((n) => n.id) || [];
+  
+      console.log("📢 Danh sách ID thông báo đã đọc:", readNotificationIds);
+  
+      if (readNotificationIds.length === 0) {
+        alert("Không có thông báo đã đọc để xóa!");
+        return;
+      }
+  
+      // Gọi API xóa thông báo đã đọc
       const response = await fetch(
-        "https://freshskinweb.onrender.com/admin/notify/review/deleteAll",
+        `https://freshskinweb.onrender.com/admin/notify/deleteAll/${dataProfile?.roleId}`,
         {
           method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ notificationIds: readNotificationIds }),
         }
       );
-
+  
+      // Kiểm tra response trước khi gọi .json()
+      let responseData = null;
+      if (response.status !== 204) {
+        responseData = await response.json().catch(() => null);
+      }
+  
+      console.log("Phản hồi từ server:", responseData);
+  
       if (response.ok) {
-        setNotifications([]);
-        setUnreadCount(0);
+        // 🏷️ Cập nhật lại danh sách thông báo (loại bỏ thông báo đã đọc)
+        setNotifications((prev) => prev.filter((n) => !n.isRead));
+        setUnreadCount((prev) => prev - readNotificationIds.length);
+  
       } else {
-        console.error("❌ Lỗi xóa tất cả thông báo:", response.statusText);
+        console.error("Lỗi xóa thông báo đã đọc:", responseData?.message || "Không rõ lỗi");
       }
     } catch (error) {
-      console.error("❌ Lỗi khi xóa tất cả thông báo:", error);
+      console.error(" Lỗi khi xóa thông báo đã đọc:", error);
     }
   };
+  
+  
 
   const formatRelativeTime = (timestamp: string): string => {
     const time = dayjs(timestamp);
@@ -240,7 +281,11 @@ export default function HeaderAdmin() {
                     onClick={() => markAsRead(notification.id)}
                   >
                     <img
-                      src={notification.image || "/default-product.png"}
+                      src={
+                        notification?.image && notification.image !== ""
+                          ? notification.image
+                          : "/default-product.png"
+                      }
                       className="w-12 h-12 rounded-lg object-cover mr-3"
                       alt="Product Image"
                     />

@@ -416,7 +416,7 @@ export default function BrandsAdminPage() {
                   onSubmit={handleChangeMulti}
                   style={{ flex: 1, gap: "8px" }}
                 >
-                  <Box display="flex" gap={2}>
+                  <Box display="flex" gap={0.5}>
                     <Select
                       fullWidth sx={{ maxWidth:200}}
                       name="status"

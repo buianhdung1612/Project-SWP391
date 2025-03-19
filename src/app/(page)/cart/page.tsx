@@ -6,13 +6,6 @@ import { useDispatch, useSelector } from "react-redux";
 import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../(actions)/cart";
 import { MdNavigateNext } from "react-icons/md";
 
-interface PriceByVolume {
-    id: number,
-    volume: number,
-    price: number,
-    unit: string
-}
-
 interface CartItem {
     image: string,
     title: string,
