@@ -49,7 +49,7 @@ export default function ProductsTrashAdminPage() {
   >("info");
   const linkApi = "https://freshskinweb.onrender.com/admin/products/trash";
 
-  const [inputChecked, setInputChecked] = useState<number[]>([]);
+
 
   // Hiển thị lựa chọn mặc định
   const [filterStatus, setFilterStatus] = useState("");
@@ -202,7 +202,7 @@ export default function ProductsTrashAdminPage() {
         const path = `${linkApi}/delete`;
 
         const data: any = {
-          id: inputChecked,
+          id:selectedProducts,
         };
 
         const response = await fetch(path, {
@@ -231,7 +231,7 @@ export default function ProductsTrashAdminPage() {
     const path = `${linkApi}/change-multi`;
 
     const data: any = {
-      id: inputChecked,
+      id:selectedProducts,
       status: statusChange,
     };
 
@@ -255,11 +255,16 @@ export default function ProductsTrashAdminPage() {
     }
   };
 
-  const handleInputChecked = (event: any, id: number) => {
+  const [selectedProducts, setSelectedProducts] = useState<number[]>([]);
+
+  const handleInputChecked = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
     if (event.target.checked) {
-      setInputChecked((prev) => [...prev, id]);
+      setSelectedProducts((prev) => [...prev, id]);
     } else {
-      setInputChecked((prev) => prev.filter((id) => id !== id));
+      setSelectedProducts((prev) => prev.filter((item) => item !== id));
     }
   };
   // Hết Thay đổi trạng thái nhiều sản phẩm
@@ -460,32 +465,35 @@ export default function ProductsTrashAdminPage() {
                   onSubmit={handleChangeMulti}
                   style={{ flex: 1, gap: "8px" }}
                 >
-                  <Box display="flex">
-                    <Select
-                      fullWidth
-                      name="status"
-                      value={changeMulti}
-                      displayEmpty
-                      onChange={(e) => setChangeMulti(e.target.value)}
-                    >
-                      <MenuItem value="active">Hoạt động</MenuItem>
-                      <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                      <MenuItem value="restored">Khôi phục</MenuItem>
-                      <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
-                    </Select>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      type="submit"
-                      sx={{
-                        width: "120px",
-                        backgroundColor: "#374785",
-                        color: "#ffffff",
-                      }}
-                    >
-                      Áp dụng
-                    </Button>
-                  </Box>
+                  {selectedProducts.length > 0 && (
+                    <Box display="flex" gap={0.5}>
+                      <Select
+                        fullWidth
+                        sx={{ maxWidth: 200 }}
+                        name="status"
+                        value={changeMulti}
+                        displayEmpty
+                        onChange={(e) => setChangeMulti(e.target.value)}
+                      >
+                        <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                        <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
+                        <MenuItem value="restored">Khôi phục</MenuItem> 
+                        <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
+                      </Select>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        type="submit"
+                        sx={{
+                          width: "120px",
+                          backgroundColor: "#374785",
+                          color: "#ffffff",
+                        }}
+                      >
+                        Áp dụng
+                      </Button>
+                    </Box>
+                 )}
                 </form>
                 <Button
                   variant="outlined"
@@ -517,13 +525,10 @@ export default function ProductsTrashAdminPage() {
                   <TableBody>
                     {data.products.map((product: any, index: number) => (
                       <TableRow key={product.id}>
-                        <TableCell
+                       <TableCell
                           padding="checkbox"
-                          onClick={(event) =>
-                            handleInputChecked(event, product.id)
-                          }
                         >
-                          <Checkbox />
+                          <Checkbox onChange={(event) => handleInputChecked(event, product.id)}/>
                         </TableCell>
                         <TableCell>
                           {(data.currentPage - 1) * data.pageSize + index + 1}

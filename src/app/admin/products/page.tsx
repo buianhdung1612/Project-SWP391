@@ -47,7 +47,7 @@ export default function ProductsAdminPage() {
   >("info");
   const linkApi = "https://freshskinweb.onrender.com/admin/products";
 
-  const [inputChecked, setInputChecked] = useState<number[]>([]);
+  
 
   // Hiển thị lựa chọn mặc định
   const [filterStatus, setFilterStatus] = useState("");
@@ -194,7 +194,7 @@ export default function ProductsAdminPage() {
     const path = `${linkApi}/change-multi`;
 
     const data: any = {
-      id: inputChecked,
+      id: selectedCategories,
       status: statusChange,
     };
 
@@ -217,12 +217,16 @@ export default function ProductsAdminPage() {
       setAlertSeverity("error");
     }
   };
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
 
-  const handleInputChecked = (event: any, id: number) => {
+  const handleInputChecked = (
+    event: React.ChangeEvent<HTMLInputElement>,
+    id: number
+  ) => {
     if (event.target.checked) {
-      setInputChecked((prev) => [...prev, id]);
+      setSelectedCategories((prev) => [...prev, id]);
     } else {
-      setInputChecked((prev) => prev.filter((id) => id !== id));
+      setSelectedCategories((prev) => prev.filter((item) => item !== id));
     }
   };
   // Hết Thay đổi trạng thái nhiều sản phẩm
@@ -418,31 +422,34 @@ export default function ProductsAdminPage() {
                   onSubmit={handleChangeMulti}
                   style={{ flex: 1, gap: "8px" }}
                 >
-                  <Box display="flex" gap={0.5}>
-                    <Select
-                      fullWidth sx={{ maxWidth: 200 }}
-                      name="status"
-                      value={changeMulti}
-                      displayEmpty
-                      onChange={(e) => setChangeMulti(e.target.value)}
-                    >
-                      <MenuItem value="active">Hoạt động</MenuItem>
-                      <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                      <MenuItem value="soft_deleted">Xóa</MenuItem>
-                    </Select>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      type="submit"
-                      sx={{
-                        width: "120px",
-                        backgroundColor: "#374785",
-                        color: "#ffffff",
-                      }}
-                    >
-                      Áp dụng
-                    </Button>
-                  </Box>
+                  {selectedCategories.length > 0 && (
+                    <Box display="flex" gap={0.5}>
+                      <Select
+                        fullWidth
+                        sx={{ maxWidth: 200 }}
+                        name="status"
+                        value={changeMulti}
+                        displayEmpty
+                        onChange={(e) => setChangeMulti(e.target.value)}
+                      >
+                        <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                        <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
+                        <MenuItem value="SOFT_DELETED">Xóa</MenuItem>
+                      </Select>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        type="submit"
+                        sx={{
+                          width: "120px",
+                          backgroundColor: "#374785",
+                          color: "#ffffff",
+                        }}
+                      >
+                        Áp dụng
+                      </Button>
+                    </Box>
+                  )}
                 </form>
                 <Button
                   variant="contained"
@@ -462,30 +469,51 @@ export default function ProductsAdminPage() {
                   <Link href="/admin/products/create">+ Thêm mới</Link>
                 </Button>
               </Box>
-              <TableContainer component={Paper} sx={{ maxHeight: 500, bgcolor: "#f9f9f9" }}>
+              <TableContainer
+                component={Paper}
+                sx={{ maxHeight: 500, bgcolor: "#f9f9f9" }}
+              >
                 <Table stickyHeader>
                   <TableHead>
                     <TableRow>
                       <TableCell></TableCell>
-                      <TableCell sx={{ color: "#374785", fontWeight:"bold" }}>STT</TableCell>
-                      <TableCell sx={{ color: "#374785", fontWeight:"bold"  }}>Hình ảnh</TableCell>
-                      <TableCell sx={{ color: "#374785", fontWeight:"bold" }}>Tiêu đề</TableCell>
-                      <TableCell sx={{ color: "#374785", fontWeight:"bold" }}>Giá</TableCell>
-                      <TableCell sx={{ color: "#374785", fontWeight:"bold" }}>Trạng thái</TableCell>
-                      <TableCell sx={{ color: "#374785", fontWeight:"bold" }}>Vị trí</TableCell>
-                      <TableCell sx={{ color: "#374785", fontWeight:"bold" }}>Hành động</TableCell>
+                      <TableCell sx={{ color: "#374785", fontWeight: "bold" }}>
+                        STT
+                      </TableCell>
+                      <TableCell sx={{ color: "#374785", fontWeight: "bold" }}>
+                        Hình ảnh
+                      </TableCell>
+                      <TableCell sx={{ color: "#374785", fontWeight: "bold" }}>
+                        Tiêu đề
+                      </TableCell>
+                      <TableCell sx={{ color: "#374785", fontWeight: "bold" }}>
+                        Giá
+                      </TableCell>
+                      <TableCell sx={{ color: "#374785", fontWeight: "bold" }}>
+                        Trạng thái
+                      </TableCell>
+                      <TableCell sx={{ color: "#374785", fontWeight: "bold" }}>
+                        Vị trí
+                      </TableCell>
+                      <TableCell sx={{ color: "#374785", fontWeight: "bold" }}>
+                        Hành động
+                      </TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
                     {data.products.map((product: any, index: number) => (
-                      <TableRow key={product.id} sx={{ bgcolor: index % 2 === 0 ? "#ffffff" : "#f1f1f1" }}>
-                        <TableCell
-                          padding="checkbox"
-                          onClick={(event) =>
-                            handleInputChecked(event, product.id)
-                          }
-                        >
-                          <Checkbox />
+                      <TableRow
+                        key={product.id}
+                        sx={{
+                          bgcolor: index % 2 === 0 ? "#ffffff" : "#f1f1f1",
+                        }}
+                      >
+                        <TableCell padding="checkbox">
+                          <Checkbox
+                            onChange={(event) =>
+                              handleInputChecked(event, product.id)
+                            }
+                          />
                         </TableCell>
                         <TableCell>
                           {(data.currentPage - 1) * data.pageSize + index + 1}

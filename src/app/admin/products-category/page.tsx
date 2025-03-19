@@ -47,7 +47,6 @@ export default function ProductsCategoryAdminPage() {
   >("info");
   const linkApi = "https://freshskinweb.onrender.com/admin/products/category";
 
-  const [inputChecked, setInputChecked] = useState<number[]>([]);
 
   // Hiển thị lựa chọn mặc định
   const [filterStatus, setFilterStatus] = useState("");
@@ -195,7 +194,7 @@ export default function ProductsCategoryAdminPage() {
     const path = `${linkApi}/change-multi`;
 
     const data: any = {
-      id: inputChecked,
+      id: selectedCategories,
       status: statusChange,
     };
 
@@ -219,11 +218,13 @@ export default function ProductsCategoryAdminPage() {
     }
   };
 
-  const handleInputChecked = (event: any, id: number) => {
+  const [selectedCategories, setSelectedCategories] = useState<number[]>([]);
+
+  const handleInputChecked = (event: React.ChangeEvent<HTMLInputElement>, id: number) => {
     if (event.target.checked) {
-      setInputChecked((prev) => [...prev, id]);
+      setSelectedCategories((prev) => [...prev, id]);
     } else {
-      setInputChecked((prev) => prev.filter((id) => id !== id));
+      setSelectedCategories((prev) => prev.filter((item) => item !== id));
     }
   };
   // Hết Thay đổi trạng thái nhiều sản phẩm
@@ -418,31 +419,34 @@ export default function ProductsCategoryAdminPage() {
                   onSubmit={handleChangeMulti}
                   style={{ flex: 1, gap: "8px" }}
                 >
-                  <Box display="flex" gap={0.5}>
-                    <Select
-                      fullWidth sx={{maxWidth:200}}
-                      name="status"
-                      value={changeMulti}
-                      displayEmpty
-                      onChange={(e) => setChangeMulti(e.target.value)}
-                    >
-                      <MenuItem value="ACTIVE">Hoạt động</MenuItem>
-                      <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
-                      <MenuItem value="SOFT_DELETED">Xóa</MenuItem>
-                    </Select>
-                    <Button
-                      variant="contained"
-                      color="success"
-                      type="submit"
-                      sx={{
-                        width: "120px",
-                        backgroundColor: "#374785",
-                        color: "#ffffff",
-                      }}
-                    >
-                      Áp dụng
-                    </Button>
-                  </Box>
+                  {selectedCategories.length > 0 && (
+                    <Box display="flex" gap={0.5}>
+                      <Select
+                        fullWidth
+                        sx={{ maxWidth: 200 }}
+                        name="status"
+                        value={changeMulti}
+                        displayEmpty
+                        onChange={(e) => setChangeMulti(e.target.value)}
+                      >
+                        <MenuItem value="ACTIVE">Hoạt động</MenuItem>
+                        <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
+                        <MenuItem value="SOFT_DELETED">Xóa</MenuItem>
+                      </Select>
+                      <Button
+                        variant="contained"
+                        color="success"
+                        type="submit"
+                        sx={{
+                          width: "120px",
+                          backgroundColor: "#374785",
+                          color: "#ffffff",
+                        }}
+                      >
+                        Áp dụng
+                      </Button>
+                    </Box>
+                  )}
                 </form>
                 <Button
                   variant="contained"
@@ -494,13 +498,10 @@ export default function ProductsCategoryAdminPage() {
                       (category: any, index: number) => (
                         <TableRow key={category.id}>
                           <TableCell
-                            padding="checkbox"
-                            onClick={(event) =>
-                              handleInputChecked(event, category.id)
-                            }
-                          >
-                            <Checkbox />
-                          </TableCell>
+                          padding="checkbox"
+                        >
+                          <Checkbox onChange={(event) => handleInputChecked(event, category.id)} />
+                        </TableCell>
                           <TableCell>{index + 1}</TableCell>
                           <TableCell>
                             <img
