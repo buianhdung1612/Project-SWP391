@@ -8,13 +8,28 @@ import Link from "next/link";
 import { BiDetail } from "react-icons/bi";
 import Alert from '@mui/material/Alert';
 import { ProfileAdminContext } from "../layout";
+
+interface SkinType {
+    id: number;
+    type: string;
+}
+
+interface ScoreRange {
+    min?: number;
+    max?: number;
+}
+
+
 export default function QuizAdminPage() {
     const [data, setData] = useState([]);
+    const [dataSkinTypes, setDataSkinTypes] = useState([]);
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const linkApi = 'https://freshskinweb.onrender.com/admin/question/group';
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
+    const [scoreRanges, setScoreRanges] = useState<Record<number, ScoreRange>>({});
+
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);
@@ -50,7 +65,21 @@ export default function QuizAdminPage() {
             setData(data.data.QuestionGroup);
         };
 
+        const fetchSkinTypes = async () => {
+            const response = await fetch(`https://freshskinweb.onrender.com/admin/skintypes/show`);
+            const data = await response.json();
+            setDataSkinTypes(data.data);
+        }
+
+        const fetchScoreRange = async () => {
+            const response = await fetch(`https://freshskinweb.onrender.com/admin/skintypes/score-range`);
+            const data = await response.json();
+            console.log(data);
+        }
+
         fetchQuiz();
+        fetchSkinTypes();
+        fetchScoreRange();
     }, []);
 
     // Lọc theo trạng thái
@@ -152,6 +181,31 @@ export default function QuizAdminPage() {
             </Alert>
         )
     }
+
+    // Tạo range điểm
+    const handleSubmitRangeScore = async (event: any, skinTypeId: number) => {
+        event.preventDefault();
+
+        const { min = 0, max = 0 } = scoreRanges[skinTypeId] || {};
+
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/skintypes/score-range/create`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                minScore: min, 
+                maxScore: max,
+                skinType: skinTypeId 
+            }),
+        });
+
+        const dataResponse = await response.json();
+        if(dataResponse.code == 200){
+            location.reload();
+        }
+    }
+
     return (
         <>
             {permissions?.includes("quiz_edit") && permissions.includes("quiz_view") && (
@@ -191,6 +245,52 @@ export default function QuizAdminPage() {
                                     </Button>
                                 </Box>
                             </form>
+                        </Box>
+                    </Paper>
+
+                    {/* Tạo range điểm */}
+                    <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: "white" }} >
+                        <Typography variant="subtitle1" fontWeight="bold" marginBottom={2} gutterBottom>
+                            Kết quả dựa trên thang điểm
+                        </Typography>
+                        <Box display="flex" flexDirection="column" gap={2}>
+                            {dataSkinTypes.map((item: any, index: number) => (
+                                <Box key={index} display="flex" alignItems="center" justifyContent="space-between" sx={{ marginBottom: 1 }}>
+                                    <Typography variant="body1">{item.type}</Typography>
+                                    <Box display="flex" alignItems="center" gap={1}>
+                                        <TextField
+                                            label="Điểm min"
+                                            variant="outlined"
+                                            type="number"
+                                            size="small"
+                                            sx={{ width: '100px' }}
+                                            onChange={(e) => setScoreRanges(prev => ({
+                                                ...prev,
+                                                [item.id]: { ...prev[item.id], min: Number(e.target.value) } // Chuyển đổi sang số
+                                            }))}
+                                        />
+                                        <TextField
+                                            label="Điểm max"
+                                            variant="outlined"
+                                            type="number"
+                                            size="small"
+                                            sx={{ width: '100px' }}
+                                            onChange={(e) => setScoreRanges(prev => ({
+                                                ...prev,
+                                                [item.id]: { ...prev[item.id], max: Number(e.target.value) } // Chuyển đổi sang số
+                                            }))}
+                                        />
+                                        <Button
+                                            variant="contained"
+                                            color="primary"
+                                            size="small"
+                                            onClick={() => handleSubmitRangeScore(event, item.id)}
+                                        >
+                                            Cập nhật
+                                        </Button>
+                                    </Box>
+                                </Box>
+                            ))}
                         </Box>
                     </Paper>
 

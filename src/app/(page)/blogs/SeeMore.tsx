@@ -4,8 +4,11 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
-export default function SeeMore(props: any) {
-    const { title = "" } = props;
+export default function SeeMore(props: {
+    title?: string,
+    className?: string
+}) {
+    const { title = "", className = "" } = props;
     const router = useRouter();
 
     const [categories, setCategories] = useState([{
@@ -43,7 +46,11 @@ export default function SeeMore(props: any) {
             <div className="flex-1 px-[10px]">
                 {categories.map((item: any, index: number) => (
                     <div key={index}>
-                        <div onClick={() => router.push(`/blogs/${item.slug}`)}  className={`cursor-pointer text-[18px] font-[600] pb-[8px] border-b border-solid border-secondary ` + (title == item.title ? "text-primary" : "text-textColor")}>
+                        <div
+                            onClick={() => router.push(`/blogs/${item.slug}`)}
+                            className={`cursor-pointer text-[18px] font-[600] pb-[8px] border-b border-solid border-secondary ` +
+                                (title == item.title || className === "active" ? "text-primary" : "text-textColor")
+                            }>
                             {item.title}
                         </div>
                         <div className="mt-[8px]">

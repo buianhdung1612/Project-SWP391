@@ -239,19 +239,19 @@ export default function Section1() {
                     <Link href="/quiz">
                         <div className="flex items-center">
                             <img src="testing.png" width={28} height={28} />
-                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Loại Da Của Bạn</span>
+                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Kiểm Tra Loại Da</span>
                         </div>
                     </Link>
                 ) : (
                     <Link href="/user/login">
                         <div className="flex items-center">
                             <img src="testing.png" width={28} height={28} />
-                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Loại Da Của Bạn</span>
+                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Kiểm Tra Loại Da</span>
                         </div>
                     </Link>
                 )}
                 
-                <Link href="/blogs">
+                <Link href="/blogs/tin-tuc">
                     <div className="flex items-center ml-[15px]">
                         <img src="note-book 1.png" width={28} height={28} />
                         <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Tạp Chí Làm Đẹp</span>
