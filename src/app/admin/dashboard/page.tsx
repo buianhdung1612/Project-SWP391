@@ -5,6 +5,7 @@ import Chart from "@/app/components/Chart/Chart";
 import Chart2 from "@/app/components/Chart/Chart2";
 import { StatCard } from "@/app/components/StatCard/StatCard";
 import { ShoppingCart, Boxes, CheckCircle, Star, Banknote, ShoppingBag, User2Icon, FileText, Clock, CheckSquare } from "lucide-react";
+// import Notify from "@/app/components/Notify/Notify";
 
 export default function DashboardAdminPage() {
   const [stats, setStats] = useState({
@@ -78,6 +79,7 @@ export default function DashboardAdminPage() {
   }, []);
 
   return (
+    
     <div className="p-4 md:p-6 bg-gray-100 max-w-screen-xl mx-auto">
       <h1 className="text-2xl mb-4">Dashboard</h1>
 
@@ -128,5 +130,6 @@ export default function DashboardAdminPage() {
         <Chart2 />
       </div>
     </div>
+    
   );
 }

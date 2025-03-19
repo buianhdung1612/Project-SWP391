@@ -341,7 +341,7 @@ export default function BlogTrashAdminPage() {
 
                     {/* Header */}
                     <Typography variant="h5" gutterBottom>
-                        Trang thùng rác thương hiệu sản phẩm
+                        Trang thùng rác bài viết 
                     </Typography>
 
                     {/* Bộ lọc và Tìm kiếm */}
@@ -370,7 +370,7 @@ export default function BlogTrashAdminPage() {
                                             shrink: true,
                                         }}
                                     />
-                                    <Button variant="contained" color="success" type="submit">
+                                    <Button variant="contained" color="success" type="submit" sx={{backgroundColor:"#374485"}}>
                                         Tìm
                                     </Button>
                                 </Box>
@@ -409,7 +409,7 @@ export default function BlogTrashAdminPage() {
                                         <MenuItem value="restored">Khôi phục</MenuItem>
                                         <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
                                     </Select>
-                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
+                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor:"#374485" }}>
                                         Áp dụng
                                     </Button>
                                 </Box>
@@ -417,7 +417,7 @@ export default function BlogTrashAdminPage() {
                             <Button
                                 variant="outlined"
                                 color="success"
-                                sx={{ borderColor: 'green', color: 'green' }}
+                                sx={{ borderColor: '#374485', color: '#374485' }}
                             >
                                 <Link href="/admin/blogs" className="flex items-center">
                                     <IoReturnDownBackOutline className="text-[25px] mr-[5px]" />

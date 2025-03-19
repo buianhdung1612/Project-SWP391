@@ -371,7 +371,7 @@ export default function BrandsTrashAdminPage() {
                                             shrink: true,
                                         }}
                                     />
-                                    <Button variant="contained" color="success" type="submit">
+                                    <Button variant="contained" color="success" type="submit" sx={{ backgroundColor: "#374785" }}>
                                         Tìm
                                     </Button>
                                 </Box>
@@ -410,7 +410,7 @@ export default function BrandsTrashAdminPage() {
                                         <MenuItem value="restored">Khôi phục</MenuItem>
                                         <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
                                     </Select>
-                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px" }}>
+                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor:"#374485" }}>
                                         Áp dụng
                                     </Button>
                                 </Box>
@@ -418,7 +418,7 @@ export default function BrandsTrashAdminPage() {
                             <Button
                                 variant="outlined"
                                 color="success"
-                                sx={{ borderColor: 'green', color: 'green' }}
+                                sx={{ borderColor: '#374485', color: '#374485' }}
                             >
                                 <Link href="/admin/blogs-category" className="flex items-center">
                                     <IoReturnDownBackOutline className="text-[25px] mr-[5px]" />

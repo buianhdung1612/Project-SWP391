@@ -411,7 +411,7 @@ export default function CategoriesTrashAdminPage() {
                         shrink: true,
                       }}
                     />
-                    <Button variant="contained" color="success" type="submit">
+                    <Button variant="contained" color="success" type="submit" sx={{ backgroundColor: "#374785" }}>
                       Tìm
                     </Button>
                   </Box>
@@ -471,7 +471,8 @@ export default function CategoriesTrashAdminPage() {
                       variant="contained"
                       color="success"
                       type="submit"
-                      sx={{ width: "120px" }}
+                      sx={{ width: "120px",backgroundColor: "#374785",
+                        color: "#ffffff" }}
                     >
                       Áp dụng
                     </Button>
@@ -480,7 +481,7 @@ export default function CategoriesTrashAdminPage() {
                 <Button
                   variant="outlined"
                   color="success"
-                  sx={{ borderColor: "green", color: "green" }}
+                  sx={{borderColor: "#374785", color: "#374785"}}
                 >
                   <Link
                     href="/admin/products-category"
