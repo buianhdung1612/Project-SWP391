@@ -286,13 +286,13 @@ export default function OrdersAdminPage() {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell ></TableCell>
-                                        <TableCell>Mã đơn hàng</TableCell>
-                                        <TableCell>Ngày đặt</TableCell>
-                                        <TableCell>Khách hàng</TableCell>
-                                        <TableCell>Điện thoại</TableCell>
-                                        <TableCell>Địa chỉ giao hàng</TableCell>
-                                        <TableCell>Tình trạng</TableCell>
-                                        <TableCell>Chi tiết </TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Mã đơn hàng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Ngày đặt</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Khách hàng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Điện thoại</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Địa chỉ giao hàng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Tình trạng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Chi tiết </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

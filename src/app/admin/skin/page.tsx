@@ -84,12 +84,10 @@ export default function ProductsAdminPage() {
                     <Table>
                         <TableHead>
                             <TableRow>
-                                <TableCell>STT</TableCell>
-                                <TableCell>Tiêu đề</TableCell>
-                                <TableCell>Mô tả</TableCell>
-                                {/* <TableCell>Tạo bởi</TableCell> */}
-                                {/* <TableCell>Cập nhật bởi</TableCell> */}
-                                <TableCell>Hành động</TableCell>
+                                <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >STT</TableCell>
+                                <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Tiêu đề</TableCell>
+                                <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Mô tả</TableCell>
+                                <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Hành động</TableCell>
                             </TableRow>
                         </TableHead>
                         <TableBody>

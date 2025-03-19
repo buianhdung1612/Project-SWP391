@@ -31,12 +31,18 @@ export default function HeaderAdmin() {
   // 🚀 Fetch danh sách thông báo từ API
   const fetchNotifications = async () => {
     try {
-      const res = await fetch("https://freshskinweb.onrender.com/admin/notify/review");
+      const res = await fetch(
+        "https://freshskinweb.onrender.com/admin/notify/review"
+      );
       const data: Notification[] = await res.json();
       // Lọc bỏ thông báo không hợp lệ nếu cần
-      const validNotifications = data.filter((n: Notification) => n.id && n.message);
+      const validNotifications = data.filter(
+        (n: Notification) => n.id && n.message
+      );
       setNotifications(validNotifications);
-      setUnreadCount(validNotifications.filter((n: Notification) => !n.isRead).length);
+      setUnreadCount(
+        validNotifications.filter((n: Notification) => !n.isRead).length
+      );
     } catch (error) {
       console.error("❌ Lỗi khi fetch thông báo:", error);
     }
@@ -102,10 +108,15 @@ export default function HeaderAdmin() {
     }
 
     try {
-      await fetch(`https://freshskinweb.onrender.com/admin/notify/update/${id}`, { method: "GET" });
+      await fetch(
+        `https://freshskinweb.onrender.com/admin/notify/update/${id}`,
+        { method: "GET" }
+      );
 
       setNotifications((prev: Notification[]) =>
-        prev.map((n: Notification) => (n.id === id ? { ...n, isRead: true } : n))
+        prev.map((n: Notification) =>
+          n.id === id ? { ...n, isRead: true } : n
+        )
       );
       setUnreadCount((prev: number) => Math.max(prev - 1, 0));
     } catch (error) {
@@ -121,12 +132,17 @@ export default function HeaderAdmin() {
     }
 
     try {
-      const response = await fetch(`https://freshskinweb.onrender.com/admin/notify/review/delete/${id}`, {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        `https://freshskinweb.onrender.com/admin/notify/review/delete/${id}`,
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
-        setNotifications((prev: Notification[]) => prev.filter((n: Notification) => n.id !== id));
+        setNotifications((prev: Notification[]) =>
+          prev.filter((n: Notification) => n.id !== id)
+        );
       } else {
         console.error(`❌ Lỗi xóa thông báo ID ${id}:`, response.statusText);
       }
@@ -137,9 +153,12 @@ export default function HeaderAdmin() {
 
   const clearAllNotifications = async () => {
     try {
-      const response = await fetch("https://freshskinweb.onrender.com/admin/notify/review/deleteAll", {
-        method: "DELETE",
-      });
+      const response = await fetch(
+        "https://freshskinweb.onrender.com/admin/notify/review/deleteAll",
+        {
+          method: "DELETE",
+        }
+      );
 
       if (response.ok) {
         setNotifications([]);
@@ -157,7 +176,8 @@ export default function HeaderAdmin() {
     const now = dayjs();
 
     if (now.diff(time, "minute") < 1) return "Vừa xong";
-    if (now.diff(time, "hour") < 1) return `${now.diff(time, "minute")} phút trước`;
+    if (now.diff(time, "hour") < 1)
+      return `${now.diff(time, "minute")} phút trước`;
     if (now.diff(time, "day") < 1) return `${now.diff(time, "hour")} giờ trước`;
     if (now.diff(time, "day") === 1) return "Hôm qua";
 
@@ -193,53 +213,63 @@ export default function HeaderAdmin() {
 
         {/* 📩 Dropdown thông báo */}
         {isDropdownOpen && (
-          <div className="absolute right-5 top-14 w-80 bg-white shadow-lg rounded-md overflow-hidden border border-gray-300 z-50">
+          <div className="absolute right-5 top-14 w-96 bg-white shadow-lg rounded-md overflow-hidden border border-gray-300 z-50">
             <div className="px-4 py-2 flex justify-between items-center bg-gray-100">
               <span className="font-semibold">Thông báo</span>
               {notifications.length > 0 && (
-                <button onClick={clearAllNotifications} className="text-red-500 text-sm hover:underline">
+                <button
+                  onClick={clearAllNotifications}
+                  className="text-red-500 text-sm hover:underline"
+                >
                   Xóa tất cả
                 </button>
               )}
             </div>
             {notifications.length === 0 ? (
-              <div className="p-4 text-gray-500 text-center">Không có thông báo</div>
+              <div className="p-4 text-gray-500 text-center">
+                Không có thông báo
+              </div>
             ) : (
               <ul className="max-h-60 overflow-y-auto">
-                {notifications.map((notification, index) => {
-                  const notificationId = notification.id ?? index;
-                  const message = notification.message || "Không có nội dung";
-                  return (
-                    <li
-                      key={notificationId}
-                      className={`px-4 py-2 border-b flex justify-between items-center hover:bg-gray-100 cursor-pointer ${
-                        notification.isRead ? "" : "bg-gray-200"
-                      }`}
-                      onClick={() => notification.id && markAsRead(notification.id)}
-                    >
-                      <div className="flex items-center space-x-2">
-                        {!notification.isRead && (
-                          <span className="w-2 h-2 bg-blue-500 rounded-full"></span>
-                        )}
-                        <div>
-                          <p className="text-sm">{message}</p>
-                          <p className="text-xs text-gray-500">{formatRelativeTime(notification.time)}</p>
-                        </div>
+                {notifications.map((notification, index) => (
+                  <li
+                    key={notification.id || `notification-${index}`}
+                    className={`px-4 py-2 border-b flex justify-between items-center hover:bg-gray-100 cursor-pointer ${
+                      notification.isRead ? "" : "bg-gray-200"
+                    }`}
+                    onClick={() => markAsRead(notification.id)}
+                  >
+                    <img
+                      src={notification.image || "/default-product.png"}
+                      className="w-12 h-12 rounded-lg object-cover mr-3"
+                      alt="Product Image"
+                    />
+                    <div className="flex items-center space-x-2">
+                      <div>
+                        <p className="text-sm">{notification.message}</p>
+                        <p className="text-xs text-gray-500">
+                          {formatRelativeTime(notification.time)}
+                        </p>
                       </div>
+                    </div>
+
+                    {/* 🗑️ Nút xóa thông báo + Dấu chấm xanh */}
+                    <div className="relative">
+                      {!notification.isRead && (
+                        <span className="absolute -top-5 -right-0 w-2 h-2 bg-blue-500 rounded-full"></span>
+                      )}
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          if (notification.id) {
-                            removeNotification(notification.id, e);
-                          }
+                          removeNotification(notification.id);
                         }}
                         className="text-red-500 hover:text-red-700"
                       >
                         <Trash2 className="w-4 h-4" />
                       </button>
-                    </li>
-                  );
-                })}
+                    </div>
+                  </li>
+                ))}
               </ul>
             )}
           </div>
@@ -248,15 +278,16 @@ export default function HeaderAdmin() {
         {/* 👤 Avatar Admin */}
         {dataProfile?.avatar && (
           <Link href="/admin/profile" className="w-[40px] aspect-square">
-            <img src={dataProfile.avatar} className="w-full h-full object-cover rounded-full" alt="Avatar" />
+            <img
+              src={dataProfile.avatar}
+              className="w-full h-full object-cover rounded-full"
+              alt="Avatar"
+            />
           </Link>
         )}
 
         {/* 🚪 Nút Đăng xuất */}
-        <span
-          onClick={handleClickLogout}
-          className="cursor-pointer"
-        >
+        <span onClick={handleClickLogout} className="cursor-pointer">
           <FaArrowRightFromBracket className="text-[#6D7587] text-[20px] hover:text-red-500" />
         </span>
       </div>

@@ -12,7 +12,7 @@ export function StatCard({ value, label, icon }: StatCardProps) {
       <div className="ml-2">
         <div className="text-gray-500 text-sm">{label}</div>
       </div>
-      <div className="ml-auto text-gray-400 text-2xl">{icon}</div>
+      <div className="ml-auto text-gray-600 text-2xl">{icon}</div>
     </div>
   );
 }

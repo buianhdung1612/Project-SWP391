@@ -22,6 +22,7 @@ interface Profile {
   firstName: string;
   lastName: string;
   phone: string;
+  roleId: number;
   roleTitle: string;
   permissions: string[];
 }
@@ -44,6 +45,7 @@ export default function RootLayout({
     lastName: "",
     phone: "",
     role: {
+      roleId: 0 ,
       title: "",
       permission: [],
     },
@@ -53,7 +55,6 @@ export default function RootLayout({
     if (!pathname.startsWith("/admin/auth/login")) {
       const fetchProfile = async () => {
         const token = Cookies.get("token");
-        console.log(token);
 
         if (token) {
           const response = await fetch(
@@ -95,6 +96,7 @@ export default function RootLayout({
             lastName: info?.lastName,
             phone: info?.phone,
             roleTitle: info?.role.title,
+            roleId: info?.role.roleId,
             permissions: info?.role.permission,
           }}
         >
