@@ -98,7 +98,7 @@ const RevenueChart = () => {
   }, []);
 
   return (
-    <div style={{ width: "1500px", height: "300px", margin: "auto" }}>
+    <div style={{ width: "1000px", height: "300px", margin: "auto" }}>
       {chartData ? <Bar data={chartData} options={chartOptions} /> : <p>Đang tải dữ liệu...</p>}
     </div>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import Chart from "@/app/components/Chart/Chart";
 import Chart2 from "@/app/components/Chart/Chart2";
 import { StatCard } from "@/app/components/StatCard/StatCard";
@@ -12,82 +12,79 @@ export default function DashboardAdminPage() {
     totalOrderCompleted: "0",
     totalOrderPending: "0",
     totalOrderCanceled: "0",
-    revenue: "0",
+    totalRevenue: "0",
     totalProducts: "0",
     totalUsers: "0",
     totalFeedbacks: "0",
     totalBlogs: "0",
   });
 
-  const [top10ProductSelling, setTop10ProductSelling] = useState<
-    { title: string }[]
-  >([]);
+  const [top10ProductSelling, setTop10ProductSelling] = useState<{ title: string }[]>([]);
+
+  const wsRef = useRef<WebSocket | null>(null); // Giữ WebSocket ngay cả khi re-render
 
   useEffect(() => {
-    let ws: WebSocket | null = null;
-    let reconnectTimeout: NodeJS.Timeout;
-
     function connectWebSocket() {
-      if (ws && ws.readyState === WebSocket.OPEN) return;
+      if (wsRef.current) return; // Tránh tạo lại WebSocket khi đã có kết nối
 
       console.log("🔌 Kết nối WebSocket...");
-      ws = new WebSocket("wss://freshskinweb.onrender.com/ws/dashboard");
+      wsRef.current = new WebSocket("wss://freshskinweb.onrender.com/ws/dashboard");
 
-      ws.onopen = () => {
-        console.log("✅ WebSocket đã kết nối!");
-        clearTimeout(reconnectTimeout);
-      };
+      wsRef.current.onopen = () => console.log("✅ WebSocket đã kết nối!");
 
-      ws.onmessage = (event) => {
+      wsRef.current.onmessage = (event) => {
         try {
           const data = JSON.parse(event.data);
-          console.log("📩 Dữ liệu nhận:", data);
+          console.log("📩 Nhận dữ liệu:", data);
 
-          setStats({
-            totalOrder: data.totalOrder || "0",
-            totalOrderCompleted: data.totalOrderCompleted || "0",
-            totalOrderPending: data.totalOrderPending || "0",
-            totalOrderCanceled: data.totalOrderCanceled || "0",
-            revenue: data.totalRevenue || "0",
-            totalProducts: data.totalProducts || "0",
-            totalUsers: data.totalUsers || "0",
-            totalFeedbacks: data.totalFeedbacks || "0",
-            totalBlogs: data.totalBlogs || "0",
-          });
+          setStats((prevStats) => ({
+            ...prevStats,
+            totalOrder: data.totalOrder || prevStats.totalOrder,
+            totalOrderCompleted: data.totalOrderCompleted || prevStats.totalOrderCompleted,
+            totalOrderPending: data.totalOrderPending || prevStats.totalOrderPending,
+            totalOrderCanceled: data.totalOrderCanceled || prevStats.totalOrderCanceled,
+            totalRevenue: data.totalRevenue || prevStats.totalRevenue,
+            totalProducts: data.totalProducts || prevStats.totalProducts,
+            totalUsers: data.totalUsers || prevStats.totalUsers,
+            totalFeedbacks: data.totalFeedbacks || prevStats.totalFeedbacks,
+            totalBlogs: data.totalBlogs || prevStats.totalBlogs,
+          }));
 
-          setTop10ProductSelling(
-            data.top10ProductSelling?.map((product: any) => ({
+          if (data.top10ProductSelling) {
+            setTop10ProductSelling(data.top10ProductSelling.map((product: any) => ({
               title: product.title || "Không có tiêu đề",
-            })) || []
-          );
+            })));
+          }
         } catch (error) {
           console.error("❌ Lỗi xử lý WebSocket:", error);
         }
       };
 
-      ws.onclose = () => {
-        console.warn("⚠️ WebSocket đóng! Thử kết nối lại...");
-        ws = null;
-        reconnectTimeout = setTimeout(connectWebSocket, 5000);
+      wsRef.current.onclose = () => {
+        console.warn("⚠️ WebSocket bị đóng, thử kết nối lại sau 5 giây...");
+        wsRef.current = null;
+        setTimeout(connectWebSocket, 5000);
       };
     }
 
     connectWebSocket();
 
     return () => {
-      if (ws) ws.close();
-      clearTimeout(reconnectTimeout);
+      if (wsRef.current) {
+        wsRef.current.close();
+        wsRef.current = null;
+      }
     };
   }, []);
 
   return (
-    <div className="p-6 bg-gray-100 w-full">
+    <div className="p-4 md:p-6 bg-gray-100 max-w-screen-xl mx-auto">
       <h1 className="text-2xl mb-4">Dashboard</h1>
 
       {/* Thống kê dạng thẻ */}
-      <div className="grid grid-cols-5 gap-3 mb-5 font-bold text-[#374785]">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-5 font-bold text-[#374785]">
         <StatCard value={stats.totalProducts} label="Số sản phẩm" icon={<Boxes className="text-indigo-500" />} />
-        <StatCard value={stats.revenue} label="Doanh thu" icon={<Banknote className="text-yellow-500" />} />
+        <StatCard value={stats.totalRevenue} label="Doanh thu" icon={<Banknote className="text-yellow-500" />} />
         <StatCard value={stats.totalUsers} label="Tổng người dùng" icon={<User2Icon className="text-indigo-500" />} />
         <StatCard value={stats.totalFeedbacks} label="Đánh giá" icon={<Star className="text-purple-500" />} />
         <StatCard value={stats.totalBlogs} label="Bài viết" icon={<FileText className="text-gray-500" />} />
@@ -99,20 +96,19 @@ export default function DashboardAdminPage() {
       </div>
 
       {/* Biểu đồ & Bảng sản phẩm bán chạy */}
-      <div className="grid grid-cols-[2fr_3fr] gap-4">
-
-        <div className="bg-white shadow-md rounded-lg p-6 h-96 flex items-center justify-center w-full">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
           <Chart />
         </div>
 
         {/* Bảng sản phẩm bán chạy */}
-        <div className="bg-white shadow-md rounded-lg p-6 h-96">
+        <div className="bg-white shadow-md rounded-lg p-4 h-80">
           <h2 className="text-xl font-semibold mb-4">Top 10 Sản Phẩm Bán Chạy</h2>
-          <div className="overflow-y-auto max-h-72">
+          <div className="overflow-y-auto max-h-64">
             <table className="w-full border-collapse border border-gray-300">
               <thead className="sticky top-0 bg-blue-600 text-white z-10">
                 <tr>
-                <th className="border bg-blue-600 p-2 text-left">Sản phẩm</th>
+                  <th className="border bg-blue-600 p-2 text-left">Sản phẩm</th>
                 </tr>
               </thead>
               <tbody>
@@ -128,7 +124,7 @@ export default function DashboardAdminPage() {
       </div>
 
       {/* Biểu đồ thứ 2 */}
-      <div className="bg-white shadow-md rounded-lg p-6 mt-6">
+      <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-80">
         <Chart2 />
       </div>
     </div>

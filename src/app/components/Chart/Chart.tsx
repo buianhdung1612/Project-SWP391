@@ -104,7 +104,13 @@ const PieChart = () => {
     });
   }, [topProducts]);
 
-  return <div className="w-full h-96"><canvas ref={chartRef} className="w-full h-full" /></div>;
+  return (
+    <div className=" h-100 relative">
+      <canvas ref={chartRef} className=" h-100" />
+    </div>
+  );
+  
+  
 };
 
 export default PieChart;
