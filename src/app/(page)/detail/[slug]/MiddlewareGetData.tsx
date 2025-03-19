@@ -29,6 +29,7 @@ interface ProductRelated {
     discountPercent: number;
 }
 interface ProductDetail {
+    id: number,
     thumbnail: string[];
     category: Category[],
     deal: string;
@@ -57,6 +58,7 @@ export const Context = createContext<Context>({
         }
     ],
     productDetail: {
+        id: 0,
         thumbnail: [],
         category: [],
         deal: "",

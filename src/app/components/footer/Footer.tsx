@@ -112,7 +112,7 @@ export default function Footer() {
                     </div>
                 </div>
                 <div className="w-[166px] h-[114px]">
-                    <img src="/demo/footer.webp" className="w-full h-full object-cover" />
+                    <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742359278/product-brand/dsadas_20250319-044118_4.webp" className="w-full h-full object-cover" />
                 </div>
                 <form action="" className="relative">
                     <input type="email" placeholder="Nhập địa chỉ email" content="email" className="w-[450px] py-[15px] pl-[20px] pr-[125px] rounded-[50px] text-[14px]" />

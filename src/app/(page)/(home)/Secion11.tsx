@@ -46,36 +46,37 @@ export default function Section11(props: any) {
 
     return (
         <>
-            <Title title="Blog làm đẹp" link="/blogs" />
+            <div className="container mx-auto">
+                <Title title="Blog làm đẹp" link="/blogs" />
 
-            <div className="text-center mb-[20px]">
-                {dataButton.map((item, index) => (
-                    <button
-                        key={index}
-                        onClick={() => handleClick(item.data, item.currentStatus)}
-                        className={`text-[16px] hover:text-primary font-[500] px-[25px] py-[2px] ${
-                            currentButton === item.currentStatus ? "text-primary" : "text-[#333]"
-                        }`}
-                    >
-                        {item.content}
-                    </button>
-                ))}
+                <div className="text-center mb-[20px]">
+                    {dataButton.map((item, index) => (
+                        <button
+                            key={index}
+                            onClick={() => handleClick(item.data, item.currentStatus)}
+                            className={`text-[16px] hover:text-primary font-[500] px-[25px] py-[2px] ${currentButton === item.currentStatus ? "text-primary" : "text-[#333]"
+                                }`}
+                        >
+                            {item.content}
+                        </button>
+                    ))}
+                </div>
+
+                <div className="container mx-auto grid grid-cols-4 gap-[20px]">
+                    {dataBlogsCurrent.length > 0 && dataBlogsCurrent.map((item: any, index: number) => (
+                        <BlogItem
+                            key={index}
+                            image={item.thumbnail[0]}
+                            day={item.createdAt}
+                            title={item.title}
+                            description={item.content}
+                            link={`/blogs/detail/${item.slug}`}
+                        />
+                    ))}
+                </div>
+
+                <ButtonSeeAll link="/blogs/tin-tuc" />
             </div>
-
-            <div className="container mx-auto grid grid-cols-4 gap-[20px]">
-                {dataBlogsCurrent.length > 0 && dataBlogsCurrent.map((item: any, index: number) => (
-                    <BlogItem
-                        key={index}
-                        image={item.thumbnail[0]}
-                        day={item.createdAt} 
-                        title={item.title}
-                        description={item.content} 
-                        link={`/blogs/detail/${item.slug}`}
-                    />
-                ))}
-            </div>
-
-            <ButtonSeeAll link="/blogs/tin-tuc" />
         </>
     );
 }

@@ -19,7 +19,7 @@ export default function QuizPage() {
                     </div>
                     <div className="flex-1 ml-[30px]">
                         <div className="w-[270px] h-[255px]">
-                            <img src="/demo/quiz.webp" className="w-full h-full object-cover" />
+                            <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742357776/product-brand/dsa_20250319-041615_16.webp" className="w-full h-full object-cover" />
                         </div>
                     </div>
                 </div>

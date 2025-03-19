@@ -2,9 +2,9 @@ import Link from "next/link"
 
 export default function Banner2() {
     const data: string[] = [
-        "/demo/banner-three-1.webp",
-        "/demo/banner-three-2.webp",
-        "/demo/banner-three-3.webp"
+        "https://res.cloudinary.com/dr53sfboy/image/upload/v1742356508/product-brand/dsa_20250319-035508_10.webp",
+        "https://res.cloudinary.com/dr53sfboy/image/upload/v1742356509/product-brand/dsa_20250319-035509_11.webp",
+        "https://res.cloudinary.com/dr53sfboy/image/upload/v1742356510/product-brand/dsa_20250319-035510_12.webp"
     ]
     return (
         <>

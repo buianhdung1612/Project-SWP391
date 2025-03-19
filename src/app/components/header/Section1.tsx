@@ -166,7 +166,7 @@ export default function Section1() {
     }, []);
 
     const settingProfile = useContext(SettingProfileContext);
-    
+
     if (!settingProfile) {
         return null;
     }
@@ -237,32 +237,34 @@ export default function Section1() {
                 {profile.username !== "" ? (
                     <Link href="/quiz">
                         <div className="flex items-center">
-                            <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742010539/product-brand/test_20250315-034859_2.png" width={28} height={28} />
+                            <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742357768/product-brand/dsa_20250319-041608_6.png" width={28} height={28} />
                             <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Kiểm Tra Loại Da</span>
                         </div>
                     </Link>
                 ) : (
                     <Link href="/user/login">
                         <div className="flex items-center">
-                            <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742010539/product-brand/test_20250315-034859_2.png" width={28} height={28} />
+                            <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742357768/product-brand/dsa_20250319-041608_6.png" width={28} height={28} />
                             <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Kiểm Tra Loại Da</span>
                         </div>
                     </Link>
                 )}
-                
+
                 <Link href="/blogs/tin-tuc">
                     <div className="flex items-center ml-[15px]">
-                        <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742010539/product-brand/test_20250315-034859_3.png" width={28} height={28} />
+                        <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742357767/product-brand/dsa_20250319-041606_5.png" width={28} height={28} />
                         <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Tạp Chí Làm Đẹp</span>
                     </div>
                 </Link>
                 <button className="ml-[15px] flex items-center">
-                    <img
-                        src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742010538/product-brand/test_20250315-034858.png"
-                        width={28}
-                        height={28}
-                        onClick={() => setOpenMore(!openMore)}
-                    />
+                    {openMore == false && (
+                        <img
+                            src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742357763/product-brand/dsa_20250319-041602.png"
+                            width={28}
+                            height={28}
+                            onClick={() => setOpenMore(!openMore)}
+                        />
+                    )}
                     {openMore && (
                         <div className="relative">
                             <span
@@ -274,12 +276,12 @@ export default function Section1() {
                             <ul className="menu-more p-0 m-0 bg-[#fff] rounded-[10px] w-[200px] absolute top-[35px] right-[5px] z-[999]">
                                 <MenuMoreItem
                                     text="Trung tâm hỗ trợ"
-                                    icon="/demo/phone-icon.webp"
+                                    icon="https://res.cloudinary.com/dr53sfboy/image/upload/v1742359281/product-brand/dsadas_20250319-044121_8.webp"
                                     link="/contact"
                                 />
                                 <MenuMoreItem
                                     text="Tra cứu đơn hàng"
-                                    icon="/demo/tra-cuu-don-hang.webp"
+                                    icon="https://res.cloudinary.com/dr53sfboy/image/upload/v1742359284/product-brand/dsadas_20250319-044124_13.webp"
                                     link="search-order"
                                 />
                             </ul>
@@ -303,14 +305,14 @@ export default function Section1() {
                     </Link>
                 )}
                 <Link href="/favorite">
-                     <div className="flex items-center ml-[15px] relative">
-                         <CiHeart className="text-[32px]" />
-                         <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">0</span>
-                     </div>
-                 </Link>
-                 <div className="relative">
-                     <Cart />
-                 </div>
+                    <div className="flex items-center ml-[15px] relative">
+                        <CiHeart className="text-[32px]" />
+                        <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">0</span>
+                    </div>
+                </Link>
+                <div className="relative">
+                    <Cart />
+                </div>
             </div>
         </div>
     );

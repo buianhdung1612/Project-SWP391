@@ -26,35 +26,37 @@ export default function Section9(props: any) {
 
     return (
         <>
-            <Title title="Tóc khỏe tóc đẹp" link="/products" />
+            <div className="container mx-auto">
+                <Title title="Tóc khỏe tóc đẹp" link="/products" />
 
-            <div className="text-center mb-[20px]">
-                {dataButton.map((item: any, index: number) => (
-                    <button
-                        key={index}
-                        onClick={() => handleClick(item.data, item.currentStatus)}
-                        className={"text-[16px] hover:text-primary font-[500] px-[25px] py-[2px] " +
-                            (currentButton == item.currentStatus ? "text-primary" : "text-[#333]")
-                        }
-                    >
-                        {item.content}
-                    </button>
-                ))}
+                <div className="text-center mb-[20px]">
+                    {dataButton.map((item: any, index: number) => (
+                        <button
+                            key={index}
+                            onClick={() => handleClick(item.data, item.currentStatus)}
+                            className={"text-[16px] hover:text-primary font-[500] px-[25px] py-[2px] " +
+                                (currentButton == item.currentStatus ? "text-primary" : "text-[#333]")
+                            }
+                        >
+                            {item.content}
+                        </button>
+                    ))}
+                </div>
+                <div className="flex-1 grid grid-cols-5 gap-[20px] container mx-auto">
+                    {data.slice(0, 5).map((item: any, index: number) => (
+                        <CardItem
+                            key={index}
+                            image={item.thumbnail}
+                            brand={item.brand.title}
+                            title={item.title}
+                            link={`/detail/${item.slug}`}
+                            priceByVolume={item.variants}
+                            discount={item.discountPercent}
+                        />
+                    ))}
+                </div>
+                <ButtonSeeAll link={`/product-category/${currentButton}`} />
             </div>
-            <div className="flex-1 grid grid-cols-5 gap-[20px] container mx-auto">
-                {data.slice(0, 5).map((item: any, index: number) => (
-                    <CardItem
-                        key={index}
-                        image={item.thumbnail}
-                        brand={item.brand.title}
-                        title={item.title}
-                        link={`/detail/${item.slug}`}
-                        priceByVolume={item.variants}
-                        discount={item.discountPercent}
-                    />
-                ))}
-            </div>
-            <ButtonSeeAll />
         </>
     )
 }

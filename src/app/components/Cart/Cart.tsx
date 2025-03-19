@@ -65,7 +65,7 @@ export default function Cart() {
                     onMouseLeave={handleMouseLeave}
                 >
                     <div className="w-[32px] aspect-square flex items-center justify-center">
-                        <img src="/demo/no-cart.webp" className="w-full h-full object-cover" />
+                        <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742359280/product-brand/dsadas_20250319-044120_7.webp" className="w-full h-full object-cover" />
                     </div>
                     <p className="mt-[15px] text-[14px] text-textColor">Không có sản phẩm nào trong giỏ hàng của bạn</p>
                 </div>

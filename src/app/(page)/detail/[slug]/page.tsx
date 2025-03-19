@@ -28,6 +28,7 @@ interface ProductRelated {
 }
 
 interface ProductDetail {
+    id: number,
     thumbnail: string[];
     category: Category[],
     deal: string;
@@ -58,6 +59,7 @@ export default function DetailProductPage() {
             }
         ],
         productDetail: {
+            id: 0,
             thumbnail: [],
             category: [],
             deal: "",

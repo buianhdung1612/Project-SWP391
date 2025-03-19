@@ -19,7 +19,7 @@ export default function Section3(props: any) {
                             brand={item.brand.title}
                             title={item.title}
                             banner={item.banner}
-                            deal="/demo/deal.webp"
+                            deal="https://res.cloudinary.com/dr53sfboy/image/upload/v1742383908/product-brand/dsa_20250319-113148_3.webp"
                             link={`/detail/${item.slug}`}
                             priceByVolume={item.variants}
                             discount={item.discountPercent}

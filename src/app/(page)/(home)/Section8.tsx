@@ -25,7 +25,7 @@ export default function Section8(props: any) {
                             <div className="text-secondary font-[600] text-[46px]">FRESH SKIN</div>
                             <div className="font-[400] text-[16px] max-w-[430px] inline-block">Không phải những người đẹp là những người hạnh phúc, mà những người hạnh phúc mới là những người đẹp.</div>
                             <div className="w-[64px] h-[34px] ml-[46%] mt-[7px]">
-                                <img src="demo/leaf.webp" className="w-full h-full object-cover" />
+                                <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742359280/product-brand/dsadas_20250319-044119_6.webp" className="w-full h-full object-cover" />
                             </div>
                         </div>
                         <div className="grid grid-cols-3 gap-[20px]">
