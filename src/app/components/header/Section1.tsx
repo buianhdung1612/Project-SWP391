@@ -1,6 +1,5 @@
 "use client";
 
-import Image from "next/image";
 import Link from "next/link";
 import { useContext, useEffect, useRef, useState } from "react";
 import { CiHeart } from "react-icons/ci";
@@ -172,14 +171,14 @@ export default function Section1() {
         return null;
     }
 
-    const { profile } = settingProfile;
+    const { profile, setting } = settingProfile;
 
     return (
         <div className="container mx-auto flex items-center py-[10px]">
             {/* Logo */}
             <Link href="/">
-                <div className="mr-[23px]">
-                    <Image src="logo.svg" alt="" width={190} height={60} />
+                <div className="mr-[23px] w-[190px] h-[60px]">
+                    <img src={setting?.logo || 'https://res.cloudinary.com/dr53sfboy/image/upload/v1742010540/product-brand/test_20250315-034900_4.png'} className="w-full h-full object-cover" />
                 </div>
             </Link>
             {/* Search */}
@@ -238,14 +237,14 @@ export default function Section1() {
                 {profile.username !== "" ? (
                     <Link href="/quiz">
                         <div className="flex items-center">
-                            <img src="testing.png" width={28} height={28} />
+                            <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742010539/product-brand/test_20250315-034859_2.png" width={28} height={28} />
                             <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Kiểm Tra Loại Da</span>
                         </div>
                     </Link>
                 ) : (
                     <Link href="/user/login">
                         <div className="flex items-center">
-                            <img src="testing.png" width={28} height={28} />
+                            <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742010539/product-brand/test_20250315-034859_2.png" width={28} height={28} />
                             <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Kiểm Tra Loại Da</span>
                         </div>
                     </Link>
@@ -253,13 +252,13 @@ export default function Section1() {
                 
                 <Link href="/blogs/tin-tuc">
                     <div className="flex items-center ml-[15px]">
-                        <img src="note-book 1.png" width={28} height={28} />
+                        <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742010539/product-brand/test_20250315-034859_3.png" width={28} height={28} />
                         <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Tạp Chí Làm Đẹp</span>
                     </div>
                 </Link>
                 <button className="ml-[15px] flex items-center">
                     <img
-                        src="dots 1.png"
+                        src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742010538/product-brand/test_20250315-034858.png"
                         width={28}
                         height={28}
                         onClick={() => setOpenMore(!openMore)}

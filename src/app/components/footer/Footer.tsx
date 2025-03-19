@@ -122,7 +122,7 @@ export default function Footer() {
             <div className="container mx-auto mt-[30px] px-[10px] flex pb-[50px]">
                 <div className="w-[304px] mr-[30px]">
                     <div className="w-[150px] h-[60px]">
-                        <img src="logo.svg" alt="logo" className="w-full h-full object-cover" />
+                        <img src={setting?.logo || "https://res.cloudinary.com/dr53sfboy/image/upload/v1742010540/product-brand/test_20250315-034900_4.png"} alt="logo" className="w-full h-full object-cover" />
                     </div>
                     <div className="text-[14px] my-[10px]">Không phải những người đẹp là những người hạnh phúc, mà những người hạnh phúc mới là những người đẹp.</div>
                     <div className="flex items-center">

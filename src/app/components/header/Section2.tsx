@@ -9,7 +9,7 @@ export default function Section2() {
                 <MenuUnShow text="Trang chủ" link="/"/>
                 <MenuShowBrand text="Thương hiệu" link='/product-category/thuong-hieu'/>
                 <MenuShowMainCategory text="Chăm sóc da mặt" link='/product-category/cham-soc-da-mat'/>
-                <MenuUnShow text="Khuyến mãi HOT" image="fire 1.png" link="/product-category/khuyen-mai-hot"/>  
+                <MenuUnShow text="Khuyến mãi HOT" image="https://res.cloudinary.com/dr53sfboy/image/upload/v1742354600/product-brand/dsa_20250319-032319.png" link="/product-category/khuyen-mai-hot"/>  
                 <MenuUnShow text="Sản phẩm mới" link="/product-category/san-pham-moi"/>
                 <MenuUnShow text="Top bán chạy" link="/product-category/top-ban-chay"/>  
                 <MenuUnShow text="So sánh sản phẩm" link=""/>  
