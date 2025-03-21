@@ -27,7 +27,6 @@ export default function HeaderAdmin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const dataProfile = useContext(ProfileAdminContext);
   const wsRef = useRef<WebSocket | null>(null);
-
   // 🚀 Fetch danh sách thông báo từ API
   const fetchNotifications = async () => {
     try {
@@ -39,7 +38,7 @@ export default function HeaderAdmin() {
       }
 
       const roleId = dataProfile.roleId;
-      // console.log("🔗 Fetching URL:", `https://freshskinweb.onrender.com/admin/notify/${roleId}`);
+      
       const res = await fetch(
         `https://freshskinweb.onrender.com/admin/notify/${roleId}`
       );
@@ -73,17 +72,20 @@ export default function HeaderAdmin() {
       const ws = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
 
       ws.onopen = () => {
-        console.log("✅ WebSocket đã kết nối!");
+        console.log( "✅ WebSocket đã kết nối!");
+        console.log(dataProfile?.roleId);
         wsRef.current = ws;
       };
+
+     
 
       ws.onmessage = (event) => {
         console.log("📩 Nhận thông báo:", event.data);
         try {
           const data: Notification = JSON.parse(event.data);
           if (!data.id || !data.message) return;
-          setNotifications((prev: Notification[]) => [data, ...prev]);
-          setUnreadCount((prev: number) => prev + 1);
+          setNotifications((prev) => [data, ...prev]);
+          setUnreadCount((prev) => prev + 1);
         } catch (error) {
           console.error("❌ Lỗi xử lý WebSocket:", error);
         }
