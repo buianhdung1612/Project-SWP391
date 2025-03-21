@@ -34,6 +34,25 @@ export default function LoginPage() {
         }
     }
 
+    const handleForgotPassword = async (event: any) => {
+        event.prevenDefault();
+
+        const response = await fetch('https://freshskinweb.onrender.com/auth/login', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: event.target.email.value,
+            })
+        });
+        const dataResponse = await response.json();
+
+        if(dataResponse.code == 200){
+            location.href = "/user/login"
+        }
+    }
+
     return (
         <>
             <div className="bg-[#F6F6F6] pb-[50px] pt-[15px]">
@@ -71,7 +90,7 @@ export default function LoginPage() {
                         </span>
                         <Link href="/user/register" className="text-[#333] text-[14px] hover:text-primary">Đăng ký tại đây</Link>
                     </div>
-                    <form action="" className={(resetPassword ? "block" : "hidden")}>
+                    <form onSubmit={handleForgotPassword} className={(resetPassword ? "block" : "hidden")}>
                         <FormInput
                             type="email"
                             placeholder="Email"

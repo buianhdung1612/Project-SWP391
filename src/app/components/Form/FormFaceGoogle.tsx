@@ -3,12 +3,12 @@ import Link from "next/link";
 export default function FormFaceGoogle(props: { info: string }) {
     const { info = "" } = props;
 
-    const handleClickFacebook = () => {
-        const fetchData = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/home`);
-            const data = await response.json();
-        };
-    }
+    // const handleClickFacebook = () => {
+    //     const fetchData = async () => {
+    //         const response = await fetch(`https://freshskinweb.onrender.com/home`);
+    //         const data = await response.json();
+    //     };
+    // }
 
     return (
         <>

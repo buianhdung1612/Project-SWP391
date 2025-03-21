@@ -9,11 +9,6 @@ import { BiDetail } from "react-icons/bi";
 import Alert from '@mui/material/Alert';
 import { ProfileAdminContext } from "../layout";
 
-interface SkinType {
-    id: number;
-    type: string;
-}
-
 interface ScoreRange {
     min?: number;
     max?: number;
