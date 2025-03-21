@@ -40,7 +40,7 @@ export default function Section2({ data }: Section2Props) {
                     Tìm kiếm: {title}
                 </li>
             </ul>
-            <div className="text-[24px] my-[15px] text-[#00090f] font-[450]">Có {products.length} kết quả tìm kiếm phù hợp</div>
+            <div className="text-[24px] my-[15px] text-[#00090f] font-[450]">Có {data.page.totalItems} kết quả tìm kiếm phù hợp</div>
             <div className="flex items-start">
                 <div className="flex-1 ml-[40px] mt-[15px]">
                     <div className="grid grid-cols-4 gap-[20px] mt-[20px]">

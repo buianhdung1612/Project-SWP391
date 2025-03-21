@@ -3,7 +3,7 @@ import Title from "@/app/components/title/Title";
 import Link from "next/link";
 
 export default function Section4(props: any) {
-    const { dataInit } = props;
+    const { dataInit = [] } = props;
 
     const bannerImage: any = [
         "https://res.cloudinary.com/dr53sfboy/image/upload/v1742356504/product-brand/dsa_20250319-035504_4.webp",

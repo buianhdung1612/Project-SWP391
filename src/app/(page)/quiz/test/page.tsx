@@ -178,7 +178,7 @@ export default function QuizQuestionPage() {
                 valueC={data[currentQuestion - 1].valueC}
                 valueD={data[currentQuestion - 1].valueD}
             />
-            <div className="border-t-4 border-solid border-[#f7f9fc] mt-[100px] flex justify-center pt-[22px]">
+            <div className="border-t-4 border-solid border-[#f7f9fc] mt-[70px] flex justify-center pt-[22px]">
                 <div className="w-[568px] flex justify-end h-[40px]">
                     <div
                         onClick={() => {

@@ -43,7 +43,7 @@ export default function Price() {
             image: productDetail.thumbnail[0],
             title: productDetail.title,
             price: currentVolume.price * (1 - productDetail.discountPercent / 100),
-            link: "#",
+            link: `/detail/${productDetail.slug}`,
             variantId: currentVolume.id,
             volume: currentVolume.volume,
             unit: currentVolume.unit,

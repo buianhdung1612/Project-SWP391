@@ -1,12 +1,13 @@
 "use client"
 
 import { useContext, useEffect, useState } from "react";
-import { FaStar } from "react-icons/fa6";
+import { FaRegStar, FaRegStarHalf, FaStar } from "react-icons/fa6";
 import { SettingProfileContext } from "../../layout";
 import { Context } from "./MiddlewareGetData";
-import { AiOutlineDislike, AiOutlineLike } from "react-icons/ai";
 import { useRouter } from "next/navigation";
 import { CiStar } from "react-icons/ci";
+import { FaStarHalfAlt } from "react-icons/fa";
+import Pagination from "@/app/components/Pagination/Pagination";
 
 export default function Rating() {
     const router = useRouter();
@@ -24,8 +25,21 @@ export default function Rating() {
     const { productDetail } = useContext(Context);
 
     const [data, setData] = useState({
-        page: {},
-        reviews: []
+        page: {
+            totalItems: 0,
+            totalPages: 1,
+            pageSize: 6,
+            currentPage: 1
+        },
+        reviews: [],
+        ratingDetail: {
+            totalComment: 0,
+            rating1: 0,
+            rating2: 0,
+            rating3: 0,
+            rating4: 0,
+            rating5: 0,
+        }
     })
 
     useEffect(() => {
@@ -33,7 +47,6 @@ export default function Rating() {
             const response = await fetch(`https://freshskinweb.onrender.com/reviews/${productDetail.id}`);
             const data = await response.json();
 
-            console.log(data);
             setData(data.data);
             setIsLoading(false);
         };
@@ -77,12 +90,51 @@ export default function Rating() {
         })
 
         const dataResponse = await response.json();
-        if(dataResponse){
-            if(dataResponse.code == 200){
+        if (dataResponse) {
+            if (dataResponse.code == 200) {
                 location.reload();
             }
         }
     }
+
+    const handleSubmitReply = async (event: any, parentId: number) => {
+        event.preventDefault();
+
+        const data = {
+            userId: profile.userID,
+            productId: productDetail.id,
+            rating: 0,
+            comment: event.target.reply.value,
+            parentId: parentId
+        }
+
+        const response = await fetch(`https://freshskinweb.onrender.com/reviews/create`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        })
+
+        const dataResponse = await response.json();
+        if (dataResponse) {
+            if (dataResponse.code == 200) {
+                location.reload();
+            }
+        }
+    }
+
+    const totalRating = data.ratingDetail.rating1 + data.ratingDetail.rating2 + data.ratingDetail.rating3 + data.ratingDetail.rating4 + data.ratingDetail.rating5;
+    // Kiểm tra tổng điểm
+    const ratingGeneral = totalRating > 0
+        ? ((data.ratingDetail.rating1 * 1 + data.ratingDetail.rating2 * 2 + data.ratingDetail.rating3 * 3 + data.ratingDetail.rating4 * 4 + data.ratingDetail.rating5 * 5) / totalRating).toFixed(1)
+        : "0";
+    const widthRating1 = totalRating > 0 ? (data.ratingDetail.rating1 / totalRating * 150).toFixed(0) : 0;
+    const widthRating2 = totalRating > 0 ? (data.ratingDetail.rating2 / totalRating * 150).toFixed(0) : 0;
+    const widthRating3 = totalRating > 0 ? (data.ratingDetail.rating3 / totalRating * 150).toFixed(0) : 0;
+    const widthRating4 = totalRating > 0 ? (data.ratingDetail.rating4 / totalRating * 150).toFixed(0) : 0;
+    const widthRating5 = totalRating > 0 ? (data.ratingDetail.rating5 / totalRating * 150).toFixed(0) : 0;
+    const setStar = parseInt(ratingGeneral.charAt(2));
 
     return (
         <>
@@ -93,15 +145,36 @@ export default function Rating() {
                     <div className="text-[13px] font-[400]">Đánh giá trung bình</div>
                     <div className="flex items-center">
                         <div className="w-[30%] text-center">
-                            <span className="font-[700] text-[80px] text-[#f60]">4.9</span>
+                            <span className="font-[700] text-[80px] text-[#f60]">{ratingGeneral}</span>
                             <span className="flex items-center justify-center mb-[10px]">
-                                <FaStar className="text-[#f60]" />
-                                <FaStar className="text-[#f60]" />
-                                <FaStar className="text-[#f60]" />
-                                <FaStar className="text-[#f60]" />
-                                <FaStar className="text-[#f60]" />
+                                {[...Array(parseInt(ratingGeneral))].map((_, i) => (
+                                    <FaStar key={i} className="text-[#f60]" />
+                                ))}
+                                {(setStar == 3 || setStar == 4 || setStar == 5 || setStar == 6 || setStar == 7) && (
+                                    <>
+                                        <FaStarHalfAlt className="text-[#f60]" />
+                                        {[...Array(5 - 1 - parseInt(ratingGeneral))].map((_, i) => (
+                                            <FaRegStar key={i} className="text-[#f60]" />
+                                        ))}
+                                    </>
+                                )}
+                                {(setStar == 0 || setStar == 1 || setStar == 2) && (
+                                    <>
+                                        {[...Array(5 - parseInt(ratingGeneral))].map((_, i) => (
+                                            <FaRegStar key={i} className="text-[#f60]" />
+                                        ))}
+                                    </>
+                                )}
+                                {(setStar == 8 || setStar == 9) && (
+                                    <>
+                                        <FaStar className="text-[#f60]" />
+                                        {[...Array(5 - 1 - parseInt(ratingGeneral))].map((_, i) => (
+                                            <FaRegStar key={i} className="text-[#f60]" />
+                                        ))}
+                                    </>
+                                )}
                             </span>
-                            <span>122 nhận xét</span>
+                            <span>{data.page.totalItems} nhận xét</span>
                         </div>
                         <div className="w-[40%] pt-[35px]">
                             <div className="flex items-center mb-[5px]">
@@ -112,67 +185,72 @@ export default function Rating() {
                                         readOnly
                                     />
                                     <input
-                                        className="w-[100px] h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
+                                        style={{ width: `${widthRating5}px` }}
+                                        className="h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
                                         readOnly
                                     />
                                 </div>
-                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">107 Rất hài lòng</span>
+                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">{data.ratingDetail.rating5} Rất hài lòng</span>
                             </div>
                             <div className="flex items-center mb-[5px]">
-                                <span className="mr-[15px] text-[13px]">5 sao</span>
+                                <span className="mr-[15px] text-[13px]">4 sao</span>
                                 <div className="relative">
                                     <input
                                         className="w-[150px] h-[15px] bg-[#D7D7D7] outline-none"
                                         readOnly
                                     />
                                     <input
-                                        className="w-[100px] h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
+                                        style={{ width: `${widthRating4}px` }}
+                                        className="h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
                                         readOnly
                                     />
                                 </div>
-                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">107 Rất hài lòng</span>
+                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">{data.ratingDetail.rating4} Hài lòng</span>
                             </div>
                             <div className="flex items-center mb-[10px]">
-                                <span className="mr-[15px] text-[13px]">5 sao</span>
+                                <span className="mr-[15px] text-[13px]">3 sao</span>
                                 <div className="relative">
                                     <input
                                         className="w-[150px] h-[15px] bg-[#D7D7D7] outline-none"
                                         readOnly
                                     />
                                     <input
-                                        className="w-[100px] h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
+                                        style={{ width: `${widthRating3}px` }}
+                                        className="h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
                                         readOnly
                                     />
                                 </div>
-                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">107 Rất hài lòng</span>
+                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">{data.ratingDetail.rating3} Bình thường</span>
                             </div>
                             <div className="flex items-center mb-[10px]">
-                                <span className="mr-[15px] text-[13px]">5 sao</span>
+                                <span className="mr-[15px] text-[13px]">2 sao</span>
                                 <div className="relative">
                                     <input
                                         className="w-[150px] h-[15px] bg-[#D7D7D7] outline-none"
                                         readOnly
                                     />
                                     <input
-                                        className="w-[100px] h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
+                                        style={{ width: `${widthRating2}px` }}
+                                        className="h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
                                         readOnly
                                     />
                                 </div>
-                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">107 Rất hài lòng</span>
+                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">{data.ratingDetail.rating2} Không hài lòng</span>
                             </div>
                             <div className="flex items-center mb-[10px]">
-                                <span className="mr-[15px] text-[13px]">5 sao</span>
+                                <span className="mr-[15px] text-[13px]">1 sao</span>
                                 <div className="relative">
                                     <input
                                         className="w-[150px] h-[15px] bg-[#D7D7D7] outline-none"
                                         readOnly
                                     />
                                     <input
-                                        className="w-[100px] h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
+                                        style={{ width: `${widthRating1}px` }}
+                                        className="h-[15px] bg-[#f60] outline-none absolute left-0 top-[4.5px]"
                                         readOnly
                                     />
                                 </div>
-                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">107 Rất hài lòng</span>
+                                <span className="ml-[15px] text-[13px] text-[#B1B1B1] font-[600]">{data.ratingDetail.rating1} Rất tệ</span>
                             </div>
                         </div>
                         <div className="flex-1 text-center">
@@ -192,11 +270,11 @@ export default function Rating() {
                             <div className="px-1 my-[10px]">
                                 {starChoose == 0 && (
                                     <div className="flex items-center">
-                                        <CiStar onClick={() => handleChooseStar(1)} className="w-[28px] h-[28px] text-[#f60]" />
-                                        <CiStar onClick={() => handleChooseStar(2)} className="w-[28px] h-[28px] text-[#f60]" />
-                                        <CiStar onClick={() => handleChooseStar(3)} className="w-[28px] h-[28px] text-[#f60]" />
-                                        <CiStar onClick={() => handleChooseStar(4)} className="w-[28px] h-[28px] text-[#f60]" />
-                                        <CiStar onClick={() => handleChooseStar(5)} className="w-[28px] h-[28px] text-[#f60]" />
+                                        <CiStar onClick={() => handleChooseStar(1)} className="w-[28px] h-[28px] text-[#f60] cursor-pointer" />
+                                        <CiStar onClick={() => handleChooseStar(2)} className="w-[28px] h-[28px] text-[#f60] cursor-pointer" />
+                                        <CiStar onClick={() => handleChooseStar(3)} className="w-[28px] h-[28px] text-[#f60] cursor-pointer" />
+                                        <CiStar onClick={() => handleChooseStar(4)} className="w-[28px] h-[28px] text-[#f60] cursor-pointer" />
+                                        <CiStar onClick={() => handleChooseStar(5)} className="w-[28px] h-[28px] text-[#f60] cursor-pointer" />
                                     </div>
                                 )}
                                 {starChoose == 1 && (
@@ -273,10 +351,10 @@ export default function Rating() {
                         </div>
                     )}
                 </div>
-                
+
                 {/* Phân trang */}
-                <div className="mx-[20px] px-[10px] bg-white flex items-center rounded-[3px] py-[6px]">
-                    <span className="text-[14px] text-black">44 bình luận cho sản phẩm này</span>
+                <div className="mx-[20px] mt-[10px] px-[10px] bg-white flex items-center rounded-[3px] py-[6px]">
+                    <span className="text-[14px] text-black">{data.ratingDetail.totalComment} bình luận cho sản phẩm này</span>
                 </div>
 
                 <div className="mt-[20px] px-[20px]">
@@ -297,18 +375,8 @@ export default function Rating() {
                                 <div className="text-[13px] text-[#666]">{item.createdAt}</div>
                             </div>
                             <div className="mt-[5px] text-[13px]">{item.comment}</div>
-                            <div className="flex items-center mt-[4px]">
-                                <span className="flex text-[13px] items-center mr-[10px]">
-                                    <AiOutlineLike className="w-[14px] h-[14px] mr-1" /> 0
-                                </span>
-                                <span className="flex text-[13px] items-center">
-                                    <AiOutlineDislike className="w-[14px] h-[14px] mr-1" /> 0
-                                </span>
-                                <span className="text-[13px] text-[#326E51] mx-2">-</span>
-                                <span className="text-[13px] text-[#326E51]">Trả lời</span>
-                            </div>
                             {item.replies.map((item: any, index: number) => (
-                                <div key={index} className="py-[10px] pl-[30px] mb-[10px]">
+                                <div key={index} className="py-[10px] pl-[30px]">
                                     <div className="flex items-center justify-between">
                                         <div className="flex items-center">
                                             {item.rating !== 0 && (
@@ -319,25 +387,31 @@ export default function Rating() {
                                                 </span>
                                             )}
                                             <span className="text-[13px] font-bold text-[#326E51]">{item.user.firstName} {item.user.lastName}</span>
-                                            <span className="text-[#999] text-[13px] ml-[10px]">{productDetail.title}</span>
                                         </div>
                                         <div className="text-[13px] text-[#666]">{item.createdAt}</div>
                                     </div>
                                     <div className="mt-[5px] text-[13px]">{item.comment}</div>
-                                    <div className="flex items-center mt-[4px]">
-                                        <span className="flex text-[13px] items-center mr-[10px]">
-                                            <AiOutlineLike className="w-[14px] h-[14px] mr-1" /> 0
-                                        </span>
-                                        <span className="flex text-[13px] items-center">
-                                            <AiOutlineDislike className="w-[14px] h-[14px] mr-1" /> 0
-                                        </span>
-                                        <span className="text-[13px] text-[#326E51] mx-2">-</span>
-                                        <span className="text-[13px] text-[#326E51]">Trả lời</span>
-                                    </div>
                                 </div>
                             ))}
-                        </div>
+                            {profile.firstName !== "" && (
+                                <form onSubmit={(event) => handleSubmitReply(event, item.reviewId)} className="flex pl-[30px] items-center">
+                                    <textarea
+                                        name="reply"
+                                        className="w-[80%] min-h-[40px] leading-[32px] px-3 border-[1px] border-[#ccc] rounded-[3px] focus:border-[#66afe9] focus:shadow-[inset_0_1px_1px_rgba(0,0,0,.075),0_0_8px_rgba(102,175,233,0.6)] outline-none"
+                                        rows={1}
+                                        placeholder="Nội dung trả lời của bạn."
+                                    >
+                                    </textarea>
+                                    <button
+                                        type="submit"
+                                        className="flex ml-[10px] items-center gap-2 justify-center text-sm disabled:opacity-80 text-white w-[100px] bg-[#326E51] h-[34px] shrink-0 py-[7px] px-2.5 leading-[32px] text-center font-bold normal-case rounded-full"
+                                    >
+                                        Gửi
+                                    </button>
+                                </form>
+                            )}
 
+                        </div>
                     ))}
                 </div>
             </div>

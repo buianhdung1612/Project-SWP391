@@ -7,11 +7,9 @@ import Link from "next/link";
 import { useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
 import Cookies from 'js-cookie';
-import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
     const [resetPassword, setResetPassword] = useState(false);
-    const router = useRouter();
 
     const handleSubmitLogin = async (event: any) => {
         event.preventDefault();
@@ -32,7 +30,7 @@ export default function LoginPage() {
 
         if(dataResponse.code == 200){
             Cookies.set('tokenUser', token);
-            router.push(`/`);
+            location.href = "/"
         }
     }
 

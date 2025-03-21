@@ -300,7 +300,7 @@ export default function ProductsTrashAdminPage() {
   // Khôi phục một sản phẩm
   const handleRestoreOneProduct = async (id: number) => {
     const confirm: boolean = window.confirm(
-      "Bạn có chắc muốn xóa vĩnh viễn bài viết này không?"
+      "Bạn có chắc muốn khôi phục sản phẩm này không?"
     );
     if (confirm) {
       const path = `${linkApi}/restore/${id}`;

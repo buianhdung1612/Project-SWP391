@@ -8,6 +8,7 @@ import { methodChoosen } from "@/app/(actions)/order";
 import { cartReset } from "@/app/(actions)/cart";
 import { useContext } from "react";
 import { SettingProfileContext } from "../layout";
+import { useRouter } from "next/navigation";
 
 interface DataSubmit {
     userId?: number,
@@ -23,6 +24,7 @@ interface DataSubmit {
 }
 
 export default function OrderPage() {
+    const router = useRouter();
     const dispatchOrder = useDispatch();
 
     const quantity = useSelector((state: any) => state.cartReducer.totalQuantityInit);
@@ -35,7 +37,7 @@ export default function OrderPage() {
         return null;
     }
 
-    const { profile } = settingProfile;
+    const { profile, setting } = settingProfile;
 
     const handleSubmitForm = async (event: any) => {
         event.preventDefault();
@@ -72,7 +74,7 @@ export default function OrderPage() {
                 orderItems: dataProducts
             }
 
-            const response = await fetch('https://freshskinweb.onrender.com/home/order/create', {
+            const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -84,13 +86,17 @@ export default function OrderPage() {
     
             if (dataResponse.code == 200) {
                 dispatchOrder(cartReset());
-                const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
-                const dataResponseVNPAY = await responseVNPAY.json();
-                if (dataResponseVNPAY.code === 200) {
-                    window.location.href = dataResponseVNPAY.data; 
+                if(event.target.method.value == "QR"){
+                    const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
+                    const dataResponseVNPAY = await responseVNPAY.json();
+                    if (dataResponseVNPAY.code === 200) {
+                        window.location.href = dataResponseVNPAY.data; 
+                    }
+                }
+                else{
+                    router.push(`/order/success/${dataResponse.data.orderId}`)
                 }
             }
-
         }
         else{
             const data: DataSubmit = {  
@@ -105,7 +111,9 @@ export default function OrderPage() {
                 orderItems: dataProducts
             }
 
-            const response = await fetch('https://freshskinweb.onrender.com/home/order/create', {
+            console.log(data);
+
+            const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json"
@@ -114,13 +122,17 @@ export default function OrderPage() {
             });
     
             const dataResponse = await response.json();
-    
             if (dataResponse.code == 200) {
                 dispatchOrder(cartReset());
-                const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
-                const dataResponseVNPAY = await responseVNPAY.json();
-                if (dataResponseVNPAY.code === 200) {
-                    window.location.href = dataResponseVNPAY.data; 
+                if(event.target.method.value == "QR"){
+                    const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
+                    const dataResponseVNPAY = await responseVNPAY.json();
+                    if (dataResponseVNPAY.code === 200) {
+                        window.location.href = dataResponseVNPAY.data; 
+                    }
+                }
+                else{
+                    router.push(`/order/success/${dataResponse.data.orderId}`)
                 }
             }
         }        
@@ -128,10 +140,10 @@ export default function OrderPage() {
 
     return (
         <>
-            <form action="" className="flex" onSubmit={handleSubmitForm}>
+            <form className="flex" onSubmit={handleSubmitForm}>
                 <div className="w-[60%] pl-[15%] pr-[2%] py-[25px] flex flex-wrap items-center justify-center">
                     <Link href="/" className="w-[206px] h-[82px] mb-[21px]">
-                        <img src="/logo.svg" className="w-full h-full object-cover" />
+                        <img src={setting.logo} className="w-full h-full object-cover" />
                     </Link>
                     <FormOrder />
                 </div>

@@ -42,6 +42,9 @@ export default function ProfileUser() {
                     {profile.phone && (
                         <div className="text-[14px] text-[#00090f] mb-[15px]"><strong>Số điện thoại: </strong>{profile.phone}</div>
                     )}
+                    {profile.skinType && (
+                        <div className="text-[14px] text-[#00090f] mb-[15px]"><strong>Loại da: </strong>{profile.skinType}</div>
+                    )}
                 </div>
             </div>
         </>

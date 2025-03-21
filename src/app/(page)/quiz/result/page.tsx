@@ -26,7 +26,7 @@ export default function QuizResultPage() {
                     Loại da của bạn là: <span className="text-purple-600">{profile.skinType}</span>
                 </p>
                 <button 
-                    className="mt-6 bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg text-lg shadow-md transition"
+                    className="mt-6 mb-2 bg-blue-500 hover:bg-blue-600 text-white py-2 px-6 rounded-lg text-lg shadow-md transition"
                 >
                     <Link href="/quiz/routine">
                         Khám phá lộ trình và sản phẩm phù hợp

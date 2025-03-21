@@ -34,6 +34,7 @@ interface ProductDetail {
     deal: string;
     banner: string;
     title: string;
+    slug: string;
     brand: Brand;
     variants: Variants[];
     discountPercent: number;
@@ -65,6 +66,7 @@ export default function DetailProductPage() {
             deal: "",
             banner: "",
             title: "",
+            slug: "",
             brand: { title: "" },
             variants: [{ id: 0, volume: 0, price: 0, unit: "" }],
             discountPercent: 0,

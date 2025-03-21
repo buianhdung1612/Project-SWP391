@@ -135,6 +135,7 @@ export default function RootLayout({
           );
 
           const data = await response.json();
+          console.log(data);
           setProfile(data.data);
         }
       };
@@ -142,6 +143,7 @@ export default function RootLayout({
       fetchProfile();
     }
   }, []);
+
 
   return (
     <html lang="en">

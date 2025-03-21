@@ -24,7 +24,7 @@ export default function Header() {
     return (
         <>
             <AboveHeader />
-            <header className={`sticky z-[999] top-0 left-0 bg-white header ${isSticky ? "shadow" : ""}`}>                
+            <header className={`sticky z-[999999] top-0 left-0 bg-white header ${isSticky ? "shadow" : ""}`}>                
                 <Section1 />
                 <Section2 />
             </header>
