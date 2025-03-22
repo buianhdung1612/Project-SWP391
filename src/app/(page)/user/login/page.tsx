@@ -35,9 +35,9 @@ export default function LoginPage() {
     }
 
     const handleForgotPassword = async (event: any) => {
-        event.prevenDefault();
+        event.preventDefault();
 
-        const response = await fetch('https://freshskinweb.onrender.com/auth/login', {
+        const response = await fetch('https://freshskinweb.onrender.com/admin/forgot-password/request', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -47,10 +47,11 @@ export default function LoginPage() {
             })
         });
         const dataResponse = await response.json();
+        console.log(dataResponse);
 
-        if(dataResponse.code == 200){
-            location.href = "/user/login"
-        }
+        // if(dataResponse.code == 200){
+        //     location.href = "/user/login"
+        // }
     }
 
     return (
