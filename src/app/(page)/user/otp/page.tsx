@@ -25,8 +25,11 @@ export default function OtpPage() {
             })
         });
         const dataResponse = await response.json();
+        if(dataResponse.code == 400){
+            location.href = "/user/login";
+        }
 
-        const token = dataResponse.data.token;
+        const token = dataResponse.data;
 
         if(dataResponse.code == 200){
             Cookies.set('tokenUser', token);

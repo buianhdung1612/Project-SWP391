@@ -47,7 +47,6 @@ export default function LoginPage() {
             })
         });
         const dataResponse = await response.json();
-        console.log(dataResponse);
 
         if(dataResponse.code == 500){
             alert("Email không hợp lệ!")
