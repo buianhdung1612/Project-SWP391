@@ -20,6 +20,7 @@ export default function RegisterPage() {
             password: formData.get("password"),
             firstName: formData.get("firstName"),
             lastName: formData.get("lastName"),
+            email: formData.get("email"),
             phone: formData.get("phone"),
             address: formData.get("address"),
         };
@@ -75,6 +76,11 @@ export default function RegisterPage() {
                     <FormInput
                         placeholder="Số điện thoại"
                         name="phone"
+                    />
+                    <FormInput
+                        placeholder="Email"
+                        name="email"
+                        type="email"
                     />
                     <FormButton text="Đăng ký" />
                     <FormFaceGoogle info="Hoặc đăng nhập bằng" />
