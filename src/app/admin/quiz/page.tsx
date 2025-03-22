@@ -169,13 +169,6 @@ export default function QuizAdminPage() {
     // Hết Xóa vĩnh viễn 1 bộ đề
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
 
     // Tạo range điểm
     const handleSubmitRangeScore = async (event: any, skinTypeId: number) => {
@@ -188,15 +181,15 @@ export default function QuizAdminPage() {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ 
-                minScore: min, 
+            body: JSON.stringify({
+                minScore: min,
                 maxScore: max,
-                skinType: skinTypeId 
+                skinType: skinTypeId
             }),
         });
 
         const dataResponse = await response.json();
-        if(dataResponse.code == 200){
+        if (dataResponse.code == 200) {
             location.reload();
         }
     }
@@ -209,6 +202,13 @@ export default function QuizAdminPage() {
                     <Typography variant="h5" gutterBottom>
                         Trang bộ đề câu hỏi
                     </Typography>
+                    {
+                        alertMessage && (
+                            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                                {alertMessage}
+                            </Alert>
+                        )
+                    }
                     {/* Bộ lọc và Tìm kiếm */}
                     <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: "white" }} >
                         <Typography variant="subtitle1" fontWeight="bold" marginBottom={2} gutterBottom>

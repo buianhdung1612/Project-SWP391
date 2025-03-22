@@ -46,13 +46,7 @@ export default function EditQuizAdminPage() {
 
     fetchInfo();
   }, [id]);
-  {
-    alertMessage && (
-      <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-        {alertMessage}
-      </Alert>
-    )
-  }
+
   // Hàm tối ưu hóa để xử lý thay đổi input
   const handleInputChange = useCallback(
     (index: number, field: "question" | "answeroption" | "answerscore", value: string | number, answerIndex?: number) => {
@@ -153,6 +147,13 @@ export default function EditQuizAdminPage() {
           <Typography variant="h5" gutterBottom>
             Trang chỉnh sửa bộ câu hỏi
           </Typography>
+          {
+            alertMessage && (
+              <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                {alertMessage}
+              </Alert>
+            )
+          }
 
           {data && (
             <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>

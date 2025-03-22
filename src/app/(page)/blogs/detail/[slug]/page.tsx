@@ -15,7 +15,11 @@ export default function BlogDetail() {
         title: "",
         content: "",
         author: "",
-        createdAt: ""
+        createdAt: "",
+        blogCategory: {
+            slug: "",
+            title: ""
+        }
     });
     const [isLoading, setIsLoading] = useState(true);
 
@@ -50,6 +54,8 @@ export default function BlogDetail() {
         return `${dayName}, ${day}/${month}/${year}`;
     };
 
+    console.log(data);
+
     return (
         <>
             <ul className="flex items-center mt-[17px] container mx-auto px-3">
@@ -59,7 +65,13 @@ export default function BlogDetail() {
                         <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
                     </Link>
                 </li>
-                <li className="text-secondary text-[15px] font-[400]">
+                <li>
+                    <Link href={`/blogs/${data.blogCategory.slug}`} className="flex items-center">
+                        <span className="text-[#333] text-[15px] font-[400] hover:text-secondary">{data.blogCategory.title}</span>
+                        <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
+                    </Link>
+                </li>
+                <li className="text-secondary text-[15px] font-[400] line-clamp-1">
                     {data.title}
                 </li>
             </ul>

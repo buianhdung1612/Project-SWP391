@@ -116,7 +116,7 @@ export default function RootLayout({
 
     fetchSettings();
 
-    if (!pathname.startsWith("/user/login") && !pathname.startsWith("/user/register")) {
+    if (!pathname.startsWith("/user/login") && !pathname.startsWith("/user/register") && !pathname.startsWith("/user/otp")) {
       const fetchProfile = async () => {
         const tokenUser = Cookies.get("tokenUser");
 
@@ -135,7 +135,6 @@ export default function RootLayout({
           );
 
           const data = await response.json();
-          console.log(data);
           setProfile(data.data);
         }
       };

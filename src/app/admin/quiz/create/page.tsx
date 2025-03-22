@@ -34,13 +34,7 @@ export default function CreateQuizAdminPage() {
                 })),
             })),
         }
-        {
-            alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                    {alertMessage}
-                </Alert>
-            )
-        }
+
         const response = await fetch('https://freshskinweb.onrender.com/admin/question/group/create', {
             method: "POST",
             headers: {
@@ -108,6 +102,13 @@ export default function CreateQuizAdminPage() {
                     <Typography variant="h5" gutterBottom>
                         Trang tạo mới bộ câu hỏi
                     </Typography>
+                    {
+                        alertMessage && (
+                            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                                {alertMessage}
+                            </Alert>
+                        )
+                    }
 
                     <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
                         <form onSubmit={handleSubmit}>

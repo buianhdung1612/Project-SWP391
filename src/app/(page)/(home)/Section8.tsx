@@ -8,8 +8,6 @@ export default function Section8(props: any) {
             image: item.thumbnail,
             brand: item.brand.title,
             title: item.title,
-            banner: "/demo/freeship.webp",
-            deal: "/demo/deal.webp",
             link: `/detail/${item.slug}`,
             priceByVolume: item.variants,
             discount: item.discountPercent

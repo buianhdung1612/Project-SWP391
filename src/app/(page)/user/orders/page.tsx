@@ -14,7 +14,10 @@ export default function OrdersHistoryPage() {
     }
 
     const { profile } = settingProfile;
-    console.log(profile);
+
+    if(profile.firstName === ""){
+        location.href = "/user/login"
+    }
 
     return (
         <>

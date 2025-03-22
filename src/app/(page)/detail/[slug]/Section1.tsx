@@ -10,9 +10,9 @@ export default function Section1() {
 
     return (
         <>
-            <ul className="flex items-center mt-[17px] container mx-auto px-3">
+            <ul className="flex items-center mt-[17px] container mx-auto px-3 whitespace-nowrap">
                 <li>
-                    <Link href="/" className="flex items-center">
+                    <Link href="/" className="flex items-center flex-nowrap">
                         <span className="text-[#333] text-[15px] font-[400] hover:text-secondary">Trang chủ</span>
                         <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
                     </Link>
@@ -31,7 +31,7 @@ export default function Section1() {
                         <span><MdNavigateNext className="ml-[10px] text-[18px] mr-[10px]" /></span>
                     </Link>
                 </li>
-                <li className="text-secondary text-[15px] font-[400]">
+                <li className="text-secondary text-[15px] font-[400] line-clamp-[1]">
                     {productDetail.title}
                 </li>
             </ul>

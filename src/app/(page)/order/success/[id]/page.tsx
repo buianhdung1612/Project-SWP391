@@ -24,6 +24,7 @@ export default function SuccessPage() {
         orderItems: []
     });
     const [isLoading, setIsLoading] = useState(true);
+    const settingProfile = useContext(SettingProfileContext);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,8 +40,6 @@ export default function SuccessPage() {
     if (isLoading) {
         return <div>Loading...</div>;
     }
-
-    const settingProfile = useContext(SettingProfileContext);
 
     if (!settingProfile) {
         return null;

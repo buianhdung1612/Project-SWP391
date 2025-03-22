@@ -15,6 +15,9 @@ export default function ProfileUser() {
 
     const { profile } = settingProfile;
 
+    if(profile.firstName === ""){
+        location.href = "/user/login"
+    }
 
     return (
         <>

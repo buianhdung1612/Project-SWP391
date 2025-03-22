@@ -66,8 +66,12 @@ export default function Price() {
         <>
             <div className="flex items-center">
                 <div className="text-[32px] font-[500] text-[#cc2020] mr-[20px]">{(currentVolume.price * (1 - productDetail.discountPercent / 100)).toLocaleString('en-US')}<sup className="underline">đ</sup></div>
-                <div className="text-[20px] font-[400] text-[#9f9f9f] mr-[15px] pt-[6px] line-through">{currentVolume.price.toLocaleString('en-US')}<sup className="underline">đ</sup></div>
-                <div className="rounded-[3px] bg-primary px-[5px] py-[1px] text-[12px] min-w-[20px] text-white mt-[7px]">-{productDetail.discountPercent}%</div>
+                {productDetail.discountPercent > 0 && (
+                    <div className="text-[20px] font-[400] text-[#9f9f9f] mr-[15px] pt-[6px] line-through">{currentVolume.price.toLocaleString('en-US')}<sup className="underline">đ</sup></div>
+                )}
+                {productDetail.discountPercent > 0 && (
+                    <div className="rounded-[3px] bg-primary px-[5px] py-[1px] text-[12px] min-w-[20px] text-white mt-[7px]">-{productDetail.discountPercent}%</div>
+                )}
             </div>
 
             <div className="my-[5px]">
@@ -89,8 +93,6 @@ export default function Price() {
                     ))}
                 </div>
             </div>
-
-            {/* <div className="text-[14px] mt-[20px]">Công dụng: <span className="text-[14px] font-[600] text-secondary">{uses}</span></div> */}
 
             <div className="text-[14px] font-[500] text-[#00090f] my-[10px]">Số lượng:</div>
             <div className="flex items-center">

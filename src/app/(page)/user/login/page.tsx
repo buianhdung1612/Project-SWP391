@@ -49,9 +49,12 @@ export default function LoginPage() {
         const dataResponse = await response.json();
         console.log(dataResponse);
 
-        // if(dataResponse.code == 200){
-        //     location.href = "/user/login"
-        // }
+        if(dataResponse.code == 500){
+            alert("Email không hợp lệ!")
+        }
+        if(dataResponse.code == 200){
+            location.href = `/user/otp?email=${event.target.email.value}`
+        }
     }
 
     return (
