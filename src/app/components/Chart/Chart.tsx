@@ -1,116 +1,53 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 import Chart from "chart.js/auto";
 
-const PieChart = () => {
+const PieChart: React.FC = () => {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
-  const chartInstance = useRef<Chart | null>(null);
-  const [topProducts, setTopProducts] = useState<{ name: string; sales: number }[]>([]);
 
   useEffect(() => {
-    let ws: WebSocket | null = null;
-    let reconnectTimeout: NodeJS.Timeout;
+    if (!chartRef.current) return;
 
-    function connectWebSocket() {
-      if (ws && ws.readyState === WebSocket.OPEN) return;
-
-      console.log("🔌 Kết nối WebSocket...");
-      ws = new WebSocket("wss://freshskinweb.onrender.com/ws/dashboard");
-
-      ws.onopen = () => {
-        console.log("✅ WebSocket đã kết nối!");
-        clearTimeout(reconnectTimeout);
-      };
-
-      ws.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          console.log("📩 Dữ liệu nhận:", data);
-
-          if (data.top10ProductSelling) {
-            setTopProducts(
-              data.top10ProductSelling
-                .slice(0, 3) // 🔥 Chỉ lấy 3 sản phẩm đầu tiên
-                .map((product: any) => ({
-                  name: product.title || "Không có tiêu đề",
-                  sales: product.sales || 0
-                }))
-            );
-          }
-        } catch (error) {
-          console.error("❌ Lỗi xử lý WebSocket:", error);
-        }
-      };
-
-      ws.onclose = () => {
-        console.warn("⚠️ WebSocket đóng! Thử kết nối lại...");
-        ws = null;
-        reconnectTimeout = setTimeout(connectWebSocket, 5000);
-      };
-    }
-
-    connectWebSocket();
-
-    return () => {
-      if (ws) ws.close();
-      clearTimeout(reconnectTimeout);
-    };
-  }, []);
-
-  useEffect(() => {
-    if (!chartRef.current || topProducts.length === 0) return;
-    
     const ctx = chartRef.current.getContext("2d");
     if (!ctx) return;
 
-    // Xóa biểu đồ cũ nếu có
-    if (chartInstance.current) {
-      chartInstance.current.destroy();
-    }
+    const xValues = ["Cocoon", "Obagi", "Vichy", "CeraVe", "SVR"];
+    const yValues = [55, 49, 44, 24, 15];
+    const barColors = ["#b91d47", "#00aba9", "#2b5797", "#e8c3b9", "#1e7145"];
 
-    const dataValues = topProducts.map((product) => product.sales);
-    const total = dataValues.reduce((acc, val) => acc + val, 0);
-    const dataPercentages = dataValues.map(value => ((value / total) * 100).toFixed(1) + "%");
-
-    chartInstance.current = new Chart(ctx, {
+    const myChart = new Chart(ctx, {
       type: "pie",
       data: {
-        labels: topProducts.map((product) => product.name),
-        datasets: [{
-          backgroundColor: ["#ff6384", "#36a2eb", "#ffce56"],
-          data: dataValues
-        }]
+        labels: xValues,
+        datasets: [
+          {
+            backgroundColor: barColors,
+            data: yValues,
+          },
+        ],
       },
       options: {
         plugins: {
           title: {
             display: true,
-            text: "Top 3 sản phẩm bán chạy",
-            font: { size: 20 }
+            text: "top doanh thu thương hiệu ",
+            font: {
+              size: 20, // Tăng kích thước chữ
+              weight: "bold", // Bôi đen chữ
+            },
+            color: "#333", // Màu chữ đậm hơn 
           },
-          tooltip: {
-            callbacks: {
-              label: function (tooltipItem) {
-                const index = tooltipItem.dataIndex;
-                return `${tooltipItem.label}: ${dataValues[index]} sản phẩm (${dataPercentages[index]})`;
-              }
-            }
-          }
         },
-        responsive: true,
-        maintainAspectRatio: false
-      }
+      },
     });
-  }, [topProducts]);
 
-  return (
-    <div className=" h-100 relative">
-      <canvas ref={chartRef} className=" h-100" />
-    </div>
-  );
-  
-  
+    return () => {
+      myChart.destroy(); // Xóa chart khi component unmount
+    };
+  }, []);
+
+  return <canvas ref={chartRef} style={{ width: "100%", maxWidth: "600px" }} />;
 };
 
 export default PieChart;

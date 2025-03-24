@@ -30,10 +30,10 @@ export default function HeaderAdmin() {
   // 🚀 Fetch danh sách thông báo từ API
   const fetchNotifications = async () => {
     try {
-      console.log("📌 dataProfile:", dataProfile);
+      console.log(" dataProfile:", dataProfile);
 
       if (!dataProfile || !dataProfile.roleId) {
-        console.error("❌ Lỗi: Role ID không tồn tại hoặc chưa được gán.");
+        console.error("  Lỗi: Role ID không tồn tại hoặc chưa được gán.");
         return;
       }
 
@@ -45,7 +45,7 @@ export default function HeaderAdmin() {
 
       if (!res.ok) {
         const errorData = await res.json();
-        console.error(`🚨 HTTP Error ${res.status}:`, errorData);
+        console.error(` HTTP Error ${res.status}:`, errorData);
         return;
       }
 
@@ -53,7 +53,7 @@ export default function HeaderAdmin() {
       setNotifications(data);
       setUnreadCount(data.filter((n) => !n.isRead).length);
     } catch (error) {
-      console.error("❌ Lỗi khi fetch thông báo:", error);
+      console.error("  Lỗi khi fetch thông báo:", error);
     }
   };
 
@@ -72,7 +72,7 @@ export default function HeaderAdmin() {
       const ws = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
 
       ws.onopen = () => {
-        console.log( "✅ WebSocket đã kết nối!");
+        console.log( " WebSocket đã kết nối!");
         console.log(dataProfile?.roleId);
         wsRef.current = ws;
       };
@@ -80,19 +80,19 @@ export default function HeaderAdmin() {
      
 
       ws.onmessage = (event) => {
-        console.log("📩 Nhận thông báo:", event.data);
+        console.log(" Nhận thông báo:", event.data);
         try {
           const data: Notification = JSON.parse(event.data);
           if (!data.id || !data.message) return;
           setNotifications((prev) => [data, ...prev]);
           setUnreadCount((prev) => prev + 1);
         } catch (error) {
-          console.error("❌ Lỗi xử lý WebSocket:", error);
+          console.error("  Lỗi xử lý WebSocket:", error);
         }
       };
 
       ws.onclose = () => {
-        console.log("❌ WebSocket mất kết nối, thử lại sau 5 giây...");
+        console.log("  WebSocket mất kết nối, thử lại sau 5 giây...");
         wsRef.current = null;
         setTimeout(connectWebSocket, 5000);
       };
@@ -115,11 +115,12 @@ export default function HeaderAdmin() {
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
+    
   };
 
   const markAsRead = async (id?: number) => {
     if (!id) {
-      console.error("❌ Lỗi: ID thông báo bị thiếu!");
+      console.error("  Lỗi: ID thông báo bị thiếu!");
       return;
     }
 
@@ -136,14 +137,14 @@ export default function HeaderAdmin() {
       );
       setUnreadCount((prev: number) => Math.max(prev - 1, 0));
     } catch (error) {
-      console.error("❌ Lỗi cập nhật trạng thái đã đọc:", error);
+      console.error("  Lỗi cập nhật trạng thái đã đọc:", error);
     }
   };
 
   const removeNotification = async (id?: number, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     if (!id) {
-      console.error("❌ Lỗi: ID thông báo bị thiếu!");
+      console.error("Lỗi: ID thông báo bị thiếu!");
       return;
     }
 
@@ -159,11 +160,12 @@ export default function HeaderAdmin() {
         setNotifications((prev: Notification[]) =>
           prev.filter((n: Notification) => n.id !== id)
         );
+        setUnreadCount((prev) => (prev > 0 ? prev - 1 : 0));
       } else {
-        console.error(`❌ Lỗi xóa thông báo ID ${id}:`, response.statusText);
+        console.error(`Lỗi xóa thông báo ID ${id}:`, response.statusText);
       }
     } catch (error) {
-      console.error("❌ Lỗi khi xóa thông báo:", error);
+      console.error("Lỗi khi xóa thông báo:", error);
     }
   };
 
@@ -174,7 +176,7 @@ export default function HeaderAdmin() {
         ?.filter((n) => n.isRead)
         ?.map((n) => n.id) || [];
   
-      console.log("📢 Danh sách ID thông báo đã đọc:", readNotificationIds);
+      console.log(" Danh sách ID thông báo đã đọc:", readNotificationIds);
   
       if (readNotificationIds.length === 0) {
         alert("Không có thông báo đã đọc để xóa!");
@@ -239,7 +241,7 @@ export default function HeaderAdmin() {
       </div>
 
       <div className="flex items-center space-x-6">
-        {/* 🔔 Chuông thông báo */}
+        {/*  Chuông thông báo */}
         <div className="relative">
           <FaBell
             className={`text-gray-600 text-[20px] cursor-pointer hover:text-green-400 ${
@@ -254,7 +256,7 @@ export default function HeaderAdmin() {
           )}
         </div>
 
-        {/* 📩 Dropdown thông báo */}
+        {/*   Dropdown thông báo */}
         {isDropdownOpen && (
           <div className="absolute right-5 top-14 w-96 bg-white shadow-lg rounded-md overflow-hidden border border-gray-300 z-50">
             <div className="px-4 py-2 flex justify-between items-center bg-gray-100">
@@ -300,7 +302,7 @@ export default function HeaderAdmin() {
                       </div>
                     </div>
 
-                    {/* 🗑️ Nút xóa thông báo + Dấu chấm xanh */}
+                    {/*  Nút xóa thông báo + Dấu chấm xanh */}
                     <div className="relative">
                       {!notification.isRead && (
                         <span className="absolute -top-5 -right-0 w-2 h-2 bg-blue-500 rounded-full"></span>
