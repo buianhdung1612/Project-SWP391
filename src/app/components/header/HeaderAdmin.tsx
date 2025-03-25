@@ -73,12 +73,8 @@ export default function HeaderAdmin() {
 
       ws.onopen = () => {
         console.log( " WebSocket đã kết nối!");
-        console.log(dataProfile?.roleId);
         wsRef.current = ws;
       };
-
-     
-
       ws.onmessage = (event) => {
         console.log(" Nhận thông báo:", event.data);
         try {
