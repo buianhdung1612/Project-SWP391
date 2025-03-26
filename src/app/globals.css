@@ -23,6 +23,10 @@ li {
     z-index: 1000; 
 }
 
+.shadow-search-order {
+    box-shadow: 3px 3px 4px 0 #9a9a9a;
+}
+
 .login::before {
     content: "";
     display: block;

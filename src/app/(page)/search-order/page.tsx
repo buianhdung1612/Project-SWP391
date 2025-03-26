@@ -7,10 +7,40 @@ import { FaSearch } from "react-icons/fa";
 export default function SearchOrderPage() {
     const [status, setStatus] = useState("phone");
 
+    const [data, setData] = useState([]);
+
+    const handleSubmitPhone = async (event: any) => {
+        event.preventDefault();
+        const phone = event.target.phone.value;
+
+        const response = await fetch(`https://freshskinweb.onrender.com/home/orders?phone=${phone}`);
+        const dataResponse = await response.json();
+        setData(dataResponse.data);
+    }
+
+    const handleSubmitEmail = async (event: any) => {
+        event.preventDefault();
+        const email = event.target.email.value;
+
+        const response = await fetch(`https://freshskinweb.onrender.com/home/orders?email=${email}`);
+        const dataResponse = await response.json();
+        setData(dataResponse.data);
+    }
+
+    const handleSubmitPhoneEmail = async (event: any) => {
+        event.preventDefault();
+        const phone = event.target.phone.value;
+        const email = event.target.email.value;
+
+        const response = await fetch(`https://freshskinweb.onrender.com/home/orders?email=${email}&phone=${phone}`);
+        const dataResponse = await response.json();
+        setData(dataResponse.data);
+    }
+
     return (
         <>
-            <div className="bg-[#F5F5F5] py-[35px] px-[230px]">
-                <div className="container bg-white p-[25px] rounded-[5px] w-full">
+            <div className="bg-[#F5F5F5] py-[35px] px-[18%]">
+                <div className="container bg-white p-[25px] rounded-[5px] w-full flex items-start">
                     <div className="bg-[rgba(228,228,228,1)] rounded-[5px] w-[460px] px-[10px] search-order">
                         <div className="flex items-center justify-center text-[17px] font-[700] py-[18px] mb-[15px] border-b boder-solid border-white">
                             <FaSearch className="mr-[5px]" />
@@ -46,7 +76,7 @@ export default function SearchOrderPage() {
                                 <label htmlFor="both" className="text-[13px] font-[400] ml-[10px] mr-[15px]">Số điện thoại và Email</label>
                             </div>
                             {status == "phone" && (
-                                <form action="" className="">
+                                <form onSubmit={handleSubmitPhone} className="">
                                     <label className="block text-[13px] mb-[5px]" htmlFor="phoneInput">Số điện thoại</label>
                                     <FormInput
                                         placeholder="0909 xxx xxx"
@@ -65,7 +95,7 @@ export default function SearchOrderPage() {
                                 </form>
                             )}
                             {status == "email" && (
-                                <form action="" className="">
+                                <form onSubmit={handleSubmitEmail} className="">
                                     <label className="block text-[13px] mb-[5px]" htmlFor="emailInput">Địa chỉ Email</label>
                                     <FormInput
                                         type="email"
@@ -85,7 +115,7 @@ export default function SearchOrderPage() {
                                 </form>
                             )}
                             {status == "both" && (
-                                <form action="" className="">
+                                <form onSubmit={handleSubmitPhoneEmail} className="">
                                     <label className="block text-[13px] mb-[5px]" htmlFor="phoneInput">Số điện thoại</label>
                                     <FormInput
                                         placeholder="0909 xxx xxx"
@@ -112,6 +142,40 @@ export default function SearchOrderPage() {
                                 </form>
                             )}
                         </div>
+                    </div>
+                    <div className="flex-1 ml-[40px]">
+                        {data.length > 0 && data.map((item: any, index: number) => (
+                            <div key={index} className="shadow-search-order flex border border-solid border-[#f0f0f0] rounded-[3px] mb-[15px] ">
+                                <div className="w-[59%] px-[10px]">
+                                    <div className="font-[600] text-[18px] py-[9px] mb-[20px]">Mã đơn hàng: #{item.orderId}</div>
+                                    <div className="text-[13px]">Họ và tên khách hàng: {item.firstName} {item.lastName}</div>
+                                    <div className="text-[13px]">Số điện thoại: {item.phoneNumber}</div>
+                                    <div className="text-[13px]">Email: {item.email}</div>
+                                    <div className="text-[13px]">Ngày mua: {item.orderDate}</div>
+                                    <div className="text-[13px]">Địa chỉ giao hàng: {item.address}</div>
+                                    {item.paymentStatus == "PENDING" && (
+                                        <div className="text-[13px] text-[#FF0000] mt-[30px] mb-[10px]">Trạng thái thanh toán: <span className="font-[600]">Đang xử lý</span></div>
+                                    )}
+                                    {item.paymentStatus == "COMPLETED" && (
+                                        <div className="text-[13px] text-[#FF0000] mt-[30px] mb-[10px]">Trạng thái thanh toán: <span className="font-[600]">Đã xác nhận</span></div>
+                                    )}
+                                    {item.paymentStatus == "CANCELED" && (
+                                        <div className="text-[13px] text-[#FF0000] mt-[30px] mb-[10px]">Trạng thái thanh toán: <span className="font-[600]">Đã hủy</span></div>
+                                    )}
+                                </div>
+                                <div className="flex-1 px-[10px]">
+                                    <div className="font-[600] text-[18px] py-[9px] mb-[10px]">Giá trị đơn hàng</div>
+                                    <div className="flex items-end">
+                                        <div className="text-[28px] text-[#FF0000]">{parseFloat((item.totalPrice.toFixed(0))).toLocaleString("en-US")}</div>
+                                        <div className="text-[18px] ml-[7px] mb-[5px]">VNĐ</div>
+                                    </div>
+                                    <div className="mt-[37px] flex items-center">
+                                        <div className="text-[18px] text-[#333]">Số lượng sản phẩm : </div>  
+                                        <span className="text-[28px] text-[#FF0000] ml-[5px] mb-[3px]">{item.totalAmount}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
