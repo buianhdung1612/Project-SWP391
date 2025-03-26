@@ -53,7 +53,7 @@ export default function DetailProductAdminPage() {
 
         fetchInfo();
     }, [id]);
-   
+
     return (
         <>
             {permissions?.includes("products_view") && (
@@ -228,9 +228,11 @@ export default function DetailProductAdminPage() {
                                     <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mr: 1 }}>
                                         Thành phần:
                                     </Typography>
-                                    <Typography variant="body1" sx={{ color: "#555" }}>
-                                        {data.ingredients}
-                                    </Typography>
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: data.ingredients
+                                        }}
+                                    />
                                 </Box>
                             </Box>
                             <Box sx={{ mb: 2 }}>
@@ -238,9 +240,11 @@ export default function DetailProductAdminPage() {
                                     <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mr: 1 }}>
                                         Hướng dẫn sử dụng:
                                     </Typography>
-                                    <Typography variant="body1" sx={{ color: "#555" }}>
-                                        {data.usageInstructions}
-                                    </Typography>
+                                    <div
+                                        dangerouslySetInnerHTML={{
+                                            __html: data.usageInstructions
+                                        }}
+                                    />
                                 </Box>
                             </Box>
                             <Box sx={{ mb: 2 }}>

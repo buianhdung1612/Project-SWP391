@@ -10,7 +10,6 @@ import { SettingProfileContext } from "@/app/(page)/layout";
 
 export default function SuccessPage() {
     const { id } = useParams();
-    console.log(id);
     const [data, setData] = useState({
         firstName: "",
         lastName: "",

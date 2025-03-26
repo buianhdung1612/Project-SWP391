@@ -7,12 +7,44 @@ import Link from "next/link";
 import { useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
 import Cookies from 'js-cookie';
+import { Alert } from "@mui/material";
 
 export default function LoginPage() {
     const [resetPassword, setResetPassword] = useState(false);
+    const [alert, setAlert] = useState<any>();
 
     const handleSubmitLogin = async (event: any) => {
         event.preventDefault();
+
+        if (!event.target.username.value) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập tên người dùng"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+        if (!event.target.password.value) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập mật khẩu"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
 
         const response = await fetch('https://freshskinweb.onrender.com/auth/login', {
             method: "POST",
@@ -25,12 +57,28 @@ export default function LoginPage() {
                 password: event.target.password.value
             })
         });
-        const dataResponse = await response.json();
-        const token = dataResponse.data.token;
 
-        if(dataResponse.code == 200){
+
+        const dataResponse = await response.json();
+        console.log(dataResponse);
+
+        if (dataResponse.code == 200) {
+            const token = dataResponse.data.token;
             Cookies.set('tokenUser', token);
             location.href = "/"
+        }
+        else {
+            setAlert({
+                severity: "error",
+                content: dataResponse.message
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000)
         }
     }
 
@@ -48,10 +96,10 @@ export default function LoginPage() {
         });
         const dataResponse = await response.json();
 
-        if(dataResponse.code == 500){
-            alert("Email không hợp lệ!")
+        if (dataResponse.code == 500) {
+
         }
-        if(dataResponse.code == 200){
+        if (dataResponse.code == 200) {
             location.href = `/user/otp?email=${event.target.email.value}`
         }
     }
@@ -82,6 +130,10 @@ export default function LoginPage() {
                             placeholder="Mật khẩu"
                             name="password"
                         />
+                        {/* Alert */}
+                        {alert && (
+                            <Alert style={{marginBottom: "10px"}} severity={alert.severity}>{alert.content}</Alert>
+                        )}
                         <FormButton text="Đăng nhập" />
                     </form>
                     <div className="flex items-center justify-between mb-[15px]">

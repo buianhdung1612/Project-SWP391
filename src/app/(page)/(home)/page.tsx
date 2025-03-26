@@ -55,6 +55,7 @@ export default function HomePage() {
     setDataBeautyTrends(data.BeautyTrends);
     setDataTop3ProductFeature(data.Top3ProductFeature);
     setAllCategory(data.AllCategory);
+    setTop10ProductSeller(data.Top10ProductSeller);
     setIsLoading(false);
   };
 

@@ -282,7 +282,7 @@ export default function Section1() {
                                 <MenuMoreItem
                                     text="Tra cứu đơn hàng"
                                     icon="https://res.cloudinary.com/dr53sfboy/image/upload/v1742359284/product-brand/dsadas_20250319-044124_13.webp"
-                                    link="search-order"
+                                    link="/search-order"
                                 />
                             </ul>
                         </div>

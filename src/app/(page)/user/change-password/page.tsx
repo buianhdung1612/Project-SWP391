@@ -2,11 +2,13 @@
 
 import ProfileLeft from "@/app/components/ProfileUser/ProfileLeft";
 import Link from "next/link";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
 import { SettingProfileContext } from "../../layout";
+import { Alert } from "@mui/material";
 
 export default function UserChangePassword() {
+    const [alert, setAlert] = useState<any>();
     const settingProfile = useContext(SettingProfileContext);
 
     if (!settingProfile) {
@@ -24,11 +26,11 @@ export default function UserChangePassword() {
 
         console.log({
             oldPassword: oldPassword,
-                password: password,
-                confirmPassword: confirmPassword
+            password: password,
+            confirmPassword: confirmPassword
         })
 
-        const response = await fetch(`https://freshskinweb.onrender.com/admin/users/${profile.userID}`, {
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/account/change-password/${profile.userID}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -40,7 +42,18 @@ export default function UserChangePassword() {
             })
         });
         const dataResponse = await response.json();
-        console.log(dataResponse);
+
+        setAlert({
+            severity: "success",
+            content: dataResponse.message
+        });
+
+        setTimeout(() => {
+            setAlert({
+                severity: "",
+                content: ""
+            })
+        }, 3000)
 
     }
 
@@ -60,6 +73,10 @@ export default function UserChangePassword() {
             <div className="flex container mx-auto px-[15px] mt-[40px]">
                 <ProfileLeft />
                 <form onSubmit={handleSubmit} className="px-[15px]">
+                    {/* Alert */}
+                    {alert && (
+                        <Alert style={{ marginBottom: "10px" }} severity={alert.severity}>{alert.content}</Alert>
+                    )}
                     <div className="uppercase text-[19px] font-[400] text-[#212B25] mb-[27px]">Đổi mật khẩu</div>
                     <div>
                         <label htmlFor="old-password" className="text-[14px] font-[400] text-[#333] cursor-pointer">Mật khẩu cũ *</label>
