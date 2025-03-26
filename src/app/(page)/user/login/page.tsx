@@ -60,7 +60,6 @@ export default function LoginPage() {
 
 
         const dataResponse = await response.json();
-        console.log(dataResponse);
 
         if (dataResponse.code == 200) {
             const token = dataResponse.data.token;

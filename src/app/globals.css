@@ -20,6 +20,7 @@ li {
 
 .shadow {
     box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    z-index: 1000; 
 }
 
 .login::before {
@@ -209,7 +210,7 @@ input[type="number"]::-webkit-inner-spin-button {
     min-width: 400px;
     display: none;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    border-radius: 8px; 
+    border-radius: 8px;
 }
 
 .sub-menu ul li {
@@ -217,13 +218,17 @@ input[type="number"]::-webkit-inner-spin-button {
     padding-left: 50px;
     border: 1px solid #ddd;
     border-radius: 10px;
-    margin: 5px 0; /* Thêm khoảng cách giữa các mục */
-    background-color: #ffffff; /* Màu nền cho các mục */
-    transition: background-color 0.3s; /* Hiệu ứng chuyển màu */
+    margin: 5px 0;
+    /* Thêm khoảng cách giữa các mục */
+    background-color: #ffffff;
+    /* Màu nền cho các mục */
+    transition: background-color 0.3s;
+    /* Hiệu ứng chuyển màu */
 }
 
 .sub-menu ul li:hover {
-    background-color: #eaeaea; /* Màu nền khi hover */
+    background-color: #eaeaea;
+    /* Màu nền khi hover */
 }
 
 .sub-menu:hover>ul {
@@ -281,8 +286,8 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .sub-menu-header ul li:hover {
-    color: #4e7661; 
-    border-left: 4px solid #4e7661; 
+    color: #4e7661;
+    border-left: 4px solid #4e7661;
 }
 
 .sub-menu-header:hover>ul {
@@ -301,6 +306,7 @@ input[type="number"]::-webkit-inner-spin-button {
 .sub-menu-header ul li:hover>ul {
     display: block;
 }
+
 /* End sub-menu-header */
 
 .drop-header {
@@ -400,10 +406,10 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 .sider__menu {
-   margin-top:0px;
-   margin-right: 200px;
+    margin-top: 0px;
+    margin-right: 200px;
 
-   }
+}
 
 .sider__logo--yellow {
     color: #F4B700;
@@ -424,9 +430,10 @@ input[type="number"]::-webkit-inner-spin-button {
     padding: 0 20px;
     background-color: #f3f4f6;
 }
+
 th {
     position: sticky;
     top: 0;
     background-color: #f5f5f5;
     z-index: 1000;
-  }
+}

@@ -1,10 +1,10 @@
 "use client"
 
-import { useContext, useEffect, useState } from "react";
-import { FaRegStar, FaStar } from "react-icons/fa6";
+import { useContext, useEffect, useRef, useState } from "react";
+import { FaAngleDown, FaAngleLeft, FaAngleRight, FaAngleUp, FaRegStar, FaStar } from "react-icons/fa6";
 import { SettingProfileContext } from "../../layout";
 import { Context } from "./MiddlewareGetData";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { CiStar } from "react-icons/ci";
 import { FaStarHalfAlt } from "react-icons/fa";
 import { Alert } from "@mui/material";
@@ -15,12 +15,36 @@ export default function Rating() {
     const [isLoading, setIsLoading] = useState(true);
     const [starChoose, setStarChoose] = useState(0);
     const [openComment, setOpenComment] = useState(false);
+    const [openSort, setOpenSort] = useState(false);
+    const sortRef = useRef<HTMLDivElement>(null);
+    const searchParams = useSearchParams();
+
+    useEffect(() => {
+        const handleClickOutside = (event: MouseEvent) => {
+            if (sortRef.current && !sortRef.current.contains(event.target as Node)) {
+                setOpenSort(false);
+            }
+        };
+
+        if (openSort) {
+            document.addEventListener("mousedown", handleClickOutside);
+        }
+
+        return () => {
+            document.removeEventListener("mousedown", handleClickOutside);
+        };
+    }, [openSort]);
+
+    const [sortCommentContent, setSortCommentContent] = useState("Ngày đánh giá");
 
     const settingProfile = useContext(SettingProfileContext);
 
     const { profile } = settingProfile || {};
 
     const productDetail = useContext(Context).productDetail;
+
+    const apiDefault = `https://freshskinweb.onrender.com/reviews/${productDetail.id}`;
+    const [api, setApi] = useState(apiDefault)
 
     const [data, setData] = useState({
         page: {
@@ -40,9 +64,11 @@ export default function Rating() {
         }
     });
 
+    const pageNumbers = Array.from({ length: data.page.totalPages }, (_, index) => index + 1);
+
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/reviews/${productDetail.id}`);
+            const response = await fetch(api);
             const data = await response.json();
 
             setData(data.data);
@@ -50,11 +76,59 @@ export default function Rating() {
         };
 
         fetchData();
-    }, [productDetail.id]); // Thêm productDetail.id vào dependency array
+    }, [api]);
 
     if (isLoading) {
         return <div>Loading...</div>;
     }
+
+    const handleClickSortFeedback = (content: string) => {
+        setSortCommentContent(content);
+        if (content == "Đánh giá tệ nhất") {
+            const url = new URL(api);
+            if (url.searchParams.get("page")) {
+                const page = url.searchParams.get("page");
+                setApi(`${apiDefault}?page=${page}&sortKey=rating&sortDirection=asc`)
+            }
+            else {
+                setApi(`${apiDefault}?sortKey=rating&sortDirection=asc`)
+            }
+        }
+        else if (content == "Đánh giá tốt nhất") {
+            const url = new URL(api);
+            if (url.searchParams.get("page")) {
+                const page = url.searchParams.get("page");
+                setApi(`${apiDefault}?page=${page}&sortKey=rating&sortDirection=desc`)
+            }
+            else {
+                setApi(`${apiDefault}?sortKey=rating&sortDirection=desc`)
+            }
+        }
+        else {
+            const url = new URL(api);
+            if (url.searchParams.get("page")) {
+                const page = url.searchParams.get("page");
+                setApi(`${apiDefault}?page=${page}`)
+            }
+            else {
+                setApi(apiDefault);
+            }
+        }
+    }
+
+    // Phân trang
+    const handlePagination = (page: number) => {
+        const url = new URL(api);
+        if (url.searchParams.get("sortKey") && url.searchParams.get("sortDirection")) {
+            const sortKeyCurrent = url.searchParams.get("sortKey");
+            const sortValueCurrent = url.searchParams.get("sortDirection");
+            setApi(`${apiDefault}?page=${page}&sortKey=${sortKeyCurrent}&sortDirection=${sortValueCurrent}`)
+        }
+        else {
+            setApi(`${apiDefault}?page=${page}`)
+        }
+    }
+    // Hết phân trang
 
     const handleClickWriteComment = () => {
         if (!profile || profile.firstName === "") {
@@ -352,8 +426,43 @@ export default function Rating() {
                 </div>
 
                 {/* Phân trang */}
-                <div className="mx-[20px] mt-[10px] px-[10px] bg-white flex items-center rounded-[3px] py-[6px]">
+                <div className="mx-[20px] mt-[10px] px-[10px] bg-white flex items-center justify-between rounded-[3px] py-[6px]">
                     <span className="text-[14px] text-black">{data.ratingDetail.totalComment} bình luận cho sản phẩm này</span>
+                    <div className="relative flex items-center" ref={sortRef}>
+                        <div onClick={() => setOpenSort((prev) => !prev)} className="flex items-center bg-[#F0F0F5] py-[3px] px-[10px] rounded-[4px] border border-solid border-white cursor-pointer">
+                            <div className="text-[#326E51] text-[13px] font-[650] mr-[5px]">{sortCommentContent}</div>
+                            {!openSort ? <FaAngleDown /> : <FaAngleUp />}
+                        </div>
+                        {openSort && (
+                            <div className="shadow absolute top-[35px] bg-white pt-[8px] rounded-[8px] w-[150px]">
+                                <div onClick={() => handleClickSortFeedback("Ngày đánh giá")} className={`py-[4px] px-[14px] text-[14px] border-b-[1px] border-[#F5F5F5] cursor-pointer ` + (sortCommentContent === "Ngày đánh giá" ? "bg-[#E1F3EA]" : "")}>Ngày đánh giá</div>
+                                <div onClick={() => handleClickSortFeedback("Đánh giá tốt nhất")} className={`py-[4px] px-[14px] text-[14px] border-b-[1px] border-[#F5F5F5] cursor-pointer ` + (sortCommentContent === "Đánh giá tốt nhất" ? "bg-[#E1F3EA]" : "")}>Đánh giá tốt nhất</div>
+                                <div onClick={() => handleClickSortFeedback("Đánh giá tệ nhất")} className={`py-[4px] px-[14px] text-[14px] cursor-pointer rounded-[8px] ` + (sortCommentContent === "Đánh giá tệ nhất" ? "bg-[#E1F3EA]" : "")}>Đánh giá tệ nhất</div>
+                            </div>
+                        )}
+                        <div className="ml-[10px] flex items-center">
+                            <ul className="flex items-center justify-center cursor-pointer">
+                                {data.page.currentPage > 1 && (
+                                    <li onClick={() => handlePagination(data.page.currentPage - 1)}><FaAngleLeft /></li>
+                                )}
+                                {pageNumbers.map((page) => (
+                                    <li
+                                        key={page}
+                                        onClick={() => handlePagination(page)}
+                                        className={`mx-[3px] text-[15px] font-[650] ${page === data.page.currentPage
+                                            ? 'text-[#f60]'
+                                            : 'text-[#326E51]'
+                                            }`}
+                                    >
+                                        {page}
+                                    </li>
+                                ))}
+                                {data.page.currentPage < data.page.totalPages && (
+                                    <li onClick={() => handlePagination(data.page.currentPage + 1)}><FaAngleRight /></li>
+                                )}
+                            </ul>
+                        </div>
+                    </div>
                 </div>
 
                 <div className="mt-[20px] px-[20px]">
