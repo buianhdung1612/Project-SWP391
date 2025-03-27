@@ -165,12 +165,14 @@ export default function FormOrder() {
                     <TitleCheckout text="Vận chuyển" />
                     {dataDistrict.length <= 0 ? (
                         <input
+                            readOnly
                             placeholder="Vui lòng nhập thông tin giao hàng"
                             className="py-[10px] px-[18px] w-full h-[44px] bg-[#d1ecf1] placeholder:text-[#0c5460] rounded-[4px] border border-solid border-[#bee5eb] outline-none mb-[30px] text-[14px] font-[450]"
                         />
                     ) : (
                         <div className="relative">
                             <input
+                                readOnly
                                 placeholder="Giao hàng tận nơi"
                                 className="py-[10px] px-[45px] w-full h-[44px] bg-white rounded-[4px] border border-solid outline-none mb-[30px] text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                             />
@@ -181,6 +183,7 @@ export default function FormOrder() {
                     <TitleCheckout text="Thanh toán" />
                     {methodChoosen == false && (
                         <input
+                            readOnly
                             placeholder="Bạn cần chọn phương thức thanh toán"
                             className="py-[10px] px-[18px] w-full h-[44px] bg-[#f8d7da] placeholder:text-[#721c24] rounded-[4px] border border-solid border-[#f5c6cb]
 outline-none mb-[20px] text-[14px] font-[450]"
@@ -189,6 +192,7 @@ outline-none mb-[20px] text-[14px] font-[450]"
                     <div className="relative">
                         <div onClick={() => handleClickBank()}>
                             <input
+                                readOnly
                                 placeholder="Chuyển khoản"
                                 className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-bl-none rounded-br-none border border-solid outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                             />
@@ -204,6 +208,7 @@ outline-none mb-[20px] text-[14px] font-[450]"
                     <div className="relative">
                         <div onClick={() => handleClickMetting()}>
                             <input
+                                readOnly
                                 placeholder="Thanh toán khi nhận hàng"
                                 className="py-[30px] px-[45px] w-full h-[44px] bg-white rounded-[4px] rounded-tl-none rounded-tr-none border border-solid border-t-0 outline-none text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                             />

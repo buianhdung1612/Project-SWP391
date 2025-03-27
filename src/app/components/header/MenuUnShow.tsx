@@ -1,7 +1,7 @@
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 
-export default function MenuUnShow(props: { text: string, image?: string, link: Url }) {
+export default function MenuUnShow(props: { text: string, image?: string, link?: string }) {
     const { text = "", image = "", link = "" } = props;
 
     return (
@@ -14,7 +14,6 @@ export default function MenuUnShow(props: { text: string, image?: string, link: 
                     )}
                 </div>
             </Link>
-
         </>
     )
 }

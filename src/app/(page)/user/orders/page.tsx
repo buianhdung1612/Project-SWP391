@@ -56,7 +56,7 @@ export default function OrdersHistoryPage() {
                     {data && (
                         <div>
                             <table className="w-full border-collapse">
-                                <thead>
+                                <thead className="sticky">
                                     <tr className="h-[35px]">
                                         <th className="w-[18%] text-white p-[5px] text-[14px] border border-solid border-[#ebebeb] bg-secondary">Đơn hàng</th>
                                         <th className="w-[18%] text-white p-[5px] text-[14px] border border-solid border-[#ebebeb] bg-secondary">Ngày</th>

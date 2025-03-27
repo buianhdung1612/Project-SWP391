@@ -52,7 +52,6 @@ export default function BlogPage() {
             api.searchParams.set('page', pageCurrent || '1');
             const response = await fetch(api.href);
             const data = await response.json();
-            console.log(data);
             setDataCurrent(data.data);
             setIsLoading(false);
         };

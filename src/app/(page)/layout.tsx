@@ -51,6 +51,10 @@ interface Profile {
   username: string;
   orders: string[];
   skinType: string;
+  productComparisonId: {
+    id: number,
+    products: any[]
+  };
 }
 
 interface SettingProfile {
@@ -101,7 +105,11 @@ export default function RootLayout({
     phone: "",
     username: "",
     orders: [],
-    skinType: ""
+    skinType: "",
+    productComparisonId: {
+      id: 0,
+      products: []
+    }
   });
 
   const pathname = usePathname();
@@ -163,7 +171,11 @@ export default function RootLayout({
               phone: '',
               username: '',
               orders: [],
-              skinType: ""
+              skinType: "",
+              productComparisonId: {
+                id: 0,
+                products: []
+              }
             }
           }}
         >

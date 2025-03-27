@@ -111,7 +111,6 @@ export default function OrderPage() {
                 orderItems: dataProducts
             }
 
-            console.log(data);
 
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
                 method: "POST",

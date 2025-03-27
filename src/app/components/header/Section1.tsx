@@ -2,7 +2,6 @@
 
 import Link from "next/link";
 import { useContext, useEffect, useRef, useState } from "react";
-import { CiHeart } from "react-icons/ci";
 import { FaRegCircleUser } from "react-icons/fa6";
 import MenuMoreItem from "./MenuMoreItem";
 import Cart from "../Cart/Cart";
@@ -10,6 +9,7 @@ import { useRouter } from "next/navigation";
 import { IoSearchOutline } from "react-icons/io5";
 import { SettingProfileContext } from "@/app/(page)/layout";
 import { FaRegUserCircle } from "react-icons/fa";
+import { IoIosGitCompare } from "react-icons/io";
 
 export default function Section1() {
     const [openMore, setOpenMore] = useState(false);
@@ -137,6 +137,8 @@ export default function Section1() {
         const response = await fetch(`https://freshskinweb.onrender.com/home/search?keyword=${event.target.keyword.value}`);
         const dataResponse = await response.json();
 
+        setShowSuggest(false);
+
         if (dataResponse.code === 200) {
             router.push(`/products/search?keyword=${dataResponse.data.title}`)
         }
@@ -146,6 +148,7 @@ export default function Section1() {
         const response = await fetch(`https://freshskinweb.onrender.com/home/search?keyword=${keyword}`);
         const dataResponse = await response.json();
 
+        setShowSuggest(false);
         if (dataResponse.code === 200) {
             router.push(`/products/search?keyword=${dataResponse.data.title}`)
         }
@@ -209,7 +212,7 @@ export default function Section1() {
                             <div key={index}>
                                 <div className="flex items-center mb-[15px]">
                                     <div className="flex-1">
-                                        <Link href={`/detail/${item.slug}`} className="text-[14px] font-[400] text-[#000] hover:text-secondary cursor-pointer mb-[5px] line-clamp-2">{item.title}</Link>
+                                        <Link onClick={() => setShowSuggest(false)} href={`/detail/${item.slug}`} className="text-[14px] font-[400] text-[#000] hover:text-secondary cursor-pointer mb-[5px] line-clamp-2">{item.title}</Link>
                                         <div className="flex items-center">
                                             <span className="text-[14px] font-[500] pr-[10px] text-primary">{((item.variants[0].price) * (1 - item.discountPercent / 100)).toLocaleString("en-US")}<sup className="underline">đ</sup></span>
                                             <span className="text-[12px] font-[300] text-[#9e9e9e] line-through">{(item.variants[0].price).toLocaleString("en-US")}<sup className="underline">đ</sup></span>
@@ -304,10 +307,10 @@ export default function Section1() {
                         </div>
                     </Link>
                 )}
-                <Link href="/favorite">
+                <Link href="/compare">
                     <div className="flex items-center ml-[15px] relative">
-                        <CiHeart className="text-[32px]" />
-                        <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">0</span>
+                        <IoIosGitCompare className="text-[32px]" />
+                        <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">{profile.productComparisonId.products.length}</span>
                     </div>
                 </Link>
                 <div className="relative">
