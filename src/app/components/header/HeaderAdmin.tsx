@@ -9,6 +9,7 @@ import { Trash2 } from "lucide-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/vi";
+import { useRouter } from "next/navigation";
 
 dayjs.extend(relativeTime);
 dayjs.locale("vi");
@@ -19,6 +20,7 @@ interface Notification {
   time: string;
   isRead: boolean;
   image: string;
+  slugProduct?: string;
 }
 
 export default function HeaderAdmin() {
@@ -27,6 +29,7 @@ export default function HeaderAdmin() {
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const dataProfile = useContext(ProfileAdminContext);
   const wsRef = useRef<WebSocket | null>(null);
+  const router = useRouter();
   // 🚀 Fetch danh sách thông báo từ API
   const fetchNotifications = async () => {
     try {
@@ -41,6 +44,7 @@ export default function HeaderAdmin() {
       
       const res = await fetch(
         `https://freshskinweb.onrender.com/admin/notify/${roleId}`
+        
       );
 
       if (!res.ok) {
@@ -70,6 +74,7 @@ export default function HeaderAdmin() {
       if (wsRef.current) return;
 
       const ws = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
+      console.log(dataProfile)
 
       ws.onopen = () => {
         console.log( " WebSocket đã kết nối!");
@@ -114,7 +119,7 @@ export default function HeaderAdmin() {
     
   };
 
-  const markAsRead = async (id?: number) => {
+  const markAsRead = async (id?: number, slugProduct?: string) => {
     if (!id) {
       console.error("  Lỗi: ID thông báo bị thiếu!");
       return;
@@ -132,6 +137,13 @@ export default function HeaderAdmin() {
         )
       );
       setUnreadCount((prev: number) => Math.max(prev - 1, 0));
+      
+
+    if (slugProduct) {
+      router.push(`/detail/${slugProduct}`);
+    } else {
+      console.warn("⚠️ Slug không tồn tại, không thể chuyển trang!");
+    }
     } catch (error) {
       console.error("  Lỗi cập nhật trạng thái đã đọc:", error);
     }
@@ -278,7 +290,7 @@ export default function HeaderAdmin() {
                     className={`px-4 py-2 border-b flex justify-between items-center hover:bg-gray-100 cursor-pointer ${
                       notification.isRead ? "" : "bg-gray-200"
                     }`}
-                    onClick={() => markAsRead(notification.id)}
+                    onClick={() => markAsRead(notification.id, notification.slugProduct)}
                   >
                     <img
                       src={
