@@ -119,8 +119,13 @@ export default function UserAdminPage() {
 
         console.log(dataResponse)
 
-        if (dataResponse.code == 200) {
-            location.reload();
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
     }
     const [alertMessage, setAlertMessage] = useState<string>("");
@@ -166,6 +171,8 @@ export default function UserAdminPage() {
 
     // Xóa một tài khoản
     const handleDeleteOneAccount = async (id: number) => {
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xoá tài khoản này không?");
+        if (confirm) {
         const path = `${linkApi}/deleteT/${id}`;
 
         console.log(path);
@@ -188,6 +195,7 @@ export default function UserAdminPage() {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
         }
+    }
     }
     // Hết Xóa một tài khoản
 
