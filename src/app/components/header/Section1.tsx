@@ -308,9 +308,13 @@ export default function Section1() {
                     </Link>
                 )}
                 <Link href="/compare">
-                    <div className="flex items-center ml-[15px] relative">
+                    <div className="flex items-center ml-[13px] relative">
                         <IoIosGitCompare className="text-[32px]" />
-                        <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">{profile.productComparisonId.products.length}</span>
+                        {profile.productComparisonId?.products && profile.productComparisonId.products?.length > 0 ? (
+                            <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">{profile?.productComparisonId?.products?.length}</span>
+                        ) : (
+                            <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">0</span>
+                        )}
                     </div>
                 </Link>
                 <div className="relative">

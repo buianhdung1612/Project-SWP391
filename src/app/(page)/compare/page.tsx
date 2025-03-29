@@ -7,6 +7,7 @@ import { MdNavigateNext } from "react-icons/md";
 import { SettingProfileContext } from "../layout";
 import { useDispatch, useSelector } from "react-redux";
 import { cartAddNewProduct } from "@/app/(actions)/cart";
+import { Alert } from "@mui/material";
 
 interface CartItem {
     image: string,
@@ -20,6 +21,9 @@ interface CartItem {
 }
 
 export default function ComparePage() {
+    const [alert, setAlert] = useState<any>();
+    const [isDeleteAlert, setIsDeleteAlert] = useState(false);
+    const [productIdDelete, setProductIdDelete] = useState(0);
     const [data, setData] = useState<any>();
     const dispatchCart = useDispatch();
 
@@ -31,16 +35,10 @@ export default function ComparePage() {
 
     const { profile } = settingProfile;
 
-    console.log(profile);
-
     const products = useSelector((state: any) => state.cartReducer.products);
 
     useEffect(() => {
         const fetchData = async () => {
-            console.log({
-                id: profile.productComparisonId.id,
-                userID: profile.userID
-            })
             const response = await fetch(`https://freshskinweb.onrender.com/home/products/getComparison`, {
                 method: "PATCH",
                 headers: {
@@ -53,8 +51,6 @@ export default function ComparePage() {
             });
 
             const dataResponse = await response.json();
-
-            console.log(dataResponse);
 
             if (dataResponse.code == 200) {
                 setData(dataResponse.data.products);
@@ -89,6 +85,15 @@ export default function ComparePage() {
         dispatchCart(cartAddNewProduct(products));
     }
 
+    const handleClosePopup = () => {
+        setIsDeleteAlert(false);
+    };
+
+    const handleOpenPopup = (productId: number) => {
+        setProductIdDelete(productId);
+        setIsDeleteAlert(true);
+    };
+
     const handleDelete = async (productId: number) => {
         const response = await fetch(`https://freshskinweb.onrender.com/home/products/comparison/delete`, {
             method: "delete",
@@ -104,7 +109,18 @@ export default function ComparePage() {
         const dataResponse = await response.json();
 
         if (dataResponse.code == 200) {
-            location.reload();
+            setAlert({
+                severity: "success",
+                content: dataResponse.message
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                });
+                location.reload();
+            }, 3000);
         }
     }
 
@@ -121,7 +137,10 @@ export default function ComparePage() {
                     So sánh sản phẩm
                 </li>
             </ul>
-
+            {/* Alert */}
+            {alert && (
+                <Alert style={{ position: "absolute", zIndex: "99999999", top: "31%", right: "18%", width: "480px" }} severity={alert.severity}>{alert.content}</Alert>
+            )}
             <h1 className="uppercase my-[28px] container mx-auto text-[20px] font-[600]">So sánh sản phẩm</h1>
             {data && data.length > 0 ? (
                 <table className="mx-auto container">
@@ -136,7 +155,7 @@ export default function ComparePage() {
                                             <img src={item.thumbnail[0]} className="rounded-[4px] w-full h-full object-cover" />
                                         </Link>
                                     </div>
-                                    <div onClick={() => handleDelete(item.id)} className="absolute top-[2%] right-[2%] text-primary border boder-solid border-primary p-[6px] w-[30px] h-[30px] flex items-center justify-center rounded-full shadow-md cursor-pointer hover:bg-primary hover:text-white transition duration-300">
+                                    <div onClick={() => handleOpenPopup(item.id)} className="absolute top-[2%] right-[2%] text-primary border boder-solid border-primary p-[6px] w-[30px] h-[30px] flex items-center justify-center rounded-full shadow-md cursor-pointer hover:bg-primary hover:text-white transition duration-300">
                                         ✖
                                     </div>
                                     <div className="px-[14px] pt-[8px] pb-[12px]">
@@ -154,8 +173,12 @@ export default function ComparePage() {
                                     </div> */}
                                         <div className="flex items-center mt-2">
                                             <div className="text-[16px] font-[700] text-[#f04438]">{parseFloat((item.variants[0].price * (1 - item.discountPercent / 100)).toFixed(0)).toLocaleString("en-US")}</div>
-                                            <div className="text-[12px] font-[500] text-[#999794] ml-2 line-tdrough mt-1">{parseFloat((item.variants[0].price).toFixed(0)).toLocaleString("en-US")}</div>
-                                            <div className="bg-[#f04438] rounded-[4px] text-[#fafafa] px-[4px] py-[3px] text-[10px] ml-[8px]">-{item.discountPercent}%</div>
+                                            {item.discountPercent > 0 && (
+                                                <div className="text-[12px] font-[500] text-[#999794] ml-2 line-tdrough mt-1">{parseFloat((item.variants[0].price).toFixed(0)).toLocaleString("en-US")}</div>
+                                            )}
+                                            {item.discountPercent > 0 && (
+                                                <div className="bg-[#f04438] rounded-[4px] text-[#fafafa] px-[4px] py-[3px] text-[10px] ml-[8px]">-{item.discountPercent}%</div>
+                                            )}
                                         </div>
                                     </div>
                                 </td>
@@ -228,6 +251,19 @@ export default function ComparePage() {
                 </table>
             ) : (
                 <div className="container mx-auto rounded-[5px] py-[7px] px-[15px] font-[600] text-[14px] border border-solid text-[#6f4400] border-[#6f4400] bg-[#fdf0d5]">Bạn có không có mục nào để so sánh.</div>
+            )}
+
+            {isDeleteAlert && (
+                <div onClick={handleClosePopup} className="fixed inset-0 bg-black bg-opacity-50 z-[99999999] flex justify-center items-start pt-[8%]">
+                    <div className="w-[524px] rounded-[12px] bg-[#F8F8F8] pt-[30px] px-[20px] pb-[20px]">
+                        <div className="text-right mr-[10px] mb-[10px] text-[17px] text-[#1b1a19] cursor-pointer hover:text-primary" onClick={handleClosePopup}>X</div>
+                        <div className="text-[14px] font-[400] text-[#1b1a19]">Bạn có chắc bạn muốn xoá sản phẩm này khỏi danh sách so sánh sản phẩm của bạn không?</div>
+                        <div className="pt-[24px] pb-[20px] flex items-center">
+                            <div onClick={handleClosePopup} className="text-center uppercase font-[600] text-[14px] py-[11px] px-[23px] rounded-[44px] text-white bg-[#1b1a19] border boder-solid border-[#1b1a19] w-[236px] mr-[5px] cursor-pointer">Hủy</div>
+                            <div onClick={() => handleDelete(productIdDelete)} className="text-center uppercase font-[600] text-[14px] py-[11px] px-[23px] rounded-[44px] text-white bg-primary hover:border-secondary border boder-solid border-primary hover:bg-secondary w-[236px] ml-[5px] cursor-pointer">Xác nhận</div>
+                        </div>
+                    </div>
+                </div>
             )}
         </>
     )

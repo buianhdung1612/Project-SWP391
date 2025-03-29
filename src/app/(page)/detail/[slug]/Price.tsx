@@ -40,8 +40,7 @@ export default function Price() {
 
     const { profile } = settingProfile;
 
-    const isCompared = profile.productComparisonId.products.find(item => productDetail.id === item.id);
-    console.log(isCompared);
+    const isCompared = profile.productComparisonId?.products.find(item => productDetail.id === item.id);
 
     const handleChange = (event: any): void => {
         setQuantity(parseInt(event.target.value));
@@ -78,21 +77,37 @@ export default function Price() {
     }
 
     const handleAddCompare = async (productId: number) => {
-        const response = await fetch(`https://freshskinweb.onrender.com/home/products/comparison/save`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                productId: productId,
-                userID: profile.userID
-            })
-        });
-        const dataResponse = await response.json();
-        if (dataResponse.code == 200) {
+        if (profile.productComparisonId?.products.length <= 2) {
+            const response = await fetch(`https://freshskinweb.onrender.com/home/products/comparison/save`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    userID: profile.userID
+                })
+            });
+            const dataResponse = await response.json();
+            if (dataResponse.code == 200) {
+                setAlert({
+                    severity: "success",
+                    content: dataResponse.message
+                });
+
+                setTimeout(() => {
+                    setAlert({
+                        severity: "",
+                        content: ""
+                    });
+                    location.reload();
+                }, 3000);
+            }
+        }
+        else{
             setAlert({
-                severity: "success",
-                content: dataResponse.message
+                severity: "error",
+                content: "Bạn chỉ có thể thêm tối đa 3 sản phẩm vào danh sách so sánh."
             });
 
             setTimeout(() => {
@@ -100,7 +115,6 @@ export default function Price() {
                     severity: "",
                     content: ""
                 });
-                location.reload();
             }, 3000);
         }
     }
@@ -120,7 +134,18 @@ export default function Price() {
         const dataResponse = await response.json();
 
         if (dataResponse.code == 200) {
-            location.reload();
+            setAlert({
+                severity: "success",
+                content: dataResponse.message
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                });
+                location.reload();
+            }, 3000);
         }
     }
 
@@ -128,7 +153,7 @@ export default function Price() {
         <>
             {/* Alert */}
             {alert && (
-                <Alert style={{ position: "absolute", zIndex: "99999999", top: "31%", right: "18%", width: "480px" }} severity={alert.severity}>{alert.content}</Alert>
+                <Alert style={{ position: "absolute", zIndex: "99999999", top: "0%", right: "0%", width: "100%" }} severity={alert.severity}>{alert.content}</Alert>
             )}
             <div className="flex items-center">
                 <div className="text-[32px] font-[500] text-[#cc2020] mr-[20px]">{(currentVolume.price * (1 - productDetail.discountPercent / 100)).toLocaleString('en-US')}<sup className="underline">đ</sup></div>
