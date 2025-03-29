@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-import Chart2 from "@/app/components/Chart/Chart2";
+
 import { StatCard } from "@/app/components/StatCard/StatCard";
 import { Chart, registerables } from "chart.js";
 import Link from "next/link";
@@ -49,11 +49,28 @@ export default function DashboardAdminPage() {
     labels: [],
     values: [],
   });
+  const [revenueChartData, setRevenueChartData] = useState<{
+    labels: string[];
+    values: number[];
+  }>({
+     labels: [],
+     values: [], 
+  });
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const ratingChartRef = useRef<HTMLCanvasElement | null>(null);
-
+  const revenueChartRef = useRef<HTMLCanvasElement | null>(null);
+  const scrollToRevenueChart = () => {
+    if (revenueChartRef.current) {
+      const offset = 150; // Điều chỉnh độ cuộn (100px phía trên phần tử)
+      const elementPosition = revenueChartRef.current.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: elementPosition - offset, 
+        behavior: "smooth",
+      });
+    }
+  };
   useEffect(() => {
     function connectWebSocket() {
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return;
@@ -113,7 +130,15 @@ export default function DashboardAdminPage() {
           if (data?.ratingStartsByDate) {
             setRatingChartData({
               labels: data.ratingStartsByDate.map((item: any) => item.date),
-              values: data.ratingStartsByDate.map((item: any) => Math.round(item.avr * 10) / 10),
+              values: data.ratingStartsByDate.map(
+                (item: any) => Math.round(item.avr * 10) / 10
+              ),
+            });
+          }
+          if (data?.revenueByDate) {
+            setRevenueChartData({
+              labels: data.revenueByDate.map((item: any) => item.orderDate),
+              values: data.revenueByDate.map((item: any) => item.totalAmount),
             });
           }
         } catch (error) {
@@ -122,7 +147,6 @@ export default function DashboardAdminPage() {
       };
 
       wsRef.current.onclose = () => {
-        console.warn("⚠️ WebSocket đóng! Thử kết nối lại sau 5s...");
         wsRef.current = null;
         reconnectTimeoutRef.current = setTimeout(connectWebSocket, 5000);
       };
@@ -210,7 +234,7 @@ export default function DashboardAdminPage() {
             display: true,
             position: "top",
             text: "Top 5 danh mục có nhiều sản phẩm nhất",
-            font: { size: 20, weight: "bold" },
+            font: { size: 16, weight: "bold" },
             color: "#333",
           },
         },
@@ -262,6 +286,7 @@ export default function DashboardAdminPage() {
             text: "Xu hướng Rating trung bình theo ngày",
             font: { size: 16, weight: "bold" },
             color: "#333",
+            padding:4,
           },
           legend: { display: false },
         },
@@ -281,6 +306,39 @@ export default function DashboardAdminPage() {
     });
   }, [ratingChartData]);
 
+  useEffect(() => {
+    if (!revenueChartRef.current || revenueChartData.labels.length === 0)
+      return;
+
+    const ctx = revenueChartRef.current.getContext("2d");
+    if (!ctx) return;
+
+    const existingChart = Chart.getChart(ctx);
+    if (existingChart) existingChart.destroy();
+
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: revenueChartData.labels,
+        datasets: [
+          {
+            label: "Doanh thu (VNĐ)",
+            data: revenueChartData.values,
+            backgroundColor: "#28528e",
+            borderColor: "#28528e",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true },
+        },
+      },
+    });
+  }, [revenueChartData]);
   return (
     <div className="p-4 md:p-6 bg-gray-100 max-w-screen-xl mx-auto">
       {stats.totalOrder === "0" && stats.totalUsers === "0" ? (
@@ -301,8 +359,10 @@ export default function DashboardAdminPage() {
             </Link>
             <StatCard
               value={stats.totalRevenue}
-              label="Doanh thu"
+              label="D.thu  "
               icon={<Banknote className="text-yellow-500" />}
+              onClick={scrollToRevenueChart}
+              style={{ cursor: "pointer" }}
             />
             <StatCard
               value={stats.totalUsers}
@@ -353,7 +413,6 @@ export default function DashboardAdminPage() {
               icon={<CheckCircle className="text-blue-500" />}
             />
           </div>
-          
 
           {/* Biểu đồ & Bảng sản phẩm bán chạy */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -365,16 +424,14 @@ export default function DashboardAdminPage() {
             </div>
           </div>
           <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-80">
-            <Chart2 />
+            <canvas ref={revenueChartRef} />
           </div>
-          
-
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-120">
               <canvas ref={ratingChartRef} />
             </div>
             <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-120">
-              <h2 className="text-xl font-bold text-gray-800 text-center">
+              <h2 className="text-base font-bold text-gray-800 text-center">
                 Top 10 Sản Phẩm Bán Chạy
               </h2>
               <div className="overflow-y-auto max-h-80 scrollbar-thin scrollbar-thumb-blue-400 scrollbar-track-gray-100">
