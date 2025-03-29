@@ -17,7 +17,7 @@ interface ScoreRange {
 
 export default function QuizAdminPage() {
     const [data, setData] = useState([]);
-    const [dataSkinTypes, setDataSkinTypes] = useState([]);
+    const [dataScoreRange, setDataScoreRangge] = useState<any>([]);
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const linkApi = 'https://freshskinweb.onrender.com/admin/question/group';
@@ -60,20 +60,13 @@ export default function QuizAdminPage() {
             setData(data.data.QuestionGroup);
         };
 
-        const fetchSkinTypes = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/admin/skintypes/show`);
-            const data = await response.json();
-            setDataSkinTypes(data.data);
-        }
-
         const fetchScoreRange = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/admin/skintypes/score-range`);
             const data = await response.json();
-            console.log(data);
+            setDataScoreRangge(data.data.items);
         }
 
         fetchQuiz();
-        fetchSkinTypes();
         fetchScoreRange();
     }, []);
 
@@ -176,15 +169,14 @@ export default function QuizAdminPage() {
 
         const { min = 0, max = 0 } = scoreRanges[skinTypeId] || {};
 
-        const response = await fetch(`https://freshskinweb.onrender.com/admin/skintypes/score-range/create`, {
-            method: 'POST',
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/skintypes/score-range/edit/${skinTypeId}`, {
+            method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
             body: JSON.stringify({
                 minScore: min,
-                maxScore: max,
-                skinType: skinTypeId
+                maxScore: max
             }),
         });
 
@@ -249,7 +241,7 @@ export default function QuizAdminPage() {
                             Kết quả dựa trên thang điểm
                         </Typography>
                         <Box display="flex" flexDirection="column" gap={2}>
-                            {dataSkinTypes.map((item: any, index: number) => (
+                            {dataScoreRange.map((item: any, index: number) => (
                                 <Box key={index} display="flex" alignItems="center" justifyContent="space-between" sx={{ marginBottom: 1 }}>
                                     <Typography variant="body1">{item.type}</Typography>
                                     <Box display="flex" alignItems="center" gap={1}>
@@ -258,10 +250,11 @@ export default function QuizAdminPage() {
                                             variant="outlined"
                                             type="number"
                                             size="small"
+                                            defaultValue={item.minScore}
                                             sx={{ width: '100px' }}
                                             onChange={(e) => setScoreRanges(prev => ({
                                                 ...prev,
-                                                [item.id]: { ...prev[item.id], min: Number(e.target.value) } // Chuyển đổi sang số
+                                                [item.id]: { ...prev[item.id], min: Number(e.target.value) }
                                             }))}
                                         />
                                         <TextField
@@ -269,17 +262,23 @@ export default function QuizAdminPage() {
                                             variant="outlined"
                                             type="number"
                                             size="small"
+                                            defaultValue={item.maxScore}
                                             sx={{ width: '100px' }}
                                             onChange={(e) => setScoreRanges(prev => ({
                                                 ...prev,
-                                                [item.id]: { ...prev[item.id], max: Number(e.target.value) } // Chuyển đổi sang số
+                                                [item.id]: { ...prev[item.id], max: Number(e.target.value) }
                                             }))}
                                         />
                                         <Button
                                             variant="contained"
                                             color="primary"
                                             size="small"
-                                            onClick={() => handleSubmitRangeScore(event, item.id)}
+                                            onClick={() => {
+                                                const foundItem = dataScoreRange.find((type: any) => type.type === item.type);
+                                                if (foundItem && foundItem.id) {
+                                                    handleSubmitRangeScore(event, foundItem.id);
+                                                }
+                                            }}
                                         >
                                             Cập nhật
                                         </Button>
