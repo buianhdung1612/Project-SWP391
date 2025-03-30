@@ -20,13 +20,6 @@ import { useParams } from "next/navigation";
 
 export default function EditVoucherAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
-    const today = new Date().toISOString().split("T")[0];
-    const tenDaysLater = new Date();
-    tenDaysLater.setDate(tenDaysLater.getDate() + 10);
-    const tenDaysLaterStr = tenDaysLater.toISOString().split("T")[0];
-
-    const [startDate, setStartDate] = useState(today);
-    const [endDate, setEndDate] = useState(tenDaysLaterStr);
     const permissions = dataProfile?.permissions;
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<
@@ -98,7 +91,7 @@ export default function EditVoucherAdminPage() {
             )}
             <Box sx={{ padding: 3, backgroundColor: "#ffffff" }}>
                 <Typography variant="h5" gutterBottom>
-                    Trang tạo mới mã giảm giá
+                    Trang chỉnh sửa mã giảm giá
                 </Typography>
 
                 <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
