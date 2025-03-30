@@ -119,6 +119,39 @@ export default function UserAdminPage() {
     event.preventDefault();
 
     const statusChange = changeMulti;
+
+    if (statusChange == "DELETE-DESTROY") {
+      const confirm: boolean = window.confirm(
+        "Bạn có chắc muốn xóa vĩnh viễn những tài khoản người dùng này không?"
+      );
+      if (confirm) {
+        const path = `${linkApi}/delete`;
+
+        const data: any = {
+          id: inputChecked,
+        };
+
+        const response = await fetch(path, {
+          method: "DELETE",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data),
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code === 200) {
+          setAlertMessage(dataResponse.message);
+          setAlertSeverity("success");
+          setTimeout(() => location.reload(), 2000);
+        } else {
+          setAlertMessage(dataResponse.message);
+          setAlertSeverity("error");
+        }
+      }
+      return;
+    }
     const path = `${linkApi}/change-multi`;
 
     const data: any = {
@@ -218,27 +251,27 @@ export default function UserAdminPage() {
   // Khôi phục một sản phẩm
   const handleRestoreOneUser = async (id: number) => {
     const confirm: boolean = window.confirm("Bạn có chắc muốn xóa bài viết này không?");
-        if (confirm) {
-    const path = `${linkApi}/restore/${id}`;
+    if (confirm) {
+      const path = `${linkApi}/restore/${id}`;
 
-    const response = await fetch(path, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+      const response = await fetch(path, {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    const dataResponse = await response.json();
+      const dataResponse = await response.json();
 
-    if (dataResponse.code === 200) {
-      setAlertMessage(dataResponse.message);
-      setAlertSeverity("success");
-      setTimeout(() => location.reload(), 2000);
-    } else {
-      setAlertMessage(dataResponse.message);
-      setAlertSeverity("error");
+      if (dataResponse.code === 200) {
+        setAlertMessage(dataResponse.message);
+        setAlertSeverity("success");
+        setTimeout(() => location.reload(), 2000);
+      } else {
+        setAlertMessage(dataResponse.message);
+        setAlertSeverity("error");
+      }
     }
-}
   };
   // Hết Khôi phục một sản phẩm
 

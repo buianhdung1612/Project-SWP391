@@ -112,6 +112,8 @@ export default function ProductsAdminPage() {
     }
     // Hết Sắp xếp theo tiêu chí
 
+    console.log(api.href);
+
     const fetchProducts = async () => {
       const response = await fetch(api.href);
       const data = await response.json();

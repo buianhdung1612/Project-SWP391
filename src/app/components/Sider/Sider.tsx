@@ -1,11 +1,11 @@
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 import { useContext, useState } from "react";
-import { CiCrop } from "react-icons/ci";
+import { CiCrop, CiRoute } from "react-icons/ci";
 import { FaBlog, FaBorderNone, FaJoomla, FaObjectGroup, FaTable, FaUsers,FaUserFriends } from "react-icons/fa";
 import { FaGaugeHigh, FaGear, FaGroupArrowsRotate, FaHurricane } from "react-icons/fa6";
 import { TbBrandCampaignmonitor } from "react-icons/tb";
-import { MdExpandLess, MdExpandMore, MdCategory, MdOutlineQuiz, MdOutlineSwitchAccount } from "react-icons/md";
+import { MdExpandLess, MdExpandMore, MdCategory, MdOutlineQuiz, MdOutlineSwitchAccount, MdOutlineDiscount } from "react-icons/md";
 import { BiCarousel } from "react-icons/bi";
 import { DiHaskell } from "react-icons/di";
 import { ProfileAdminContext } from "@/app/admin/layout";
@@ -21,7 +21,8 @@ const subCategory: Menu[] = [
     { content: "Sản phẩm", icon: <FaBorderNone />, link: "/admin/products" },
     { content: "Danh mục sản phẩm", icon: <FaTable />, link: "/admin/products-category" },
     { content: "Thương hiệu", icon: <TbBrandCampaignmonitor />, link: "/admin/brands" },
-    { content: "Thể loại da", icon: <CiCrop />, link: "/admin/skin" }
+    { content: "Thể loại da", icon: <CiCrop />, link: "/admin/skin" },
+    { content: "Mã khuyến mãi", icon: <MdOutlineDiscount />, link: "/admin/vouchers" }
 ];
 
 const subBlog: Menu[] = [
@@ -47,6 +48,7 @@ const menu: Menu[] = [
     { content: "Quản lý tài khoản", icon: <FaUserFriends />, subMenu: subUserManagement },
     { content: "Đơn hàng", icon: <FaHurricane />, link: "/admin/orders" },
     { content: "Bộ câu hỏi", icon: <MdOutlineQuiz />, link: "/admin/quiz" },
+    { content: "Lộ trình chăm sóc từng loại da", icon: <CiRoute />, link: "/admin/route-skin" },
     { content: "Cài đặt chung", icon: <FaGear />, link: "/admin/settings/general" }
 ];
 

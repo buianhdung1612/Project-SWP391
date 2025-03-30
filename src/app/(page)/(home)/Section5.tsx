@@ -4,6 +4,14 @@ import CardItem from "@/app/components/Card/CardItem";
 import Title from "@/app/components/title/Title";
 import { useState } from "react";
 import Link from "next/link";
+import { Swiper, SwiperSlide } from 'swiper/react';
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/grid'
+import '../../(page)/swiper.css';
+import { Navigation } from 'swiper/modules';
 
 export default function Section5(props: any) {
     const { dataInit = [] } = props;

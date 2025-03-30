@@ -1,19 +1,18 @@
-import CardItem from "@/app/components/Card/CardItem"
+import CardItem from "@/app/components/Card/CardItem";
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/pagination';
+import '../../(page)/swiper.css';
+// import required modules
+import { Pagination } from 'swiper/modules';
 
 export default function Section8(props: any) {
     const { dataInit = [] } = props;
 
-    const data: any = dataInit.map((item: any) => (
-        {
-            image: item.thumbnail,
-            brand: item.brand.title,
-            title: item.title,
-            link: `/detail/${item.slug}`,
-            priceByVolume: item.variants,
-            discount: item.discountPercent
-        }
-    ));
-    
+    console.log(dataInit);
+
     return (
         <>
             <div className="h-[660px] bg-[url('../../public/demo/bg-section8.webp')] bg-cover mt-[50px]">
@@ -26,24 +25,33 @@ export default function Section8(props: any) {
                                 <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742359280/product-brand/dsadas_20250319-044119_6.webp" className="w-full h-full object-cover" />
                             </div>
                         </div>
-                        <div className="grid grid-cols-3 gap-[20px]">
-                            {data.map((item: any, index: number) => (
-                                <CardItem
-                                    key={index}
-                                    image={item.image}
-                                    brand={item.category}
-                                    title={item.title}
-                                    banner={item.banner}
-                                    deal={item.deal}
-                                    link={item.link}
-                                    priceByVolume={item.priceByVolume}
-                                    discount={item.discount}
-                                />
+                        <Swiper
+                            slidesPerView={3}
+                            spaceBetween={30}
+                            pagination={{
+                              clickable: true,
+                            }}
+                            modules={[Pagination]}
+                            className="mySwiper swiper-2"
+                        >
+                            {dataInit.map((item: any, index: number) => (
+                                <SwiperSlide key={index}>
+                                    <CardItem
+                                        image={item.thumbnail}
+                                        brand={item.brand.title}
+                                        title={item.title}
+                                        banner={item.banner}
+                                        deal="https://res.cloudinary.com/dr53sfboy/image/upload/v1742383908/product-brand/dsa_20250319-113148_3.webp"
+                                        link={`/detail/${item.slug}`}
+                                        priceByVolume={item.variants}
+                                        discount={item.discountPercent}
+                                    />
+                                </SwiperSlide>
                             ))}
-                        </div>
+                        </Swiper>
                     </div>
                 </div>
             </div>
         </>
-    )
+    );
 }

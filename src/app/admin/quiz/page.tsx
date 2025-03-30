@@ -14,7 +14,6 @@ interface ScoreRange {
     max?: number;
 }
 
-
 export default function QuizAdminPage() {
     const [data, setData] = useState([]);
     const [dataScoreRange, setDataScoreRangge] = useState<any>([]);
@@ -24,7 +23,6 @@ export default function QuizAdminPage() {
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
     const [scoreRanges, setScoreRanges] = useState<Record<number, ScoreRange>>({});
-
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);

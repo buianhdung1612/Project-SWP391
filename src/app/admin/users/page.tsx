@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Tooltip, Checkbox } from "@mui/material";
+import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Chip, Tooltip, Checkbox, Stack, Pagination } from "@mui/material";
 import { BiDetail } from "react-icons/bi";
 import { MdDeleteOutline } from "react-icons/md";
 import Link from "next/link";
@@ -11,8 +11,15 @@ import Alert from '@mui/material/Alert';
 export default function UserAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
+    const [page, setPage] = useState(1);
 
-    const [data, setData] = useState([]);
+    const [data, setData] = useState({
+        totalItems: 0,
+        totalPages: 2,
+        pageSize: 10,
+        currentPage: 1,
+        users: []
+    });
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/users';
 
@@ -38,6 +45,17 @@ export default function UserAdminPage() {
         }
         // Hết Lọc theo trạng thái
 
+        // Phân trang
+        const pageCurrent = urlCurrent.searchParams.get("page");
+        setPage(pageCurrent ? parseInt(pageCurrent) : 1);
+
+        if (pageCurrent) {
+            api.searchParams.set("page", pageCurrent);
+        } else {
+            api.searchParams.delete("page");
+        }
+        // Hết Phân trang
+
         // Tìm kiếm tài khoản
         const keywordCurrent = urlCurrent.searchParams.get('keyword');
         setKeyword(keywordCurrent ?? "");
@@ -53,7 +71,7 @@ export default function UserAdminPage() {
         const fetchAccounts = async () => {
             const response = await fetch(api.href);
             const data = await response.json();
-            setData(data.data.users);
+            setData(data.data);
         };
 
         fetchAccounts();
@@ -105,8 +123,6 @@ export default function UserAdminPage() {
             status: statusChange
         }
 
-        console.log(data);
-
         const response = await fetch(path, {
             method: "PATCH",
             headers: {
@@ -153,7 +169,7 @@ export default function UserAdminPage() {
 
         const dataResponse = await response.json();
 
-        
+
         if (dataResponse.code === 200) {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("success");
@@ -179,7 +195,7 @@ export default function UserAdminPage() {
 
         const dataResponse = await response.json();
 
-       
+
         if (dataResponse.code === 200) {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("success");
@@ -191,15 +207,29 @@ export default function UserAdminPage() {
     }
     // Hết Xóa một tài khoản
 
+    // Phân trang
+    const handlePagination = (event: any, page: number) => {
+        const url = new URL(location.href);
+
+        if (page) {
+            url.searchParams.set("page", page.toString());
+        } else {
+            url.searchParams.delete("page");
+        }
+
+        location.href = url.href;
+    };
+    // Hết phân trang
+
     return (
         <>
-         {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+            {
+                alertMessage && (
+                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                        {alertMessage}
+                    </Alert>
+                )
+            }
             {permissions?.includes("accounts_view") && permissions?.includes("accounts_edit") && (
                 <Box p={3}>
                     {/* Header */}
@@ -285,7 +315,7 @@ export default function UserAdminPage() {
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
-                                    {data.map((account: any, index: number) => (
+                                    {data.users.map((account: any, index: number) => (
                                         <TableRow key={index}>
                                             <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, account.userID)}>
                                                 <Checkbox />
@@ -339,6 +369,31 @@ export default function UserAdminPage() {
                             </Table>
                         </TableContainer>
                     </Paper>
+                    {/* Pagination */}
+                    <Stack spacing={2} marginTop={2}>
+                        <Pagination
+                            count={data.totalPages}
+                            color="primary"
+                            page={page}
+                            variant="outlined"
+                            shape="rounded"
+                            siblingCount={1}
+                            sx={{
+                                "& .MuiPaginationItem-root": {
+                                    backgroundColor: "white",
+                                    color: "blue",
+                                    "&:hover": {
+                                        backgroundColor: "#e0e0e0",
+                                    },
+                                },
+                                "& .Mui-selected": {
+                                    backgroundColor: "blue",
+                                    color: "white",
+                                },
+                            }}
+                            onChange={handlePagination}
+                        />
+                    </Stack>
                 </Box>
             )}
         </>

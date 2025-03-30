@@ -4,7 +4,21 @@ import { cartAddNewProduct } from "@/app/(actions)/cart";
 import Link from "next/link";
 import { useState } from "react";
 import { IoIosGitCompare } from "react-icons/io";
+import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from "react-redux";
+import { Swiper, SwiperSlide } from 'swiper/react';
+import { Swiper as SwiperType } from 'swiper';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/free-mode';
+import 'swiper/css/navigation';
+import 'swiper/css/thumbs';
+
+import '../../(page)/swiper.css';
+
+// import required modules
+import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 
 interface PriceByVolume {
     id: number,
@@ -37,6 +51,7 @@ export default function CardItem(props: {
 }) {
     const { image = [], brand = "", title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0 } = props;
 
+    const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const dispatchCart = useDispatch();
 
     const products = useSelector((state: any) => state.cartReducer.products);
@@ -130,7 +145,7 @@ export default function CardItem(props: {
                 </div>
             </div>
 
-            {isPopupOpen && (
+            {isPopupOpen && ReactDOM.createPortal(
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-[99999999] flex justify-center items-start pt-[8%]" onClick={handleClosePopup}>
                     <div className="bg-white rounded-[5px] w-[840px] p-5 relative" onClick={(e) => e.stopPropagation()}>
                         <button
@@ -142,26 +157,36 @@ export default function CardItem(props: {
 
                         <div className="flex items-center px-[5px]">
                             <div className="w-[256px] mr-[10px]">
-                                <div className="w-full aspect-square">
-                                    <img
-                                        src={image[0]}
-                                        className="w-full h-full object-cover"
-                                    />
-                                </div>
-                                <div className="grid grid-cols-3 gap-[10px]">
-                                    <img
-                                        src={image[1]}
-                                        className="w-full h-full object-cover border border-solid border-[#e9edf5]"
-                                    />
-                                    <img
-                                        src={image[2]}
-                                        className="w-full h-full object-cover border border-solid border-[#e9edf5]"
-                                    />
-                                    <img
-                                        src={image[3]}
-                                        className="w-full h-full object-cover border border-solid border-[#e9edf5]"
-                                    />
-                                </div>
+                                <Swiper
+                                    loop={true}
+                                    spaceBetween={10}
+                                    navigation={true}
+                                    thumbs={{ swiper: thumbsSwiper }}
+                                    modules={[FreeMode, Navigation, Thumbs]}
+                                    className="mySwiper2"
+                                >
+                                    {image.map((item: any, index: number) => (
+                                        <SwiperSlide key={index}>
+                                            <img className="w-full h-full object-cover" src={item} />
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
+                                <Swiper
+                                    onSwiper={setThumbsSwiper}
+                                    loop={true}
+                                    spaceBetween={10}
+                                    slidesPerView={4}
+                                    freeMode={true}
+                                    watchSlidesProgress={true}
+                                    modules={[FreeMode, Navigation, Thumbs]}
+                                    className="mySwiper"
+                                >
+                                    {image.map((item: any, index: number) => (
+                                        <SwiperSlide key={index}>
+                                            <img className="w-full h-full object-cover border border-solid border-[#e9edf5] cursor-pointer" src={item} />
+                                        </SwiperSlide>
+                                    ))}
+                                </Swiper>
                             </div>
                             <div className="flex-1">
                                 <div className="text-[23px] font-[600] text-[#333]">{title}</div>
@@ -179,8 +204,7 @@ export default function CardItem(props: {
                                                     (item.volume === currentVolume.volume
                                                         ? "bg-secondary border-[#ddd] text-white"
                                                         : "border-[#e4e4e4] text-[#00090F]"
-                                                    )
-                                                }
+                                                    )}
                                                 onClick={() => setCurrentVolume(item)}
                                             >
                                                 {item.volume}{item.unit.toLowerCase()}
@@ -217,7 +241,8 @@ export default function CardItem(props: {
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>,
+                document.body // Render vào body để tránh giới hạn
             )}
         </>
     )

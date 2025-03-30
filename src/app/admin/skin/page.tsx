@@ -85,7 +85,7 @@ export default function ProductsAdminPage() {
                         <TableHead>
                             <TableRow>
                                 <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >STT</TableCell>
-                                <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Tiêu đề</TableCell>
+                                <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Loại da</TableCell>
                                 <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Mô tả</TableCell>
                                 <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Hành động</TableCell>
                             </TableRow>

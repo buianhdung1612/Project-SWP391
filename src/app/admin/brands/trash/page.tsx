@@ -204,9 +204,6 @@ export default function BrandsTrashAdminPage() {
           id: selectedCategories,
         };
 
-        console.log(path);
-        console.log(data);
-
         const response = await fetch(path, {
           method: "DELETE",
           headers: {
