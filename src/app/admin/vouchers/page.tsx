@@ -14,7 +14,7 @@ export default function VouchersAdminPage() {
     const [isLoading, setIsLoading] = useState(true);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    const linkApi = 'https://freshskinweb.onrender.com/admin/vouchers/show';
+    const linkApi = 'https://freshskinweb.onrender.com/admin/vouchers';
 
     useEffect(() => {
         const fetchData = async () => {

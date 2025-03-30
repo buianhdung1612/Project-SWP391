@@ -1,7 +1,7 @@
 "use client";
 
 import dynamic from "next/dynamic";
-import React, { useContext, useState } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import {
     Box,
@@ -16,6 +16,7 @@ import {
 } from "@mui/material";
 
 import { ProfileAdminContext } from "../../../layout";
+import { useParams } from "next/navigation";
 
 export default function EditVoucherAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
@@ -31,6 +32,29 @@ export default function EditVoucherAdminPage() {
     const [alertSeverity, setAlertSeverity] = useState<
         "success" | "error" | "info" | "warning"
     >("info");
+    const [data, setData] = useState({
+        discountValue: 0,
+        endDate: "",
+        maxDiscount: 0,
+        minOrderValue: 0,
+        name: "",
+        startDate: "",
+        type: "",
+        usageLimit: 0,
+        voucherId: ""
+    });
+
+    const { id } = useParams();
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const response = await fetch(`https://freshskinweb.onrender.com/admin/vouchers/${id}`);
+            const dataResponse = await response.json();
+            setData(dataResponse.data);
+        };
+
+        fetchData();
+    }, [])
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
@@ -46,8 +70,8 @@ export default function EditVoucherAdminPage() {
             endDate: event.target.endDate.value,
         }
 
-        const response = await fetch(`https://freshskinweb.onrender.com/admin/vouchers/create`, {
-            method: "POST",
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/vouchers/update/${id}`, {
+            method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
             },
@@ -86,9 +110,11 @@ export default function EditVoucherAdminPage() {
                             fullWidth
                             sx={{ marginBottom: 3 }}
                             required
+                            value={data.name}
+                            onChange={(e) => setData({ ...data, name: e.target.value })}
                         />
                         <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                            <RadioGroup defaultValue="FIXED_AMOUNT" name="type" row>
+                            <RadioGroup value={data.type} onChange={(e) => setData({ ...data, type: e.target.value })} name="type" row>
                                 <FormControlLabel
                                     value="FIXED_AMOUNT"
                                     control={<Radio />}
@@ -109,6 +135,8 @@ export default function EditVoucherAdminPage() {
                             fullWidth
                             sx={{ marginBottom: 3 }}
                             required
+                            value={data.discountValue}
+                            onChange={(e) => setData({ ...data, discountValue: parseInt(e.target.value) })}
                         />
                         <TextField
                             label="Giá giảm tối đa"
@@ -118,6 +146,8 @@ export default function EditVoucherAdminPage() {
                             fullWidth
                             sx={{ marginBottom: 3 }}
                             required
+                            value={data.maxDiscount}
+                            onChange={(e) => setData({ ...data, maxDiscount: parseInt(e.target.value) })}
                         />
                         <TextField
                             label="Giá trị đơn hàng tối thiểu"
@@ -127,6 +157,8 @@ export default function EditVoucherAdminPage() {
                             fullWidth
                             sx={{ marginBottom: 3 }}
                             required
+                            value={data.minOrderValue}
+                            onChange={(e) => setData({ ...data, minOrderValue: parseInt(e.target.value) })}
                         />
                         <TextField
                             label="Lượt sử dụng"
@@ -136,6 +168,8 @@ export default function EditVoucherAdminPage() {
                             fullWidth
                             sx={{ marginBottom: 3 }}
                             required
+                            value={data.usageLimit}
+                            onChange={(e) => setData({ ...data, usageLimit: parseInt(e.target.value) })}
                         />
                         <TextField
                             label="Ngày bắt đầu"
@@ -143,8 +177,8 @@ export default function EditVoucherAdminPage() {
                             name="startDate"
                             variant="outlined"
                             fullWidth
-                            value={startDate}
-                            onChange={(e) => setStartDate(e.target.value)}
+                            value={data.startDate}
+                            onChange={(e) => setData({ ...data, startDate: e.target.value })}
                             sx={{ marginBottom: 3 }}
                             required
                         />
@@ -154,8 +188,8 @@ export default function EditVoucherAdminPage() {
                             name="endDate"
                             variant="outlined"
                             fullWidth
-                            value={endDate}
-                            onChange={(e) => setEndDate(e.target.value)}
+                            value={data.endDate}
+                            onChange={(e) => setData({ ...data, endDate: e.target.value })}
                             sx={{ marginBottom: 3 }}
                             required
                         />
@@ -165,7 +199,7 @@ export default function EditVoucherAdminPage() {
                             color="primary"
                             sx={{ width: "100%" }}
                         >
-                            Tạo mã giảm giá
+                            Cập nhật mã giảm giá
                         </Button>
                     </form>
                 </Paper>
