@@ -9,8 +9,12 @@ import { Trash2 } from "lucide-react";
 import dayjs from "dayjs";
 import relativeTime from "dayjs/plugin/relativeTime";
 import "dayjs/locale/vi";
+import utc from "dayjs/plugin/utc";
+import timezone from "dayjs/plugin/timezone";
 import { useRouter } from "next/navigation";
 
+dayjs.extend(utc);
+dayjs.extend(timezone);
 dayjs.extend(relativeTime);
 dayjs.locale("vi");
 
@@ -32,21 +36,17 @@ export default function HeaderAdmin() {
   const router = useRouter();
   // 🚀 Fetch danh sách thông báo từ API
   const fetchNotifications = async () => {
-    try {
-      console.log(" dataProfile:", dataProfile);
 
       if (!dataProfile || !dataProfile.roleId) {
-        console.error("  Lỗi: Role ID không tồn tại hoặc chưa được gán.");
         return;
       }
 
       const roleId = dataProfile.roleId;
-      
+
       const res = await fetch(
         `https://freshskinweb.onrender.com/admin/notify/${roleId}`
-        
       );
-
+     
       if (!res.ok) {
         const errorData = await res.json();
         console.error(` HTTP Error ${res.status}:`, errorData);
@@ -56,16 +56,12 @@ export default function HeaderAdmin() {
       const data: Notification[] = await res.json();
       setNotifications(data);
       setUnreadCount(data.filter((n) => !n.isRead).length);
-    } catch (error) {
-      console.error("  Lỗi khi fetch thông báo:", error);
-    }
-  };
+    } 
+  
 
   useEffect(() => {
     if (dataProfile?.roleId) {
       fetchNotifications();
-    } else {
-      console.warn("⚠️ Chưa có dataProfile, đợi cập nhật...");
     }
   }, [dataProfile]);
 
@@ -74,26 +70,21 @@ export default function HeaderAdmin() {
       if (wsRef.current) return;
 
       const ws = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
-      console.log(dataProfile)
+      
 
       ws.onopen = () => {
-        console.log( " WebSocket đã kết nối!");
+        console.log(" WebSocket đã kết nối!");
         wsRef.current = ws;
       };
       ws.onmessage = (event) => {
-        console.log(" Nhận thông báo:", event.data);
-        try {
+        console.log(" Nhận thông báo:", event.data);      
           const data: Notification = JSON.parse(event.data);
           if (!data.id || !data.message) return;
           setNotifications((prev) => [data, ...prev]);
           setUnreadCount((prev) => prev + 1);
-        } catch (error) {
-          console.error("  Lỗi xử lý WebSocket:", error);
-        }
-      };
+        } 
 
       ws.onclose = () => {
-        console.log("  WebSocket mất kết nối, thử lại sau 5 giây...");
         wsRef.current = null;
         setTimeout(connectWebSocket, 5000);
       };
@@ -116,16 +107,14 @@ export default function HeaderAdmin() {
 
   const toggleDropdown = () => {
     setIsDropdownOpen(!isDropdownOpen);
-    
   };
 
   const markAsRead = async (id?: number, slugProduct?: string) => {
     if (!id) {
-      console.error("  Lỗi: ID thông báo bị thiếu!");
       return;
     }
 
-    try {
+    
       await fetch(
         `https://freshskinweb.onrender.com/admin/notify/update/${id}`,
         { method: "GET" }
@@ -137,26 +126,19 @@ export default function HeaderAdmin() {
         )
       );
       setUnreadCount((prev: number) => Math.max(prev - 1, 0));
-      
 
-    if (slugProduct) {
-      router.push(`/detail/${slugProduct}`);
-    } else {
-      console.warn("⚠️ Slug không tồn tại, không thể chuyển trang!");
+      if (slugProduct) {
+        router.push(`/detail/${slugProduct}`);
+      } 
     }
-    } catch (error) {
-      console.error("  Lỗi cập nhật trạng thái đã đọc:", error);
-    }
-  };
 
   const removeNotification = async (id?: number, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
     if (!id) {
-      console.error("Lỗi: ID thông báo bị thiếu!");
       return;
     }
 
-    try {
+    
       const response = await fetch(
         `https://freshskinweb.onrender.com/admin/notify/delete/${id}`,
         {
@@ -169,28 +151,20 @@ export default function HeaderAdmin() {
           prev.filter((n: Notification) => n.id !== id)
         );
         setUnreadCount((prev) => (prev > 0 ? prev - 1 : 0));
-      } else {
-        console.error(`Lỗi xóa thông báo ID ${id}:`, response.statusText);
-      }
-    } catch (error) {
-      console.error("Lỗi khi xóa thông báo:", error);
-    }
-  };
+      } 
+    } 
 
   const clearAllNotifications = async () => {
-    try {
+    
       // 🔍 Lọc danh sách ID thông báo đã đọc
-      const readNotificationIds = notifications
-        ?.filter((n) => n.isRead)
-        ?.map((n) => n.id) || [];
-  
-      console.log(" Danh sách ID thông báo đã đọc:", readNotificationIds);
-  
+      const readNotificationIds =
+        notifications?.filter((n) => n.isRead)?.map((n) => n.id) || [];
+
       if (readNotificationIds.length === 0) {
         alert("Không có thông báo đã đọc để xóa!");
         return;
       }
-  
+
       // Gọi API xóa thông báo đã đọc
       const response = await fetch(
         `https://freshskinweb.onrender.com/admin/notify/deleteAll/${dataProfile?.roleId}`,
@@ -200,42 +174,34 @@ export default function HeaderAdmin() {
           body: JSON.stringify({ notificationIds: readNotificationIds }),
         }
       );
-  
+
       // Kiểm tra response trước khi gọi .json()
       let responseData = null;
       if (response.status !== 204) {
         responseData = await response.json().catch(() => null);
       }
-  
+
       console.log("Phản hồi từ server:", responseData);
-  
+
       if (response.ok) {
         // 🏷️ Cập nhật lại danh sách thông báo (loại bỏ thông báo đã đọc)
         setNotifications((prev) => prev.filter((n) => !n.isRead));
         setUnreadCount((prev) => prev - readNotificationIds.length);
-  
-      } else {
-        console.error("Lỗi xóa thông báo đã đọc:", responseData?.message || "Không rõ lỗi");
-      }
-    } catch (error) {
-      console.error(" Lỗi khi xóa thông báo đã đọc:", error);
-    }
-  };
-  
+      } 
+    } 
   
 
-  const formatRelativeTime = (timestamp: string): string => {
-    const time = dayjs(timestamp);
-    const now = dayjs();
-
-    if (now.diff(time, "minute") < 1) return "Vừa xong";
-    if (now.diff(time, "hour") < 1)
-      return `${now.diff(time, "minute")} phút trước`;
-    if (now.diff(time, "day") < 1) return `${now.diff(time, "hour")} giờ trước`;
-    if (now.diff(time, "day") === 1) return "Hôm qua";
-
-    return time.format("DD/MM/YYYY");
-  };
+    const formatRelativeTime = (timestamp: string): string => {
+      const time = dayjs.utc(timestamp).tz("Asia/Ho_Chi_Minh"); // Chuyển timestamp về múi giờ VN
+      const now = dayjs();
+    
+      if (now.diff(time, "minute") < 1) return "Vừa xong";
+      if (now.diff(time, "hour") < 1) return `${now.diff(time, "minute")} phút trước`;
+      if (now.diff(time, "day") < 1) return `${now.diff(time, "hour")} giờ trước`;
+      if (now.diff(time, "day") === 1) return "Hôm qua";
+    
+      return time.format("DD/MM/YYYY");
+    };
 
   return (
     <div className="flex items-center justify-between bg-white p-4 w-full">
@@ -290,17 +256,16 @@ export default function HeaderAdmin() {
                     className={`px-4 py-2 border-b flex justify-between items-center hover:bg-gray-100 cursor-pointer ${
                       notification.isRead ? "" : "bg-gray-200"
                     }`}
-                    onClick={() => markAsRead(notification.id, notification.slugProduct)}
+                    onClick={() =>
+                      markAsRead(notification.id, notification.slugProduct)
+                    }
                   >
                     <img
-                      src={
-                        notification?.image && notification.image !== ""
-                          ? notification.image
-                          : "/default-product.png"
-                      }
+                      src={notification.image}
                       className="w-12 h-12 rounded-lg object-cover mr-3"
                       alt="Product Image"
                     />
+
                     <div className="flex items-center space-x-2">
                       <div>
                         <p className="text-sm">{notification.message}</p>

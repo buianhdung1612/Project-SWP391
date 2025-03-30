@@ -19,7 +19,6 @@ import {
   Clock,
   CheckSquare,
 } from "lucide-react";
-import TopPrice from "@/app/components/Chart/TopPrice";
 
 export default function DashboardAdminPage() {
   const [stats, setStats] = useState({
@@ -53,20 +52,35 @@ export default function DashboardAdminPage() {
     labels: string[];
     values: number[];
   }>({
-     labels: [],
-     values: [], 
+    labels: [],
+    values: [],
   });
+  
+
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const ratingChartRef = useRef<HTMLCanvasElement | null>(null);
   const revenueChartRef = useRef<HTMLCanvasElement | null>(null);
+
   const scrollToRevenueChart = () => {
     if (revenueChartRef.current) {
-      const offset = 150; // Điều chỉnh độ cuộn (100px phía trên phần tử)
-      const elementPosition = revenueChartRef.current.getBoundingClientRect().top + window.scrollY;
+      const offset = 250; // Điều chỉnh độ cuộn (100px phía trên phần tử)
+      const elementPosition =
+        revenueChartRef.current.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({
-        top: elementPosition - offset, 
+        top: elementPosition - offset,
+        behavior: "smooth",
+      });
+    }
+  };
+  const scrollToRating = () => {
+    if (ratingChartRef.current) {
+      const offset = 10; // Điều chỉnh độ cuộn (100px phía trên phần tử)
+      const elementPosition =
+        ratingChartRef.current.getBoundingClientRect().top + window.scrollY;
+      window.scrollTo({
+        top: elementPosition - offset,
         behavior: "smooth",
       });
     }
@@ -75,74 +89,69 @@ export default function DashboardAdminPage() {
     function connectWebSocket() {
       if (wsRef.current && wsRef.current.readyState === WebSocket.OPEN) return;
 
-      console.log("🔌 Kết nối WebSocket...");
       wsRef.current = new WebSocket(
         "wss://freshskinweb.onrender.com/ws/dashboard"
       );
 
       wsRef.current.onopen = () => {
-        console.log("✅ WebSocket đã kết nối!");
+        console.log(" WebSocket đã kết nối!");
         if (reconnectTimeoutRef.current)
           clearTimeout(reconnectTimeoutRef.current);
       };
 
       wsRef.current.onmessage = (event) => {
-        try {
-          const data = JSON.parse(event.data);
-          console.log("📩 Dữ liệu nhận:", data);
+        const data = JSON.parse(event.data);
+        console.log(" Dữ liệu nhận:", data);
 
-          // Cập nhật thống kê
-          setStats((prevStats) => ({
-            ...prevStats,
-            totalOrder: data.totalOrder || prevStats.totalOrder,
-            totalOrderCompleted:
-              data.totalOrderCompleted || prevStats.totalOrderCompleted,
-            totalOrderPending:
-              data.totalOrderPending || prevStats.totalOrderPending,
-            totalOrderCanceled:
-              data.totalOrderCanceled || prevStats.totalOrderCanceled,
-            totalRevenue: data.totalRevenue || prevStats.totalRevenue,
-            totalProducts: data.totalProducts || prevStats.totalProducts,
-            totalUsers: data.totalUsers || prevStats.totalUsers,
-            totalFeedbacks: data.totalFeedbacks || prevStats.totalFeedbacks,
-            totalBlogs: data.totalBlogs || prevStats.totalBlogs,
-          }));
+        // Cập nhật thống kê
+        setStats((prevStats) => ({
+          ...prevStats,
+          totalOrder: data.totalOrder || prevStats.totalOrder,
+          totalOrderCompleted:
+            data.totalOrderCompleted || prevStats.totalOrderCompleted,
+          totalOrderPending:
+            data.totalOrderPending || prevStats.totalOrderPending,
+          totalOrderCanceled:
+            data.totalOrderCanceled || prevStats.totalOrderCanceled,
+          totalRevenue: data.totalRevenue || prevStats.totalRevenue,
+          totalProducts: data.totalProducts || prevStats.totalProducts,
+          totalUsers: data.totalUsers || prevStats.totalUsers,
+          totalFeedbacks: data.totalFeedbacks || prevStats.totalFeedbacks,
+          totalBlogs: data.totalBlogs || prevStats.totalBlogs,
+        }));
 
-          // Cập nhật danh sách sản phẩm bán chạy
-          if (Array.isArray(data.top10ProductSelling?.data)) {
-            setTop10ProductSelling(
-              data.top10ProductSelling.data.map((product: any) => ({
-                title: product.title || "Không có tiêu đề",
-                soldQuantity: product.soldQuantity || "Không có sp",
-              }))
-            );
-          }
+        // Cập nhật danh sách sản phẩm bán chạy
+        if (Array.isArray(data.top10ProductSelling?.data)) {
+          setTop10ProductSelling(
+            data.top10ProductSelling.data.map((product: any) => ({
+              title: product.title || "Không có tiêu đề",
+              soldQuantity: product.soldQuantity || "Không có sp",
+            }))
+          );
+        }
 
-          // Cập nhật dữ liệu cho PieChart
-          if (data?.Top5CategoryHaveTopProduct?.data) {
-            const categories = data.Top5CategoryHaveTopProduct.data;
-            setChartData({
-              labels: categories.map((item: any) => item.title),
-              values: categories.map((item: any) => item.total),
-            });
-          }
-          //cập nhật dữ liệu rating
-          if (data?.ratingStartsByDate) {
-            setRatingChartData({
-              labels: data.ratingStartsByDate.map((item: any) => item.date),
-              values: data.ratingStartsByDate.map(
-                (item: any) => Math.round(item.avr * 10) / 10
-              ),
-            });
-          }
-          if (data?.revenueByDate) {
-            setRevenueChartData({
-              labels: data.revenueByDate.map((item: any) => item.orderDate),
-              values: data.revenueByDate.map((item: any) => item.totalAmount),
-            });
-          }
-        } catch (error) {
-          console.error("❌ Lỗi xử lý WebSocket:", error);
+        // Cập nhật dữ liệu cho PieChart
+        if (data?.Top5CategoryHaveTopProduct?.data) {
+          const categories = data.Top5CategoryHaveTopProduct.data;
+          setChartData({
+            labels: categories.map((item: any) => item.title),
+            values: categories.map((item: any) => item.total),
+          });
+        }
+        //cập nhật dữ liệu rating
+        if (data?.ratingStartsByDate) {
+          setRatingChartData({
+            labels: data.ratingStartsByDate.map((item: any) => item.date),
+            values: data.ratingStartsByDate.map(
+              (item: any) => Math.round(item.avr * 10) / 10
+            ),
+          });
+        }
+        if (data?.revenueByDate) {
+          setRevenueChartData({
+            labels: data.revenueByDate.map((item: any) => item.orderDate),
+            values: data.revenueByDate.map((item: any) => item.totalAmount),
+          });
         }
       };
 
@@ -184,6 +193,7 @@ export default function DashboardAdminPage() {
           },
         ],
       },
+
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -279,14 +289,14 @@ export default function DashboardAdminPage() {
       },
       options: {
         responsive: true,
-        maintainAspectRatio: false, // 🔥 Giúp biểu đồ mở rộng chiều cao tự nhiên
+        maintainAspectRatio: false,
         plugins: {
           title: {
             display: true,
             text: "Xu hướng Rating trung bình theo ngày",
             font: { size: 16, weight: "bold" },
             color: "#333",
-            padding:4,
+            padding: 4,
           },
           legend: { display: false },
         },
@@ -339,6 +349,7 @@ export default function DashboardAdminPage() {
       },
     });
   }, [revenueChartData]);
+
   return (
     <div className="p-4 md:p-6 bg-gray-100 max-w-screen-xl mx-auto">
       {stats.totalOrder === "0" && stats.totalUsers === "0" ? (
@@ -359,20 +370,24 @@ export default function DashboardAdminPage() {
             </Link>
             <StatCard
               value={stats.totalRevenue}
-              label="D.thu  "
+              label="D.số "
               icon={<Banknote className="text-yellow-500" />}
               onClick={scrollToRevenueChart}
               style={{ cursor: "pointer" }}
             />
-            <StatCard
-              value={stats.totalUsers}
-              label="Tổng người dùng"
-              icon={<User2Icon className="text-indigo-500" />}
-            />
+            <Link href="http://localhost:3000/admin/users" className="block">
+              <StatCard
+                value={stats.totalUsers}
+                label="Tổng người dùng"
+                icon={<User2Icon className="text-indigo-500" />}
+              />
+            </Link>
             <StatCard
               value={stats.totalFeedbacks}
               label="Đánh giá"
               icon={<Star className="text-purple-500" />}
+              onClick={scrollToRating}
+              style={{ cursor: "pointer" }}
             />
             <Link href="/admin/blogs" className="block">
               <StatCard
@@ -381,46 +396,47 @@ export default function DashboardAdminPage() {
                 icon={<FileText className="text-gray-500" />}
               />
             </Link>
-            <StatCard
-              value={stats.totalOrder}
-              label="Tổng đơn hàng"
-              icon={<ShoppingCart className="text-green-500" />}
-            />
             <Link href="/admin/orders" className="block">
+              <StatCard
+                value={stats.totalOrder}
+                label="Tổng đơn hàng"
+                icon={<ShoppingCart className="text-green-500" />}
+              />
+            </Link>
+            <Link href="/admin/orders?status=PENDING" className="block">
               <StatCard
                 value={stats.totalOrderPending}
                 label="Đơn chờ duyệt"
                 icon={<Clock className="text-orange-500" />}
               />
             </Link>
-            <Link href="/admin/orders" className="block">
+            <Link href="/admin/orders?status=COMPLETED" className="block">
               <StatCard
                 value={stats.totalOrderCompleted}
                 label="Đơn đã duyệt"
                 icon={<CheckSquare className="text-orange-500" />}
               />
             </Link>
-            <Link href="/admin/orders" className="block">
+            <Link href="/admin/orders?page=1&status=CANCELED" className="block">
               <StatCard
                 value={stats.totalOrderCanceled}
                 label="Đơn đã hủy"
                 icon={<ShoppingBag className="text-red-500" />}
               />
             </Link>
-            <StatCard
-              value={stats.totalOrderCompleted}
-              label="Hoàn thành"
-              icon={<CheckCircle className="text-blue-500" />}
-            />
+            <Link href="/admin/orders?status=COMPLETED" className="block">
+              <StatCard
+                value={stats.totalOrderCompleted}
+                label="Hoàn thành"
+                icon={<CheckCircle className="text-blue-500" />}
+              />
+            </Link>
           </div>
 
           {/* Biểu đồ & Bảng sản phẩm bán chạy */}
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
               <canvas ref={chartRef} />
-            </div>
-            <div className="bg-white shadow-md rounded-lg p-4  h-80">
-              <TopPrice />
             </div>
           </div>
           <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-80">

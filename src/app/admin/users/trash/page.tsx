@@ -222,7 +222,7 @@ export default function UserAdminPage() {
   // Xóa vĩnh viễn một sản phẩm
   const handleDeleteOneUser = async (id: number) => {
     const confirm: boolean = window.confirm(
-      "Bạn có chắc muốn xóa bài viết này không?"
+      "Bạn có chắc muốn xóa vĩnh viễn tài khoản này không?"
     );
     if (confirm) {
       const path = `${linkApi}/delete/${id}`;
@@ -250,9 +250,15 @@ export default function UserAdminPage() {
 
   // Khôi phục một sản phẩm
   const handleRestoreOneUser = async (id: number) => {
+<<<<<<< HEAD
     const confirm: boolean = window.confirm("Bạn có chắc muốn xóa bài viết này không?");
     if (confirm) {
       const path = `${linkApi}/restore/${id}`;
+=======
+    const confirm: boolean = window.confirm("Bạn có chắc muốn khôi phục tài khoản này không?");
+        if (confirm) {
+    const path = `${linkApi}/restore/${id}`;
+>>>>>>> 070c46cfe04e95d570f702954f3166042606a622
 
       const response = await fetch(path, {
         method: "PATCH",
