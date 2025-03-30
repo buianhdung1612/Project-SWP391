@@ -1,7 +1,6 @@
 "use client";
 
 import { useEffect, useState, useRef } from "react";
-
 import { StatCard } from "@/app/components/StatCard/StatCard";
 import { Chart, registerables } from "chart.js";
 import Link from "next/link";
@@ -32,7 +31,17 @@ export default function DashboardAdminPage() {
     totalFeedbacks: "0",
     totalBlogs: "0",
   });
+  interface RevenueData {
+    category: string;
+    date: string;
+    revenue: number;
+  }
 
+  interface WebSocketData {
+    revenueByCategories: {
+      data: RevenueData[];
+    };
+  }
   const [top10ProductSelling, setTop10ProductSelling] = useState([]);
   const [chartData, setChartData] = useState<{
     labels: string[];
@@ -55,7 +64,16 @@ export default function DashboardAdminPage() {
     labels: [],
     values: [],
   });
-  
+  const StackedChartRef = useRef<HTMLCanvasElement | null>(null);
+  const chartInstanceRef = useRef<Chart | null>(null);
+  const [wsData, setWsData] = useState<WebSocketData | null>(null);
+  const [stackedChartData, setStackedChartData] = useState<{
+    labels: string[];
+    datasets: any[];
+  }>({
+    labels: [],
+    datasets: [],
+  });
 
   const wsRef = useRef<WebSocket | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -101,6 +119,7 @@ export default function DashboardAdminPage() {
 
       wsRef.current.onmessage = (event) => {
         const data = JSON.parse(event.data);
+        setWsData(data);
         console.log(" Dữ liệu nhận:", data);
 
         // Cập nhật thống kê
@@ -315,6 +334,89 @@ export default function DashboardAdminPage() {
       },
     });
   }, [ratingChartData]);
+  useEffect(() => {
+    const warmColors = [
+      "#b91d47",
+      "#c76c01",
+      "#c7d110",
+      "#588e28",
+      "#288e6c",
+      "#28528e",
+      "#8f409c",
+      "#ff6c82",
+      "#5e1e0d",
+      "#a086a5",
+      "#183e21",
+    ];
+    const categoryColors: { [key: string]: string } = {};
+
+    const getWarmColor = (category: string, index: number) => {
+      if (!categoryColors[category]) {
+        categoryColors[category] = warmColors[index % warmColors.length];
+      }
+      return categoryColors[category];
+    };
+    if (!wsData || !Array.isArray(wsData.revenueByCategories?.data)) return;
+
+    const revenueData = wsData.revenueByCategories.data;
+
+    // Nhóm dữ liệu theo ngày
+    const groupedData: { [date: string]: { [category: string]: number } } = {};
+    revenueData.forEach(({ date, category, revenue }) => {
+      if (!groupedData[date]) groupedData[date] = {};
+      groupedData[date][category] = revenue;
+    });
+
+    const labels = Object.keys(groupedData);
+    const categories = [...new Set(revenueData.map((item) => item.category))];
+
+    const datasets = categories.map((category, index) => ({
+      label: category,
+      data: labels.map((date) => groupedData[date][category] || 0),
+      backgroundColor: getWarmColor(category, index),
+    }));
+
+    setStackedChartData({ labels, datasets });
+  }, [wsData]);
+
+  useEffect(() => {
+    if (!StackedChartRef.current || stackedChartData.labels.length === 0)
+      return;
+
+    // Hủy biểu đồ cũ nếu có
+    if (chartInstanceRef.current) {
+      chartInstanceRef.current.destroy();
+    }
+
+    const ctx = StackedChartRef.current.getContext("2d");
+    if (!ctx) return;
+
+    chartInstanceRef.current = new Chart(ctx, {
+      type: "bar",
+      data: stackedChartData,
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: { position: "top" },
+          title: {
+            display: true,
+            text: "So sánh doanh thu các danh mục",
+            font: { size: 16, weight: "bold" },
+            color: "#333",
+            padding: 4,
+          },
+        },
+        scales: { x: { stacked: true }, y: { stacked: true } },
+      },
+    });
+
+    return () => {
+      if (chartInstanceRef.current) {
+        chartInstanceRef.current.destroy();
+      }
+    };
+  }, [stackedChartData]);
 
   useEffect(() => {
     if (!revenueChartRef.current || revenueChartData.labels.length === 0)
@@ -437,6 +539,9 @@ export default function DashboardAdminPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
               <canvas ref={chartRef} />
+            </div>
+            <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
+              <canvas ref={StackedChartRef} />
             </div>
           </div>
           <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-80">

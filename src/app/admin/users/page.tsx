@@ -188,7 +188,7 @@ export default function UserAdminPage() {
     // Xóa một tài khoản
     const handleDeleteOneAccount = async (id: number) => {
         const confirm: boolean = window.confirm("Bạn có chắc muốn xoá tài khoản này không?");
-        if (confirm) {
+    if (confirm) {
         const path = `${linkApi}/deleteT/${id}`;
 
         console.log(path);

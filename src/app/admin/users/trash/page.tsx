@@ -250,15 +250,9 @@ export default function UserAdminPage() {
 
   // Khôi phục một sản phẩm
   const handleRestoreOneUser = async (id: number) => {
-<<<<<<< HEAD
-    const confirm: boolean = window.confirm("Bạn có chắc muốn xóa bài viết này không?");
+    const confirm: boolean = window.confirm("Bạn có chắc muốn khôi phục tài khoản này không?");
     if (confirm) {
       const path = `${linkApi}/restore/${id}`;
-=======
-    const confirm: boolean = window.confirm("Bạn có chắc muốn khôi phục tài khoản này không?");
-        if (confirm) {
-    const path = `${linkApi}/restore/${id}`;
->>>>>>> 070c46cfe04e95d570f702954f3166042606a622
 
       const response = await fetch(path, {
         method: "PATCH",
