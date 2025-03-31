@@ -6,6 +6,7 @@ import { Chart, registerables } from "chart.js";
 import Link from "next/link";
 Chart.register(...registerables);
 
+import VoucherUse from "@/app/components/Chart/VoucherUse";
 import {
   ShoppingCart,
   Boxes,
@@ -64,6 +65,14 @@ export default function DashboardAdminPage() {
     labels: [],
     values: [],
   });
+  const [chartPieData, setChartPieData] = useState<{
+    labels: string[];
+    values: number[];
+  }>({
+    labels: [],
+    values: [],
+  });
+
   const StackedChartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
   const [wsData, setWsData] = useState<WebSocketData | null>(null);
@@ -80,7 +89,7 @@ export default function DashboardAdminPage() {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const ratingChartRef = useRef<HTMLCanvasElement | null>(null);
   const revenueChartRef = useRef<HTMLCanvasElement | null>(null);
-
+  const chartPieRef = useRef<HTMLCanvasElement | null>(null);
   const scrollToRevenueChart = () => {
     if (revenueChartRef.current) {
       const offset = 250; // Điều chỉnh độ cuộn (100px phía trên phần tử)
@@ -157,11 +166,25 @@ export default function DashboardAdminPage() {
             values: categories.map((item: any) => item.total),
           });
         }
+
+        // cập nhật biểu đồ SkinType
+        if (data?.statisticSkinTest?.data) {
+          const skinType = data.statisticSkinTest.data;
+          setChartPieData({
+            labels: skinType.map((item: any) => item.skinType),
+            values: skinType.map((item: any) => item.count),
+          });
+        }
         //cập nhật dữ liệu rating
+        
         if (data?.ratingStartsByDate) {
+          const sortedData = data.ratingStartsByDate.sort(
+            (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()
+          );
+        
           setRatingChartData({
-            labels: data.ratingStartsByDate.map((item: any) => item.date),
-            values: data.ratingStartsByDate.map(
+            labels: sortedData.map((item: any) => item.date),
+            values: sortedData.map(
               (item: any) => Math.round(item.avr * 10) / 10
             ),
           });
@@ -278,11 +301,10 @@ export default function DashboardAdminPage() {
     const ctx = ratingChartRef.current.getContext("2d");
     if (!ctx) return;
 
-    // Xóa biểu đồ cũ nếu có
     const existingChart = Chart.getChart(ctx);
     if (existingChart) existingChart.destroy();
 
-    // Tạo màu gradient
+    
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, "rgba(0, 123, 255, 0.4)");
     gradient.addColorStop(1, "rgba(0, 123, 255, 0)");
@@ -336,17 +358,7 @@ export default function DashboardAdminPage() {
   }, [ratingChartData]);
   useEffect(() => {
     const warmColors = [
-      "#b91d47",
-      "#c76c01",
-      "#c7d110",
-      "#588e28",
-      "#288e6c",
-      "#28528e",
-      "#8f409c",
-      "#ff6c82",
-      "#5e1e0d",
-      "#a086a5",
-      "#183e21",
+      "#b91d47","#c76c01","#c7d110","#588e28","#288e6c","#28528e","#8f409c","#ff6c82","#5e1e0d","#a086a5","#183e21",
     ];
     const categoryColors: { [key: string]: string } = {};
 
@@ -419,7 +431,7 @@ export default function DashboardAdminPage() {
   }, [stackedChartData]);
 
   useEffect(() => {
-    if (!revenueChartRef.current || revenueChartData.labels.length === 0)
+    if (!revenueChartRef.current || revenueChartData.labels.length ===0)
       return;
 
     const ctx = revenueChartRef.current.getContext("2d");
@@ -451,6 +463,91 @@ export default function DashboardAdminPage() {
       },
     });
   }, [revenueChartData]);
+
+
+  useEffect(() => {
+    if (!chartPieRef.current || chartData.labels.length === 0) return;
+
+    const ctx = chartPieRef.current.getContext("2d");
+    if (!ctx) return;
+
+    const myChart = new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: chartPieData.labels,
+        datasets: [
+          {
+            backgroundColor: [
+              "#b91d47",
+              "#00aba9",
+              "#2b5797",
+              "#e8c3b9",
+              "#1e7145",
+            ],
+            data: chartPieData.values,
+          },
+        ],
+      },
+
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+          legend: {
+            position: "left",
+            labels: {
+              padding: 5,
+              boxWidth: 20,
+              generateLabels: function (chart: any) {
+                const data = chart.data;
+                if (data.labels.length && data.datasets.length) {
+                  return data.labels.map((label: any, i: any) => {
+                    const value = data.datasets[0].data[i];
+                    const total = data.datasets[0].data.reduce(
+                      (acc: any, cur: any) => acc + cur,
+                      0
+                    );
+                    const percentage = ((value / total) * 100).toFixed(1);
+
+                    return {
+                      text: `${percentage}% ${label}`,
+                      fillStyle: data.datasets[0].backgroundColor[i],
+                      hidden: chart.getDatasetMeta(0).data[i].hidden || false, // Kiểm tra trạng thái
+                      datasetIndex: 0,
+                      index: i,
+                    };
+                  });
+                }
+                return [];
+              },
+            },
+            onClick: (e: any, legendItem: any, legend: any) => {
+              const index = legendItem.index;
+              const ci = legend.chart;
+              const meta = ci.getDatasetMeta(0);
+
+              // Toggle trạng thái hiển thị của dataset
+              meta.data[index].hidden = !meta.data[index].hidden;
+
+              ci.options.plugins.legend.labels.generateLabels(ci);
+
+              ci.update(); 
+            },
+          },
+          title: {
+            display: true,
+            position: "top",
+            text: "Tệp khách hàng tiềm năng thuộc...",
+            font: { size: 16, weight: "bold" },
+            color: "#333",
+          },
+        },
+      },
+    });
+
+    return () => myChart.destroy();
+  }, [chartPieData]);
+  
 
   return (
     <div className="p-4 md:p-6 bg-gray-100 max-w-screen-xl mx-auto">
@@ -548,10 +645,10 @@ export default function DashboardAdminPage() {
             <canvas ref={revenueChartRef} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-120">
+            <div className="bg-white shadow-md rounded-lg p-4 mt-4 mb-4 h-120">
               <canvas ref={ratingChartRef} />
             </div>
-            <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-120">
+            <div className="bg-white shadow-md rounded-lg p-4 mb-4 mt-4 h-120">
               <h2 className="text-base font-bold text-gray-800 text-center">
                 Top 10 Sản Phẩm Bán Chạy
               </h2>
@@ -579,6 +676,14 @@ export default function DashboardAdminPage() {
                   </tbody>
                 </table>
               </div>
+            </div>
+          </div>         
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
+            <canvas ref={chartPieRef} />
+            </div>
+            <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
+              <VoucherUse/>
             </div>
           </div>
         </>
