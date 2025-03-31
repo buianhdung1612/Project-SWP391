@@ -55,22 +55,24 @@ export default function RouteSkinDetailPage() {
             <Typography variant="h5" gutterBottom sx={{ fontWeight: "bold" }}>
                 Chi tiết lộ trình chăm sóc da
             </Typography>
-            <Paper sx={{ padding: 3, borderRadius: 2, boxShadow: 2 }}>
-                <Typography variant="h6" gutterBottom>
-                    Loại da: {data.skinTypeEntity?.type}
-                </Typography>
-                <Divider sx={{ marginBottom: 2 }} />
-                <Typography variant="body1" gutterBottom>
-                    <strong>Lộ trình:</strong> {data.rountine}
-                </Typography>
-                <Grid container spacing={2} sx={{ marginTop: 2 }}>
-                    <Grid item xs={6}>
-                        <Typography variant="body2" color="textSecondary">
-                            <strong>Ngày tạo:</strong> {data.createdAt}
-                        </Typography>
+            {permissions?.includes("rountine_view") && (
+                <Paper sx={{ padding: 3, borderRadius: 2, boxShadow: 2 }}>
+                    <Typography variant="h6" gutterBottom>
+                        Loại da: {data.skinTypeEntity?.type}
+                    </Typography>
+                    <Divider sx={{ marginBottom: 2 }} />
+                    <Typography variant="body1" gutterBottom>
+                        <strong>Lộ trình:</strong> <span dangerouslySetInnerHTML={{ __html: data.rountine }} ></span>
+                    </Typography>
+                    <Grid container spacing={2} sx={{ marginTop: 2 }}>
+                        <Grid item xs={6}>
+                            <Typography variant="body2" color="textSecondary">
+                                <strong>Ngày tạo:</strong> {data.createdAt}
+                            </Typography>
+                        </Grid>
                     </Grid>
-                </Grid>
-            </Paper>
-        </Box>
+                </Paper>
+            )}
+        </Box >
     );
 }

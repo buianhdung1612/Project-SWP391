@@ -3,7 +3,6 @@
 import { cartAddNewProduct } from "@/app/(actions)/cart";
 import Link from "next/link";
 import { useState } from "react";
-import { IoIosGitCompare } from "react-icons/io";
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from 'swiper/react';

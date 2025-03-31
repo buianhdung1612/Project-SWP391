@@ -1,6 +1,4 @@
 "use client";
-
-import dynamic from "next/dynamic";
 import React, { useContext, useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import {
@@ -93,109 +91,110 @@ export default function EditVoucherAdminPage() {
                 <Typography variant="h5" gutterBottom>
                     Trang chỉnh sửa mã giảm giá
                 </Typography>
-
-                <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label="Mã giảm giá"
-                            name="name"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                            value={data.name}
-                            onChange={(e) => setData({ ...data, name: e.target.value })}
-                        />
-                        <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                            <RadioGroup value={data.type} onChange={(e) => setData({ ...data, type: e.target.value })} name="type" row>
-                                <FormControlLabel
-                                    value="FIXED_AMOUNT"
-                                    control={<Radio />}
-                                    label="Giảm theo giá"
-                                />
-                                <FormControlLabel
-                                    value="PERCENTAGE"
-                                    control={<Radio />}
-                                    label="Giảm theo phần trăm"
-                                />
-                            </RadioGroup>
-                        </FormControl>
-                        <TextField
-                            label="Giá giảm / Phần trăm giảm"
-                            type="number"
-                            name="discountValue"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                            value={data.discountValue}
-                            onChange={(e) => setData({ ...data, discountValue: parseInt(e.target.value) })}
-                        />
-                        <TextField
-                            label="Giá giảm tối đa"
-                            type="number"
-                            name="maxDiscount"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                            value={data.maxDiscount}
-                            onChange={(e) => setData({ ...data, maxDiscount: parseInt(e.target.value) })}
-                        />
-                        <TextField
-                            label="Giá trị đơn hàng tối thiểu"
-                            type="number"
-                            name="minOrderValue"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                            value={data.minOrderValue}
-                            onChange={(e) => setData({ ...data, minOrderValue: parseInt(e.target.value) })}
-                        />
-                        <TextField
-                            label="Lượt sử dụng"
-                            type="number"
-                            name="usageLimit"
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                            value={data.usageLimit}
-                            onChange={(e) => setData({ ...data, usageLimit: parseInt(e.target.value) })}
-                        />
-                        <TextField
-                            label="Ngày bắt đầu"
-                            type="date"
-                            name="startDate"
-                            variant="outlined"
-                            fullWidth
-                            value={data.startDate}
-                            onChange={(e) => setData({ ...data, startDate: e.target.value })}
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <TextField
-                            label="Ngày kết thúc"
-                            type="date"
-                            name="endDate"
-                            variant="outlined"
-                            fullWidth
-                            value={data.endDate}
-                            onChange={(e) => setData({ ...data, endDate: e.target.value })}
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <Button
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            sx={{ width: "100%" }}
-                        >
-                            Cập nhật mã giảm giá
-                        </Button>
-                    </form>
-                </Paper>
+                {permissions?.includes("vouchers_eidt") && (
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Mã giảm giá"
+                                name="name"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                                value={data.name}
+                                onChange={(e) => setData({ ...data, name: e.target.value })}
+                            />
+                            <FormControl fullWidth sx={{ marginBottom: 3 }}>
+                                <RadioGroup value={data.type} onChange={(e) => setData({ ...data, type: e.target.value })} name="type" row>
+                                    <FormControlLabel
+                                        value="FIXED_AMOUNT"
+                                        control={<Radio />}
+                                        label="Giảm theo giá"
+                                    />
+                                    <FormControlLabel
+                                        value="PERCENTAGE"
+                                        control={<Radio />}
+                                        label="Giảm theo phần trăm"
+                                    />
+                                </RadioGroup>
+                            </FormControl>
+                            <TextField
+                                label="Giá giảm / Phần trăm giảm"
+                                type="number"
+                                name="discountValue"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                                value={data.discountValue}
+                                onChange={(e) => setData({ ...data, discountValue: parseInt(e.target.value) })}
+                            />
+                            <TextField
+                                label="Giá giảm tối đa"
+                                type="number"
+                                name="maxDiscount"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                                value={data.maxDiscount}
+                                onChange={(e) => setData({ ...data, maxDiscount: parseInt(e.target.value) })}
+                            />
+                            <TextField
+                                label="Giá trị đơn hàng tối thiểu"
+                                type="number"
+                                name="minOrderValue"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                                value={data.minOrderValue}
+                                onChange={(e) => setData({ ...data, minOrderValue: parseInt(e.target.value) })}
+                            />
+                            <TextField
+                                label="Lượt sử dụng"
+                                type="number"
+                                name="usageLimit"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                required
+                                value={data.usageLimit}
+                                onChange={(e) => setData({ ...data, usageLimit: parseInt(e.target.value) })}
+                            />
+                            <TextField
+                                label="Ngày bắt đầu"
+                                type="date"
+                                name="startDate"
+                                variant="outlined"
+                                fullWidth
+                                value={data.startDate}
+                                onChange={(e) => setData({ ...data, startDate: e.target.value })}
+                                sx={{ marginBottom: 3 }}
+                                required
+                            />
+                            <TextField
+                                label="Ngày kết thúc"
+                                type="date"
+                                name="endDate"
+                                variant="outlined"
+                                fullWidth
+                                value={data.endDate}
+                                onChange={(e) => setData({ ...data, endDate: e.target.value })}
+                                sx={{ marginBottom: 3 }}
+                                required
+                            />
+                            <Button
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                sx={{ width: "100%" }}
+                            >
+                                Cập nhật mã giảm giá
+                            </Button>
+                        </form>
+                    </Paper>
+                )}
             </Box>
         </>
     );

@@ -77,10 +77,11 @@ export default function Sider() {
                         item.content === "Đơn hàng" && !permissions.includes("orders_view") ||
                         item.content === "Quản lý tài khoản" && !permissions.includes("accounts_view") ||
                         item.content === "Cài đặt chung" && !permissions.includes("settings_view") ||
-                        item.content === "Quản lý sản phẩm" && !permissions.includes("products_view") && !permissions.includes("products-category_view") &&  !permissions.includes("brands_view") && !permissions.includes("skin_view") ||
+                        item.content === "Quản lý sản phẩm" && !permissions.includes("products_view") && !permissions.includes("products-category_view") &&  !permissions.includes("brands_view") && !permissions.includes("vouchers_view") && !permissions.includes("rountine_view") ||
                         item.content === "Quản lý bài viết" && !permissions.includes("blogs_view") && !permissions.includes("blogs-category_view") || 
                         item.content === "Quản lý quyền" && !permissions.includes("roles_view") && !permissions.includes("roles_permissions") ||
-                        item.content === "Bộ câu hỏi" && !permissions.includes("quiz_view")
+                        item.content === "Bộ câu hỏi" && !permissions.includes("quiz_view") ||
+                        item.content === "Lộ trình chăm sóc từng loại da" && !permissions.includes("rountine_view")
                     ) {
                         return null;
                     }
@@ -113,7 +114,8 @@ export default function Sider() {
                                                     (subItem.content === "Nhóm quyền" && !permissions.includes("roles_view")) ||
                                                     (subItem.content === "Phân quyền" && !permissions.includes("roles_permissions")) ||
                                                     (subItem.content === "Tài khoản quản trị" && !permissions.includes("accounts_view")) ||
-                                                    (subItem.content === "Tài khoản người dùng" && !permissions.includes("accounts_view"))
+                                                    (subItem.content === "Tài khoản người dùng" && !permissions.includes("accounts_view")) ||
+                                                    (subItem.content === "Mã khuyến mãi" && !permissions.includes("vouchers_view"))
                                                 ) {
                                                     return null;
                                                 }

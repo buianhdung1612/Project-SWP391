@@ -2,20 +2,27 @@
 
 import { Box, Button, Paper, Typography } from "@mui/material";
 import { useParams } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import Alert from '@mui/material/Alert';
-import TinyEditor from "../../../../../../TinyEditor";
+import dynamic from "next/dynamic";
+import { ProfileAdminContext } from "@/app/admin/layout";
+
+const TinyEditor = dynamic(() => import("../../../../../../TinyEditor"), {
+    ssr: false,
+});
 
 export default function EditRouteSkinAdminPage() {
     const { id } = useParams();
-
     const [rountine, setRountine] = useState('');
+    const dataProfile = useContext(ProfileAdminContext);
+    const permissions = dataProfile?.permissions;
 
     const [data, setData] = useState({
         skinTypeEntity: {
             type: ""
         }
     })
+
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
 
@@ -31,7 +38,8 @@ export default function EditRouteSkinAdminPage() {
     }, []);
 
     const handleClick = async () => {
-        const response = await fetch(`https://freshskinweb.onrender.com/admin/skin-care-routines//edit/${id}`, {
+        console.log(rountine);
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/skin-care-routines/edit/${id}`, {
             method: "PATCH",
             headers: {
                 "Content-Type": "application/json"
@@ -67,12 +75,14 @@ export default function EditRouteSkinAdminPage() {
                     </span>
                 </Typography>
 
-                <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                    <TinyEditor value={rountine} onEditorChange={(rountine: string) => setRountine(rountine)} />
-                    <Button onClick={() => handleClick} variant="contained" color="primary" sx={{ width: '100%' }}>
-                        Chỉnh sửa lộ trình chăm sóc da
-                    </Button>
-                </Paper>
+                {permissions?.includes("rountine_edit") && (
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                        <TinyEditor value={rountine} onEditorChange={(rountine: string) => setRountine(rountine)} />
+                        <Button onClick={handleClick} variant="contained" color="primary" sx={{ width: '100%' }}>
+                            Chỉnh sửa lộ trình chăm sóc da
+                        </Button>
+                    </Paper>
+                )}
             </Box>
         </>
     )

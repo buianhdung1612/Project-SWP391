@@ -127,7 +127,6 @@ export default function RootLayout({
     if (!pathname.startsWith("/user/login") && !pathname.startsWith("/user/register") && !pathname.startsWith("/user/otp")) {
       const fetchProfile = async () => {
         const tokenUser = Cookies.get("tokenUser");
-        console.log(tokenUser);
 
         if (tokenUser) {
           const response = await fetch(

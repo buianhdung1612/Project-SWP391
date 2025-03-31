@@ -10,6 +10,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import { SettingProfileContext } from "@/app/(page)/layout";
 import { FaRegUserCircle } from "react-icons/fa";
 import { IoIosGitCompare } from "react-icons/io";
+import Compare from "../Compare/Compare";
 
 export default function Section1() {
     const [openMore, setOpenMore] = useState(false);
@@ -307,16 +308,9 @@ export default function Section1() {
                         </div>
                     </Link>
                 )}
-                <Link href="/compare">
-                    <div className="flex items-center ml-[13px] relative">
-                        <IoIosGitCompare className="text-[32px]" />
-                        {profile.productComparisonId?.products && profile.productComparisonId.products?.length > 0 ? (
-                            <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">{profile?.productComparisonId?.products?.length}</span>
-                        ) : (
-                            <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">0</span>
-                        )}
-                    </div>
-                </Link>
+                <div className="relative">
+                    <Compare />
+                </div>
                 <div className="relative">
                     <Cart />
                 </div>

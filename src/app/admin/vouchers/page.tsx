@@ -34,7 +34,6 @@ export default function VouchersAdminPage() {
         const confirm: boolean = window.confirm("Bạn có chắc muốn xóa mã giảm giá này vĩnh viễn không?");
         if (confirm) {
             const path = `${linkApi}/delete/${id}`;
-            console.log(path);
 
             const response = await fetch(path, {
                 method: "DELETE",
@@ -69,7 +68,7 @@ export default function VouchersAdminPage() {
                     {alertMessage}
                 </Alert>
             )}
-            {permissions?.includes("roles_view") && permissions.includes("roles_edit") && (
+            {permissions?.includes("vouchers_view") && permissions.includes("vouchers_edit") && (
                 <Box p={3}>
                     <Typography variant="h5" gutterBottom>
                         Danh sách mã giảm giá

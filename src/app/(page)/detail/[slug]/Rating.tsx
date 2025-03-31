@@ -4,11 +4,9 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { FaAngleDown, FaAngleLeft, FaAngleRight, FaAngleUp, FaRegStar, FaStar } from "react-icons/fa6";
 import { SettingProfileContext } from "../../layout";
 import { Context } from "./MiddlewareGetData";
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { CiStar } from "react-icons/ci";
 import { FaStarHalfAlt } from "react-icons/fa";
-import { Alert } from "@mui/material";
-import { CheckIcon } from "lucide-react";
 
 export default function Rating() {
     const router = useRouter();
@@ -17,7 +15,6 @@ export default function Rating() {
     const [openComment, setOpenComment] = useState(false);
     const [openSort, setOpenSort] = useState(false);
     const sortRef = useRef<HTMLDivElement>(null);
-    const searchParams = useSearchParams();
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -76,7 +73,7 @@ export default function Rating() {
         };
 
         fetchData();
-    }, [api]);
+    });
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -165,7 +162,8 @@ export default function Rating() {
 
         const dataResponse = await response.json();
         if (dataResponse && dataResponse.code === 200) {
-            location.reload();
+            setStarChoose(0);
+            setOpenComment(false);
         }
     }
 

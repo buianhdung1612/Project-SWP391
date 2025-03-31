@@ -15,10 +15,6 @@ export default function ProfileUser() {
 
     const { profile } = settingProfile;
 
-    if(profile.firstName === ""){
-        location.href = "/user/login"
-    }
-
     return (
         <>
             <ul className="flex items-center container mx-auto px-3">
@@ -48,6 +44,7 @@ export default function ProfileUser() {
                     {profile.skinType && (
                         <div className="text-[14px] text-[#00090f] mb-[15px]"><strong>Loại da: </strong>{profile.skinType}</div>
                     )}
+                    <Link href="/user/edit" className="bg-secondary border border-solid border-secondary cursor-pointer hover:bg-white hover:text-secondary text-white px-[10px] py-[5px] text-[14px] text-center rounded-[5px]">Chỉnh sửa thông tin cá nhân</Link>
                 </div>
             </div>
         </>

@@ -26,10 +26,6 @@ interface PermissionProps {
   ) => void;
 }
 
-// <<<<<<< HEAD
-// =======
-// // Component Permission: Render các dòng permission dựa trên danh sách roles có trạng thái permission cập nhật
-// >>>>>>> 80b953dc8047c1c6f53d688c6d0cb693aafb4367
 function Permission({ permissions, roles, onCheckboxChange }: PermissionProps) {
   return (
     <>
@@ -352,6 +348,33 @@ export default function PermissionPage() {
                 onCheckboxChange={handleCheckboxChange}
               />
 
+              {/* Mã khuyến mãi */}
+              <tr>
+                <td
+                  style={{
+                    fontWeight: "bold",
+                    padding: "12px",
+                    backgroundColor: "#e1f5fe",
+                  }}
+                  colSpan={listRoles.length + 1}
+                >
+                  Mã khuyến mãi
+                </td>
+              </tr>
+              <Permission
+                roles={listRoles.map((role) => ({
+                  ...role,
+                  permission: updatedRoles[role.roleId] || [],
+                }))}
+                permissions={[
+                  { dataName: "vouchers_view", dataContent: "Xem" },
+                  { dataName: "vouchers_view_create", dataContent: "Thêm mới" },
+                  { dataName: "vouchers_view_edit", dataContent: "Chỉnh sửa" },
+                  { dataName: "vouchers_view_delete", dataContent: "Xóa" },
+                ]}
+                onCheckboxChange={handleCheckboxChange}
+              />
+
               {/* Danh mục bài viết */}
               <tr>
                 <td
@@ -500,7 +523,7 @@ export default function PermissionPage() {
                   }}
                   colSpan={listRoles.length + 1}
                 >
-                  Quiz
+                  Bộ câu hỏi
                 </td>
               </tr>
               <Permission
@@ -513,6 +536,31 @@ export default function PermissionPage() {
                   { dataName: "quiz_create", dataContent: "Thêm mới" },
                   { dataName: "quiz_edit", dataContent: "Chỉnh sửa" },
                   { dataName: "quiz_delete", dataContent: "Xóa" },
+                ]}
+                onCheckboxChange={handleCheckboxChange}
+              />
+
+              {/* Lộ trình chăm sóc da */}
+              <tr>
+                <td
+                  style={{
+                    fontWeight: "bold",
+                    padding: "12px",
+                    backgroundColor: "#e1f5fe",
+                  }}
+                  colSpan={listRoles.length + 1}
+                >
+                  Lộ trình chăm sóc da
+                </td>
+              </tr>
+              <Permission
+                roles={listRoles.map((role) => ({
+                  ...role,
+                  permission: updatedRoles[role.roleId] || [],
+                }))}
+                permissions={[
+                  { dataName: "rountine_view", dataContent: "Xem" },
+                  { dataName: "rountine_edit", dataContent: "Chỉnh sửa" },
                 ]}
                 onCheckboxChange={handleCheckboxChange}
               />

@@ -22,7 +22,6 @@ export default function Section2() {
                         {productsRelated.slice(0, 5).map((item: any, index: number) => (
                             <Link key={index} href={`/detail/${item.slug}`}>
                                 <div className="py-[4px] flex items-center border-b border-solid border-[#ededed]">
-
                                     <div className="w-[60px] aspect-square">
                                         <img src={item.thumbnail[0]} className="w-full h-full object-cover" />
                                     </div>
@@ -30,7 +29,9 @@ export default function Section2() {
                                         <div className="text-[14px] pb-[3px] text-textColor font-[500] line-clamp-2">{item.title}</div>
                                         <div className="flex">
                                             <span className="text-[14px] text-primary pr-[10px]">{(item.variants[0].price * (1 - item.discountPercent / 100)).toLocaleString()}<sup className="underline">đ</sup></span>
-                                            <span className="text-[12px] text-[#9e9e9e] line-through mt-[3px] font-[400]">{(item.variants[0].price).toLocaleString()}<sup className="underline">đ</sup></span>
+                                            {item.discountPercent > 0 && (
+                                                <span className="text-[12px] text-[#9e9e9e] line-through mt-[3px] font-[400]">{(item.variants[0].price).toLocaleString()}<sup className="underline">đ</sup></span>
+                                            )}
                                         </div>
                                     </div>
                                 </div>
