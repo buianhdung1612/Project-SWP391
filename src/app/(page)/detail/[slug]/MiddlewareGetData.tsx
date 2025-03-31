@@ -40,6 +40,8 @@ interface ProductDetail {
     variants: Variants[];
     discountPercent: number;
     description: string;
+    origin: string;
+    skinIssues: string;
 }
 
 interface Context {
@@ -69,7 +71,9 @@ export const Context = createContext<Context>({
         brand: { title: "" },
         variants: [{ id: 0, volume: 0, price: 0, unit: "" }],
         discountPercent: 0,
-        description: ""
+        description: "",
+        origin: "",
+        skinIssues: ""
     }
 });
 

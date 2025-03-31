@@ -1,13 +1,34 @@
 import Link from "next/link";
+import { Swiper, SwiperSlide } from 'swiper/react';
+
+// Import Swiper styles
+import 'swiper/css';
+import 'swiper/css/navigation';
+import '../../(page)/swiper.css';
+import { Navigation } from 'swiper/modules';
 
 export default function Banner() {
     return (
         <>
             <div className="container mx-auto flex mt-[10px]">
                 <div className="w-[858px] h-[340px] mr-[15px] ">
-                    <Link href="/products">
-                        <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742356502/product-brand/dsa_20250319-035502.webp" className="rounded-[15px] object-cover" />
-                    </Link>
+                    <Swiper
+                        slidesPerView={1}
+                        navigation={true}
+                        modules={[Navigation]}
+                        className="mySwiper"
+                    >
+                        <SwiperSlide>
+                            <Link href="/products">
+                                <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742356502/product-brand/dsa_20250319-035502.webp" className="rounded-[15px] object-cover" />
+                            </Link>
+                        </SwiperSlide>
+                        <SwiperSlide>
+                            <Link href="/products">
+                                <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1743325037/product-brand/dsa_20250330-085716.webp" className="rounded-[15px] object-cover" />
+                            </Link>
+                        </SwiperSlide>
+                    </Swiper>
                 </div>
                 <div className="flex-1">
                     <div className="mb-[15px] h-[164px]">

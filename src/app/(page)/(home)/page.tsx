@@ -12,7 +12,9 @@ import Section5 from "./Section5";
 import Section7 from "./Section7";
 import Section8 from "./Section8";
 import Section9 from "./Section9";
+import Cookies from 'js-cookie';
 import { useEffect, useState } from "react";
+import { useSearchParams } from "next/navigation";
 
 export default function HomePage() {
   const [dataFeaturedBlogCategory, setDataFeaturedBlogCategory] = useState([]);
@@ -25,6 +27,15 @@ export default function HomePage() {
   const [allCategory, setAllCategory] = useState([]);
   const [top10ProductSeller, setTop10ProductSeller] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+
+  const searchParams = useSearchParams();
+  const token = searchParams.get("token");
+  useEffect(() => {
+    if (token) {
+      Cookies.set('tokenUser', token);
+      window.location.href = "/"; 
+    }
+  }, [token]);
 
   const fetchData = async () => {
     const cachedData = sessionStorage.getItem('homeData');
@@ -66,13 +77,13 @@ export default function HomePage() {
   if (isLoading) {
     return <div>Loading...</div>;
   }
-  
+
   return (
     <>
       <Banner />
       <Section1 dataInit={dataFeaturedProductCategory} />
       <Section2 dataInit={dataTop7ProductFlashSale} />
-      <Section3 dataInit={top10ProductSeller}/>
+      <Section3 dataInit={top10ProductSeller} />
       <Section4 dataInit={allCategory} />
       <Section5 dataInit={dataFreshSkinSlogan} />
       <Banner2 />

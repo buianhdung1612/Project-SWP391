@@ -12,7 +12,11 @@
     overflow: hidden;
     padding: 0;
     margin: 0;
-    top: 120px;
+    top: 45%;
+}
+
+.swiper-slide-thumb-active {
+    border: 1px solid #4e7661;
 }
 
 .swiper-button-next:hover,

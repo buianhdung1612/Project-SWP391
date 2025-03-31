@@ -7,26 +7,23 @@ export default function UploadImage(props: {
     id: string;
     name: string;
     onImageChange: (images: File[]) => void;
-    defaultImages?: string[]; // Thêm props cho ảnh mặc định
+    defaultImages?: string[];
 }) {
     const { label = "", id = "", name = "", onImageChange, defaultImages = [] } = props;
 
-    // Lưu trữ các file ảnh người dùng chọn
     const [imagePreviews, setImagePreviews] = useState<File[]>([]);
 
-    // Xử lý khi người dùng chọn ảnh mới
     const handleChange = (event: any) => {
         const newFiles = Array.from(event.target.files) as File[];
         const updatedFiles = [...imagePreviews, ...newFiles];
         setImagePreviews(updatedFiles);
-        onImageChange(updatedFiles); // Gửi các ảnh mới cho parent component
+        onImageChange(updatedFiles); 
     };
 
-    // Xử lý khi xóa ảnh
     const handleClickDelete = (index: number) => {
         const updatedFiles = imagePreviews.filter((_, i) => i !== index);
         setImagePreviews(updatedFiles);
-        onImageChange(updatedFiles); // Cập nhật lại danh sách ảnh cho parent
+        onImageChange(updatedFiles); 
     };
 
     return (

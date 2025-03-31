@@ -35,7 +35,7 @@ export default function Section1() {
                     {productDetail.title}
                 </li>
             </ul>
-            <div className="container mx-auto flex mt-[10px] items-center">
+            <div className="container mx-auto flex mt-[25px] items-center">
                 <Image />
                 <Information />
             </div>

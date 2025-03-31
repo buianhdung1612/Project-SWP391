@@ -183,7 +183,7 @@ export default function CardItem(props: {
                                 >
                                     {image.map((item: any, index: number) => (
                                         <SwiperSlide key={index}>
-                                            <img className="w-full h-full object-cover border border-solid border-[#e9edf5] cursor-pointer" src={item} />
+                                            <img className="w-full h-full hover:border hover:border-solid hover:border-secondary object-cover border border-solid border-[#e9edf5] cursor-pointer" src={item} />
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
@@ -242,7 +242,7 @@ export default function CardItem(props: {
                         </div>
                     </div>
                 </div>,
-                document.body // Render vào body để tránh giới hạn
+                document.body 
             )}
         </>
     )

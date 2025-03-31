@@ -185,6 +185,11 @@ export default function Price() {
                 </div>
             </div>
 
+            <div className="my-[15px]">
+                    <div className="text-[14px] mb-[10px] text-textColor">Nguồn gốc: <span className="text-secondary font-[600]">{productDetail.origin}</span></div>
+                    <div className="text-[14px] mb-[10px] text-textColor">Dành cho: <span className="text-secondary font-[600]">{productDetail.skinIssues}</span></div>
+            </div>
+
             <div className="text-[14px] font-[500] text-[#00090f] my-[10px]">Số lượng:</div>
             <div className="flex items-center">
                 <div className="mb-[10px] flex">
