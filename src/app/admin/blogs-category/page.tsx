@@ -155,19 +155,16 @@ export default function BlogsCategoryAdminPage() {
     status: string,
     dataPath: string
   ) => {
-    const statusChange = status;
     const path = `${linkApi}${dataPath}`;
-
-    const data = {
-      status: statusChange,
-    };
-
     const response = await fetch(path, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        statusEdit: "editStatus",
+        status: status
+      }),
     });
 
     const dataResponse = await response.json();
@@ -225,7 +222,7 @@ export default function BlogsCategoryAdminPage() {
       setSelectedCategories((prev) => prev.filter((item) => item !== id));
     }
   };
-  
+
   // Hết Thay đổi trạng thái nhiều sản phẩm
 
   // Xóa một sản phẩm
@@ -259,14 +256,19 @@ export default function BlogsCategoryAdminPage() {
 
   // Thay đổi vị trí sản phẩm
   const handleChangePosition = async (event: any, id: number) => {
-    const newPosition = event.target.value;
+    const newPosition = parseInt(event.target.value);
 
     if (newPosition < 0) {
       alert("Vị trí phải là một số không âm");
       return;
     }
 
-    const path = `${linkApi}/edit/${id}`;
+    const path = `${linkApi}/update/${id}`;
+
+    console.log({
+      statusEdit: "editPosition",
+      position: newPosition,
+    })
 
     const response = await fetch(path, {
       method: "PATCH",
@@ -274,6 +276,7 @@ export default function BlogsCategoryAdminPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        statusEdit: "editPosition",
         position: newPosition,
       }),
     });
@@ -420,12 +423,12 @@ export default function BlogsCategoryAdminPage() {
                 Danh sách
               </Typography>
               {selectedCategories.length > 0 && (
-              <Box display="flex" gap={20} flexWrap="wrap">
-                <form
-                  onSubmit={handleChangeMulti}
-                  style={{ flex: 1, gap: "8px" }}
-                >
-                  
+                <Box display="flex" gap={20} flexWrap="wrap">
+                  <form
+                    onSubmit={handleChangeMulti}
+                    style={{ flex: 1, gap: "8px" }}
+                  >
+
                     <Box display="flex" gap={0.5}>
                       <Select
                         fullWidth
@@ -452,26 +455,26 @@ export default function BlogsCategoryAdminPage() {
                         Áp dụng
                       </Button>
                     </Box>
-                  
-                </form>
-                <Button
-                  variant="contained"
-                  startIcon={<DeleteIcon />}
-                  sx={{
-                    backgroundColor: "#757575",
-                    "&:hover": { backgroundColor: "#616161" },
-                  }}
-                >
-                  <Link href="/admin/blogs-category/trash">Thùng rác</Link>
-                </Button>
-                <Button
-                  variant="outlined"
-                  color="success"
-                  sx={{ borderColor: "#374785", color: "#374785" }}
-                >
-                  <Link href="/admin/blogs-category/create">+ Thêm mới</Link>
-                </Button>
-              </Box>
+
+                  </form>
+                  <Button
+                    variant="contained"
+                    startIcon={<DeleteIcon />}
+                    sx={{
+                      backgroundColor: "#757575",
+                      "&:hover": { backgroundColor: "#616161" },
+                    }}
+                  >
+                    <Link href="/admin/blogs-category/trash">Thùng rác</Link>
+                  </Button>
+                  <Button
+                    variant="outlined"
+                    color="success"
+                    sx={{ borderColor: "#374785", color: "#374785" }}
+                  >
+                    <Link href="/admin/blogs-category/create">+ Thêm mới</Link>
+                  </Button>
+                </Box>
               )}
               <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
                 <Table stickyHeader>
@@ -531,7 +534,7 @@ export default function BlogsCategoryAdminPage() {
                               onClick={() =>
                                 handleChangeStatusOneProduct(
                                   "INACTIVE",
-                                  `/edit/${category.id}`
+                                  `/update/${category.id}`
                                 )
                               }
                             />
@@ -545,7 +548,7 @@ export default function BlogsCategoryAdminPage() {
                               onClick={() =>
                                 handleChangeStatusOneProduct(
                                   "ACTIVE",
-                                  `/edit/${category.id}`
+                                  `/update/${category.id}`
                                 )
                               }
                             />

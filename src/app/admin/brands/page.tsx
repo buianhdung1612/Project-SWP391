@@ -155,17 +155,16 @@ export default function BrandsAdminPage() {
     status: string,
     dataPath: string
   ) => {
-    const statusChange = status;
     const path = `${linkApi}${dataPath}`;
-    const data = {
-      status: statusChange,
-    };
     const response = await fetch(path, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        statusEdit: "editStatus",
+        status: status
+      }),
     });
 
     const dataResponse = await response.json();
@@ -254,16 +253,21 @@ export default function BrandsAdminPage() {
   };
   // Hết Xóa một sản phẩm
 
-  // Thay đổi vị trí sản phẩm
+  // Thay đổi vị trí thương hiệu
   const handleChangePosition = async (event: any, id: number) => {
-    const newPosition = event.target.value;
+    const newPosition = parseInt(event.target.value);
 
     if (newPosition < 0) {
       alert("Vị trí phải là một số không âm");
       return;
     }
 
-    const path = `${linkApi}/edit/${id}`;
+    const path = `${linkApi}/update/${id}`;
+
+    console.log({
+      statusEdit: "editPosition",
+      position: newPosition,
+    })
 
     const response = await fetch(path, {
       method: "PATCH",
@@ -271,6 +275,7 @@ export default function BrandsAdminPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        statusEdit: "editPosition",
         position: newPosition,
       }),
     });
@@ -278,10 +283,15 @@ export default function BrandsAdminPage() {
     const dataResponse = await response.json();
 
     if (dataResponse.code === 200) {
-      location.reload();
+      setAlertMessage(dataResponse.message);
+      setAlertSeverity("success");
+      setTimeout(() => location.reload(), 2000);
+    } else {
+      setAlertMessage(dataResponse.message);
+      setAlertSeverity("error");
     }
   };
-  // Hết Thay đổi vị trí sản phẩm
+  // Hết Thay đổi vị trí thương hiệu
 
   // Sắp xếp theo tiêu chí
   const handleChangeSort = async (event: any) => {
@@ -509,7 +519,7 @@ export default function BrandsAdminPage() {
                               onClick={() =>
                                 handleChangeStatusOnebrand(
                                   "INACTIVE",
-                                  `/edit/${brand.id}`
+                                  `/update/${brand.id}`
                                 )
                               }
                             />
@@ -523,7 +533,7 @@ export default function BrandsAdminPage() {
                               onClick={() =>
                                 handleChangeStatusOnebrand(
                                   "ACTIVE",
-                                  `/edit/${brand.id}`
+                                  `/update/${brand.id}`
                                 )
                               }
                             />

@@ -157,19 +157,16 @@ export default function ProductsCategoryAdminPage() {
     status: string,
     dataPath: string
   ) => {
-    const statusChange = status;
     const path = `${linkApi}${dataPath}`;
-
-    const data = {
-      status: statusChange,
-    };
-
     const response = await fetch(path, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        statusEdit: "editStatus",
+        status: status
+      }),
     });
 
     const dataResponse = await response.json();
@@ -260,14 +257,19 @@ export default function ProductsCategoryAdminPage() {
 
   // Thay đổi vị trí sản phẩm
   const handleChangePosition = async (event: any, id: number) => {
-    const newPosition = event.target.value;
+    const newPosition = parseInt(event.target.value);
 
     if (newPosition < 0) {
       alert("Vị trí phải là một số không âm");
       return;
     }
 
-    const path = `${linkApi}/edit/${id}`;
+    const path = `${linkApi}/update/${id}`;
+
+    console.log({
+      statusEdit: "editPosition",
+      position: newPosition,
+    })
 
     const response = await fetch(path, {
       method: "PATCH",
@@ -275,6 +277,7 @@ export default function ProductsCategoryAdminPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        statusEdit: "editPosition",
         position: newPosition,
       }),
     });
@@ -282,7 +285,12 @@ export default function ProductsCategoryAdminPage() {
     const dataResponse = await response.json();
 
     if (dataResponse.code === 200) {
-      location.reload();
+      setAlertMessage(dataResponse.message);
+      setAlertSeverity("success");
+      setTimeout(() => location.reload(), 2000);
+    } else {
+      setAlertMessage(dataResponse.message);
+      setAlertSeverity("error");
     }
   };
   // Hết Thay đổi vị trí sản phẩm
@@ -498,10 +506,10 @@ export default function ProductsCategoryAdminPage() {
                       (category: any, index: number) => (
                         <TableRow key={category.id}>
                           <TableCell
-                          padding="checkbox"
-                        >
-                          <Checkbox onChange={(event) => handleInputChecked(event, category.id)} />
-                        </TableCell>
+                            padding="checkbox"
+                          >
+                            <Checkbox onChange={(event) => handleInputChecked(event, category.id)} />
+                          </TableCell>
                           <TableCell>{index + 1}</TableCell>
                           <TableCell>
                             <img
@@ -525,7 +533,7 @@ export default function ProductsCategoryAdminPage() {
                                 onClick={() =>
                                   handleChangeStatusOneProduct(
                                     "INACTIVE",
-                                    `/edit/${category.id}`
+                                    `/update/${category.id}`
                                   )
                                 }
                               />
@@ -539,7 +547,7 @@ export default function ProductsCategoryAdminPage() {
                                 onClick={() =>
                                   handleChangeStatusOneProduct(
                                     "ACTIVE",
-                                    `/edit/${category.id}`
+                                    `/update/${category.id}`
                                   )
                                 }
                               />
@@ -582,7 +590,11 @@ export default function ProductsCategoryAdminPage() {
                                 </Link>
                               </Tooltip>
                               <Tooltip title="Sửa" placement="top">
-                                <MdEditNote className="text-[25px] text-[#E0A800]" />
+                                <Link
+                                  href={`/admin/products-category/edit/${category.id}`}
+                                >
+                                  <MdEditNote className="text-[25px] cursor-pointer text-[#E0A800]" />
+                                </Link>
                               </Tooltip>
                               <Tooltip
                                 title="Xóa"

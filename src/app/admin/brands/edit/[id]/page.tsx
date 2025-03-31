@@ -6,9 +6,9 @@ import {
   Box,
   Typography,
   TextField,
-  FormControl,
   Button,
   Paper,
+  FormControl,
   RadioGroup,
   FormControlLabel,
   Radio,
@@ -21,14 +21,6 @@ const TinyEditor = dynamic(() => import("../../../../../../TinyEditor"), {
   ssr: false,
 });
 
-interface DataSubmit {
-  title: string;
-  description: string;
-  position: number;
-  featured: boolean;
-  status: string;
-}
-
 export default function EditBrandtAdminPage() {
   const dataProfile = useContext(ProfileAdminContext);
   const permissions = dataProfile?.permissions;
@@ -38,14 +30,12 @@ export default function EditBrandtAdminPage() {
   >("info");
   const { id } = useParams();
   const [description, setDescription] = useState("");
-  const [images, setImages] = useState<(string | File)[]>([]);
 
-  const [brandInfo, setBrandInfo] = useState({
+  const [data, setData] = useState({
     title: "",
     description: "",
-    position: 0,
     featured: false,
-    status: "ACTIVE",
+    image: [],
   });
 
   useEffect(() => {
@@ -54,27 +44,38 @@ export default function EditBrandtAdminPage() {
         `https://freshskinweb.onrender.com/admin/products/brand/${id}`
       );
       const data = await response.json();
-      setBrandInfo(data.data);
+      setData(data.data);
       setDescription(data.data.description);
-      setImages(data.data.image); // Assuming images are URLs
     };
 
     fetchBrand();
   }, []);
 
-  const handleImageChange = (updatedImages: (string | File)[]) => {
-    setImages((prevImages) => [...prevImages, ...updatedImages]);
+  const handleChangeFeatured = (event: any) => {
+    setData({ ...data, featured: event.target.value === "true" });
+  };
+
+  const [images, setImages] = useState<(File)[]>([]);
+
+  const handleImageChange = (newImages: (File)[]) => {
+    setImages(newImages);
+  };
+
+  const handleRemoveDefaultImage = (index: number) => {
+    setData(prevData => ({
+      ...prevData,
+      image: prevData.image.filter((_, i) => i !== index)
+    }));
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
 
-    const request: DataSubmit = {
-      title: brandInfo.title,
+    const request = {
+      title: data.title,
+      image: data.image,
       description: description,
-      featured: brandInfo.featured,
-      status: brandInfo.status,
-      position: brandInfo.position,
+      featured: data.featured
     };
 
     const formData = new FormData();
@@ -82,18 +83,10 @@ export default function EditBrandtAdminPage() {
     formData.append("request", JSON.stringify(request));
 
     images.forEach((image) => {
-      formData.append("thumbnail", image);
-    });
-
-    // Hàm để in ra dữ liệu trong FormData
-    const logFormData = (formData: FormData) => {
-      for (const [key, value] of formData.entries()) {
-        console.log(`${key}: ${value}`);
+      if (image instanceof File) {
+        formData.append("newImg", image);
       }
-    };
-
-    // Gọi hàm logFormData để in ra dữ liệu
-    logFormData(formData);
+    });
 
     const response = await fetch(
       `https://freshskinweb.onrender.com/admin/products/brand/edit/${id}`,
@@ -125,7 +118,7 @@ export default function EditBrandtAdminPage() {
       {permissions?.includes("brands_edit") && (
         <Box sx={{ padding: 3, backgroundColor: "#e3f2fd" }}>
           <Typography variant="h5" gutterBottom>
-            Trang chỉnh sửa sản phẩm
+            Trang chỉnh sửa thương hiệu
           </Typography>
 
           <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
@@ -137,88 +130,35 @@ export default function EditBrandtAdminPage() {
                 fullWidth
                 sx={{ marginBottom: 3 }}
                 required
-                value={brandInfo.title}
+                value={data.title}
                 onChange={(e) =>
-                  setBrandInfo({ ...brandInfo, title: e.target.value })
+                  setData({ ...data, title: e.target.value })
                 }
               />
               <FormControl fullWidth sx={{ marginBottom: 3 }}>
                 <RadioGroup
-                  value={brandInfo.featured.toString()}
+                  value={data.featured.toString()}
                   name="featured"
-                  onChange={(e) =>
-                    setBrandInfo({
-                      ...brandInfo,
-                      featured: e.target.value === "true",
-                    })
-                  }
+                  onChange={handleChangeFeatured}
                   row
                 >
-                  <FormControlLabel
-                    value="true"
-                    control={<Radio />}
-                    label="Nổi bật"
-                  />
-                  <FormControlLabel
-                    value="false"
-                    control={<Radio />}
-                    label="Không nổi bật"
-                  />
+                  <FormControlLabel value="true" control={<Radio />} label="Nổi bật" />
+                  <FormControlLabel value="false" control={<Radio />} label="Không nổi bật" />
                 </RadioGroup>
               </FormControl>
-              <Typography variant="h6" gutterBottom>
-                Hình ảnh
-              </Typography>
               <UploadImage
-                label="Thêm hình ảnh"
+                label="Chỉnh sửa hình ảnh"
                 id="upload-images"
                 name="images"
-                defaultImages={
-                  images.filter((img) => typeof img === "string") as string[]
-                }
+                defaultImages={data.image}
                 onImageChange={handleImageChange}
+                onRemoveDefaultImage={handleRemoveDefaultImage}
               />
               <h4>Mô tả</h4>
               <TinyEditor
                 value={description}
                 onEditorChange={(content: string) => setDescription(content)}
               />
-              <TextField
-                label="Vị trí (tự động tăng)"
-                name="position"
-                variant="outlined"
-                fullWidth
-                type="number"
-                sx={{ marginBottom: 2, marginTop: 2 }}
-                value={brandInfo.position}
-                onChange={(e) =>
-                  setBrandInfo({
-                    ...brandInfo,
-                    position: parseInt(e.target.value),
-                  })
-                }
-              />
-              <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                <RadioGroup
-                  value={brandInfo.status}
-                  name="status"
-                  onChange={(e) =>
-                    setBrandInfo({ ...brandInfo, status: e.target.value })
-                  }
-                  row
-                >
-                  <FormControlLabel
-                    value="ACTIVE"
-                    control={<Radio />}
-                    label="Hoạt động"
-                  />
-                  <FormControlLabel
-                    value="INACTIVE"
-                    control={<Radio />}
-                    label="Dừng hoạt động"
-                  />
-                </RadioGroup>
-              </FormControl>
               <Button
                 type="submit"
                 variant="contained"

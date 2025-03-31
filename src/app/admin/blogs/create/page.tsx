@@ -159,7 +159,7 @@ export default function CreateBlogAdminPage() {
                             variant="contained" 
                             color="primary" 
                             sx={{ width: '100%' }}
-                            disabled={loading} // Vô hiệu hóa khi đang gửi request
+                            disabled={loading} 
                         >
                             {loading ? "Đang tạo bài viết..." : "Tạo bài viết"}
                         </Button>
