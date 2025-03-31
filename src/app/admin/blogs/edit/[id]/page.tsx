@@ -11,6 +11,7 @@ import UploadImage from '@/app/components/Upload/UploadImage';
 import { useParams } from 'next/navigation';
 import { ProfileAdminContext } from '@/app/admin/layout';
 import Alert from '@mui/material/Alert';
+
 export default function EditBlogAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
@@ -23,10 +24,12 @@ export default function EditBlogAdminPage() {
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [data, setData] = useState({
         title: "",
-        position: 0,
         status: "ACTIVE",
-        featured: false
-    })
+        featured: false,
+        thumbnail: []
+    });
+
+    console.log(data.thumbnail);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -38,11 +41,10 @@ export default function EditBlogAdminPage() {
         const fetchDataBlog = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/admin/blogs/${id}`);
             const data = await response.json();
-            console.log(data)
             setData(data.data);
             setContent(data.data.content);
-            setCategoryCurrent(data.data.blogCategory.id)
-        }
+            setCategoryCurrent(data.data.blogCategory.id);
+        };
 
         fetchCategories();
         fetchDataBlog();
@@ -58,6 +60,13 @@ export default function EditBlogAdminPage() {
         setImages(newImages);
     };
 
+    const handleRemoveDefaultImage = (index: number) => {
+        setData(prevData => ({
+            ...prevData,
+            thumbnail: prevData.thumbnail.filter((_, i) => i !== index)
+        }));
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
 
@@ -66,8 +75,8 @@ export default function EditBlogAdminPage() {
         const request = {
             title: formData.get("title"),
             content: content,
-            position: formData.get("position"),
-            status: formData.get("status"),
+            user: 8,
+            thumbnail: data.thumbnail,
             featured: formData.get("featured") === "true",
             categoryID: categoryCurrent
         };
@@ -76,22 +85,16 @@ export default function EditBlogAdminPage() {
 
         images.forEach((image) => {
             if (image instanceof File) {
-                formData.append("thumbnail", image);
+                formData.append("newImg", image);
             }
         });
 
-
-
         const response = await fetch(`https://freshskinweb.onrender.com/admin/blogs/edit/${id}`, {
             method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
             body: formData
         });
 
         const dataResponse = await response.json();
-
 
         if (dataResponse.code === 200) {
             setAlertMessage(dataResponse.message);
@@ -101,7 +104,7 @@ export default function EditBlogAdminPage() {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
         }
-    }
+    };
 
     return (
         <> {alertMessage && (
@@ -141,58 +144,25 @@ export default function EditBlogAdminPage() {
                                     {listCategory.map((item: any, index: number) => (
                                         <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
                                     ))}
-
                                 </Select>
-                            </FormControl>
-                            <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                                <RadioGroup
-                                    value={data.featured.toString()}
-                                    name="featured"
-                                    row
-                                    onChange={(e) => setData({ ...data, featured: e.target.value === "true" })}
-                                >
-                                    <FormControlLabel value={true} control={<Radio />} label="Nổi bật" />
-                                    <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
-                                </RadioGroup>
                             </FormControl>
                             <UploadImage
                                 label="Chọn ảnh"
                                 id="images"
                                 name="images"
                                 onImageChange={handleImageChange}
-                                defaultImages={}
+                                defaultImages={data.thumbnail}
+                                onRemoveDefaultImage={handleRemoveDefaultImage}
                             />
                             <h4>Nội dung bài viết</h4>
                             <TinyEditor value={content} onEditorChange={(content: string) => setContent(content)} />
-                            <TextField
-                                label="Vị trí (tự động tăng)"
-                                name='position'
-                                variant="outlined"
-                                fullWidth
-                                type="number"
-                                sx={{ marginBottom: 2, marginTop: 2 }}
-                                value={data.position}
-                                onChange={(e) => setData({ ...data, position: parseInt(e.target.value) })}
-                            />
-                            {/* <UploadImage/> */}
-                            <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                                <RadioGroup
-                                    value={data.status}
-                                    name="status"
-                                    row
-                                    onChange={(e) => setData({ ...data, status: e.target.value })}
-                                >
-                                    <FormControlLabel value="ACTIVE" control={<Radio />} label="Hoạt động" />
-                                    <FormControlLabel value="INACTIVE" control={<Radio />} label="Dừng hoạt động" />
-                                </RadioGroup>
-                            </FormControl>
                             <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
                                 Chỉnh sửa bài viết
                             </Button>
                         </form>
                     </Paper>
                 )}
-            </Box >
+            </Box>
         </>
     );
 }

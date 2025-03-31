@@ -8,8 +8,9 @@ export default function UploadImage(props: {
     name: string;
     onImageChange: (images: File[]) => void;
     defaultImages?: string[];
+    onRemoveDefaultImage?: (index: number) => void;
 }) {
-    const { label = "", id = "", name = "", onImageChange, defaultImages = [] } = props;
+    const { label = "", id = "", name = "", onImageChange, defaultImages = [], onRemoveDefaultImage } = props;
 
     const [imagePreviews, setImagePreviews] = useState<File[]>([]);
 
@@ -17,13 +18,19 @@ export default function UploadImage(props: {
         const newFiles = Array.from(event.target.files) as File[];
         const updatedFiles = [...imagePreviews, ...newFiles];
         setImagePreviews(updatedFiles);
-        onImageChange(updatedFiles); 
+        onImageChange(updatedFiles);
+    };
+
+    const handleClickDeleteFile = (index: number) => {
+        if (onRemoveDefaultImage) {
+            onRemoveDefaultImage(index);
+        }
     };
 
     const handleClickDelete = (index: number) => {
         const updatedFiles = imagePreviews.filter((_, i) => i !== index);
         setImagePreviews(updatedFiles);
-        onImageChange(updatedFiles); 
+        onImageChange(updatedFiles);
     };
 
     return (
@@ -58,8 +65,8 @@ export default function UploadImage(props: {
                                 className="w-[200px] h-[200px] object-cover border border-solid border-[#aaaaaa] rounded-[5px] p-[10px]"
                             />
                             <button
-                                className="absolute right-2 top-1 text-[20px]"
-                                onClick={() => handleClickDelete(index)}
+                                className="absolute right-2 top-1 text-[20px] bg-red-500 text-white rounded-full px-2"
+                                onClick={() => handleClickDeleteFile(index)}
                             >
                                 X
                             </button>
@@ -73,7 +80,7 @@ export default function UploadImage(props: {
                                 className="w-[200px] h-[200px] object-cover border border-solid border-[#aaaaaa] rounded-[5px] p-[10px]"
                             />
                             <button
-                                className="absolute right-2 top-1 text-[20px]"
+                                className="absolute right-2 top-1 text-[20px] bg-red-500 text-white rounded-full px-2"
                                 onClick={() => handleClickDelete(index)}
                             >
                                 X

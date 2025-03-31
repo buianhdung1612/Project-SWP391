@@ -17,7 +17,7 @@ export default function Image() {
     const { productDetail } = useContext(Context);
 
     return (
-        <div className="w-[400px] ml-[30px] mr-[40px]">
+        <div className="w-[450px] ml-[70px] mr-[40px]">
             <Swiper
                 loop={true}
                 spaceBetween={10}
@@ -28,7 +28,7 @@ export default function Image() {
             >
                 {productDetail.thumbnail.map((item: any, index: number) => (
                     <SwiperSlide key={index}>
-                        <div className="w-[400px] h-[400px] relative mb-[10px]">
+                        <div className="w-[450px] h-[380px] relative mb-[10px]">
                             <img src={item} className="w-full h-full object-cover" />
                         </div>
                     </SwiperSlide>
@@ -37,7 +37,7 @@ export default function Image() {
             <Swiper
                 onSwiper={setThumbsSwiper}
                 loop={true}
-                spaceBetween={10}
+                spaceBetween={20}
                 slidesPerView={4}
                 freeMode={true}
                 watchSlidesProgress={true}
@@ -46,7 +46,7 @@ export default function Image() {
             >
                 {productDetail.thumbnail.map((item: any, index: number) => (
                     <SwiperSlide key={index}>
-                        <div className="w-[90px] aspect-square hover:border hover:border-solid hover:border-secondary cursor-pointer">
+                        <div className="w-[110px] h-[90px] hover:border hover:border-solid hover:border-secondary cursor-pointer">
                             <img src={item} className="w-full h-full object-cover" />
                         </div>
                     </SwiperSlide>

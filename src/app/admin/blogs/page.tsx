@@ -157,17 +157,16 @@ export default function BlogsAdminPage() {
     status: string,
     dataPath: string
   ) => {
-    const statusChange = status;
     const path = `${linkApi}${dataPath}`;
-    const data = {
-      status: statusChange,
-    };
     const response = await fetch(path, {
       method: "PATCH",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(data),
+      body: JSON.stringify({
+        statusEdit: "editStatus",
+        status: status
+      }),
     });
 
     const dataResponse = await response.json();
@@ -249,14 +248,19 @@ export default function BlogsAdminPage() {
 
   // Thay đổi vị trí sản phẩm
   const handleChangePosition = async (event: any, id: number) => {
-    const newPosition = event.target.value;
+    const newPosition = parseInt(event.target.value);
 
     if (newPosition < 0) {
       alert("Vị trí phải là một số không âm");
       return;
     }
 
-    const path = `${linkApi}/edit/${id}`;
+    const path = `${linkApi}/update/${id}`;
+
+    console.log({
+      statusEdit: "editPosition",
+      position: newPosition,
+    })
 
     const response = await fetch(path, {
       method: "PATCH",
@@ -264,6 +268,7 @@ export default function BlogsAdminPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        statusEdit: "editPosition",
         position: newPosition,
       }),
     });
@@ -522,7 +527,7 @@ export default function BlogsAdminPage() {
                               onClick={() =>
                                 handleChangeStatusOneblog(
                                   "INACTIVE",
-                                  `/edit/${blog.id}`
+                                  `/update/${blog.id}`
                                 )
                               }
                             />
@@ -536,7 +541,7 @@ export default function BlogsAdminPage() {
                               onClick={() =>
                                 handleChangeStatusOneblog(
                                   "ACTIVE",
-                                  `/edit/${blog.id}`
+                                  `/update/${blog.id}`
                                 )
                               }
                             />
