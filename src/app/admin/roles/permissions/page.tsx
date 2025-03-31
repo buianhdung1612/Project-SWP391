@@ -368,9 +368,9 @@ export default function PermissionPage() {
                 }))}
                 permissions={[
                   { dataName: "vouchers_view", dataContent: "Xem" },
-                  { dataName: "vouchers_view_create", dataContent: "Thêm mới" },
-                  { dataName: "vouchers_view_edit", dataContent: "Chỉnh sửa" },
-                  { dataName: "vouchers_view_delete", dataContent: "Xóa" },
+                  { dataName: "vouchers_create", dataContent: "Thêm mới" },
+                  { dataName: "vouchers_edit", dataContent: "Chỉnh sửa" },
+                  { dataName: "vouchers_delete", dataContent: "Xóa" },
                 ]}
                 onCheckboxChange={handleCheckboxChange}
               />

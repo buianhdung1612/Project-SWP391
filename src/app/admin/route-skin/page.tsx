@@ -45,7 +45,7 @@ export default function RouteSkinAdminPage() {
                                         <TableRow key={item.id}>
                                             <TableCell>{index + 1}</TableCell>
                                             <TableCell>{item.skinTypeEntity.type}</TableCell>
-                                            <TableCell>{item.rountine}</TableCell>
+                                            <TableCell><span className="line-clamp-2" dangerouslySetInnerHTML={{ __html: item.rountine }} ></span></TableCell>
                                             <TableCell>
                                                 <div className="flex">
                                                     <Tooltip title="Chi tiết" placement="top">

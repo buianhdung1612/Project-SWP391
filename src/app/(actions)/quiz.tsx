@@ -5,3 +5,9 @@ export const quizAnswer = (question: string, answer: string) => {
         answer: answer
     }
 }
+
+export const quizReset = () => {
+    return {
+        type: "QUIZ_RESET"
+    }
+}

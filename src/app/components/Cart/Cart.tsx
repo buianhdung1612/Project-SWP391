@@ -87,7 +87,7 @@ export default function Cart() {
                                     </div>
                                 </div>
                                 <div className="flex-1 ml-[35px]">
-                                    <div className="text-[13px] font-[400] text-textColor pr-[5px] line-clamp-2 hover:text-secondary cursor-pointer">{item.title}</div>
+                                    <Link href={item.link} className="text-[13px] font-[400] text-textColor pr-[5px] line-clamp-2 hover:text-secondary cursor-pointer">{item.title}</Link>
                                     <span className="text-[12px] text-[#9e9e9e]">{item.volume}{item.unit.toLowerCase()}</span>
                                     <div className="flex items-center justify-between mt-[4px]">
                                         <div className="flex">

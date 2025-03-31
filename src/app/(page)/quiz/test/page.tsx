@@ -4,9 +4,10 @@ import QuizQuestion from "@/app/components/Quiz/QuizQuestion";
 import { useContext, useEffect, useState } from "react";
 import { IoChevronBack, IoChevronForwardOutline } from "react-icons/io5";
 import { SiTicktick } from "react-icons/si";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { SettingProfileContext } from "../../layout";
 import { useRouter } from "next/navigation";
+import { quizReset } from "@/app/(actions)/quiz";
 
 type QuestionData = {
     question: string;
@@ -45,7 +46,7 @@ export default function QuizQuestionPage() {
         id: 0
     });
     const [isLoading, setIsLoading] = useState(true);
-
+    const dispatchQuiz = useDispatch();
 
     useEffect(() => {
         const fetchQuiz = async () => {
@@ -155,7 +156,8 @@ export default function QuizQuestionPage() {
         const dataResponse = await response.json();
 
         if(dataResponse.code == 200){
-            router.push("/quiz/result")
+            dispatchQuiz(quizReset());
+            window.location.href = "/quiz/result";
         }
 
     }
@@ -167,16 +169,16 @@ export default function QuizQuestionPage() {
     return (
         <>
             <QuizQuestion
-                question={data[currentQuestion - 1].question}
-                answerA={data[currentQuestion - 1].answerA}
-                answerB={data[currentQuestion - 1].answerB}
-                answerC={data[currentQuestion - 1].answerC}
-                answerD={data[currentQuestion - 1].answerD}
-                name={data[currentQuestion - 1].name}
-                valueA={data[currentQuestion - 1].valueA}
-                valueB={data[currentQuestion - 1].valueB}
-                valueC={data[currentQuestion - 1].valueC}
-                valueD={data[currentQuestion - 1].valueD}
+                question={data[currentQuestion - 1]?.question}
+                answerA={data[currentQuestion - 1]?.answerA}
+                answerB={data[currentQuestion - 1]?.answerB}
+                answerC={data[currentQuestion - 1]?.answerC}
+                answerD={data[currentQuestion - 1]?.answerD}
+                name={data[currentQuestion - 1]?.name}
+                valueA={data[currentQuestion - 1]?.valueA}
+                valueB={data[currentQuestion - 1]?.valueB}
+                valueC={data[currentQuestion - 1]?.valueC}
+                valueD={data[currentQuestion - 1]?.valueD}
             />
             <div className="border-t-4 border-solid border-[#f7f9fc] mt-[70px] flex justify-center pt-[22px]">
                 <div className="w-[568px] flex justify-end h-[40px]">

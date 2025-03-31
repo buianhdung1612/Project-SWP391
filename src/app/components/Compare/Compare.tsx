@@ -26,7 +26,7 @@ export default function Compare() {
     return (
         <>
             <Link href="/compare">
-                <div className="flex items-center ml-[13px] relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+                <div className="flex items-center ml-[13px] mb-[-30px] pb-[30px] relative" onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
                     <IoIosGitCompare className="text-[32px]" />
                     {profile.productComparisonId?.products && profile.productComparisonId.products?.length > 0 ? (
                         <span className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[1px] left-[18px]">{profile?.productComparisonId?.products?.length}</span>
@@ -62,7 +62,7 @@ export default function Compare() {
                                     </div>
                                 </div>
                                 <div className="flex-1 ml-[35px]">
-                                    <div className="text-[13px] font-[400] text-textColor pr-[5px] line-clamp-2 hover:text-secondary cursor-pointer"></div>
+                                    <Link href={`/detail/${item.slug}`} className="text-[13px] font-[400] text-textColor pr-[5px] line-clamp-2 hover:text-secondary cursor-pointer">{item.title}</Link>
                                     <span className="text-[12px] text-primary">{item.brand?.title}</span>
                                 </div>
                             </div>

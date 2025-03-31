@@ -27,6 +27,8 @@ export default function VouchersAdminPage() {
         fetchData();
     }, []);
 
+    console.log(permissions);
+
 
 
     // Xóa một voucher
@@ -68,7 +70,7 @@ export default function VouchersAdminPage() {
                     {alertMessage}
                 </Alert>
             )}
-            {permissions?.includes("vouchers_view") && permissions.includes("vouchers_edit") && (
+            {permissions?.includes("vouchers_view") && permissions.includes("vouchers_delete") && (
                 <Box p={3}>
                     <Typography variant="h5" gutterBottom>
                         Danh sách mã giảm giá

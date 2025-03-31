@@ -95,7 +95,7 @@ export default function MiddlewareGetData({ data }: MiddlewareGetDataProps) {
             productDetail: data.productDetail
         }}>
             <Section1 />
-            <SaleCode data={dataSale} />
+            <SaleCode />
             <Section2 />
             <Rating/>
         </Context.Provider>
