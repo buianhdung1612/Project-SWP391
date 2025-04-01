@@ -15,8 +15,6 @@ export default function SaleCode() {
         fecthData();
     }, []);
 
-    console.log(data);
-
     return (
         <>
             <div className="container mx-auto mt-[30px] rounded-[10px] sale-code">

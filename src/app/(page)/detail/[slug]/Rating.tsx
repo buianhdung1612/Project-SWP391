@@ -7,14 +7,127 @@ import { Context } from "./MiddlewareGetData";
 import { useRouter } from "next/navigation";
 import { CiStar } from "react-icons/ci";
 import { FaStarHalfAlt } from "react-icons/fa";
+import Link from "next/link";
+import FormButton from "@/app/components/Form/FormButton";
+import FormFaceGoogle from "@/app/components/Form/FormFaceGoogle";
+import FormInput from "@/app/components/Form/FormInput";
+import Cookies from 'js-cookie';
+import { Alert } from "@mui/material";
 
 export default function Rating() {
-    const router = useRouter();
     const [isLoading, setIsLoading] = useState(true);
     const [starChoose, setStarChoose] = useState(0);
     const [openComment, setOpenComment] = useState(false);
     const [openSort, setOpenSort] = useState(false);
     const sortRef = useRef<HTMLDivElement>(null);
+
+    //Popup
+    const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
+
+    const handleOpenPopup = () => {
+        setIsPopupLoginOpen(true);
+    };
+
+    const handleClosePopup = () => {
+        setIsPopupLoginOpen(false);
+    };
+
+    const [resetPassword, setResetPassword] = useState(false);
+    const [alert, setAlert] = useState<any>();
+
+    const handleSubmitLogin = async (event: any) => {
+        event.preventDefault();
+
+        if (!event.target.username.value) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập tên người dùng"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+        if (!event.target.password.value) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập mật khẩu"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+        const response = await fetch('https://freshskinweb.onrender.com/auth/login', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                username: event.target.username.value,
+                password: event.target.password.value
+            })
+        });
+
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            const token = dataResponse.data.token;
+            Cookies.set('tokenUser', token);
+            window.location.href = `/detail/${productDetail.slug}`
+        }
+        else {
+            setAlert({
+                severity: "error",
+                content: dataResponse.message
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000)
+        }
+    }
+
+    const handleForgotPassword = async (event: any) => {
+        event.preventDefault();
+
+        const response = await fetch('https://freshskinweb.onrender.com/admin/forgot-password/request', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: event.target.email.value,
+            })
+        });
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 500) {
+
+        }
+        if (dataResponse.code == 200) {
+            location.href = `/user/otp?email=${event.target.email.value}`
+        }
+    }
+
+    const settingProfile = useContext(SettingProfileContext);
+
+    const { profile } = settingProfile || {};
 
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
@@ -33,10 +146,6 @@ export default function Rating() {
     }, [openSort]);
 
     const [sortCommentContent, setSortCommentContent] = useState("Ngày đánh giá");
-
-    const settingProfile = useContext(SettingProfileContext);
-
-    const { profile } = settingProfile || {};
 
     const productDetail = useContext(Context).productDetail;
 
@@ -129,10 +238,7 @@ export default function Rating() {
 
     const handleClickWriteComment = () => {
         if (!profile || profile.firstName === "") {
-            // <Alert icon={<CheckIcon fontSize="inherit" />} severity="info">
-            //     Bạn cần đăng nhập để bình luận
-            // </Alert>
-            router.push("/user/login");
+            handleOpenPopup();
         } else {
             setOpenComment(!openComment);
         }
@@ -189,7 +295,7 @@ export default function Rating() {
         const dataResponse = await response.json();
         if (dataResponse) {
             if (dataResponse.code == 200) {
-                location.reload();
+                event.target.reply.value = ""
             }
         }
     }
@@ -520,6 +626,51 @@ export default function Rating() {
                     ))}
                 </div>
             </div>
+
+            {isPopupLoginOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-[99999999] flex justify-center items-start pt-[8%]" onClick={handleClosePopup}>
+                    <div className="container mx-auto w-[432px] bg-[#fff] p-[10px] rounded-[10px]" onClick={(e) => e.stopPropagation()}>
+                        <Alert icon={false} severity="success">
+                            Bạn cần đăng nhập để thực hiện chức năng này
+                        </Alert>
+                        <form onSubmit={handleSubmitLogin} className=" mt-[15px] text-center rounded-[10px] relative">
+                            <h1 className="text-primary text-[26px] font-[400] uppercase mb-[35px] mt-[10px] login">Đăng nhập</h1>
+                            <FormInput
+                                placeholder="Tên tài khoản"
+                                name="username"
+                            />
+                            <FormInput
+                                type="password"
+                                placeholder="Mật khẩu"
+                                name="password"
+                            />
+                            {/* Alert */}
+                            {alert && (
+                                <Alert style={{ marginBottom: "10px" }} severity={alert.severity}>{alert.content}</Alert>
+                            )}
+                            <FormButton text="Đăng nhập" />
+                        </form>
+                        <div className="flex items-center justify-between mb-[15px]">
+                            <span
+                                className="text-[#333] text-[14px] hover:text-primary cursor-pointer"
+                                onClick={() => setResetPassword(!resetPassword)}
+                            >
+                                Quên mật khẩu?
+                            </span>
+                            <Link onClick={() => setIsPopupLoginOpen(false)} href="/user/register" className="text-[#333] text-[14px] hover:text-primary">Đăng ký tại đây</Link>
+                        </div>
+                        <form onSubmit={handleForgotPassword} className={(resetPassword ? "block" : "hidden")}>
+                            <FormInput
+                                type="email"
+                                placeholder="Email"
+                                name="email"
+                            />
+                            <FormButton text="Lấy lại mật khẩu" />
+                        </form>
+                        <FormFaceGoogle info="hoặc đăng nhập qua" />
+                    </div>
+                </div>
+            )}
         </>
     );
 }

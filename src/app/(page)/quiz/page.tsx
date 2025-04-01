@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 import { IoMdInformationCircleOutline } from "react-icons/io";
 import { SiTicktick } from "react-icons/si";

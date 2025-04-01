@@ -9,8 +9,12 @@ import { useRouter } from "next/navigation";
 import { IoSearchOutline } from "react-icons/io5";
 import { SettingProfileContext } from "@/app/(page)/layout";
 import { FaRegUserCircle } from "react-icons/fa";
-import { IoIosGitCompare } from "react-icons/io";
 import Compare from "../Compare/Compare";
+import FormButton from "@/app/components/Form/FormButton";
+import FormFaceGoogle from "@/app/components/Form/FormFaceGoogle";
+import FormInput from "@/app/components/Form/FormInput";
+import Cookies from 'js-cookie';
+import { Alert } from "@mui/material";
 
 export default function Section1() {
     const [openMore, setOpenMore] = useState(false);
@@ -177,6 +181,110 @@ export default function Section1() {
 
     const { profile, setting } = settingProfile;
 
+    //Popup
+    const [isPopupLoginOpen, setIsPopupLoginOpen] = useState(false);
+
+    const handleOpenPopup = () => {
+        setIsPopupLoginOpen(true);
+    };
+
+    const handleClosePopup = () => {
+        setIsPopupLoginOpen(false);
+    };
+
+    const [resetPassword, setResetPassword] = useState(false);
+    const [alert, setAlert] = useState<any>();
+
+    const handleSubmitLogin = async (event: any) => {
+        event.preventDefault();
+
+        if (!event.target.username.value) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập tên người dùng"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+        if (!event.target.password.value) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập mật khẩu"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+        const response = await fetch('https://freshskinweb.onrender.com/auth/login', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            credentials: 'include',
+            body: JSON.stringify({
+                username: event.target.username.value,
+                password: event.target.password.value
+            })
+        });
+
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 200) {
+            const token = dataResponse.data.token;
+            Cookies.set('tokenUser', token);
+            window.location.href = "/quiz"
+        }
+        else {
+            setAlert({
+                severity: "error",
+                content: dataResponse.message
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000)
+        }
+    }
+
+    const handleForgotPassword = async (event: any) => {
+        event.preventDefault();
+
+        const response = await fetch('https://freshskinweb.onrender.com/admin/forgot-password/request', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify({
+                email: event.target.email.value,
+            })
+        });
+        const dataResponse = await response.json();
+
+        if (dataResponse.code == 500) {
+
+        }
+        if (dataResponse.code == 200) {
+            location.href = `/user/otp?email=${event.target.email.value}`
+        }
+    }
+
     return (
         <div className="container mx-auto flex items-center py-[10px]">
             {/* Logo */}
@@ -246,12 +354,10 @@ export default function Section1() {
                         </div>
                     </Link>
                 ) : (
-                    <Link href="/user/login">
-                        <div className="flex items-center">
-                            <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742357768/product-brand/dsa_20250319-041608_6.png" width={28} height={28} />
-                            <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Kiểm Tra Loại Da</span>
-                        </div>
-                    </Link>
+                    <div onClick={() => { handleOpenPopup() }} className="flex items-center cursor-pointer">
+                        <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742357768/product-brand/dsa_20250319-041608_6.png" width={28} height={28} />
+                        <span className="text-[12px] font-[600] ml-[4px] hover:text-primary">Kiểm Tra Loại Da</span>
+                    </div>
                 )}
 
                 <Link href="/blogs/tin-tuc">
@@ -315,6 +421,52 @@ export default function Section1() {
                     <Cart />
                 </div>
             </div>
+
+            {isPopupLoginOpen && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 z-[99999999] flex justify-center items-start pt-[8%]" onClick={handleClosePopup}>
+                    <div className="container mx-auto w-[432px] bg-[#fff] p-[10px] rounded-[10px]" onClick={(e) => e.stopPropagation()}>
+                        <Alert icon={false} severity="success">
+                            Bạn cần đăng nhập để thực hiện chức năng này
+                        </Alert>
+                        <form onSubmit={handleSubmitLogin} className=" mt-[15px] text-center rounded-[10px] relative">
+                            <h1 className="text-primary text-[26px] font-[400] uppercase mb-[35px] mt-[10px] login">Đăng nhập</h1>
+                            <FormInput
+                                placeholder="Tên tài khoản"
+                                name="username"
+                            />
+                            <FormInput
+                                type="password"
+                                placeholder="Mật khẩu"
+                                name="password"
+                            />
+                            {/* Alert */}
+                            {alert && (
+                                <Alert style={{ marginBottom: "10px" }} severity={alert.severity}>{alert.content}</Alert>
+                            )}
+                            <FormButton text="Đăng nhập" />
+                        </form>
+                        <div className="flex items-center justify-between mb-[15px]">
+                            <span
+                                className="text-[#333] text-[14px] hover:text-primary cursor-pointer"
+                                onClick={() => setResetPassword(!resetPassword)}
+                            >
+                                Quên mật khẩu?
+                            </span>
+                            <Link onClick={() => setIsPopupLoginOpen(false)} href="/user/register" className="text-[#333] text-[14px] hover:text-primary">Đăng ký tại đây</Link>
+                        </div>
+                        <form onSubmit={handleForgotPassword} className={(resetPassword ? "block" : "hidden")}>
+                            <FormInput
+                                type="email"
+                                placeholder="Email"
+                                name="email"
+                            />
+                            <FormButton text="Lấy lại mật khẩu" />
+                        </form>
+                        <FormFaceGoogle info="hoặc đăng nhập qua" />
+                    </div>
+                </div>
+            )}
         </div>
+
     );
 }

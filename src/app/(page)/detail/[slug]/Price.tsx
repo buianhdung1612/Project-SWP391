@@ -8,6 +8,7 @@ import { Context } from "./MiddlewareGetData";
 import { IoIosGitCompare } from "react-icons/io";
 import { SettingProfileContext } from "../../layout";
 import { Alert } from "@mui/material";
+import { useRouter } from "next/navigation";
 
 interface CartItem {
     image: string,
@@ -24,6 +25,7 @@ export default function Price() {
     const [alert, setAlert] = useState<any>();
     const dispatchCart = useDispatch();
 
+    const router = useRouter();
     const products = useSelector((state: any) => state.cartReducer.products);
 
     const { productDetail } = useContext(Context);
@@ -76,6 +78,31 @@ export default function Price() {
         dispatchCart(cartAddNewProduct(products));
     }
 
+    const handleBuyNow = () => {
+        const data: CartItem = {
+            image: productDetail.thumbnail[0],
+            title: productDetail.title,
+            price: currentVolume.price * (1 - productDetail.discountPercent / 100),
+            link: `/detail/${productDetail.slug}`,
+            variantId: currentVolume.id,
+            volume: currentVolume.volume,
+            unit: currentVolume.unit,
+            quantity: quantity
+        };
+
+        const existProductInCart = products.find((item: CartItem) => item.title == data.title && item.volume == data.volume);
+
+        if (existProductInCart) {
+            existProductInCart.quantity = existProductInCart.quantity + data.quantity;
+        }
+        else {
+            products.push(data);
+        }
+
+        dispatchCart(cartAddNewProduct(products));
+        router.push("/order");
+    }
+
     const handleAddCompare = async (productId: number) => {
         if (profile.productComparisonId?.products.length <= 2) {
             const response = await fetch(`https://freshskinweb.onrender.com/home/products/comparison/save`, {
@@ -104,7 +131,7 @@ export default function Price() {
                 }, 3000);
             }
         }
-        else{
+        else {
             setAlert({
                 severity: "error",
                 content: "Bạn chỉ có thể thêm tối đa 3 sản phẩm vào danh sách so sánh."
@@ -186,8 +213,8 @@ export default function Price() {
             </div>
 
             <div className="my-[15px]">
-                    <div className="text-[14px] mb-[10px] text-textColor">Nguồn gốc: <span className="text-secondary font-[600]">{productDetail.origin}</span></div>
-                    <div className="text-[14px] mb-[10px] text-textColor">Dành cho: <span className="text-secondary font-[600]">{productDetail.skinIssues}</span></div>
+                <div className="text-[14px] mb-[10px] text-textColor">Nguồn gốc: <span className="text-secondary font-[600]">{productDetail.origin}</span></div>
+                <div className="text-[14px] mb-[10px] text-textColor">Dành cho: <span className="text-secondary font-[600]">{productDetail.skinIssues}</span></div>
             </div>
 
             <div className="text-[14px] font-[500] text-[#00090f] my-[10px]">Số lượng:</div>
@@ -220,7 +247,7 @@ export default function Price() {
                     <CiShoppingCart className="text-white text-[24px]" />
                     <span className="ml-[5px] text-[12px] uppercase text-white font-[400] h-[40px] w-auto flex items-center">Thêm vào giỏ hàng</span>
                 </button>
-                <button className="buy-now uppercase text-[12px] text-white font-[400] h-[40px] w-auto rounded-[40px] mb-[10px] ml-[15px] px-[30px]">Mua ngay</button>
+                <button onClick={handleBuyNow} className="buy-now uppercase text-[12px] text-white font-[400] h-[40px] w-auto rounded-[40px] mb-[10px] ml-[15px] px-[30px]">Mua ngay</button>
 
                 {isCompared == undefined ? (
                     <div onClick={() => handleAddCompare(productDetail.id)} className="cursor-pointer rounded-full border border-solid hover:border-primary hover:text-primary border-black p-[5px] mb-[10px] ml-[15px]">

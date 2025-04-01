@@ -18,7 +18,7 @@ export default function ProfileLeft() {
 
     const handleClickLogout = async () => {
         Cookies.remove('tokenUser');
-        location.href = "/user/login"
+        location.href = "/"
     };
 
     return(

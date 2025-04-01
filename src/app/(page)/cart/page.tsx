@@ -118,7 +118,14 @@ export default function CartPage() {
                     </div>
                 </div>
             ) : (
-                <div>das</div>
+                <div className="container mx-auto mt-[20px] text-center">
+                    <div className="text-[22px] text-textColor font-[550] mb-[25px]">Giỏ hàng của bạn</div>
+                    <div className="flex justify-center m-[15px]">
+                        <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742359280/product-brand/dsadas_20250319-044120_7.webp" className="w-[32px] h-[32px] object-cover" />
+                    </div>
+                    <div className="mb-[180px] text-[14px] text-textColor">Không có sản phẩm nào trong giỏ hàng của bạn</div>
+                    <div></div>
+                </div>
             )}
 
         </>

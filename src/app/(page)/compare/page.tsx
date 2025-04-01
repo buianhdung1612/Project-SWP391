@@ -26,7 +26,6 @@ export default function ComparePage() {
     const [productIdDelete, setProductIdDelete] = useState(0);
     const [data, setData] = useState<any>();
     const dispatchCart = useDispatch();
-
     const settingProfile = useContext(SettingProfileContext);
 
     if (!settingProfile) {
@@ -124,6 +123,7 @@ export default function ComparePage() {
         }
     }
 
+    
     return (
         <>
             <ul className="flex items-center mt-[17px] container mx-auto">

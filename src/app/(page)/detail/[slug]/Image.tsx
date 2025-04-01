@@ -28,7 +28,7 @@ export default function Image() {
             >
                 {productDetail.thumbnail.map((item: any, index: number) => (
                     <SwiperSlide key={index}>
-                        <div className="w-[450px] h-[380px] relative mb-[10px]">
+                        <div className="w-[450px] h-[350px] relative mb-[10px]">
                             <img src={item} className="w-full h-full object-cover" />
                         </div>
                     </SwiperSlide>

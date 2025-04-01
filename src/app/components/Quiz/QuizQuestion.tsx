@@ -40,7 +40,7 @@ export default function QuizQuestion(props: any) {
                         <label htmlFor={valueA} className={`block w-full rounded-[6px] bg-[#F7F8FB] py-[16px] pl-[24px] pr-[65px] cursor-pointer ` + (valueCurrent === valueA || answerCurrent === valueA ? "border border-solid border-[#478AF4]" : "")}>
                             {answerA}
                         </label>
-                        <span className={`cursor-pointer ${valueCurrent === valueA || answerCurrent === valueA ? "circle-quiz-check" : "circle-quiz"}`}></span>
+                        <label htmlFor={valueA} className={`cursor-pointer ${valueCurrent === valueA || answerCurrent === valueA ? "circle-quiz-check" : "circle-quiz"}`}></label>
                     </div>
                 )}
 
@@ -50,7 +50,7 @@ export default function QuizQuestion(props: any) {
                         <label htmlFor={valueB} className={`block w-full rounded-[6px] bg-[#F7F8FB] py-[16px] pl-[24px] pr-[65px] cursor-pointer ` + (valueCurrent === valueB || answerCurrent === valueB ? "border border-solid border-[#478AF4]" : "")}>
                             {answerB}
                         </label>
-                        <span className={`cursor-pointer ${valueCurrent === valueB || answerCurrent === valueB ? "circle-quiz-check" : "circle-quiz"}`}></span>
+                        <label htmlFor={valueB} className={`cursor-pointer ${valueCurrent === valueB || answerCurrent === valueB ? "circle-quiz-check" : "circle-quiz"}`}></label>
                     </div>
                 )}
 
@@ -60,7 +60,7 @@ export default function QuizQuestion(props: any) {
                         <label htmlFor={valueC} className={`block w-full rounded-[6px] bg-[#F7F8FB] py-[16px] pl-[24px] pr-[65px] cursor-pointer ` + (valueCurrent === valueC || answerCurrent === valueC ? "border border-solid border-[#478AF4]" : "")}>
                             {answerC}
                         </label>
-                        <span className={`cursor-pointer ${valueCurrent === valueC || answerCurrent === valueC ? "circle-quiz-check" : "circle-quiz"}`}></span>
+                        <label htmlFor={valueC} className={`cursor-pointer ${valueCurrent === valueC || answerCurrent === valueC ? "circle-quiz-check" : "circle-quiz"}`}></label>
                     </div>
                 )}
 
@@ -70,7 +70,7 @@ export default function QuizQuestion(props: any) {
                         <label htmlFor={valueD} className={`block w-full rounded-[6px] bg-[#F7F8FB] py-[16px] pl-[24px] pr-[65px] cursor-pointer ` + (valueCurrent === valueD || answerCurrent === valueD ? "border border-solid border-[#478AF4]" : "")}>
                             {answerD}
                         </label>
-                        <span className={`cursor-pointer ${valueCurrent === valueD || answerCurrent === valueD ? "circle-quiz-check" : "circle-quiz"}`}></span>
+                        <label htmlFor={valueD} className={`cursor-pointer ${valueCurrent === valueD || answerCurrent === valueD ? "circle-quiz-check" : "circle-quiz"}`}></label>
                     </div>
                 )}
 
@@ -80,7 +80,7 @@ export default function QuizQuestion(props: any) {
                         <label htmlFor={valueE} className={`block w-full rounded-[6px] bg-[#F7F8FB] py-[16px] pl-[24px] pr-[65px] cursor-pointer ` + (valueCurrent === valueE || answerCurrent === valueE ? "border border-solid border-[#478AF4]" : "")}>
                             {answerE}
                         </label>
-                        <span className={`cursor-pointer ${valueCurrent === valueE || answerCurrent === valueE ? "circle-quiz-check" : "circle-quiz"}`}></span>
+                        <label htmlFor={valueE} className={`cursor-pointer ${valueCurrent === valueE || answerCurrent === valueE ? "circle-quiz-check" : "circle-quiz"}`}></label>
                     </div>
                 )}
             </div>
