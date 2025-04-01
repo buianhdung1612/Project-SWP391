@@ -422,13 +422,13 @@ export default function BlogsCategoryAdminPage() {
               <Typography variant="h6" gutterBottom sx={{ marginLeft: "20px" }}>
                 Danh sách
               </Typography>
-              {selectedCategories.length > 0 && (
+              
                 <Box display="flex" gap={20} flexWrap="wrap">
                   <form
                     onSubmit={handleChangeMulti}
                     style={{ flex: 1, gap: "8px" }}
                   >
-
+                  {selectedCategories.length > 0 && (
                     <Box display="flex" gap={0.5}>
                       <Select
                         fullWidth
@@ -455,6 +455,7 @@ export default function BlogsCategoryAdminPage() {
                         Áp dụng
                       </Button>
                     </Box>
+                  )}
 
                   </form>
                   <Button
@@ -475,7 +476,7 @@ export default function BlogsCategoryAdminPage() {
                     <Link href="/admin/blogs-category/create">+ Thêm mới</Link>
                   </Button>
                 </Box>
-              )}
+              
               <TableContainer component={Paper} sx={{ maxHeight: 500 }}>
                 <Table stickyHeader>
                   <TableHead>

@@ -6,7 +6,7 @@ import { Chart, registerables } from "chart.js";
 import Link from "next/link";
 Chart.register(...registerables);
 
-import VoucherUse from "@/app/components/Chart/VoucherUse";
+
 import {
   ShoppingCart,
   Boxes,
@@ -43,6 +43,7 @@ export default function DashboardAdminPage() {
       data: RevenueData[];
     };
   }
+  
   const [top10ProductSelling, setTop10ProductSelling] = useState([]);
   const [chartData, setChartData] = useState<{
     labels: string[];
@@ -72,7 +73,15 @@ export default function DashboardAdminPage() {
     labels: [],
     values: [],
   });
-
+  const [voucherChartData, setVoucherChartData] = useState<{
+    labels: string[];
+    values: number[];
+    values1:number[];
+  }>({
+    labels: [],
+    values: [],
+    values1:[],
+  });
   const StackedChartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
   const [wsData, setWsData] = useState<WebSocketData | null>(null);
@@ -89,6 +98,7 @@ export default function DashboardAdminPage() {
   const chartRef = useRef<HTMLCanvasElement | null>(null);
   const ratingChartRef = useRef<HTMLCanvasElement | null>(null);
   const revenueChartRef = useRef<HTMLCanvasElement | null>(null);
+  const voucherChartRef = useRef<HTMLCanvasElement | null>(null);
   const chartPieRef = useRef<HTMLCanvasElement | null>(null);
   const scrollToRevenueChart = () => {
     if (revenueChartRef.current) {
@@ -103,7 +113,7 @@ export default function DashboardAdminPage() {
   };
   const scrollToRating = () => {
     if (ratingChartRef.current) {
-      const offset = 10; // Điều chỉnh độ cuộn (100px phía trên phần tử)
+      const offset = 300; // Điều chỉnh độ cuộn (100px phía trên phần tử)
       const elementPosition =
         ratingChartRef.current.getBoundingClientRect().top + window.scrollY;
       window.scrollTo({
@@ -157,6 +167,15 @@ export default function DashboardAdminPage() {
             }))
           );
         }
+        //cập nhật dữ liệu voucher
+        if (data?.discountDetail) {
+          setVoucherChartData({
+            labels: data.discountDetail.map((item: any) => item.name),
+            values: data.discountDetail.map((item: any) => item.usageLimit),
+            values1:data.discountDetail.map((item:any)=> item.used)
+          });
+        }
+
 
         // Cập nhật dữ liệu cho PieChart
         if (data?.Top5CategoryHaveTopProduct?.data) {
@@ -195,6 +214,7 @@ export default function DashboardAdminPage() {
             values: data.revenueByDate.map((item: any) => item.totalAmount),
           });
         }
+        
       };
 
       wsRef.current.onclose = () => {
@@ -211,6 +231,8 @@ export default function DashboardAdminPage() {
         clearTimeout(reconnectTimeoutRef.current);
     };
   }, []);
+  
+
 
   useEffect(() => {
     if (!chartRef.current || chartData.labels.length === 0) return;
@@ -230,6 +252,7 @@ export default function DashboardAdminPage() {
               "#2b5797",
               "#e8c3b9",
               "#1e7145",
+              "#c76c01",
             ],
             data: chartData.values,
           },
@@ -463,6 +486,46 @@ export default function DashboardAdminPage() {
       },
     });
   }, [revenueChartData]);
+  useEffect(() => {
+    if (!voucherChartRef.current || voucherChartData.labels.length ===0)
+      return;
+
+    const ctx = voucherChartRef.current.getContext("2d");
+    if (!ctx) return;
+
+    const existingChart = Chart.getChart(ctx);
+    if (existingChart) existingChart.destroy();
+
+    new Chart(ctx, {
+      type: "bar",
+      data: {
+        labels: voucherChartData.labels,
+        datasets: [
+          {
+            label: "Số lượt",
+            data: voucherChartData.values,
+            backgroundColor: "#28528e",
+            borderColor: "#28528e",
+            borderWidth: 1,
+          },
+          {
+            label: "Đã sử dụng",
+            data: voucherChartData.values1,
+            backgroundColor: "#b91d47",
+            borderColor: "#b91d47",
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        scales: {
+          y: { beginAtZero: true },
+        },
+      },
+    });
+  }, [voucherChartData]);
 
 
   useEffect(() => {
@@ -683,7 +746,7 @@ export default function DashboardAdminPage() {
             <canvas ref={chartPieRef} />
             </div>
             <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
-              <VoucherUse/>
+            <canvas ref={voucherChartRef} />
             </div>
           </div>
         </>

@@ -20,7 +20,7 @@ export default function Banner() {
                     >
                         <SwiperSlide>
                             <Link href="/products">
-                                <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742356502/product-brand/dsa_20250319-035502.webp" className="rounded-[15px] object-cover" />
+                                <img src="https://i.imgur.com/CxJ49T7.jpeg" className="rounded-[15px] object-cover" />
                             </Link>
                         </SwiperSlide>
                         <SwiperSlide>

@@ -27,6 +27,7 @@ interface Notification {
   slugProduct?: string;
 }
 
+
 export default function HeaderAdmin() {
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -46,7 +47,7 @@ export default function HeaderAdmin() {
       const res = await fetch(
         `https://freshskinweb.onrender.com/admin/notify/${roleId}`
       );
-     
+        console.log(dataProfile?.roleId)
       if (!res.ok) {
         const errorData = await res.json();
         console.error(` HTTP Error ${res.status}:`, errorData);
@@ -71,7 +72,7 @@ export default function HeaderAdmin() {
 
       const ws = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
       
-
+       
       ws.onopen = () => {
         console.log(" WebSocket đã kết nối!");
         wsRef.current = ws;
@@ -128,8 +129,17 @@ export default function HeaderAdmin() {
       setUnreadCount((prev: number) => Math.max(prev - 1, 0));
 
       if (slugProduct) {
+        // Điều hướng đến sản phẩm
         router.push(`/detail/${slugProduct}`);
-      } 
+    
+       
+        setTimeout(() => {
+          const ratingSection = document.getElementById("rating-section");
+          if (ratingSection) {
+            ratingSection.scrollIntoView({ behavior: "smooth" });
+          }
+        },500);  
+      }
     }
 
   const removeNotification = async (id?: number, e?: React.MouseEvent) => {
