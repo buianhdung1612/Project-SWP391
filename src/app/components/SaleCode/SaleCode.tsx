@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 
 export default function SaleCode() {
     const [data, setData] = useState([]);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
         const fecthData = async () => {
@@ -14,6 +15,11 @@ export default function SaleCode() {
 
         fecthData();
     }, []);
+
+    const handleCopy = async (code: string) => {
+        await navigator.clipboard.writeText(code);
+        setCopied(true);
+    };
 
     return (
         <>
@@ -33,6 +39,7 @@ export default function SaleCode() {
                                 <div className="text-[12px] mt-[3px] font-[400]">Mã giảm {item.discountValue}% cho đơn hàng tối thiểu {item.minOrderValue.toLocaleString("en-US")
                                 }đ.</div>
                                 <div
+                                    onClick={() => handleCopy(item.name)}
                                     className="bg-primary hover:bg-secondary cursor-pointer text-white py-[3px] px-[10px] mt-[3px] rounded-[40px] inline-flex text-[10px] font-[400]">
                                     Sao chép mã
                                 </div>

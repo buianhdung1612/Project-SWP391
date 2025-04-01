@@ -111,7 +111,6 @@ export default function OrderPage() {
                 orderItems: dataProducts
             }
 
-
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
                 method: "POST",
                 headers: {
@@ -140,7 +139,7 @@ export default function OrderPage() {
     return (
         <>
             <form className="flex" onSubmit={handleSubmitForm}>
-                <div className="w-[60%] pl-[15%] pr-[2%] py-[25px] flex flex-wrap items-center justify-center">
+                <div className="w-[60%] pl-[15%] pr-[2%] py-[25px] flex flex-wrap justify-center">
                     <Link href="/" className="w-[206px] h-[82px] mb-[21px]">
                         <img src={setting.logo} className="w-full h-full object-cover" />
                     </Link>
