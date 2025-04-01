@@ -5,22 +5,40 @@ import { Box, Typography, TextField, FormControl, Button, Paper, RadioGroup, For
 import UploadImage from "@/app/components/Upload/UploadImage";
 import { ProfileAdminContext } from "@/app/admin/layout";
 import Alert from '@mui/material/Alert';
+import { useParams } from "next/navigation";
 export default function EditAccountAdmin() {
+    const { id } = useParams();
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const [listRoles, setListRoles] = useState([]);
-    const [roleCurrent, setRoleCurrent] = useState('');
+    const [data, setData] = useState({
+        firstName: "",
+        lastName: "",
+        email: "",
+        phone: "",
+        username: "",
+        avatar: []
+    })
+    const [roleCurrent, setRoleCurrent] = useState(0);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
 
     useEffect(() => {
-        const fetchCategories = async () => {
-            const response = await fetch('https://freshskinweb.onrender.com/admin/role');
+        const fetchRoles = async () => {
+            const response = await fetch('https://freshskinweb.onrender.com/admin/roles');
             const data = await response.json();
             setListRoles(data.data);
         };
 
-        fetchCategories();
+        const fetchData = async () => {
+            const response = await fetch(`https://freshskinweb.onrender.com/admin/account/${id}`);
+            const data = await response.json();
+            setRoleCurrent(data.data.role.roleId)
+            setData(data.data);
+        }
+
+        fetchRoles();
+        fetchData();
     }, []);
 
     const [images, setImages] = useState<(File)[]>([]);
@@ -29,9 +47,20 @@ export default function EditAccountAdmin() {
         setImages(newImages);
     };
 
+    const handleRemoveDefaultImage = (index: number) => {
+        setData(prevData => ({
+            ...prevData,
+            avatar: prevData.avatar.filter((_, i) => i !== index)
+        }));
+    };
+
+    const handleChangeRole = (event: any) => {
+        setRoleCurrent(event.target.value);
+    };
+
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-   
+
         const formData = new FormData(event.currentTarget);
 
         const request = {
@@ -70,14 +99,14 @@ export default function EditAccountAdmin() {
     }
 
     return (
-        <> 
-         {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+        <>
+            {
+                alertMessage && (
+                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                        {alertMessage}
+                    </Alert>
+                )
+            }
             {permissions?.includes("accounts_edit") && (
                 <Box sx={{ padding: 3, backgroundColor: "#e3f2fd" }}>
                     <Typography variant="h5" gutterBottom>
@@ -90,15 +119,12 @@ export default function EditAccountAdmin() {
                                 <InputLabel shrink={true}>-- Chọn nhóm quyền --</InputLabel>
                                 <Select
                                     value={roleCurrent}
-                                    onChange={(e) => setRoleCurrent(e.target.value)}
+                                    onChange={handleChangeRole}
                                     label=" Chọn nhóm quyền --"
                                     displayEmpty
                                 >
-                                    <MenuItem value="">
-                                        -- Chọn nhóm quyền --
-                                    </MenuItem>
-                                    {listRoles.map((item: any, index: number) => (
-                                        <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+                                    {listRoles && listRoles.length > 0 && listRoles.map((item: any, index: number) => (
+                                        <MenuItem key={index} value={item.roleId}>{item.title}</MenuItem>
                                     ))}
 
                                 </Select>
@@ -110,6 +136,10 @@ export default function EditAccountAdmin() {
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
                                 required
+                                value={data.firstName}
+                                onChange={(e) =>
+                                    setData({ ...data, firstName: e.target.value })
+                                }
                             />
                             <TextField
                                 label="Tên"
@@ -118,6 +148,19 @@ export default function EditAccountAdmin() {
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
                                 required
+                                value={data.lastName}
+                                onChange={(e) =>
+                                    setData({ ...data, lastName: e.target.value })
+                                }
+                            />
+                            <TextField
+                                label="Tài khoản người dùng"
+                                name="username"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                aria-readonly
+                                value={data.username}
                             />
                             <TextField
                                 label="Email"
@@ -125,8 +168,9 @@ export default function EditAccountAdmin() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
+                                aria-readonly
                                 type="email"
+                                value={data.email}
                             />
                             <TextField
                                 label="Số điện thoại"
@@ -135,27 +179,19 @@ export default function EditAccountAdmin() {
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
                                 required
+                                value={data.phone}
+                                onChange={(e) =>
+                                    setData({ ...data, phone: e.target.value })
+                                }
                             />
                             <UploadImage
-                                label="Ảnh đại diện"
+                                label="Chỉnh sửa ảnh đại diện"
                                 id="images"
                                 name="images"
                                 onImageChange={handleImageChange}
+                                defaultImages={data.avatar}
+                                onRemoveDefaultImage={handleRemoveDefaultImage}
                             />
-                            <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                                <RadioGroup defaultValue="ACTIVE" name="status" row>
-                                    <FormControlLabel
-                                        value="ACTIVE"
-                                        control={<Radio />}
-                                        label="Hoạt động"
-                                    />
-                                    <FormControlLabel
-                                        value="INACTIVE"
-                                        control={<Radio />}
-                                        label="Dừng hoạt động"
-                                    />
-                                </RadioGroup>
-                            </FormControl>
                             <Button
                                 type="submit"
                                 variant="contained"

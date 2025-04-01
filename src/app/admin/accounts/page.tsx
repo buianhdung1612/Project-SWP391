@@ -7,6 +7,7 @@ import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
 import { ProfileAdminContext } from "../layout";
 import Alert from '@mui/material/Alert';
+
 export default function AccountAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
