@@ -2,48 +2,67 @@ import { useEffect, useState } from "react";
 import { Bar } from "react-chartjs-2";
 import "chart.js/auto";
 
+interface Dataset {
+  label: string;
+  data: number[];
+  backgroundColor: string;
+}
+
 const VoucherChart = () => {
-    const [chartData, setChartData] = useState<{
-        labels: string[];
-        datasets: { label: string; data: number[]; backgroundColor: string }[];
-      }>({
-        labels: [],
-        datasets: []
-      });
+  const [chartVoucherData, setChartVoucherData] = useState<{ labels: string[]; datasets: Dataset[] }>({
+    labels: [],
+    datasets: []
+  });
 
   useEffect(() => {
-    fetch("https://freshskinweb.onrender.com/admin/vouchers")
-      .then((response) => response.json())
-      .then((data) => {
-        if (data?.data) {
-          const labels = data.data.map((item:any) => item.name);
-          const usedData = data.data.map((item:any ) => item.used);
-          const usageLimitData = data.data.map((item:any) => item.usageLimit);
+    const ws = new WebSocket("wss://freshskinweb.onrender.com/ws/dashboard");
 
-          setChartData({
-            labels,
-            datasets: [
-              {
-                label: "Số lần đã sử dụng",
-                data: usedData,
-                backgroundColor: "rgba(54, 162, 235, 0.6)",
-              },
-              {
-                label: "Giới hạn sử dụng",
-                data: usageLimitData,
-                backgroundColor: "rgba(255, 99, 132, 0.6)",
-              },
-            ],
-          });
-        }
-      })
+    ws.onmessage = (event) => {
+      const data = JSON.parse(event.data);
+      if (data?.data) {
+        const labels: string[] = data.data.map((item: any) => item.name);
+        const usedData: number[] = data.data.map((item: any) => item.used);
+        const usageLimitData: number[] = data.data.map((item: any) => item.usageLimit);
+
+        setChartVoucherData({
+          labels: labels,
+          datasets: [
+            {
+              label: "Số lần đã sử dụng",
+              data: usedData,
+              backgroundColor: "rgba(54, 162, 235, 0.6)"
+            },
+            {
+              label: "Giới hạn sử dụng",
+              data: usageLimitData,
+              backgroundColor: "rgba(255, 99, 132, 0.6)"
+            }
+          ]
+        });
+      }
+    };
+
+    return () => {
+      ws.close();
+    };
   }, []);
 
+  const options = {
+    responsive: true,
+    maintainAspectRatio: false,
+    plugins: {
+      title: {
+        display: true,
+        text: "Thống kê voucher",
+        font: { size: 16, weight: 700 },
+        color: "#333"
+      }
+    }
+  };
+
   return (
-   
     <div className="p-7 h-80 flex items-center justify-center w-full">
-        <h2>Thống kê voucher</h2>
-      <Bar data={chartData} />
+      <Bar data={chartVoucherData} options={options} />
     </div>
   );
 };

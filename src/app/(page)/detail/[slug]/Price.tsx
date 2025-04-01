@@ -1,7 +1,7 @@
 "use client"
 
 import { useContext, useState } from "react";
-import { CiHeart, CiShoppingCart } from "react-icons/ci";
+import { CiShoppingCart } from "react-icons/ci";
 import { useDispatch, useSelector } from "react-redux";
 import { cartAddNewProduct } from "@/app/(actions)/cart";
 import { Context } from "./MiddlewareGetData";

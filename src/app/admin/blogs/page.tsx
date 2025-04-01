@@ -201,8 +201,13 @@ export default function BlogsAdminPage() {
 
     const dataResponse = await response.json();
 
-    if (dataResponse.code == 200) {
-      location.reload();
+    if (dataResponse.code === 200) {
+      setAlertMessage(dataResponse.data)
+      setAlertSeverity("success");
+      setTimeout(() => location.reload(), 2000);
+    } else {
+      setAlertMessage(dataResponse.data)
+      setAlertSeverity("error");
     }
   };
 

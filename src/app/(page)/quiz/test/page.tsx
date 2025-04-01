@@ -6,7 +6,6 @@ import { IoChevronBack, IoChevronForwardOutline } from "react-icons/io5";
 import { SiTicktick } from "react-icons/si";
 import { useDispatch, useSelector } from "react-redux";
 import { SettingProfileContext } from "../../layout";
-import { useRouter } from "next/navigation";
 import { quizReset } from "@/app/(actions)/quiz";
 
 type QuestionData = {
@@ -38,7 +37,6 @@ type Quiz = {
 };
 
 export default function QuizQuestionPage() {
-    const router = useRouter();
     const [currentQuestion, setCurrentQuestion] = useState(1);
     const listAnswers = useSelector((state: any) => state.quizReducer);
     const [choosenQuiz, setChoosenQuiz] = useState<Quiz>({
