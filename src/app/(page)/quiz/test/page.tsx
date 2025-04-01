@@ -189,7 +189,7 @@ export default function QuizQuestionPage() {
                                 handlePreviousQuestion();
                             }
                         }}
-                        className={`px-[22px] cursor-pointer rounded-[8px] text-[#478AF4] text-[14px] hover:bg-[#BFBFBF] font-[600] border border-solid border-[#478AF4] hover:border-[#BFBFBF] flex items-center mr-[10px] ${currentQuestion === 1 ? 'cursor-not-allowed opacity-50' : ''}`}
+                        className={`px-[22px] cursor-pointer rounded-[8px] text-[#52766e] text-[14px] hover:bg-[#aed8d3] font-[600] border border-solid border-[#52766e] hover:border-[#BFBFBF] flex items-center mr-[10px] ${currentQuestion === 1 ? 'cursor-not-allowed opacity-50' : ''}`}
                     >
                         <IoChevronBack className="mr-[5px]" />
                         Trở lại
@@ -197,14 +197,14 @@ export default function QuizQuestionPage() {
                     {currentQuestion != data.length ? (
                         <div
                             onClick={handleNextQuestion}
-                            className="px-[22px] cursor-pointer rounded-[8px] text-white text-[14px] bg-[#478AF4] hover:bg-[#4177E0] font-[600] flex items-center border border-solid"
+                            className="px-[22px] cursor-pointer rounded-[8px] text-white text-[14px] bg-[#9acba4] hover:bg-[#52766e] font-[600] flex items-center border border-solid"
                         >
                             Tiếp theo
                             <IoChevronForwardOutline className="ml-[5px]" />
                         </div>
                     ) : (
                         <button
-                            className="px-[22px] cursor-pointer rounded-[8px] text-white text-[14px] bg-[#478AF4] hover:bg-[#4177E0] font-[600] flex items-center border border-solid"
+                            className="px-[22px] cursor-pointer rounded-[8px] text-white text-[14px] bg-[#9acba4] hover:bg-[#52766e] font-[600] flex items-center border border-solid"
                             type="submit"
                             onClick={handleSubmitQuiz}
                         >
