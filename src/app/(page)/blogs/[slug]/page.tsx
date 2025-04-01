@@ -59,9 +59,18 @@ export default function BlogPage() {
         fetchBlogsByCategory();
     }, [slug, page]);
 
+    const formatDate = (date: string) => {
+        return new Date(date).toLocaleDateString("vi-VN", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric"
+        });
+    };
+
     if (isLoading) {
         return <div>Loading...</div>;
     }
+
     return (
         <>
             <ul className="flex items-center mt-[17px] container mx-auto px-3">
@@ -97,7 +106,7 @@ export default function BlogPage() {
                                 </div>
                                 <div className="flex-1">
                                     <Link href={`/blogs/detail/${item.slug}`} className="text-textColor text-[14px] hover:text-secondary">{item.title}</Link>
-                                    <div className="text-textColor text-[13px] italic py-1">{item.createdAt}</div>
+                                    <div className="text-textColor text-[13px] italic py-1">{formatDate(item.createdAt)}</div>
                                     <div className="text-textColor text-[13px] line-clamp-2" dangerouslySetInnerHTML={{ __html: item.content }}></div>
                                 </div>
                             </div>

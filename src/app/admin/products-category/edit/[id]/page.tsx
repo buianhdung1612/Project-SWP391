@@ -34,13 +34,16 @@ export default function EditProductCategorytAdminPage() {
     const { id } = useParams();
     const [description, setDescription] = useState("");
     const [listCategory, setListCategory] = useState([]);
-    const [categoryCurrent, setCategoryCurrent] = useState("");
+    const [categoryCurrent, setCategoryCurrent] = useState(0);
 
     const [data, setData] = useState({
         title: "",
         description: "",
         featured: false,
         image: [],
+        parent: {
+            id: 0
+        }
     });
 
     useEffect(() => {
@@ -50,6 +53,7 @@ export default function EditProductCategorytAdminPage() {
             );
             const data = await response.json();
             setData(data.data);
+            setCategoryCurrent(data.data.parent.id);
             setDescription(data.data.description);
         };
 
@@ -90,8 +94,9 @@ export default function EditProductCategorytAdminPage() {
 
         const request = {
             title: data.title,
-            image: data.image,
+            thumbnail: data.image,
             description: description,
+            parentID: categoryCurrent,
             featured: data.featured
         };
 
@@ -106,7 +111,7 @@ export default function EditProductCategorytAdminPage() {
         });
 
         const response = await fetch(
-            ``,
+            `https://freshskinweb.onrender.com/admin/products/category/edit/${id}`,
             {
                 method: "PATCH",
                 body: formData,
@@ -155,7 +160,7 @@ export default function EditProductCategorytAdminPage() {
                             <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
                                 <InputLabel shrink={true}>Danh mục cha</InputLabel>
                                 <Select
-                                    value={1}
+                                    value={categoryCurrent}
                                     onChange={handleChangeCategory}
                                     label=" Chọn danh mục --"
                                     displayEmpty
