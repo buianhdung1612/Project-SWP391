@@ -8,9 +8,10 @@ import { FaMoneyBillAlt } from "react-icons/fa";
 import { useDispatch, useSelector } from "react-redux";
 import { provinceChoosen } from "../../(actions)/order";
 import { SettingProfileContext } from "../layout";
+import { methodChoosen } from "../../(actions)/order";
 
 export default function FormOrder() {
-    const methodChoosen = useSelector((state: any) => state.orderReducer.methodChoosen);
+    let methodChoosenValue = useSelector((state: any) => state.orderReducer.methodChoosen);
     const [dataProvince, setDataProvince] = useState([]);
     const dispatchOrder = useDispatch();
 
@@ -52,10 +53,10 @@ export default function FormOrder() {
         setDataWard(data.wards);
     }
 
-    
-
     const handleRadioMeetingChange = (event: any) => {
         if (event.target.checked) {
+            methodChoosenValue = true;
+            dispatchOrder(methodChoosen(true));
             setMeeting(true);
             setBank(false);
         }
@@ -63,17 +64,23 @@ export default function FormOrder() {
 
     const handleRadioBankChange = async (event: any) => {
         if (event.target.checked) {
+            methodChoosenValue = true;
+            dispatchOrder(methodChoosen(true));
             setBank(true);
             setMeeting(false);
         }
     };
 
     const handleClickBank = () => {
+        methodChoosenValue = true;
+        dispatchOrder(methodChoosen(true));
         setBank(true);
         setMeeting(false);
     }
 
     const handleClickMetting = () => {
+        methodChoosenValue = true;
+        dispatchOrder(methodChoosen(true));
         setMeeting(true);
         setBank(false);
     }
@@ -181,7 +188,7 @@ export default function FormOrder() {
                         </div>
                     )}
                     <TitleCheckout text="Thanh toán" />
-                    {methodChoosen == false && (
+                    {methodChoosenValue == false && (
                         <input
                             readOnly
                             placeholder="Bạn cần chọn phương thức thanh toán"
