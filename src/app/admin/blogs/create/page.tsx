@@ -42,7 +42,6 @@ export default function CreateBlogAdminPage() {
 
         setLoading(true);
 
-        setLoading(true);
         try {
             const formData = new FormData(event.currentTarget);
 

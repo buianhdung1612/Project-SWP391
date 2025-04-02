@@ -30,7 +30,7 @@ export default function EditBlogCategorytAdminPage() {
   >("info");
   const { id } = useParams();
   const [description, setDescription] = useState("");
-
+  const [loading, setLoading] = useState(false);
   const [data, setData] = useState({
     title: "",
     description: "",
@@ -70,6 +70,32 @@ export default function EditBlogCategorytAdminPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
+
+    const formData = new FormData();
+    if (!data.title) {
+      setAlertMessage("Tiêu đề danh mục bài viết không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!description) {
+      setAlertMessage("Mô tả danh mục bài viết không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if ((images.length + data.image.length) < 1) {
+      setAlertMessage("Phải chọn tối thiểu 1 ảnh.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
 
     const request = {
       title: data.title,
@@ -78,7 +104,6 @@ export default function EditBlogCategorytAdminPage() {
       featured: data.featured
     };
 
-    const formData = new FormData();
 
     formData.append("request", JSON.stringify(request));
 
@@ -111,7 +136,7 @@ export default function EditBlogCategorytAdminPage() {
   return (
     <>
       {alertMessage && (
-        <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+        <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
           {alertMessage}
         </Alert>
       )}
@@ -129,7 +154,6 @@ export default function EditBlogCategorytAdminPage() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
                 value={data.title}
                 onChange={(e) =>
                   setData({ ...data, title: e.target.value })
@@ -160,12 +184,13 @@ export default function EditBlogCategorytAdminPage() {
                 onEditorChange={(description: string) => setDescription(description)}
               />
               <Button
-                type="submit"
+                type='submit'
                 variant="contained"
                 color="primary"
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
+                disabled={loading}
               >
-                Cập nhật danh mục bài viết
+                {loading ? "Đang cập nhật danh mục bài viết..." : "Chỉnh sửa danh mục bài viết"}
               </Button>
             </form>
           </Paper>

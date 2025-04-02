@@ -12,20 +12,44 @@ import Alert from '@mui/material/Alert';
 export default function CreateBlogCategoryAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
-    // Mô tả TinyMCE
     const [description, setDescription] = useState('');
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
-    // Ảnh Files
     const [images, setImages] = useState<File[]>([]);
+    const [loading, setLoading] = useState(false);
     const handleImageChange = (newImages: File[]) => {
         setImages(newImages);
     };
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
+        setLoading(true);
 
         const formData = new FormData(event.currentTarget);
+
+        if (!formData.get("title")) {
+            setAlertMessage("Tiêu đề danh mục bài viết không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!description) {
+            setAlertMessage("Mô tả danh mục bài viết không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if ((images.length) < 1) {
+            setAlertMessage("Phải chọn tối thiểu 1 ảnh.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
         const request = {
             title: formData.get("title"),
@@ -34,7 +58,7 @@ export default function CreateBlogCategoryAdminPage() {
             featured: formData.get("featured") === "true",
             status: formData.get("status")
         };
-    
+
 
         formData.append("request", JSON.stringify(request));
 
@@ -51,11 +75,11 @@ export default function CreateBlogCategoryAdminPage() {
 
         const dataResponse = await response.json();
 
-       
+
         if (dataResponse.code === 200) {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
+            setTimeout(() => location.reload(), 1000);
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
@@ -64,13 +88,11 @@ export default function CreateBlogCategoryAdminPage() {
 
     return (
         <>
-         {
-            alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
                     {alertMessage}
                 </Alert>
-            )
-        }
+            )}
             {permissions?.includes("blogs-category_view") && (
                 <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
                     <Typography variant="h5" gutterBottom>
@@ -85,7 +107,6 @@ export default function CreateBlogCategoryAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <FormControl fullWidth sx={{ marginBottom: 3 }}>
                                 <RadioGroup
@@ -118,8 +139,14 @@ export default function CreateBlogCategoryAdminPage() {
                                     <FormControlLabel value="INACTIVE" control={<Radio />} label="Dừng hoạt động" />
                                 </RadioGroup>
                             </FormControl>
-                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                                Tạo danh mục
+                            <Button
+                                type='submit'
+                                variant="contained"
+                                color="primary"
+                                sx={{ width: '100%' }}
+                                disabled={loading}
+                            >
+                                {loading ? "Đang tạo danh mục bài viết..." : "Tạo danh mục bài viết"}
                             </Button>
                         </form>
                     </Paper>
