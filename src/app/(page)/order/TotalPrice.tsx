@@ -4,14 +4,18 @@ import { useSelector } from "react-redux";
 
 export default function TotalPrice() {
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
-    const provinceChoosen = useSelector((state: any) => state.orderReducer.provinceChoosen);
+    const priceVoucher = useSelector((state: any) => (state.cartReducer.priceVoucher));
 
     return (
         <>
             <div className="ml-[28px]">
                 <div className="flex items-center justify-between mt-[15px]">
                     <span className="text-[16px] text-[#737373]">Tổng cộng</span>
-                    <span className="text-[20px] text-[#2a9dcc]">{(provinceChoosen ? (totalPrice) : totalPrice).toLocaleString("en-US")}<sup className="underline">đ</sup></span>
+                    {priceVoucher > 0 ? (
+                        <span className="text-[20px] text-[#2a9dcc]">{priceVoucher.toLocaleString("en-US")}<sup className="underline">đ</sup></span>
+                    ) : (
+                        <span className="text-[20px] text-[#2a9dcc]">{totalPrice.toLocaleString("en-US")}<sup className="underline">đ</sup></span>
+                    )}
                 </div>
                 <div className="mt-[15px] flex justify-between items-center">
                     <Link href="/cart" className="text-[14px] text-[#2a9dcc] hover:text-[#2a6395] flex items-center group">

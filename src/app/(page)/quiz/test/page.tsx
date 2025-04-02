@@ -160,7 +160,7 @@ export default function QuizQuestionPage() {
 
     }
 
-    if (isLoading) {
+    if (isLoading || choosenQuiz.questions.length === 0) {
         return <div>Loading...</div>;
     }
 

@@ -36,10 +36,11 @@ export const cartAddNewProduct = (products) => {
     }
 }
 
-export const cartTotalPriceVoucher = (newTotalPrice) => {
+export const cartTotalPriceVoucher = (totalPriceVoucher, voucherTitle) => {
     return {
         type: "CART_TOTAL_PRICE_VOUCHER",
-        newTotalPrice: newTotalPrice    
+        totalPriceVoucher: totalPriceVoucher,
+        voucherTitle: voucherTitle    
     }
 }
 

@@ -3,17 +3,112 @@
 import FormButton from "@/app/components/Form/FormButton";
 import FormFaceGoogle from "@/app/components/Form/FormFaceGoogle";
 import FormInput from "@/app/components/Form/FormInput";
+import { Alert } from "@mui/material";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
 
 export default function RegisterPage() {
     const router = useRouter();
+    const [alert, setAlert] = useState<any>();
+
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
         const formData = new FormData(event.currentTarget);
+
+        if (!formData.get("firstName")) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập họ của bạn"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+        if (!formData.get("lastName")) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập tên của bạn"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+        if (!formData.get("username")) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập tên người dùng"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+        if (!formData.get("password")) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập mật khẩu"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+       
+        if (!formData.get("phone")) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập số điện thoại"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
+
+        if (!formData.get("email")) {
+            setAlert({
+                severity: "error",
+                content: "Vui lòng nhập email"
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000);
+            return;
+        }
 
         const request = {
             username: formData.get("username"),
@@ -24,7 +119,7 @@ export default function RegisterPage() {
             phone: formData.get("phone"),
             address: formData.get("address"),
         };
-        
+
         formData.append("request", JSON.stringify(request));
 
         const response = await fetch('https://freshskinweb.onrender.com/admin/account/create', {
@@ -35,7 +130,24 @@ export default function RegisterPage() {
         const dataResponse = await response.json();
 
         if (dataResponse.code == 200) {
+            setAlert({
+                severity: "success",
+                content: dataResponse.message
+            });
             router.push("/user/login");
+        }
+        else {
+            setAlert({
+                severity: "error",
+                content: dataResponse.message
+            });
+
+            setTimeout(() => {
+                setAlert({
+                    severity: "",
+                    content: ""
+                })
+            }, 3000)
         }
     }
 
@@ -82,6 +194,10 @@ export default function RegisterPage() {
                         name="email"
                         type="email"
                     />
+                    {/* Alert */}
+                    {alert && (
+                        <Alert style={{ marginBottom: "10px" }} severity={alert.severity}>{alert.content}</Alert>
+                    )}
                     <FormButton text="Đăng ký" />
                     <FormFaceGoogle info="Hoặc đăng nhập bằng" />
                 </form>

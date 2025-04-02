@@ -21,7 +21,8 @@ interface DataSubmit {
     totalAmount: number,
     totalPrice: number,
     paymentMethod: string,
-    orderItems: any
+    orderItems: any,
+    voucherName: string
 }
 
 export default function OrderPage() {
@@ -34,6 +35,7 @@ export default function OrderPage() {
     console.log(tokenUser);
     const quantity = useSelector((state: any) => state.cartReducer.totalQuantityInit);
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
+    const voucherName = useSelector((state: any) => (state.cartReducer.voucherTitle));
     const products = useSelector((state: any) => (state.cartReducer.products));
 
     const settingProfile = useContext(SettingProfileContext);
@@ -137,6 +139,7 @@ export default function OrderPage() {
                 totalPrice: totalPrice,
                 paymentMethod: event.target.method.value,
                 orderItems: dataProducts,
+                voucherName: voucherName
             }
 
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
@@ -173,7 +176,8 @@ export default function OrderPage() {
                 totalAmount: quantity,
                 totalPrice: totalPrice,
                 paymentMethod: event.target.method.value,
-                orderItems: dataProducts
+                orderItems: dataProducts,
+                voucherName: voucherName
             }
 
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {

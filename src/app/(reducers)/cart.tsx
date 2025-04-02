@@ -18,10 +18,10 @@ let dataInit: any = undefined;
 const tokenUser = Cookies.get("tokenUser");
 if (!tokenUser) {
     const getCartFromCookie = () => {
-        if (typeof window === "undefined") return { products: [], totalPriceInit: 0, totalQuantityInit: 0 };
+        if (typeof window === "undefined") return { products: [], totalPriceInit: 0, totalQuantityInit: 0, priceVoucher: 0, voucherTitle: "" };
 
         const cartCookie = Cookies.get("cart");
-        return cartCookie ? JSON.parse(cartCookie) : { products: [], totalPriceInit: 0, totalQuantityInit: 0 };
+        return cartCookie ? JSON.parse(cartCookie) : { products: [], totalPriceInit: 0, totalQuantityInit: 0, priceVoucher: 0, voucherTitle: "" };
     };
 
     dataInit = getCartFromCookie();
@@ -39,7 +39,9 @@ else {
     dataInit = {
         products: productsInit,
         totalPriceInit: totalPriceInit,
-        totalQuantityInit: totalQuantityInit
+        totalQuantityInit: totalQuantityInit,
+        priceVoucher: 0,
+        voucherTitle: ""
     }
 }
 
@@ -164,10 +166,11 @@ export const cartReducer = (state = dataInit, action: any) => {
         }
 
         case "CART_TOTAL_PRICE_VOUCHER": {
-            if (action.newTotalPrice >= 0) { 
+            if (action.totalPriceVoucher >= 0) { 
                 newState = {
                     ...state,
-                    totalPriceInit: action.newTotalPrice,
+                    priceVoucher: action.totalPriceVoucher,
+                    voucherTitle: action.voucherTitle
                 };
             }
             break;

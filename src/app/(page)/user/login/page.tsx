@@ -95,9 +95,6 @@ export default function LoginPage() {
         });
         const dataResponse = await response.json();
 
-        if (dataResponse.code == 500) {
-
-        }
         if (dataResponse.code == 200) {
             location.href = `/user/otp?email=${event.target.email.value}`
         }

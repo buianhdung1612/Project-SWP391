@@ -1,6 +1,7 @@
 "use client"
 
 import { cartTotalPriceVoucher } from "@/app/(actions)/cart";
+import { Alert } from "@mui/material";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa6";
 import { useDispatch, useSelector } from "react-redux";
@@ -8,6 +9,8 @@ import { useDispatch, useSelector } from "react-redux";
 export default function SaleCode() {
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
     const dispatchCart = useDispatch();
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [copied, setCopied] = useState(false);
     const [data, setData] = useState([{
         voucherId: "",
@@ -54,27 +57,31 @@ export default function SaleCode() {
         setCopied(true);
     };
 
-    const handleSubmitVoucher = (voucher: string) => {
-        const currentVoucher = data.find((item: any) => item.name == voucher);
-        if(!currentVoucher){
+    const handleSubmitVoucher = () => {
+        const currentVoucher = data.find((item: any) => item.name == currentValueInput);
+        if (!currentVoucher) {
+            dispatchCart(cartTotalPriceVoucher(0, ""));
+            setAlertMessage("Mã giảm giá không hợp lệ");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
             return;
         }
         if (totalPrice > currentVoucher.minOrderValue) {
             let priceAfterApplyVoucher = totalPrice;
             let discountAmount = 0;
-    
+
             if (currentVoucher.type === "PERCENTAGE") {
                 discountAmount = totalPrice * (currentVoucher.discountValue / 100);
-                discountAmount = Math.min(discountAmount, currentVoucher.maxDiscount); 
-            } else { 
+                discountAmount = Math.min(discountAmount, currentVoucher.maxDiscount);
+            } else {
                 discountAmount = currentVoucher.discountValue;
             }
-            
+
             priceAfterApplyVoucher = totalPrice - discountAmount;
-            if(priceAfterApplyVoucher < 0){
+            if (priceAfterApplyVoucher < 0) {
                 priceAfterApplyVoucher = 0;
             }
-            // dispatchCart(cartTotalPriceVoucher(priceAfterApplyVoucher));
+            dispatchCart(cartTotalPriceVoucher(priceAfterApplyVoucher, currentValueInput));
         }
     }
 
@@ -93,6 +100,11 @@ export default function SaleCode() {
 
     return (
         <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             <div className="ml-[28px] pt-[24px] pb-[12px] border-t border-solid border-[#d9d9d9] flex items-center justify-between">
                 <div className="flex-1">
                     <div className="relative">
@@ -115,7 +127,7 @@ export default function SaleCode() {
                         />
                     </div>
                 </div>
-                <div onClick={() => handleSubmitVoucher(currentValueInput)} className="rounded-[4px] cursor-pointer ml-[12px] pt-[10px] mb-[10px] bg-[#72a834] border border-solid border-[#72a834] text-white text-[14px] font-[450] h-[44px] px-[20px]">
+                <div onClick={handleSubmitVoucher} className="rounded-[4px] cursor-pointer ml-[12px] pt-[10px] mb-[10px] bg-[#72a834] border border-solid border-[#72a834] text-white text-[14px] font-[450] h-[44px] px-[20px]">
                     Áp dụng
                 </div>
             </div>
