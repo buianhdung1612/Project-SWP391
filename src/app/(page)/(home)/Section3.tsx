@@ -41,7 +41,7 @@ export default function Section3(props: any) {
                         </SwiperSlide>
                     ))}
                 </Swiper>
-                <ButtonSeeAll />
+                <ButtonSeeAll link="/product-category/top-ban-chay" />
             </div>
         </>
     )

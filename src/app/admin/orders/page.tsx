@@ -213,13 +213,13 @@ export default function OrdersAdminPage() {
 
     return (
         <>
-         {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+            {
+                alertMessage && (
+                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                        {alertMessage}
+                    </Alert>
+                )
+            }
             {permissions?.includes("orders_confirm") && permissions.includes("orders_delete") && (
                 <Box p={3}>
                     {/* Header */}
@@ -286,13 +286,13 @@ export default function OrdersAdminPage() {
                                 <TableHead>
                                     <TableRow>
                                         <TableCell ></TableCell>
-                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Mã đơn hàng</TableCell>
-                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Ngày đặt</TableCell>
-                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Khách hàng</TableCell>
-                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Điện thoại</TableCell>
-                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Địa chỉ giao hàng</TableCell>
-                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Tình trạng</TableCell>
-                                        <TableCell sx={{ color: "#374785", fontWeight:"bold" }} >Chi tiết </TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Mã đơn hàng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Ngày đặt</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Khách hàng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Điện thoại</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Địa chỉ giao hàng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Tình trạng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Chi tiết </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>

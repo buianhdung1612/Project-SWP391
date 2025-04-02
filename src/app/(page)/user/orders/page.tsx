@@ -2,11 +2,16 @@
 
 import Link from "next/link";
 import { useContext, useEffect, useState } from "react";
-import { MdNavigateNext } from "react-icons/md";
+import { MdCancel, MdNavigateNext } from "react-icons/md";
 import { SettingProfileContext } from "../../layout";
 import ProfileLeft from "@/app/components/ProfileUser/ProfileLeft";
+import { Alert, Tooltip } from "@mui/material";
 
 export default function OrdersHistoryPage() {
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<
+        "success" | "error" | "info" | "warning"
+    >("info");
     const [data, setData] = useState([]);
     const settingProfile = useContext(SettingProfileContext);
 
@@ -16,10 +21,6 @@ export default function OrdersHistoryPage() {
 
     const { profile } = settingProfile;
 
-    if (profile.firstName === "") {
-        location.href = "/user/login"
-    }
-
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/home/orders/user/${profile.userID}`);
@@ -28,10 +29,42 @@ export default function OrdersHistoryPage() {
         };
 
         fetchData();
-    }, [])
+    }, []);
+
+    const handleCancel = async (id: number) => {
+        const isConfirm = confirm("Bạn có chắc muốn hủy đơn hàng?");
+        if (isConfirm) {
+            const path = `https://freshskinweb.onrender.com/admin/orders/edit/${id}`;
+
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    orderStatus: "CANCELED"
+                })
+            });
+
+            const dataResponse = await response.json();
+
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
+        }
+    }
 
     return (
         <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             <ul className="flex items-center container mx-auto px-3">
                 <li>
                     <Link href="/" className="flex items-center">
@@ -83,7 +116,9 @@ export default function OrdersHistoryPage() {
                                                 <td className="w-[28%] text-[#1C1C1C] py-[20px] px-[5px] text-[14px] border border-solid border-[#ebebeb] text-center">{item.address}</td>
                                                 <td className="w-[18%] text-[#1C1C1C] py-[20px] px-[5px] text-[14px] border border-solid border-[#ebebeb] text-center">{(item.totalPrice).toLocaleString("en-US")}<sup className="underline">đ</sup></td>
                                                 {item.orderStatus == "PENDING" && (
-                                                    <td className="w-[18%] text-[#1C1C1C] py-[20px] px-[5px] text-[14px] border border-solid border-[#ebebeb] text-center">Đang xử lý</td>
+                                                    <td className="w-[18%] text-[#1C1C1C] py-[20px] px-[5px] text-[14px] border border-solid border-[#ebebeb] text-center">
+                                                        <span>Đang xử lý</span> <Tooltip title="Hủy đơn hàng"><MdCancel onClick={() => { handleCancel(item.orderId) }} className="text-red-500 text-[16px] ml-[41%] mt-[5px] cursor-pointer" /></Tooltip>
+                                                    </td>
                                                 )}
                                                 {item.orderStatus == "CANCELED" && (
                                                     <td className="w-[18%] text-[#1C1C1C] py-[20px] px-[5px] text-[14px] border border-solid border-[#ebebeb] text-center">Đã hủy</td>

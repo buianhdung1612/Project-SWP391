@@ -11,6 +11,8 @@ import { Pagination } from 'swiper/modules';
 export default function Section8(props: any) {
     const { dataInit = [] } = props;
 
+    console.log(dataInit);
+
     return (
         <>
             <div className="h-[660px] bg-[url('../../public/demo/bg-section8.webp')] bg-cover mt-[50px]">

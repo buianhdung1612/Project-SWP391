@@ -14,7 +14,7 @@ export default function Section2() {
                 <MenuUnShow text="Khuyến mãi HOT" image="https://res.cloudinary.com/dr53sfboy/image/upload/v1742357763/product-brand/dsa_20250319-041603_2.png" link="/product-category/khuyen-mai-hot"/>  
                 <MenuUnShow text="Sản phẩm mới" link="/product-category/san-pham-moi"/>
                 <MenuUnShow text="Top bán chạy" link="/product-category/top-ban-chay"/>  
-                <MenuUnShow text="So sánh sản phẩm" link="/compare"/>  
+                <MenuUnShow text="Câu hỏi thường gặp" link="/cau-hoi-thuong-gap"/>  
             </div>
         </>
     )

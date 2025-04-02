@@ -80,7 +80,7 @@ export default function CardItem(props: {
         const data: CartItem = {
             image: image[0],
             title: title,
-            price: currentVolume.price,
+            price: currentVolume.price * (1 - discount / 100),
             link: link,
             variantId: currentVolume.id,
             volume: currentVolume.volume,
@@ -116,7 +116,7 @@ export default function CardItem(props: {
             <div className="bg-white rounded-[10px] w-[226px]">
                 <div className="w-[226px] aspect-square relative group">
                     <Link href={link}>
-                        <img src={image[0]} className="w-full h-full object-cover rounded-[10px]" />
+                        <img src={image[0]} alt="Image" className="w-full h-full object-cover rounded-[10px]" />
                     </Link>
                     {banner && (
                         <img src={banner} className="absolute bottom-0" />
@@ -173,7 +173,7 @@ export default function CardItem(props: {
                                 >
                                     {image.map((item: any, index: number) => (
                                         <SwiperSlide key={index}>
-                                            <img className="w-full h-full object-cover" src={item} />
+                                            <img className="w-full h-full object-cover" src={item} alt="Image" />
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>

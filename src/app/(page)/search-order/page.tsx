@@ -153,13 +153,13 @@ export default function SearchOrderPage() {
                                     <div className="text-[13px]">Email: {item.email}</div>
                                     <div className="text-[13px]">Ngày mua: {item.orderDate}</div>
                                     <div className="text-[13px]">Địa chỉ giao hàng: {item.address}</div>
-                                    {item.paymentStatus == "PENDING" && (
+                                    {item.orderStatus == "PENDING" && (
                                         <div className="text-[13px] text-[#FF0000] mt-[30px] mb-[10px]">Trạng thái thanh toán: <span className="font-[600]">Đang xử lý</span></div>
                                     )}
-                                    {item.paymentStatus == "COMPLETED" && (
+                                    {item.orderStatus == "COMPLETED" && (
                                         <div className="text-[13px] text-[#FF0000] mt-[30px] mb-[10px]">Trạng thái thanh toán: <span className="font-[600]">Đã xác nhận</span></div>
                                     )}
-                                    {item.paymentStatus == "CANCELED" && (
+                                    {item.orderStatus == "CANCELED" && (
                                         <div className="text-[13px] text-[#FF0000] mt-[30px] mb-[10px]">Trạng thái thanh toán: <span className="font-[600]">Đã hủy</span></div>
                                     )}
                                 </div>

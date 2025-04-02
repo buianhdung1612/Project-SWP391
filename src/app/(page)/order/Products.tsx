@@ -1,3 +1,5 @@
+"use client"
+
 import { useSelector } from "react-redux";
 
 interface Product {
