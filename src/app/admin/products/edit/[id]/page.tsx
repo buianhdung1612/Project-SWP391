@@ -1,4 +1,5 @@
 "use client";
+
 import dynamic from 'next/dynamic';
 const TinyEditor = dynamic(() => import('../../../../../../TinyEditor'), {
     ssr: false
@@ -27,6 +28,8 @@ export default function EditProductAdminPage() {
     const { id } = useParams();
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    const [loading, setLoading] = useState(false);
+
 
     // Quản lý mặc định
     const [listSkinType, setListSkinType] = useState([]);
@@ -38,12 +41,11 @@ export default function EditProductAdminPage() {
     const [listBrand, setListBrand] = useState([]);
     const [inputCheckedCategory, setInputCheckedCategory] = useState<number[]>([]);
     const [checkedSkinType, setCheckedSkinType] = useState<number[]>([]);
+    const [inputs, setInputs] = useState<InputField[]>([]);
 
     const [productInfo, setProductInfo] = useState({
         title: "",
-        categories: [{
-
-        }],
+        categories: [],
         brandId: {},
         description: "",
         variants: [],
@@ -85,11 +87,15 @@ export default function EditProductAdminPage() {
             setDescription(data.data.description);
             setIngredients(data.data.ingredients);
             setUsageInstructions(data.data.usageInstructions);
-            setInputs(data.data.variants);
             setBrandCurrent(data.data.brand.id.toString());
             const selectedCategories = data.data.category.map((cat: any) => cat.id);
             setInputCheckedCategory(selectedCategories);
-            setInputCheckedCategory(selectedCategories);
+            const productVariants = data.data.variants.map((variant: any) => ({
+                price: variant.price,
+                volume: variant.volume,
+                unit: variant.unit,
+            }));
+            setInputs(productVariants);
             const skinTypeIds = data.data.skinTypes.map((type: any) => type.id);
             setCheckedSkinType(skinTypeIds);
         };
@@ -100,14 +106,8 @@ export default function EditProductAdminPage() {
         fetchSkintypes();
     }, []);
 
-    console.log(inputCheckedCategory);
-
-    // Category
     const handleCheckedChange = (checkedIds: number[]) => {
-        setInputCheckedCategory(prev => {
-            const newCheckedIds = Array.from(new Set([...prev, ...checkedIds]));
-            return newCheckedIds;
-        });
+        setInputCheckedCategory(checkedIds); // Cập nhật danh sách đã chọn
     };
 
     // SkinType
@@ -122,14 +122,7 @@ export default function EditProductAdminPage() {
         });
     };
 
-    console.log(inputCheckedCategory);
-    console.log(checkedSkinType);
-
-
-    // Variants
-    const [inputs, setInputs] = useState<InputField[]>([
-        { price: 0, volume: 0, unit: "ML" }
-    ]);
+    /// Variants
     const handleAddInput = () => {
         setInputs([...inputs, { price: 0, volume: 0, unit: "ML" }]);
     };
@@ -176,86 +169,204 @@ export default function EditProductAdminPage() {
         setProductInfo({ ...productInfo, featured: event.target.value === "true" });
     };
 
-    // const handleSubmit = async (event: any) => {
-    //     event.preventDefault();
+    const handleSubmit = async (event: any) => {
+        event.preventDefault();
+        setLoading(true);
 
-    //     // Skin Type
-    //     const selectedSkinTypes: string[] = [];
-    //     for (const type in checked) {
-    //         if (checked[type as SkinType]) {
-    //             selectedSkinTypes.push(type as SkinType);
-    //         }
-    //     }
+        const title = event.target.title.value;
+        const discountPercent = parseInt(event.target.discount.value);
+        const origin = event.target.origin.value;
+        const benefits = event.target.benefits.value;
+        const skinIssues = event.target.skinIssues.value;
+        const featured = event.target.featured.value === "true";
 
-    //     // const dataSubmit: DataSubmit = {
-    //     //     title: event.target.title.value,
-    //     //     categoryId: parseInt(categoryCurrent),
-    //     //     brandId: parseInt(brandCurrent),
-    //     //     description: description,
-    //     //     variants: inputs,
-    //     //     discount: event.target.discount.value,
-    //     //     origin: event.target.origin.value,
-    //     //     ingredients: event.target.ingredients.value,
-    //     //     usageInstructions: event.target.usageInstructions.value,
-    //     //     benefits: event.target.benefits.value,
-    //     //     skinIssues: event.target.skinIssues.value,
-    //     //     featured: event.target.featured.value,
-    //     //     status: event.target.status.value,
-    //     //     position: event.target.position.value
-    //     // }
+        if (!title) {
+            setAlertMessage("Tên sản phẩm không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
-    //     const formData = new FormData();
+        if (title.length <= 10) {
+            setAlertMessage("Tên sản phẩm phải trên 10 ký tự.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
-    //     const requestPayload = {
-    //         categoryId: inputCheckedCategory,
-    //         brandId: brandCurrent,
-    //         title: event.target.title.value,
-    //         description: description,
-    //         variants: inputs.map(input => ({
-    //             price: Number(input.price),
-    //             volume: input.volume ? Number(input.volume) : 0
-    //         })),
-    //         skinTypes: [1, 2, 3, 4, 5],
-    //         discountPercent: parseInt(event.target.discount.value),
-    //         position: event.target.position.value,
-    //         origin: event.target.origin.value,
-    //         ingredients: event.target.ingredients.value,
-    //         usageInstructions: event.target.usageInstructions.value,
-    //         benefits: event.target.benefits.value,
-    //         skinIssues: event.target.skinIssues.value,
-    //         featured: event.target.featured.value === "true",
-    //         status: event.target.status.value,
-    //     };
+        if (inputCheckedCategory.length === 0) {
+            setAlertMessage("Danh mục sản phẩm không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
-    //     formData.append("request", JSON.stringify(requestPayload));
+        if (!brandCurrent) {
+            setAlertMessage("Thương hiệu không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
-    //     images.forEach((image) => formData.append("thumbnail", image));
+        if ((images.length + productInfo.thumbnail.length) < 5) {
+            setAlertMessage("Phải chọn tối thiểu 5 ảnh.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
-    //     const response = await fetch(`https://freshskinweb.onrender.com/admin/products/edit/${id}`, {
-    //         method: "PATCH",
-    //         body: formData,
-    //     });
+        if (!description) {
+            setAlertMessage("Mô tả không được để trống");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
-    //     const dataResponse = await response.json();
+        for (const input of inputs) {
+            if (input.volume <= 0) {
+                setAlertMessage("Dung tích / Số lượng không được nhỏ hơn hoặc bằng 0ml/g.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 5000);
+                setLoading(false);
+                return;
+            }
+            if (input.volume > 0 && input.price <= 0) {
+                setAlertMessage("Giá không được để trống.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 5000);
+                setLoading(false);
+                return;
+            }
+            if (input.volume > 10000) {
+                setAlertMessage("Dung tích không được lớn hơn 10.000ml/g.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 5000);
+                setLoading(false);
+                return;
+            }
+        }
 
-    //     if (dataResponse.code === 200) {
-    //         setAlertMessage(dataResponse.message);
-    //         setAlertSeverity("success");
-    //         setTimeout(() => location.reload(), 2000);
-    //     } else {
-    //         setAlertMessage(dataResponse.message);
-    //         setAlertSeverity("error");
-    //     }
-    // };
+        if (!discountPercent) {
+            setAlertMessage("Phần trăm giảm giá không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (discountPercent >= 100) {
+            setAlertMessage("Phần trăm giảm giá không được vượt quá 100%.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (checkedSkinType.length === 0) {
+            setAlertMessage("Sản phẩm dành cho loại da không được để trống");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!benefits) {
+            setAlertMessage("Lợi ích sản phẩm không được để trống");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!ingredients) {
+            setAlertMessage("Thành phần sản phẩm không được để trống");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!usageInstructions) {
+            setAlertMessage("Hướng dẫn sử dụng sản phẩm không được để trống");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!origin) {
+            setAlertMessage("Xuất sứ sản phẩm không được để trống");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!skinIssues) {
+            setAlertMessage("Vấn đề da không được để trống");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        const formData = new FormData();
+
+        const request = {
+            categoryId: inputCheckedCategory,
+            brandId: brandCurrent,
+            title: title,
+            description: description,
+            image: productInfo.thumbnail,
+            variants: inputs.map(input => ({
+                price: Number(input.price),
+                volume: input.volume ? Number(input.volume) : 0,
+                unit: input.unit
+            })),
+            skinTypeId: checkedSkinType,
+            discountPercent: discountPercent,
+            origin: origin,
+            ingredients: ingredients,
+            usageInstructions: usageInstructions,
+            benefits: benefits,
+            skinIssues: skinIssues,
+            featured: featured,
+        };
+
+        formData.append("request", JSON.stringify(request));
+
+        images.forEach((image) => formData.append("newImg", image));
+
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/products/edit/${id}`, {
+            method: "PATCH",
+            body: formData,
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
+        }
+    };
 
     return (
-        <>{
-            alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+        <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
                     {alertMessage}
                 </Alert>
-            )
-        }
+            )}
             <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
                 <Typography variant="h4" gutterBottom>
                     Trang chỉnh sửa sản phẩm
@@ -263,14 +374,13 @@ export default function EditProductAdminPage() {
 
                 {permissions?.includes("products_edit") && (
                     <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                        <form>
+                        <form onSubmit={handleSubmit}>
                             <TextField
                                 label="Tên sản phẩm"
                                 name='title'
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={productInfo.title}
                                 onChange={(e) => setProductInfo({ ...productInfo, title: e.target.value })}
                             />
@@ -279,7 +389,7 @@ export default function EditProductAdminPage() {
                                 <SubCategory
                                     items={listCategory}
                                     onCheckedChange={handleCheckedChange}
-                                    defaultCheckedIds={inputCheckedCategory}
+                                    defaultCheckedIds={inputCheckedCategory} 
                                 />
                             </div>
                             <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
@@ -323,7 +433,7 @@ export default function EditProductAdminPage() {
                                 {inputs.map((input, index: number) => (
                                     <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                         <TextField
-                                            label="Dung tích / Số lượng"
+                                            label="Dung tích (ML)"
                                             type='number'
                                             variant="outlined"
                                             size="small"
@@ -364,7 +474,6 @@ export default function EditProductAdminPage() {
                                 fullWidth
                                 type="number"
                                 sx={{ marginBottom: 2 }}
-                                required
                                 value={productInfo.discountPercent}
                                 onChange={(e) => setProductInfo({ ...productInfo, discountPercent: parseFloat(e.target.value) })}
                             />
@@ -383,7 +492,6 @@ export default function EditProductAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 2, marginTop: 2 }}
-                                required
                                 value={productInfo.origin}
                                 onChange={(e) => setProductInfo({ ...productInfo, origin: e.target.value })}
                             />
@@ -398,7 +506,6 @@ export default function EditProductAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 2, marginTop: 2 }}
-                                required
                                 value={productInfo.benefits}
                                 onChange={(e) => setProductInfo({ ...productInfo, benefits: e.target.value })}
                             />
@@ -408,12 +515,11 @@ export default function EditProductAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 2, marginTop: 2 }}
-                                required
                                 value={productInfo.skinIssues}
                                 onChange={(e) => setProductInfo({ ...productInfo, skinIssues: e.target.value })}
                             />
-                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                                Cập nhật sản phẩm
+                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }} disabled={loading}>
+                                {loading ? "Đang cập nhật sản phẩm..." : "Cập nhật sản phẩm"}
                             </Button>
                         </form>
                     </Paper>

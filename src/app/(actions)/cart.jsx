@@ -36,6 +36,13 @@ export const cartAddNewProduct = (products) => {
     }
 }
 
+export const cartTotalPriceVoucher = (newTotalPrice) => {
+    return {
+        type: "CART_TOTAL_PRICE_VOUCHER",
+        newTotalPrice: newTotalPrice    
+    }
+}
+
 export const cartReset = () => {
     return {
         type: "CART_RESET"

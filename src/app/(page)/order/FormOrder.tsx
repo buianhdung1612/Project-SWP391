@@ -5,13 +5,11 @@ import { FaCaretDown } from "react-icons/fa6";
 import FormInputCheckout from "@/app/components/Form/FormInputCheckout";
 import TitleCheckout from "@/app/components/title/TitleCheckout";
 import { FaMoneyBillAlt } from "react-icons/fa";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { provinceChoosen } from "../../(actions)/order";
 import { SettingProfileContext } from "../layout";
-import { methodChoosen } from "../../(actions)/order";
 
 export default function FormOrder() {
-    let methodChoosenValue = useSelector((state: any) => state.orderReducer.methodChoosen);
     const [dataProvince, setDataProvince] = useState([]);
     const dispatchOrder = useDispatch();
 
@@ -55,8 +53,6 @@ export default function FormOrder() {
 
     const handleRadioMeetingChange = (event: any) => {
         if (event.target.checked) {
-            methodChoosenValue = true;
-            dispatchOrder(methodChoosen(true));
             setMeeting(true);
             setBank(false);
         }
@@ -64,23 +60,17 @@ export default function FormOrder() {
 
     const handleRadioBankChange = async (event: any) => {
         if (event.target.checked) {
-            methodChoosenValue = true;
-            dispatchOrder(methodChoosen(true));
             setBank(true);
             setMeeting(false);
         }
     };
 
     const handleClickBank = () => {
-        methodChoosenValue = true;
-        dispatchOrder(methodChoosen(true));
         setBank(true);
         setMeeting(false);
     }
 
     const handleClickMetting = () => {
-        methodChoosenValue = true;
-        dispatchOrder(methodChoosen(true));
         setMeeting(true);
         setBank(false);
     }
@@ -91,29 +81,29 @@ export default function FormOrder() {
                 <div className="">
                     <TitleCheckout text="Thông tin nhận hàng" />
                     {profile.email !== "" ? (
-                        <FormInputCheckout label="Email" type="email" name="email" id="email" required value={profile.email}/>
+                        <FormInputCheckout label="Email" type="email" name="email" id="email" value={profile.email}/>
                     ) : (
-                        <FormInputCheckout label="Email" type="email" name="email" id="email" required/>
+                        <FormInputCheckout label="Email" type="email" name="email" id="email"/>
                     )}
                     {profile.firstName !== "" ? (
-                        <FormInputCheckout label="Họ" name="firstName" id="firstName" required value={profile.firstName}/>
+                        <FormInputCheckout label="Họ" name="firstName" id="firstName" value={profile.firstName}/>
                     ) : (
-                        <FormInputCheckout label="Họ" name="firstName" id="firstName" required/>
+                        <FormInputCheckout label="Họ" name="firstName" id="firstName"/>
                     )}
                     {profile.lastName !== "" ? (
-                        <FormInputCheckout label="Tên" name="lastName" id="lastName" required value={profile.lastName}/>
+                        <FormInputCheckout label="Tên" name="lastName" id="lastName" value={profile.lastName}/>
                     ) : (
-                        <FormInputCheckout label="Tên" name="lastName" id="lastName" required/>
+                        <FormInputCheckout label="Tên" name="lastName" id="lastName"/>
                     )}
                     {profile.phone !== "" ? (
-                        <FormInputCheckout label="Số điện thoại (tùy chọn)" name="phone" id="phone" value={profile.phone}/>
+                        <FormInputCheckout label="Số điện thoại" name="phone" id="phone" value={profile.phone}/>
                     ) : (
-                        <FormInputCheckout label="Số điện thoại (tùy chọn)" name="phone" id="phone"/>
+                        <FormInputCheckout label="Số điện thoại" name="phone" id="phone"/>
                     )}
                     {profile.address !== "" ? (
-                        <FormInputCheckout label="Địa chỉ (tùy chọn)" name="address" id="address" value={profile.address}/>
+                        <FormInputCheckout label="Địa chỉ" name="address" id="address" value={profile.address}/>
                     ) : (
-                        <FormInputCheckout label="Địa chỉ (tùy chọn)" name="address" id="address"/>
+                        <FormInputCheckout label="Địa chỉ" name="address" id="address"/>
                     )}
                     <div className="relative">
                         <label htmlFor="province" className="text-[13px] font-[300] text-[#999] absolute top-[5px] left-[11px]">Tỉnh thành</label>
@@ -184,18 +174,10 @@ export default function FormOrder() {
                                 className="py-[10px] px-[45px] w-full h-[44px] bg-white rounded-[4px] border border-solid outline-none mb-[30px] text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                             />
                             <span className="cursor-pointer absolute left-[15px] top-[12px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></span>
-                            <span className="text-[14px] font-[450] text-[#545454] absolute top-[10px] right-[15px]">40.000<sup className="underline">đ</sup></span>
+                            <span className="text-[14px] font-[450] text-[#545454] absolute top-[10px] right-[15px]">0<sup className="underline">đ</sup></span>
                         </div>
                     )}
                     <TitleCheckout text="Thanh toán" />
-                    {methodChoosenValue == false && (
-                        <input
-                            readOnly
-                            placeholder="Bạn cần chọn phương thức thanh toán"
-                            className="py-[10px] px-[18px] w-full h-[44px] bg-[#f8d7da] placeholder:text-[#721c24] rounded-[4px] border border-solid border-[#f5c6cb]
-outline-none mb-[20px] text-[14px] font-[450]"
-                        />
-                    )}
                     <div className="relative">
                         <div onClick={() => handleClickBank()}>
                             <input

@@ -41,6 +41,7 @@ export default function EditAccountAdmin() {
         fetchData();
     }, []);
 
+    // Upload ảnh
     const [images, setImages] = useState<(File)[]>([]);
 
     const handleImageChange = (newImages: (File)[]) => {
@@ -53,6 +54,7 @@ export default function EditAccountAdmin() {
             avatar: prevData.avatar.filter((_, i) => i !== index)
         }));
     };
+
 
     const handleChangeRole = (event: any) => {
         setRoleCurrent(event.target.value);
@@ -185,11 +187,11 @@ export default function EditAccountAdmin() {
                                 }
                             />
                             <UploadImage
-                                label="Chỉnh sửa ảnh đại diện"
-                                id="images"
+                                label="Chỉnh sửa hình ảnh"
+                                id="upload-images"
                                 name="images"
-                                onImageChange={handleImageChange}
                                 defaultImages={data.avatar}
+                                onImageChange={handleImageChange}
                                 onRemoveDefaultImage={handleRemoveDefaultImage}
                             />
                             <Button

@@ -1,10 +1,13 @@
 "use client"
 
-import FormInputCheckout from "@/app/components/Form/FormInputCheckout";
+import { cartTotalPriceVoucher } from "@/app/(actions)/cart";
 import { useEffect, useState } from "react";
 import { FaAngleRight } from "react-icons/fa6";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function SaleCode() {
+    const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
+    const dispatchCart = useDispatch();
     const [copied, setCopied] = useState(false);
     const [data, setData] = useState([{
         voucherId: "",
@@ -15,9 +18,19 @@ export default function SaleCode() {
         minOrderValue: 0
     }]);
 
+    const [value, setValue] = useState("");
+
+    useEffect(() => {
+        if (value !== "") {
+            setInputIsFocused(true);
+            setCurrentValueInput(value);
+        }
+    }, [value]);
+
+
     useEffect(() => {
         const fetchData = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/admin/vouchers`);
+            const response = await fetch(`https://freshskinweb.onrender.com/admin/vouchers/valid`);
             const dataResponse = await response.json();
             setData(dataResponse.data);
         };
@@ -41,15 +54,70 @@ export default function SaleCode() {
         setCopied(true);
     };
 
+    const handleSubmitVoucher = (voucher: string) => {
+        const currentVoucher = data.find((item: any) => item.name == voucher);
+        if(!currentVoucher){
+            return;
+        }
+        if (totalPrice > currentVoucher.minOrderValue) {
+            let priceAfterApplyVoucher = totalPrice;
+            let discountAmount = 0;
+    
+            if (currentVoucher.type === "PERCENTAGE") {
+                discountAmount = totalPrice * (currentVoucher.discountValue / 100);
+                discountAmount = Math.min(discountAmount, currentVoucher.maxDiscount); 
+            } else { 
+                discountAmount = currentVoucher.discountValue;
+            }
+            
+            priceAfterApplyVoucher = totalPrice - discountAmount;
+            if(priceAfterApplyVoucher < 0){
+                priceAfterApplyVoucher = 0;
+            }
+            // dispatchCart(cartTotalPriceVoucher(priceAfterApplyVoucher));
+        }
+    }
+
+    const [inputIsFocused, setInputIsFocused] = useState(value !== "");
+    const [currentValueInput, setCurrentValueInput] = useState(value);
+
+    const handleFocusInput = () => setInputIsFocused(true);
+
+    const handleInput = (event: any) => setCurrentValueInput(event.target.value);
+
+    const handleBlurInput = () => {
+        if (currentValueInput.length === 0) {
+            setInputIsFocused(false);
+        }
+    };
+
     return (
         <>
             <div className="ml-[28px] pt-[24px] pb-[12px] border-t border-solid border-[#d9d9d9] flex items-center justify-between">
                 <div className="flex-1">
-                    <FormInputCheckout label="Nhập mã giảm giá" name="code-sale" id="codesale" />
+                    <div className="relative">
+                        <label
+                            htmlFor="voucher"
+                            className={`text-[#999] absolute left-[11px] transition-all duration-200 ${inputIsFocused ? "text-[13px] top-[5px]" : "text-[15px] top-[12px]"
+                                }`}
+                        >
+                            Nhập mã giảm giá
+                        </label>
+                        <input
+                            name="voucher"
+                            id="voucher"
+                            className="pt-[16px] pb-[2px] px-[11px] w-full h-[44px] bg-white text-[#333] rounded-[4px] border border-solid border-[#d9d9d9] focus:border-[#72a834] outline-none input-checkout mb-[10px] text-[14px] font-[450]"
+                            onFocus={handleFocusInput}
+                            onBlur={handleBlurInput}
+                            onInput={handleInput}
+                            value={currentValueInput}
+                            onChange={handleInput}
+                        />
+                    </div>
                 </div>
-                <button className="rounded-[4px] ml-[12px] mb-[10px] bg-[#72a834] border border-solid border-[#72a834] text-white text-[14px] font-[450] h-[44px] px-[20px]">
+                <div onClick={() => handleSubmitVoucher(currentValueInput)} className="rounded-[4px] cursor-pointer ml-[12px] pt-[10px] mb-[10px] bg-[#72a834] border border-solid border-[#72a834] text-white text-[14px] font-[450] h-[44px] px-[20px]">
                     Áp dụng
-                </button>
+                </div>
             </div>
             <div className="ml-[28px] flex items-center justify-between">
                 <div className="flex items-center">

@@ -7,8 +7,7 @@ interface initState {
     totalAmount: number,
     totalPrice: number,
     paymentMethod: string,
-    provinceChoosen: boolean,
-    methodChoosen: boolean
+    provinceChoosen: boolean
 }
 
 const initialState: initState = {
@@ -20,8 +19,7 @@ const initialState: initState = {
     totalAmount: 0,
     totalPrice: 0,
     paymentMethod: "",
-    provinceChoosen: false,
-    methodChoosen: true
+    provinceChoosen: false
 }
 
 export const orderReducer = (state = initialState, action: any) => {
@@ -30,11 +28,6 @@ export const orderReducer = (state = initialState, action: any) => {
             return {
                 ...state,
                 provinceChoosen: action.provinceChoosen
-            };
-        case "METHOD_CHOOSEN":
-            return {
-                ...state,
-                methodChoosen: action.methodChoosen
             };
         default:
             return state;

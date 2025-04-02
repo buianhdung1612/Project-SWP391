@@ -163,6 +163,17 @@ export const cartReducer = (state = dataInit, action: any) => {
             break;
         }
 
+        case "CART_TOTAL_PRICE_VOUCHER": {
+            if (action.newTotalPrice >= 0) { 
+                newState = {
+                    ...state,
+                    totalPriceInit: action.newTotalPrice,
+                };
+            }
+            break;
+        }
+
+
         case "CART_RESET":
             newState = {
                 products: [],

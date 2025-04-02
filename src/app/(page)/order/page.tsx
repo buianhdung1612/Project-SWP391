@@ -4,11 +4,12 @@ import { useDispatch, useSelector } from "react-redux";
 import FormOrder from "./FormOrder";
 import Section2 from "./Section2";
 import Link from "next/link";
-import { methodChoosen } from "@/app/(actions)/order";
 import { cartReset } from "@/app/(actions)/cart";
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { SettingProfileContext } from "../layout";
 import { useRouter } from "next/navigation";
+import { Alert } from "@mui/material";
+import Cookies from "js-cookie";
 
 interface DataSubmit {
     userId?: number,
@@ -26,13 +27,17 @@ interface DataSubmit {
 export default function OrderPage() {
     const router = useRouter();
     const dispatchOrder = useDispatch();
-
+    const [loading, setLoading] = useState(false);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    const tokenUser = Cookies.get("tokenUser");
+    console.log(tokenUser);
     const quantity = useSelector((state: any) => state.cartReducer.totalQuantityInit);
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
     const products = useSelector((state: any) => (state.cartReducer.products));
 
     const settingProfile = useContext(SettingProfileContext);
-            
+
     if (!settingProfile) {
         return null;
     }
@@ -41,9 +46,69 @@ export default function OrderPage() {
 
     const handleSubmitForm = async (event: any) => {
         event.preventDefault();
-        
-        if(!event.target.method.value){
-            dispatchOrder(methodChoosen(false));
+        setLoading(true);
+
+        if (!event.target.firstName.value) {
+            setAlertMessage("Họ không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false); 
+            return;
+        }
+
+        if (!event.target.lastName.value) {
+            setAlertMessage("Tên không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false); 
+            return;
+        }
+
+        if (!event.target.phone.value) {
+            setAlertMessage("Số điện thoại không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false); 
+            return;
+        }
+
+        if (!event.target.address.value) {
+            setAlertMessage("Địa chỉ không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false); 
+            return;
+        }
+
+        if (!event.target.province.value) {
+            setAlertMessage("Tỉnh thành không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false); 
+            return;
+        }
+
+        if (!event.target.district.value) {
+            setAlertMessage("Quận huyện không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false); 
+            return;
+        }
+
+        if (!event.target.ward.value) {
+            setAlertMessage("Phường xã không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false); 
+            return;
+        }
+
+        if (!event.target.method.value) {
+            setAlertMessage("Phương thức thanh toán không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false); 
             return;
         }
 
@@ -60,8 +125,8 @@ export default function OrderPage() {
             })
         ))
 
-        if(profile.userID !== 0){
-            const data: DataSubmit = {  
+        if (tokenUser) {
+            const data: DataSubmit = {
                 userId: profile.userID,
                 firstName: event.target.firstName.value,
                 lastName: event.target.lastName.value,
@@ -81,25 +146,25 @@ export default function OrderPage() {
                 },
                 body: JSON.stringify(data)
             });
-    
+
             const dataResponse = await response.json();
-    
+
             if (dataResponse.code == 200) {
                 dispatchOrder(cartReset());
-                if(event.target.method.value == "QR"){
+                if (event.target.method.value == "QR") {
                     const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
                     const dataResponseVNPAY = await responseVNPAY.json();
                     if (dataResponseVNPAY.code === 200) {
-                        window.location.href = dataResponseVNPAY.data; 
+                        window.location.href = dataResponseVNPAY.data;
                     }
                 }
-                else{
+                else {
                     router.push(`/order/success/${dataResponse.data.orderId}`)
                 }
             }
         }
-        else{
-            const data: DataSubmit = {  
+        else {
+            const data: DataSubmit = {
                 firstName: event.target.firstName.value,
                 lastName: event.target.lastName.value,
                 email: event.target.email.value,
@@ -118,26 +183,31 @@ export default function OrderPage() {
                 },
                 body: JSON.stringify(data)
             });
-    
+
             const dataResponse = await response.json();
             if (dataResponse.code == 200) {
                 dispatchOrder(cartReset());
-                if(event.target.method.value == "QR"){
+                if (event.target.method.value == "QR") {
                     const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
                     const dataResponseVNPAY = await responseVNPAY.json();
                     if (dataResponseVNPAY.code === 200) {
-                        window.location.href = dataResponseVNPAY.data; 
+                        window.location.href = dataResponseVNPAY.data;
                     }
                 }
-                else{
+                else {
                     router.push(`/order/success/${dataResponse.data.orderId}`)
                 }
             }
-        }        
+        }
     }
 
     return (
         <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             <form className="flex" onSubmit={handleSubmitForm}>
                 <div className="w-[60%] pl-[15%] pr-[2%] py-[25px] flex flex-wrap justify-center">
                     <Link href="/" className="w-[206px] h-[82px] mb-[21px]">

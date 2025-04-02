@@ -7,15 +7,15 @@ export default function SubCategory(props: any) {
 
     useEffect(() => {
         setInputChecked(defaultCheckedIds);
-    }, [defaultCheckedIds]); 
+    }, [defaultCheckedIds]);
 
     const handleInputChecked = (event: any, id: number) => {
         const newChecked = event.target.checked
-            ? [...inputChecked, id]
-            : inputChecked.filter(checkedId => checkedId !== id);
+            ? [...inputChecked, id] 
+            : inputChecked.filter(checkedId => checkedId !== id); 
 
-        setInputChecked(newChecked);
-        onCheckedChange(newChecked);
+        setInputChecked(newChecked); 
+        onCheckedChange(newChecked); 
     };
 
     return (
@@ -34,7 +34,11 @@ export default function SubCategory(props: any) {
                                 )}
                             </Typography>
                             {item.child && item.child.length > 0 && (
-                                <SubCategory items={item.child} onCheckedChange={onCheckedChange} defaultCheckedIds={defaultCheckedIds} /> // Truyền defaultCheckedIds xuống
+                                <SubCategory 
+                                    items={item.child} 
+                                    onCheckedChange={onCheckedChange} 
+                                    defaultCheckedIds={inputChecked} 
+                                />
                             )}
                         </li>
                     ))}

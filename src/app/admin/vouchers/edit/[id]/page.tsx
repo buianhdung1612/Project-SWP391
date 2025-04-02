@@ -91,7 +91,7 @@ export default function EditVoucherAdminPage() {
                 <Typography variant="h5" gutterBottom>
                     Trang chỉnh sửa mã giảm giá
                 </Typography>
-                {permissions?.includes("vouchers_eidt") && (
+                {permissions?.includes("vouchers_edit") && (
                     <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
                         <form onSubmit={handleSubmit}>
                             <TextField

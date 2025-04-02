@@ -85,6 +85,14 @@ export default function CreateProductAdminPage() {
         const featured = event.target.featured.value === "true";
         const status = event.target.status.value;
 
+        if (!title) {
+            setAlertMessage("Tên sản phẩm không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
         if (title.length <= 10) {
             setAlertMessage("Tên sản phẩm phải trên 10 ký tự.");
             setAlertSeverity("error");

@@ -47,7 +47,7 @@ export default function ProductsAdminPage() {
   >("info");
   const linkApi = "https://freshskinweb.onrender.com/admin/products";
 
-  
+
 
   // Hiển thị lựa chọn mặc định
   const [filterStatus, setFilterStatus] = useState("");
@@ -164,6 +164,7 @@ export default function ProductsAdminPage() {
     const path = `${linkApi}${dataPath}`;
 
     const data = {
+      statusEdit: "editStatus",
       status: statusChange,
     };
 
@@ -264,14 +265,19 @@ export default function ProductsAdminPage() {
 
   // Thay đổi vị trí sản phẩm
   const handleChangePosition = async (event: any, id: number) => {
-    const newPosition = event.target.value;
+    const newPosition = parseInt(event.target.value);
 
     if (newPosition < 0) {
       alert("Vị trí phải là một số không âm");
       return;
     }
 
-    const path = `${linkApi}/edit/${id}`;
+    const path = `${linkApi}/update/${id}`;
+
+    console.log({
+      statusEdit: "editPosition",
+      position: newPosition,
+    });
 
     const response = await fetch(path, {
       method: "PATCH",
@@ -279,6 +285,7 @@ export default function ProductsAdminPage() {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
+        statusEdit: "editPosition",
         position: newPosition,
       }),
     });
@@ -545,7 +552,7 @@ export default function ProductsAdminPage() {
                               onClick={() =>
                                 handleChangeStatusOneProduct(
                                   "inactive",
-                                  `/edit/${product.id}`
+                                  `/update/${product.id}`
                                 )
                               }
                             />
@@ -559,7 +566,7 @@ export default function ProductsAdminPage() {
                               onClick={() =>
                                 handleChangeStatusOneProduct(
                                   "active",
-                                  `/edit/${product.id}`
+                                  `/update/${product.id}`
                                 )
                               }
                             />
