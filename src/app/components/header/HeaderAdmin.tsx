@@ -27,7 +27,6 @@ interface Notification {
   slugProduct?: string;
 }
 
-
 export default function HeaderAdmin() {
   const [unreadCount, setUnreadCount] = useState<number>(0);
   const [notifications, setNotifications] = useState<Notification[]>([]);
@@ -37,28 +36,26 @@ export default function HeaderAdmin() {
   const router = useRouter();
   // 🚀 Fetch danh sách thông báo từ API
   const fetchNotifications = async () => {
+    if (!dataProfile || !dataProfile.roleId) {
+      return;
+    }
 
-      if (!dataProfile || !dataProfile.roleId) {
-        return;
-      }
+    const roleId = dataProfile.roleId;
 
-      const roleId = dataProfile.roleId;
+    const res = await fetch(
+      `https://freshskinweb.onrender.com/admin/notify/${roleId}`
+    );
+    console.log(dataProfile?.roleId);
+    if (!res.ok) {
+      const errorData = await res.json();
+      console.error(` HTTP Error ${res.status}:`, errorData);
+      return;
+    }
 
-      const res = await fetch(
-        `https://freshskinweb.onrender.com/admin/notify/${roleId}`
-      );
-        console.log(dataProfile?.roleId)
-      if (!res.ok) {
-        const errorData = await res.json();
-        console.error(` HTTP Error ${res.status}:`, errorData);
-        return;
-      }
-
-      const data: Notification[] = await res.json();
-      setNotifications(data);
-      setUnreadCount(data.filter((n) => !n.isRead).length);
-    } 
-  
+    const data: Notification[] = await res.json();
+    setNotifications(data);
+    setUnreadCount(data.filter((n) => !n.isRead).length);
+  };
 
   useEffect(() => {
     if (dataProfile?.roleId) {
@@ -71,19 +68,18 @@ export default function HeaderAdmin() {
       if (wsRef.current) return;
 
       const ws = new WebSocket("wss://freshskinweb.onrender.com/ws/notify");
-      
-       
+
       ws.onopen = () => {
         console.log(" WebSocket đã kết nối!");
         wsRef.current = ws;
       };
       ws.onmessage = (event) => {
-        console.log(" Nhận thông báo:", event.data);      
-          const data: Notification = JSON.parse(event.data);
-          if (!data.id || !data.message) return;
-          setNotifications((prev) => [data, ...prev]);
-          setUnreadCount((prev) => prev + 1);
-        } 
+        console.log(" Nhận thông báo:", event.data);
+        const data: Notification = JSON.parse(event.data);
+        if (!data.id || !data.message) return;
+        setNotifications((prev) => [data, ...prev]);
+        setUnreadCount((prev) => prev + 1);
+      };
 
       ws.onclose = () => {
         wsRef.current = null;
@@ -115,32 +111,27 @@ export default function HeaderAdmin() {
       return;
     }
 
-    
-      await fetch(
-        `https://freshskinweb.onrender.com/admin/notify/update/${id}`,
-        { method: "GET" }
-      );
+    await fetch(`https://freshskinweb.onrender.com/admin/notify/update/${id}`, {
+      method: "GET",
+    });
 
-      setNotifications((prev: Notification[]) =>
-        prev.map((n: Notification) =>
-          n.id === id ? { ...n, isRead: true } : n
-        )
-      );
-      setUnreadCount((prev: number) => Math.max(prev - 1, 0));
+    setNotifications((prev: Notification[]) =>
+      prev.map((n: Notification) => (n.id === id ? { ...n, isRead: true } : n))
+    );
+    setUnreadCount((prev: number) => Math.max(prev - 1, 0));
 
-      if (slugProduct) {
-        // Điều hướng đến sản phẩm
-        router.push(`/detail/${slugProduct}`);
-    
-       
-        setTimeout(() => {
-          const ratingSection = document.getElementById("rating-section");
-          if (ratingSection) {
-            ratingSection.scrollIntoView({ behavior: "smooth" });
-          }
-        },500);  
-      }
+    if (slugProduct) {
+      // Điều hướng đến sản phẩm
+      router.push(`/detail/${slugProduct}`);
+
+      setTimeout(() => {
+        const ratingSection = document.getElementById("rating-section");
+        if (ratingSection) {
+          ratingSection.scrollIntoView({ behavior: "smooth" });
+        }
+      }, 500);
     }
+  };
 
   const removeNotification = async (id?: number, e?: React.MouseEvent) => {
     if (e) e.stopPropagation();
@@ -148,70 +139,68 @@ export default function HeaderAdmin() {
       return;
     }
 
-    
-      const response = await fetch(
-        `https://freshskinweb.onrender.com/admin/notify/delete/${id}`,
-        {
-          method: "DELETE",
-        }
-      );
+    const response = await fetch(
+      `https://freshskinweb.onrender.com/admin/notify/delete/${id}`,
+      {
+        method: "DELETE",
+      }
+    );
 
-      if (response.ok) {
-        setNotifications((prev: Notification[]) =>
-          prev.filter((n: Notification) => n.id !== id)
-        );
-        setUnreadCount((prev) => (prev > 0 ? prev - 1 : 0));
-      } 
-    } 
+    if (response.ok) {
+      setNotifications((prev: Notification[]) =>
+        prev.filter((n: Notification) => n.id !== id)
+      );
+      setUnreadCount((prev) => (prev > 0 ? prev - 1 : 0));
+    }
+  };
 
   const clearAllNotifications = async () => {
-    
-      // 🔍 Lọc danh sách ID thông báo đã đọc
-      const readNotificationIds =
-        notifications?.filter((n) => n.isRead)?.map((n) => n.id) || [];
+    // 🔍 Lọc danh sách ID thông báo đã đọc
+    const readNotificationIds =
+      notifications?.filter((n) => n.isRead)?.map((n) => n.id) || [];
 
-      if (readNotificationIds.length === 0) {
-        alert("Không có thông báo đã đọc để xóa!");
-        return;
+    if (readNotificationIds.length === 0) {
+      alert("Không có thông báo đã đọc để xóa!");
+      return;
+    }
+
+    // Gọi API xóa thông báo đã đọc
+    const response = await fetch(
+      `https://freshskinweb.onrender.com/admin/notify/deleteAll/${dataProfile?.roleId}`,
+      {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ notificationIds: readNotificationIds }),
       }
+    );
 
-      // Gọi API xóa thông báo đã đọc
-      const response = await fetch(
-        `https://freshskinweb.onrender.com/admin/notify/deleteAll/${dataProfile?.roleId}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ notificationIds: readNotificationIds }),
-        }
-      );
+    // Kiểm tra response trước khi gọi .json()
+    let responseData = null;
+    if (response.status !== 204) {
+      responseData = await response.json().catch(() => null);
+    }
 
-      // Kiểm tra response trước khi gọi .json()
-      let responseData = null;
-      if (response.status !== 204) {
-        responseData = await response.json().catch(() => null);
-      }
+    console.log("Phản hồi từ server:", responseData);
 
-      console.log("Phản hồi từ server:", responseData);
+    if (response.ok) {
+      // 🏷️ Cập nhật lại danh sách thông báo (loại bỏ thông báo đã đọc)
+      setNotifications((prev) => prev.filter((n) => !n.isRead));
+      setUnreadCount((prev) => prev - readNotificationIds.length);
+    }
+  };
 
-      if (response.ok) {
-        // 🏷️ Cập nhật lại danh sách thông báo (loại bỏ thông báo đã đọc)
-        setNotifications((prev) => prev.filter((n) => !n.isRead));
-        setUnreadCount((prev) => prev - readNotificationIds.length);
-      } 
-    } 
-  
+  const formatRelativeTime = (timestamp: string): string => {
+    const time = dayjs.utc(timestamp).tz("Asia/Ho_Chi_Minh"); // Chuyển timestamp về múi giờ VN
+    const now = dayjs();
 
-    const formatRelativeTime = (timestamp: string): string => {
-      const time = dayjs.utc(timestamp).tz("Asia/Ho_Chi_Minh"); // Chuyển timestamp về múi giờ VN
-      const now = dayjs();
-    
-      if (now.diff(time, "minute") < 1) return "Vừa xong";
-      if (now.diff(time, "hour") < 1) return `${now.diff(time, "minute")} phút trước`;
-      if (now.diff(time, "day") < 1) return `${now.diff(time, "hour")} giờ trước`;
-      if (now.diff(time, "day") === 1) return "Hôm qua";
-    
-      return time.format("DD/MM/YYYY");
-    };
+    if (now.diff(time, "minute") < 1) return "Vừa xong";
+    if (now.diff(time, "hour") < 1)
+      return `${now.diff(time, "minute")} phút trước`;
+    if (now.diff(time, "day") < 1) return `${now.diff(time, "hour")} giờ trước`;
+    if (now.diff(time, "day") === 1) return "Hôm qua";
+
+    return time.format("DD/MM/YYYY");
+  };
 
   return (
     <div className="flex items-center justify-between bg-white p-4 w-full">
@@ -271,7 +260,7 @@ export default function HeaderAdmin() {
                     }
                   >
                     <img
-                      src={notification.image}
+                      src={notification.image || "https://png.pngtree.com/png-vector/20190228/ourmid/pngtree-check-mark-icon-design-template-vector-isolated-png-image_711429.jpg"}
                       className="w-12 h-12 rounded-lg object-cover mr-3"
                       alt="Product Image"
                     />

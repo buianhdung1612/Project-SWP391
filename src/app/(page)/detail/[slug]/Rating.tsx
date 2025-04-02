@@ -4,7 +4,6 @@ import { useContext, useEffect, useRef, useState } from "react";
 import { FaAngleDown, FaAngleLeft, FaAngleRight, FaAngleUp, FaRegStar, FaStar } from "react-icons/fa6";
 import { SettingProfileContext } from "../../layout";
 import { Context } from "./MiddlewareGetData";
-import { useRouter } from "next/navigation";
 import { CiStar } from "react-icons/ci";
 import { FaStarHalfAlt } from "react-icons/fa";
 import Link from "next/link";
