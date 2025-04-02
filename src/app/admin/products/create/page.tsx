@@ -29,7 +29,7 @@ export default function CreateProductAdminPage() {
     const [brandCurrent, setBrandCurrent] = useState('');
     const [listBrand, setListBrand] = useState([]);
     const [listSkinType, setListSkinType] = useState([]);
-    const [loading, setLoading] = useState(false); // Loading state
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -74,7 +74,7 @@ export default function CreateProductAdminPage() {
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-        setLoading(true); // Set loading state to true
+        setLoading(true);
 
         const title = event.target.title.value;
         const discountPercent = parseInt(event.target.discount.value);
@@ -85,12 +85,11 @@ export default function CreateProductAdminPage() {
         const featured = event.target.featured.value === "true";
         const status = event.target.status.value;
 
-        // Validation checks
         if (title.length <= 10) {
             setAlertMessage("Tên sản phẩm phải trên 10 ký tự.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false); // Reset loading state
+            setLoading(false); 
             return;
         }
 
@@ -251,7 +250,7 @@ export default function CreateProductAdminPage() {
         if (dataResponse.code === 200) {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("success");
-            location.reload();
+            setTimeout(() => location.reload(), 2000);
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");

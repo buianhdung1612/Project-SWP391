@@ -35,6 +35,7 @@ export default function EditProductCategorytAdminPage() {
     const [description, setDescription] = useState("");
     const [listCategory, setListCategory] = useState([]);
     const [categoryCurrent, setCategoryCurrent] = useState(0);
+    const [loading, setLoading] = useState(false);
 
     const [data, setData] = useState({
         title: "",
@@ -91,6 +92,39 @@ export default function EditProductCategorytAdminPage() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setLoading(true);
+
+        if (!data.title) {
+            setAlertMessage("Tên danh mục không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (data.title.length < 5) {
+            setAlertMessage("Tên danh mục phải trên 5 ký tự.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if ((images.length + data.image.length) < 1) {
+            setAlertMessage("Phải chọn tối thiểu 1 ảnh.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!description) {
+            setAlertMessage("Mô tả danh mục không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
         const request = {
             title: data.title,
@@ -133,7 +167,7 @@ export default function EditProductCategorytAdminPage() {
     return (
         <>
             {alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
                     {alertMessage}
                 </Alert>
             )}
@@ -198,13 +232,8 @@ export default function EditProductCategorytAdminPage() {
                                 value={description}
                                 onEditorChange={(content: string) => setDescription(content)}
                             />
-                            <Button
-                                type="submit"
-                                variant="contained"
-                                color="primary"
-                                sx={{ width: "100%" }}
-                            >
-                                Cập nhật danh mục sản phẩm
+                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }} disabled={loading}>
+                                {loading ? "Đang cập nhật..." : "Cập nhật danh mục"}
                             </Button>
                         </form>
                     </Paper>

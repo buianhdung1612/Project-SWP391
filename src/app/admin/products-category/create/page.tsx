@@ -17,6 +17,7 @@ export default function CreateProductCategoryAdminPage() {
     const [description, setDescription] = useState('');
     const [categoryCurrent, setCategoryCurrent] = useState("");
     const [listCategory, setListCategory] = useState([]);
+    const [loading, setLoading] = useState(false);
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -39,6 +40,39 @@ export default function CreateProductCategoryAdminPage() {
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
+        setLoading(true);
+
+        if (!event.target.title.value) {
+            setAlertMessage("Tên danh mục không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (event.target.title.value.length < 5) {
+            setAlertMessage("Tên danh mục phải trên 5 ký tự.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (images.length < 1) {
+            setAlertMessage("Phải chọn tối thiểu 1 ảnh.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!description) {
+            setAlertMessage("Mô tả danh mục không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
         const formData = new FormData();
 
@@ -69,19 +103,18 @@ export default function CreateProductCategoryAdminPage() {
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
         }
     }
 
 
     return (
         <>
-        {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             {permissions?.includes("products-category_create") && (
                 <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
                     <Typography variant="h4" gutterBottom>
@@ -96,7 +129,6 @@ export default function CreateProductCategoryAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
                                 <InputLabel shrink={true}>Danh mục cha</InputLabel>
@@ -151,8 +183,8 @@ export default function CreateProductCategoryAdminPage() {
                                     <FormControlLabel value="INACTIVE" control={<Radio />} label="Dừng hoạt động" />
                                 </RadioGroup>
                             </FormControl>
-                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                                Tạo danh mục
+                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }} disabled={loading}>
+                                {loading ? "Đang tạo danh mục..." : "Tạo danh mục"}
                             </Button>
                         </form>
                     </Paper>
