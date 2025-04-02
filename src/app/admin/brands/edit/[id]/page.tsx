@@ -25,6 +25,7 @@ export default function EditBrandtAdminPage() {
   const dataProfile = useContext(ProfileAdminContext);
   const permissions = dataProfile?.permissions;
   const [alertMessage, setAlertMessage] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
     "success" | "error" | "info" | "warning"
   >("info");
@@ -70,6 +71,31 @@ export default function EditBrandtAdminPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
+
+    if (!data.title) {
+      setAlertMessage("Tên thương hiệu không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!description) {
+      setAlertMessage("Mô tả thương hiệu không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if ((images.length + data.image.length) < 1) {
+      setAlertMessage("Phải chọn tối thiểu 1 ảnh.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
 
     const request = {
       title: data.title,
@@ -111,7 +137,7 @@ export default function EditBrandtAdminPage() {
   return (
     <>
       {alertMessage && (
-        <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+        <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
           {alertMessage}
         </Alert>
       )}
@@ -129,7 +155,6 @@ export default function EditBrandtAdminPage() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
                 value={data.title}
                 onChange={(e) =>
                   setData({ ...data, title: e.target.value })
@@ -160,12 +185,13 @@ export default function EditBrandtAdminPage() {
                 onEditorChange={(content: string) => setDescription(content)}
               />
               <Button
-                type="submit"
+                type='submit'
                 variant="contained"
                 color="primary"
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
+                disabled={loading}
               >
-                Cập nhật thương hiệu
+                {loading ? "Đang cập nhật thương hiệu..." : "Chỉnh sửa thương hiệu"}
               </Button>
             </form>
           </Paper>

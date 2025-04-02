@@ -16,7 +16,6 @@ export default function EditBlogAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const { id } = useParams();
-
     const [content, setContent] = useState('');
     const [categoryCurrent, setCategoryCurrent] = useState('');
     const [listCategory, setListCategory] = useState([]);

@@ -26,6 +26,7 @@ export default function CreateBrandAdminPage() {
   const permissions = dataProfile?.permissions;
   const [description, setDescription] = useState("");
   const [alertMessage, setAlertMessage] = useState<string>("");
+  const [loading, setLoading] = useState(false);
   const [alertSeverity, setAlertSeverity] = useState<
     "success" | "error" | "info" | "warning"
   >("info");
@@ -37,8 +38,33 @@ export default function CreateBrandAdminPage() {
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
 
     const formData = new FormData(event.currentTarget);
+
+    if (!formData.get("title")) {
+      setAlertMessage("Tên thương hiệu không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!description) {
+      setAlertMessage("Mô tả thương hiệu không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if ((images.length) < 1) {
+      setAlertMessage("Phải chọn tối thiểu 1 ảnh.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
 
     const request = {
       title: formData.get("title"),
@@ -69,7 +95,7 @@ export default function CreateBrandAdminPage() {
     if (dataResponse.code === 200) {
       setAlertMessage(dataResponse.message);
       setAlertSeverity("success");
-      setTimeout(() => location.reload(), 2000);
+      setTimeout(() => location.reload(), 1000);
     } else {
       setAlertMessage(dataResponse.message);
       setAlertSeverity("error");
@@ -79,7 +105,7 @@ export default function CreateBrandAdminPage() {
   return (
     <>
       {alertMessage && (
-        <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+        <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
           {alertMessage}
         </Alert>
       )}
@@ -97,7 +123,6 @@ export default function CreateBrandAdminPage() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
               />
               <FormControl fullWidth sx={{ marginBottom: 3 }}>
                 <RadioGroup defaultValue={false} name="featured" row>
@@ -147,12 +172,13 @@ export default function CreateBrandAdminPage() {
                 </RadioGroup>
               </FormControl>
               <Button
-                type="submit"
+                type='submit'
                 variant="contained"
                 color="primary"
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
+                disabled={loading}
               >
-                Tạo thương hiệu
+                {loading ? "Đang tạo thương hiệu..." : "Tạo thương hiệu"}
               </Button>
             </form>
           </Paper>

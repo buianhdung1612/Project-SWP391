@@ -28,7 +28,8 @@ export default function DetailBlogAdminPage() {
         blogCategory: {
             title: ""
         },
-        thumbnail: []
+        thumbnail: [],
+        author: ""
     });
 
     const [showFullContent, setShowFullContent] = useState(false);

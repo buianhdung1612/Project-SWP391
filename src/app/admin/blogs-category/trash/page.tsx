@@ -450,7 +450,7 @@ export default function BrandsTrashAdminPage() {
                                             <TableCell>{(data.currentPage - 1) * data.pageSize + index + 1}</TableCell>
                                             <TableCell>
                                                 <img
-                                                    src={category.thumbnail}
+                                                    src={category.image[0]}
                                                     alt={category.title}
                                                     style={{ width: 100, height: 100, objectFit: "cover" }}
                                                 />
