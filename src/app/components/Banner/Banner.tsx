@@ -37,7 +37,7 @@ export default function Banner() {
                         </Link>
                     </div>
                     <div className="h-[164px]">
-                        <Link href="/products">
+                        <Link href="/product-category/toner-nuoc-can-bang-da">
                             <img src="https://res.cloudinary.com/dr53sfboy/image/upload/v1742356504/product-brand/dsa_20250319-035503_3.webp" className="rounded-[15px]" />
                         </Link>
                     </div>

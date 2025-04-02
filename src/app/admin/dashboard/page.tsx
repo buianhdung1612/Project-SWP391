@@ -480,6 +480,15 @@ export default function DashboardAdminPage() {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: "Doanh thu theo ngày",
+            font: { size: 16, weight: "bold" },
+            color: "#333",
+            padding: 4,
+          },
+        },
         scales: {
           y: { beginAtZero: true },
         },
@@ -520,6 +529,15 @@ export default function DashboardAdminPage() {
       options: {
         responsive: true,
         maintainAspectRatio: false,
+        plugins: {
+          title: {
+            display: true,
+            text: "Thống kê Voucher",
+            font: { size: 16, weight: "bold" },
+            color: "#333",
+            padding: 4,
+          },
+        },
         scales: {
           y: { beginAtZero: true },
         },
