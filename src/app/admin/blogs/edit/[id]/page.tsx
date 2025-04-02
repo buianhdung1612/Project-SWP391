@@ -28,6 +28,8 @@ export default function EditBlogAdminPage() {
         featured: false,
         thumbnail: []
     });
+    const [loading, setLoading] = useState(false);
+
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -71,8 +73,41 @@ export default function EditBlogAdminPage() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setLoading(true);
 
         const formData = new FormData(event.currentTarget);
+
+        if (!formData.get("title")) {
+            setAlertMessage("Tiêu đề bài viết không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!categoryCurrent) {
+            setAlertMessage("Danh mục bài viết không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if ((images.length + data.thumbnail.length) < 1) {
+            setAlertMessage("Phải chọn tối thiểu 1 ảnh.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!content) {
+            setAlertMessage("Nội dung bài viết không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
         const request = {
             title: formData.get("title"),
@@ -101,7 +136,7 @@ export default function EditBlogAdminPage() {
         if (dataResponse.code === 200) {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
+            setTimeout(() => location.reload(), 1000);
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
@@ -109,11 +144,12 @@ export default function EditBlogAdminPage() {
     };
 
     return (
-        <> {alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )}
+        <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>
                 <Typography variant="h5" gutterBottom>
                     Trang tạo mới bài viết
@@ -128,7 +164,6 @@ export default function EditBlogAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={data.title}
                                 onChange={(e) => setData({ ...data, title: e.target.value })}
                             />
@@ -169,8 +204,8 @@ export default function EditBlogAdminPage() {
                             />
                             <h4>Nội dung bài viết</h4>
                             <TinyEditor value={content} onEditorChange={(content: string) => setContent(content)} />
-                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                                Chỉnh sửa bài viết
+                            <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }} disabled={loading}>
+                                {loading ? "Đang cập nhật bài viết..." : "Chỉnh sửa bài viết"}
                             </Button>
                         </form>
                     </Paper>

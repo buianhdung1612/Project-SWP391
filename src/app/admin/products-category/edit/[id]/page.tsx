@@ -157,7 +157,7 @@ export default function EditProductCategorytAdminPage() {
         if (dataResponse.code === 200) {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
+            setTimeout(() => location.reload(), 1000);
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");

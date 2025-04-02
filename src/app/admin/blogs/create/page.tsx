@@ -14,7 +14,7 @@ export default function CreateBlogAdminPage() {
     const [content, setContent] = useState('');
     const [categoryCurrent, setCategoryCurrent] = useState('');
     const [listCategory, setListCategory] = useState([]);
-    const [loading, setLoading] = useState(false); // Thêm trạng thái loading
+    const [loading, setLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     useEffect(() => {
@@ -39,12 +39,44 @@ export default function CreateBlogAdminPage() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
-        
-        if (loading) return; // Nếu đang gửi request, không làm gì cả
 
-        setLoading(true); // Bắt đầu gửi request
+        setLoading(true);
+
+        setLoading(true);
         try {
             const formData = new FormData(event.currentTarget);
+
+            if (!formData.get("title")) {
+                setAlertMessage("Tiêu đề bài viết không được để trống.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 5000);
+                setLoading(false);
+                return;
+            }
+
+            if (!categoryCurrent) {
+                setAlertMessage("Danh mục bài viết không được để trống.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 5000);
+                setLoading(false);
+                return;
+            }
+
+            if ((images.length) < 1) {
+                setAlertMessage("Phải chọn tối thiểu 1 ảnh.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 5000);
+                setLoading(false);
+                return;
+            }
+
+            if (!content) {
+                setAlertMessage("Nội dung bài viết không được để trống.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 5000);
+                setLoading(false);
+                return;
+            }
 
             const request = {
                 title: formData.get("title"),
@@ -70,103 +102,103 @@ export default function CreateBlogAdminPage() {
 
             const dataResponse = await response.json();
 
-           
-        if (dataResponse.code === 200) {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("error");
-        }
+
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 1000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
         } catch (error) {
             alert("Lỗi khi gửi dữ liệu!");
             console.error(error);
         } finally {
-            setLoading(false); // Kết thúc request
+            setLoading(false);
         }
     };
-      
+
 
     return (
-        <>{alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )}
-        <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>
-            <Typography variant="h5" gutterBottom>
-                Trang tạo mới bài viết
-            </Typography>
-
-            {permissions?.includes("blogs_create") && (
-                <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                    <form onSubmit={handleSubmit}>
-                        <TextField
-                            label="Tiêu đề bài viết"
-                            name='title'
-                            variant="outlined"
-                            fullWidth
-                            sx={{ marginBottom: 3 }}
-                            required
-                        />
-                        <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
-                            <InputLabel shrink={true}>-- Chọn danh mục --</InputLabel>
-                            <Select
-                                value={categoryCurrent}
-                                onChange={handleChangeCategory}
-                                label="Chọn danh mục --"
-                                displayEmpty
-                            >
-                                <MenuItem value=''>
-                                    -- Chọn danh mục --
-                                </MenuItem>
-                                {listCategory.map((item: any, index: number) => (
-                                    <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
-                                ))}
-                            </Select>
-                        </FormControl>
-                        <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                            <RadioGroup defaultValue={false} name="featured" row>
-                                <FormControlLabel value={true} control={<Radio />} label="Nổi bật" />
-                                <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
-                            </RadioGroup>
-                        </FormControl>
-                        <UploadImage
-                            label="Chọn ảnh"
-                            id="images"
-                            name="images"
-                            onImageChange={handleImageChange}
-                        />
-                        <h4>Nội dung bài viết</h4>
-                        <TinyEditor value={content} onEditorChange={(content: string) => setContent(content)} />
-                        <TextField
-                            label="Vị trí (tự động tăng)"
-                            name='position'
-                            variant="outlined"
-                            fullWidth
-                            type="number"
-                            sx={{ marginBottom: 2, marginTop: 2 }}
-                        />
-                        <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                            <RadioGroup defaultValue="ACTIVE" name="status" row>
-                                <FormControlLabel value="ACTIVE" control={<Radio />} label="Hoạt động" />
-                                <FormControlLabel value="INACTIVE" control={<Radio />} label="Dừng hoạt động" />
-                            </RadioGroup>
-                        </FormControl>
-                        <Button 
-                            type='submit' 
-                            variant="contained" 
-                            color="primary" 
-                            sx={{ width: '100%' }}
-                            disabled={loading} 
-                        >
-                            {loading ? "Đang tạo bài viết..." : "Tạo bài viết"}
-                        </Button>
-                    </form>
-                </Paper>
+        <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
             )}
-        </Box>
+            <Box sx={{ padding: 3, backgroundColor: '#F5F5F5' }}>
+                <Typography variant="h5" gutterBottom>
+                    Trang tạo mới bài viết
+                </Typography>
+
+                {permissions?.includes("blogs_create") && (
+                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
+                        <form onSubmit={handleSubmit}>
+                            <TextField
+                                label="Tiêu đề bài viết"
+                                name='title'
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                            />
+                            <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
+                                <InputLabel shrink={true}>-- Chọn danh mục --</InputLabel>
+                                <Select
+                                    value={categoryCurrent}
+                                    onChange={handleChangeCategory}
+                                    label="Chọn danh mục --"
+                                    displayEmpty
+                                >
+                                    <MenuItem value=''>
+                                        -- Chọn danh mục --
+                                    </MenuItem>
+                                    {listCategory.map((item: any, index: number) => (
+                                        <MenuItem key={index} value={item.id}>{item.title}</MenuItem>
+                                    ))}
+                                </Select>
+                            </FormControl>
+                            <FormControl fullWidth sx={{ marginBottom: 3 }}>
+                                <RadioGroup defaultValue={false} name="featured" row>
+                                    <FormControlLabel value={true} control={<Radio />} label="Nổi bật" />
+                                    <FormControlLabel value={false} control={<Radio />} label="Không nổi bật" />
+                                </RadioGroup>
+                            </FormControl>
+                            <UploadImage
+                                label="Chọn ảnh"
+                                id="images"
+                                name="images"
+                                onImageChange={handleImageChange}
+                            />
+                            <h4>Nội dung bài viết</h4>
+                            <TinyEditor value={content} onEditorChange={(content: string) => setContent(content)} />
+                            <TextField
+                                label="Vị trí (tự động tăng)"
+                                name='position'
+                                variant="outlined"
+                                fullWidth
+                                type="number"
+                                sx={{ marginBottom: 2, marginTop: 2 }}
+                            />
+                            <FormControl fullWidth sx={{ marginBottom: 3 }}>
+                                <RadioGroup defaultValue="ACTIVE" name="status" row>
+                                    <FormControlLabel value="ACTIVE" control={<Radio />} label="Hoạt động" />
+                                    <FormControlLabel value="INACTIVE" control={<Radio />} label="Dừng hoạt động" />
+                                </RadioGroup>
+                            </FormControl>
+                            <Button
+                                type='submit'
+                                variant="contained"
+                                color="primary"
+                                sx={{ width: '100%' }}
+                                disabled={loading}
+                            >
+                                {loading ? "Đang tạo bài viết..." : "Tạo bài viết"}
+                            </Button>
+                        </form>
+                    </Paper>
+                )}
+            </Box>
         </>
     );
 }
