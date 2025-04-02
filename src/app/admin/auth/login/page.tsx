@@ -1,12 +1,16 @@
 "use client";
 
 import React, { useState } from 'react';
-import { TextField, Button, Box, Typography } from '@mui/material';
+import { TextField, Button, Box, Typography, Alert } from '@mui/material';
 import { useRouter } from 'next/navigation';
 import Cookies from 'js-cookie';
 
 
 export default function LoginAdminPage() {
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<
+        "success" | "error" | "info" | "warning"
+    >("info");
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
 
@@ -14,7 +18,7 @@ export default function LoginAdminPage() {
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
-        
+
         const response = await fetch('https://freshskinweb.onrender.com/auth/login', {
             method: "POST",
             headers: {
@@ -27,14 +31,18 @@ export default function LoginAdminPage() {
             })
         });
         const dataResponse = await response.json();
-        console.log(dataResponse)
-        const token = dataResponse.data.token;
 
-        if(dataResponse.code == 200){
+        if (dataResponse.code === 200) {
+            const token = dataResponse.data.token;
             Cookies.set('token', token);
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
             router.push(`/admin/dashboard`);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
         }
-       
+
     };
     return (
         <Box
@@ -50,6 +58,11 @@ export default function LoginAdminPage() {
                 boxShadow: 3,
             }}
         >
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold', color: '#333' }}>
                 Đăng Nhập
             </Typography>

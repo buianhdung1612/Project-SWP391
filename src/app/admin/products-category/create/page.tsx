@@ -15,7 +15,7 @@ export default function CreateProductCategoryAdminPage() {
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [description, setDescription] = useState('');
-    const [categoryCurrent, setCategoryCurrent] = useState("");
+    const [categoryCurrent, setCategoryCurrent] = useState(0);
     const [listCategory, setListCategory] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -138,7 +138,7 @@ export default function CreateProductCategoryAdminPage() {
                                     label=" Chọn danh mục --"
                                     displayEmpty
                                 >
-                                    <MenuItem value="">
+                                    <MenuItem value={0}>
                                         -- Chọn danh mục --
                                     </MenuItem>
                                     {listCategory.map((item: any, index: number) => (

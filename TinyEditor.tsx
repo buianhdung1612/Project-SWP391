@@ -9,7 +9,7 @@ const TinyEditor: React.FC<TinyEditorProps> = ({ value, onEditorChange }) => {
     return (
         <div>
             <Editor
-                apiKey='7t27pftb5wg1mhanxe4ko7inck94v8c0ef2cdk47ng0h4w2t' 
+                apiKey='otp1xs60od18xpp0cbahj95j8dcp52wpmuz3jc6aqlbcb4g1' 
                 value={value}
                 init={{
                     height: 350,

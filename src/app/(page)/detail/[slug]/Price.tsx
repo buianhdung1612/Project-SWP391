@@ -150,6 +150,35 @@ export default function Price() {
     };
 
     const handleAddCompare = async (productId: number) => {
+        if (!profile.productComparisonId) {
+            const response = await fetch(`https://freshskinweb.onrender.com/home/products/comparison/save`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    productId: productId,
+                    userID: profile.userID
+                })
+            });
+            const dataResponse = await response.json();
+            if (dataResponse.code == 200) {
+                setAlert({
+                    severity: "success",
+                    content: dataResponse.message
+                });
+
+                setTimeout(() => {
+                    setAlert({
+                        severity: "",
+                        content: ""
+                    });
+                    location.reload();
+                }, 3000);
+            };
+            return;
+        }
+        
         if (profile.productComparisonId?.products.length <= 2) {
             const response = await fetch(`https://freshskinweb.onrender.com/home/products/comparison/save`, {
                 method: "POST",

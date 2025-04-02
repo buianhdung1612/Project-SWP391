@@ -1,9 +1,13 @@
 import { Checkbox, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 export default function SubCategory(props: any) {
-    const { items, onCheckedChange } = props;
+    const { items, onCheckedChange, defaultCheckedIds } = props; 
     const [inputChecked, setInputChecked] = useState<number[]>([]);
+
+    useEffect(() => {
+        setInputChecked(defaultCheckedIds);
+    }, [defaultCheckedIds]); 
 
     const handleInputChecked = (event: any, id: number) => {
         const newChecked = event.target.checked
@@ -21,10 +25,16 @@ export default function SubCategory(props: any) {
                     {items.map((item: any, index: number) => (
                         <li key={index} className="py-[10px] text-[18px]">
                             <Typography variant="body1" style={{ cursor: 'pointer' }}>
-                                {item.title} {item.child.length <= 0 && (<Checkbox checked={inputChecked.includes(item.id)} onChange={(event) => handleInputChecked(event, item.id)} />)}
+                                {item.title} 
+                                {item.child.length <= 0 && (
+                                    <Checkbox 
+                                        checked={inputChecked.includes(item.id)} 
+                                        onChange={(event) => handleInputChecked(event, item.id)} 
+                                    />
+                                )}
                             </Typography>
                             {item.child && item.child.length > 0 && (
-                                <SubCategory items={item.child} onCheckedChange={onCheckedChange} />
+                                <SubCategory items={item.child} onCheckedChange={onCheckedChange} defaultCheckedIds={defaultCheckedIds} /> // Truyền defaultCheckedIds xuống
                             )}
                         </li>
                     ))}

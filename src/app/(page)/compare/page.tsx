@@ -36,29 +36,31 @@ export default function ComparePage() {
 
     const products = useSelector((state: any) => state.cartReducer.products);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/home/products/getComparison`, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    id: profile.productComparisonId.id,
-                    userID: profile.userID
-                })
-            });
+    if (profile.productComparisonId) {
+        useEffect(() => {
+            const fetchData = async () => {
+                const response = await fetch(`https://freshskinweb.onrender.com/home/products/getComparison`, {
+                    method: "PATCH",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        id: profile.productComparisonId.id,
+                        userID: profile.userID
+                    })
+                });
 
-            const dataResponse = await response.json();
+                const dataResponse = await response.json();
 
-            if (dataResponse.code == 200) {
-                setData(dataResponse.data.products);
-            }
-        };
+                if (dataResponse.code == 200) {
+                    setData(dataResponse.data.products);
+                }
+            };
 
-        fetchData();
+            fetchData();
 
-    });
+        });
+    }
 
     const handleAddNewProductToCart = (item: any) => {
         const data: CartItem = {
@@ -123,7 +125,7 @@ export default function ComparePage() {
         }
     }
 
-    
+
     return (
         <>
             <ul className="flex items-center mt-[17px] container mx-auto">
