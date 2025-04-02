@@ -45,8 +45,11 @@ export default function Price() {
     const isCompared = profile.productComparisonId?.products.find(item => productDetail.id === item.id);
 
     const handleChange = (event: any): void => {
-        setQuantity(parseInt(event.target.value));
-    }
+        const value = parseInt(event.target.value);
+        if (!isNaN(value) && value >= 1 && value <= 30) {
+            setQuantity(value);
+        }
+    };
 
     const handleClickDecrease = (): void => {
         if (quantity - 1 >= 1) {
@@ -54,7 +57,14 @@ export default function Price() {
         }
     }
 
+    const handleClickIncrease = (): void => {
+        if (quantity < 30) {
+            setQuantity(quantity + 1);
+        }
+    };
+
     const handleAddNewProductToCart = () => {
+        const newCart = [...products];
         const data: CartItem = {
             image: productDetail.thumbnail[0],
             title: productDetail.title,
@@ -66,17 +76,32 @@ export default function Price() {
             quantity: quantity
         };
 
-        const existProductInCart = products.find((item: CartItem) => item.title == data.title && item.volume == data.volume);
+        const existProductInCart = newCart.find(
+            (item) => item.title === data.title && item.volume === data.volume
+        );
 
         if (existProductInCart) {
-            existProductInCart.quantity = existProductInCart.quantity + data.quantity;
-        }
-        else {
-            products.push(data);
+            if (existProductInCart.quantity + data.quantity > 30) {
+                setAlert({
+                    severity: "error",
+                    content: "Bạn chỉ có thể mua tối đa 30 sản phẩm."
+                });
+                return;
+            }
+            existProductInCart.quantity += data.quantity;
+        } else {
+            if (data.quantity > 30) {
+                setAlert({
+                    severity: "error",
+                    content: "Bạn chỉ có thể mua tối đa 30 sản phẩm."
+                });
+                return;
+            }
+            newCart.push(data);
         }
 
-        dispatchCart(cartAddNewProduct(products));
-    }
+        dispatchCart(cartAddNewProduct(newCart));
+    };
 
     const handleBuyNow = () => {
         const data: CartItem = {
@@ -90,18 +115,35 @@ export default function Price() {
             quantity: quantity
         };
 
-        const existProductInCart = products.find((item: CartItem) => item.title == data.title && item.volume == data.volume);
+        const newCart = [...products];
+
+        const existProductInCart = newCart.find(
+            (item) => item.title === data.title && item.volume === data.volume
+        );
 
         if (existProductInCart) {
-            existProductInCart.quantity = existProductInCart.quantity + data.quantity;
-        }
-        else {
-            products.push(data);
+            if (existProductInCart.quantity + data.quantity > 30) {
+                setAlert({
+                    severity: "error",
+                    content: "Bạn chỉ có thể mua tối đa 30 sản phẩm."
+                });
+                return;
+            }
+            existProductInCart.quantity += data.quantity;
+        } else {
+            if (data.quantity > 30) {
+                setAlert({
+                    severity: "error",
+                    content: "Bạn chỉ có thể mua tối đa 30 sản phẩm."
+                });
+                return;
+            }
+            newCart.push(data);
         }
 
-        dispatchCart(cartAddNewProduct(products));
+        dispatchCart(cartAddNewProduct(newCart));
         router.push("/order");
-    }
+    };
 
     const handleAddCompare = async (productId: number) => {
         if (profile.productComparisonId?.products.length <= 2) {
@@ -236,7 +278,7 @@ export default function Price() {
                     />
                     <button
                         className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tr-[40px] rounded-br-[40px] border border-solid border-[#ddd]"
-                        onClick={() => setQuantity(quantity + 1)}>
+                        onClick={handleClickIncrease}>
                         +
                     </button>
                 </div>

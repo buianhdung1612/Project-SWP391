@@ -425,7 +425,7 @@ export default function BlogsAdminPage() {
                   onSubmit={handleChangeMulti}
                   style={{ flex: 1, gap: "8px" }}
                 >
-                 {selectedCategories.length > 0 && (
+                  {selectedCategories.length > 0 && (
                     <Box display="flex" gap={0.5}>
                       <Select
                         fullWidth
@@ -492,8 +492,7 @@ export default function BlogsAdminPage() {
                       <TableCell sx={{ color: "#374485", fontWeight: "bold" }}>
                         Vị trí
                       </TableCell>
-                      {/* <TableCell>Tạo bởi</TableCell> */}
-                      {/* <TableCell>Cập nhật bởi</TableCell> */}
+                      <TableCell>Tác giả</TableCell>
                       <TableCell sx={{ color: "#374485", fontWeight: "bold" }}>
                         Hành động
                       </TableCell>
@@ -502,7 +501,7 @@ export default function BlogsAdminPage() {
                   <TableBody>
                     {data.blogs.map((blog: any, index: number) => (
                       <TableRow key={blog.id}>
-                         <TableCell
+                        <TableCell
                           padding="checkbox"
                         >
                           <Checkbox onChange={(event) => handleInputChecked(event, blog.id)} />
@@ -566,6 +565,9 @@ export default function BlogsAdminPage() {
                               inputProps: { min: 0, step: 1 },
                             }}
                           />
+                        </TableCell>
+                        <TableCell>
+                          {blog.author}
                         </TableCell>
                         <TableCell>
                           <div className="flex">

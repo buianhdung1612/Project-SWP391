@@ -2,7 +2,7 @@
 
 import { useDispatch, useSelector } from "react-redux"
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { CiCircleRemove } from "react-icons/ci";
 import { GrCart } from "react-icons/gr";
 import ButtonPay from "../Button/ButtonPay";
@@ -25,15 +25,20 @@ export default function Cart() {
     const totalQuantityInit = useSelector((state: any) => state.cartReducer.totalQuantityInit);
     const dispatchCart = useDispatch();
 
-    // Hover Item Cart
     const [isHover, setIsHover] = useState(false);
+    const [clientTotalQuantity, setClientTotalQuantity] = useState<number | null>(null);
+
+    useEffect(() => {
+        setClientTotalQuantity(totalQuantityInit); 
+    }, [totalQuantityInit]);
 
     const handleMouseEnter = () => setIsHover(true);
     const handleMouseLeave = () => setIsHover(false);
-    // End Hover Item Cart
 
     const handleChange = (event: any, index: number): void => {
-        dispatchCart(cartChangeQuantity(event, index))
+        const newQuantity = Number(event.target.value);
+        if (newQuantity > 30) return;
+        dispatchCart(cartChangeQuantity(event, index));
     }
 
     const handleClickDecrease = (event: any, index: number): void => {
@@ -41,7 +46,9 @@ export default function Cart() {
     }
 
     const handleClickIncrease = (event: any, index: number): void => {
-        dispatchCart(cartIncreaseQuantity(event, index))
+        const newQuantity = products[index].quantity + 1;
+        if (newQuantity > 30) return;
+        dispatchCart(cartIncreaseQuantity(event, index));
     }
 
     const handleDeleteItem = (index: number): void => {
@@ -55,10 +62,10 @@ export default function Cart() {
                 <span
                     className="h-[16px] w-[16px] rounded-full flex items-center justify-center absolute bg-primary text-white text-[10px] top-[-2px] left-[18px]"
                 >
-                    {totalQuantityInit}
+                    {clientTotalQuantity !== null ? clientTotalQuantity : 0}
                 </span>
             </Link>
-            {isHover && totalQuantityInit == 0 && (
+            {isHover && clientTotalQuantity === 0 && (
                 <div
                     className="cart-hover-show w-[340px] py-[15px] flex flex-wrap justify-center items-center rounded-[5px] bg-[#fff] overflow-hidden z-[999] absolute top-[46px] right-[0px]"
                     onMouseEnter={handleMouseEnter}
@@ -70,7 +77,7 @@ export default function Cart() {
                     <p className="mt-[15px] text-[14px] text-textColor">Không có sản phẩm nào trong giỏ hàng của bạn</p>
                 </div>
             )}
-            {isHover && totalQuantityInit != 0 && (
+            {isHover && clientTotalQuantity !== 0 && (
                 <div
                     className="cart-hover-show w-[340px] rounded-[5px] bg-[#fff] overflow-hidden z-[999] absolute top-[46px] right-[0px]"
                     onMouseEnter={handleMouseEnter}

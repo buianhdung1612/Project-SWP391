@@ -60,8 +60,15 @@ export default function CardItem(props: {
     const [quantity, setQuantity] = useState(1);
 
     const handleChange = (event: any): void => {
-        setQuantity(parseInt(event.target.value));
-    }
+        const value = parseInt(event.target.value);
+        if (value >= 1 && value <= 30) {
+            setQuantity(value);
+        } else if (value > 30) {
+            setQuantity(30);
+        } else {
+            setQuantity(1);
+        }
+    };
 
     const handleClickDecrease = (): void => {
         if (quantity - 1 >= 1) {
@@ -229,7 +236,8 @@ export default function CardItem(props: {
                                         />
                                         <button
                                             className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tr-[5px] rounded-br-[5px] border border-solid border-[#ddd]"
-                                            onClick={() => setQuantity(quantity + 1)}>
+                                            onClick={() => setQuantity((prev) => (prev < 30 ? prev + 1 : prev))}
+                                        >
                                             +
                                         </button>
                                     </div>

@@ -14,7 +14,7 @@ export default function FeePay() {
                 <div className="flex items-center justify-between text-[#737373] text-[14px] mt-[15px]">
                     <span>Phí vận chuyển</span>
                     {provinceChoosen ? (
-                        <span>40,000<sup className="underline">đ</sup></span>
+                        <span>0<sup className="underline">đ</sup></span>
                     ) : (
                         <span>-</span>
                     )}

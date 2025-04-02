@@ -1,6 +1,6 @@
 import Link from "next/link";
 
-export default function Title(props: { title: string, link: string }) {
+export default function Title(props: { title: string, link?: string }) {
     const { title = "", link = "" } = props;
     
     return (

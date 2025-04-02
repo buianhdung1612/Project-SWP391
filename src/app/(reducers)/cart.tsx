@@ -1,132 +1,184 @@
-"use client"
+"use client";
+
+import Cookies from "js-cookie";
 
 interface CartItem {
-    image: string,
-    title: string,
-    price: number,
-    link: string,
-    variantId: number,
-    volume: number,
-    unit: string,
-    quantity: number
+    image: string;
+    title: string;
+    price: number;
+    link: string;
+    variantId: number;
+    volume: number;
+    unit: string;
+    quantity: number;
 }
 
-// Data Init
-const productsInit: CartItem[] = [];
-const totalPriceInit: number = productsInit.reduce((sum: number, item: CartItem) => {
-    return sum + item.price * item.quantity
-}, 0);
-const totalQuantityInit: number = productsInit.reduce((sum: number, item: CartItem) => {
-    return sum + item.quantity
-}, 0);
-const dataInit: any = {
-    products: productsInit,
-    totalPriceInit: totalPriceInit,
-    totalQuantityInit: totalQuantityInit
+let dataInit: any = undefined;
+
+const tokenUser = Cookies.get("tokenUser");
+if (!tokenUser) {
+    const getCartFromCookie = () => {
+        if (typeof window === "undefined") return { products: [], totalPriceInit: 0, totalQuantityInit: 0 };
+
+        const cartCookie = Cookies.get("cart");
+        return cartCookie ? JSON.parse(cartCookie) : { products: [], totalPriceInit: 0, totalQuantityInit: 0 };
+    };
+
+    dataInit = getCartFromCookie();
 }
+else {
+    // Data Init
+    const productsInit: CartItem[] = [];
+    const totalPriceInit: number = productsInit.reduce((sum: number, item: CartItem) => {
+        return sum + item.price * item.quantity
+    }, 0);
+    const totalQuantityInit: number = productsInit.reduce((sum: number, item: CartItem) => {
+        return sum + item.quantity
+    }, 0);
+
+    dataInit = {
+        products: productsInit,
+        totalPriceInit: totalPriceInit,
+        totalQuantityInit: totalQuantityInit
+    }
+}
+
+const saveCartToCookie = (cart: { products: CartItem[]; totalPriceInit: number; totalQuantityInit: number }) => {
+    Cookies.set("cart", JSON.stringify(cart), { expires: 100, path: "/" });
+};
+
 
 export const cartReducer = (state = dataInit, action: any) => {
+    let newState;
+
     switch (action.type) {
-        case "CART_CHANGE_QUANTITY":
+        case "CART_CHANGE_QUANTITY": {
             const updatedDataChangeQuantity = [...state.products];
             const newQuantity = parseInt(action.event.target.value);
+
             if (newQuantity >= 0) {
                 updatedDataChangeQuantity[action.index].quantity = newQuantity;
 
-                const priceTotalUpdatedChangeQuantity: number = updatedDataChangeQuantity.reduce((sum: number, item: CartItem) => {
-                    return sum += item.price * item.quantity
-                }, 0);
+                const priceTotalUpdatedChangeQuantity = updatedDataChangeQuantity.reduce(
+                    (sum: number, item: CartItem) => sum + item.price * item.quantity,
+                    0
+                );
 
-                const quantityTotalUpdatedChangeQuantity: number = updatedDataChangeQuantity.reduce((sum: number, item: CartItem) => {
-                    return sum += item.quantity
-                }, 0);
+                const quantityTotalUpdatedChangeQuantity = updatedDataChangeQuantity.reduce(
+                    (sum: number, item: CartItem) => sum + item.quantity,
+                    0
+                );
 
-                return {
+                newState = {
                     ...state,
                     products: updatedDataChangeQuantity,
                     totalPriceInit: priceTotalUpdatedChangeQuantity,
-                    totalQuantityInit: quantityTotalUpdatedChangeQuantity
-                }
+                    totalQuantityInit: quantityTotalUpdatedChangeQuantity,
+                };
             }
+            break;
+        }
 
-            return state;
-
-        case "CART_INCREASE_QUANTITY":
+        case "CART_INCREASE_QUANTITY": {
             action.event.preventDefault();
 
             const updatedDataIncreaseQuantity = [...state.products];
             updatedDataIncreaseQuantity[action.index].quantity += 1;
-            const priceTotalUpdatedIncreaseQuantity: number = state.totalPriceInit + updatedDataIncreaseQuantity[action.index].price;
-            const quantityTotalUpdatedIncreaseQuantity: number = state.totalQuantityInit + 1;
 
-            return {
+            const priceTotalUpdatedIncreaseQuantity =
+                state.totalPriceInit + updatedDataIncreaseQuantity[action.index].price;
+            const quantityTotalUpdatedIncreaseQuantity = state.totalQuantityInit + 1;
+
+            newState = {
                 ...state,
                 products: updatedDataIncreaseQuantity,
                 totalPriceInit: priceTotalUpdatedIncreaseQuantity,
-                totalQuantityInit: quantityTotalUpdatedIncreaseQuantity
-            }
+                totalQuantityInit: quantityTotalUpdatedIncreaseQuantity,
+            };
+            break;
+        }
 
-        case "CART_DECREASE_QUANTITY":
+        case "CART_DECREASE_QUANTITY": {
             action.event.preventDefault();
 
             const updatedDataDecreaseQuantity = [...state.products];
             if (updatedDataDecreaseQuantity[action.index].quantity - 1 >= 0) {
                 updatedDataDecreaseQuantity[action.index].quantity -= 1;
-                const priceTotalUpdatedDecreaseQuantity: number = state.totalPriceInit - updatedDataDecreaseQuantity[action.index].price;
-                const quantityTotalUpdatedDecreaseQuantity: number = state.totalQuantityInit - 1;
 
-                return {
+                const priceTotalUpdatedDecreaseQuantity =
+                    state.totalPriceInit - updatedDataDecreaseQuantity[action.index].price;
+                const quantityTotalUpdatedDecreaseQuantity = state.totalQuantityInit - 1;
+
+                newState = {
                     ...state,
                     products: updatedDataDecreaseQuantity,
                     totalPriceInit: priceTotalUpdatedDecreaseQuantity,
-                    totalQuantityInit: quantityTotalUpdatedDecreaseQuantity
-                }
+                    totalQuantityInit: quantityTotalUpdatedDecreaseQuantity,
+                };
             }
+            break;
+        }
 
-            return state;
+        case "CART_DELETE": {
+            const updatedDataDelete = state.products.filter((_: CartItem, index: number) => index !== action.index);
 
-        case "CART_DELETE":
-            const updatedDataDelete = state.products.filter((item: CartItem, index: number) => index !== action.index);
+            const priceTotalUpdatedDelete = updatedDataDelete.reduce(
+                (sum: number, item: CartItem) => sum + item.price * item.quantity,
+                0
+            );
 
-            const priceTotalUpdatedDelete: number = updatedDataDelete.reduce((sum: number, item: CartItem) => {
-                return sum += item.price * item.quantity
-            }, 0);
+            const quantityTotalUpdatedDelete = updatedDataDelete.reduce(
+                (sum: number, item: CartItem) => sum + item.quantity,
+                0
+            );
 
-            const quantityTotalUpdatedDelete: number = updatedDataDelete.reduce((sum: number, item: CartItem) => {
-                return sum += item.quantity
-            }, 0);
-
-            return {
+            newState = {
                 ...state,
                 products: updatedDataDelete,
                 totalPriceInit: priceTotalUpdatedDelete,
-                totalQuantityInit: quantityTotalUpdatedDelete
-            }
+                totalQuantityInit: quantityTotalUpdatedDelete,
+            };
+            break;
+        }
 
-        case "CART_ADD_NEW_PRODUCT":
+        case "CART_ADD_NEW_PRODUCT": {
             const updatedDataNewProduct = action.products;
-            const priceTotalUpdatedAddNewProduct: number = updatedDataNewProduct.reduce((sum: number, item: CartItem) => {
-                return sum + item.price * item.quantity
-            }, 0)
-            const quantityTotalUpdatedAddNewProduct: number = updatedDataNewProduct.reduce((sum: number, item: CartItem) => {
-                return sum + item.quantity
-            }, 0);
 
-            return {
+            const priceTotalUpdatedAddNewProduct = updatedDataNewProduct.reduce(
+                (sum: number, item: CartItem) => sum + item.price * item.quantity,
+                0
+            );
+
+            const quantityTotalUpdatedAddNewProduct = updatedDataNewProduct.reduce(
+                (sum: number, item: CartItem) => sum + item.quantity,
+                0
+            );
+
+            newState = {
                 ...state,
                 products: updatedDataNewProduct,
                 totalPriceInit: priceTotalUpdatedAddNewProduct,
-                totalQuantityInit: quantityTotalUpdatedAddNewProduct
-            }
+                totalQuantityInit: quantityTotalUpdatedAddNewProduct,
+            };
+            break;
+        }
 
         case "CART_RESET":
-            return {
+            newState = {
                 products: [],
                 totalPriceInit: 0,
-                totalQuantityInit: 0
-            }
+                totalQuantityInit: 0,
+            };
+            break;
+
         default:
             return state;
     }
 
-}
+    if (newState) {
+        saveCartToCookie(newState);
+        return newState;
+    }
+
+    return state;
+};

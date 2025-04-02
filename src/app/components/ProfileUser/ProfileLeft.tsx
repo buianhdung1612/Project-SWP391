@@ -31,6 +31,11 @@ export default function ProfileLeft() {
                         Thông tin tài khoản
                     </Link>
                 </div>
+                <div className={`text-[#212B25] hover:text-secondary cursor-pointer text-[14px] font-[400] mb-[15px] ` + (pathname == "rountine" ? "text-secondary" : "")}>
+                    <Link href="/rountine">
+                        Lộ trình da của bạn
+                    </Link>
+                </div>
                 <div className={`text-[#212B25] hover:text-secondary cursor-pointer text-[14px] font-[400] mb-[15px] ` + (pathname == "/user/orders" ? "text-secondary" : "")}>
                     <Link href="/user/orders">
                         Đơn hàng của bạn

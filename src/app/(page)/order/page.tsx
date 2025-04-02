@@ -69,9 +69,9 @@ export default function OrderPage() {
                 address: dataAddress,
                 phoneNumber: event.target.phone.value,
                 totalAmount: quantity,
-                totalPrice: totalPrice + 40000,
+                totalPrice: totalPrice,
                 paymentMethod: event.target.method.value,
-                orderItems: dataProducts
+                orderItems: dataProducts,
             }
 
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
@@ -106,7 +106,7 @@ export default function OrderPage() {
                 address: dataAddress,
                 phoneNumber: event.target.phone.value,
                 totalAmount: quantity,
-                totalPrice: totalPrice + 40000,
+                totalPrice: totalPrice,
                 paymentMethod: event.target.method.value,
                 orderItems: dataProducts
             }

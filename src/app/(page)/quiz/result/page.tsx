@@ -28,7 +28,7 @@ export default function QuizResultPage() {
                 <button
                     className="mt-6 mb-2 bg-green-500 hover:bg-green-600 text-white py-2 px-6 rounded-lg text-lg shadow-md transition"
                 >
-                    <Link href="/quiz/routine">
+                    <Link href="/rountine">
                         Khám phá lộ trình và sản phẩm phù hợp
                     </Link>
                 </button>

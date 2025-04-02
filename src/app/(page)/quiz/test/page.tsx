@@ -50,7 +50,6 @@ export default function QuizQuestionPage() {
         const fetchQuiz = async () => {
             const response = await fetch("https://freshskinweb.onrender.com/admin/question/group");
             const dataResponse = await response.json();
-            console.log(dataResponse);
             if (dataResponse.data.QuestionGroup.length > 0) {
                 const randomIndex = Math.floor(Math.random() * dataResponse.data.QuestionGroup.length);
                 setChoosenQuiz(dataResponse.data.QuestionGroup[randomIndex]);

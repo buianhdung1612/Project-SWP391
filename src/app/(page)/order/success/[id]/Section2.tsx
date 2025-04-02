@@ -17,12 +17,12 @@ export default function Section2() {
                 <div className="px-[20px] py-[15px] border-t-2 border-b-2 border-solid border-white">
                     <div className="flex items-center justify-between text-[#46484a] text-[14px]">
                         <span>Tạm tính</span>
-                        <span>{(totalPrice - 40000).toLocaleString("en-US")}<sup className="underline">đ</sup></span>
+                        <span>{(totalPrice).toLocaleString("en-US")}<sup className="underline">đ</sup></span>
                     </div>
                     <div className="flex items-center justify-between text-[#46484a] text-[14px] mt-[15px]">
                         <span>Phí vận chuyển</span>
                         {totalPrice ? (
-                            <span>40,000<sup className="underline">đ</sup></span>
+                            <span>0<sup className="underline">đ</sup></span>
                         ) : (   
                             <span>-</span>
                         )}

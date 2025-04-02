@@ -147,6 +147,17 @@ export default function DetailBlogAdminPage() {
                             </Box>
                         </Box>
 
+                        <Box sx={{ mb: 2 }}>
+                            <Box sx={{ display: "flex", alignItems: "center" }}>
+                                <Typography variant="body1" sx={{ fontWeight: "bold", color: "#555", mr: 1 }}>
+                                    Tác giả:
+                                </Typography>
+                                <Typography variant="body1" sx={{ color: "#555" }}>
+                                    {blogInfo.author}
+                                </Typography>
+                            </Box>
+                        </Box>
+
                         <Divider sx={{ my: 2 }} />
 
                         <Box
