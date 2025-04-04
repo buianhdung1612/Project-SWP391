@@ -270,7 +270,7 @@ export default function EditProductAdminPage() {
             return;
         }
 
-        if(stock > 0){
+        if(stock <= 0){
             setAlertMessage("Số lượng sản phẩm phải lớn hơn 0.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
