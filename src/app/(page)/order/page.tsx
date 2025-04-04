@@ -32,7 +32,6 @@ export default function OrderPage() {
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const tokenUser = Cookies.get("tokenUser");
-    console.log(tokenUser);
     const quantity = useSelector((state: any) => state.cartReducer.totalQuantityInit);
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
     const voucherName = useSelector((state: any) => (state.cartReducer.voucherTitle));
@@ -179,6 +178,8 @@ export default function OrderPage() {
                 orderItems: dataProducts,
                 voucherName: voucherName
             }
+
+            console.log(data);
 
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
                 method: "POST",

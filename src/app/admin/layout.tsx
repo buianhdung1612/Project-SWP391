@@ -71,6 +71,7 @@ export default function RootLayout({
           );
 
           const data = await response.json();
+          console.log(data);
           setInfo(data.data);
         }
         else{
@@ -95,9 +96,9 @@ export default function RootLayout({
             firstName: info?.firstName,
             lastName: info?.lastName,
             phone: info?.phone,
-            roleTitle: info?.role.title,
-            roleId: info?.role.roleId,
-            permissions: info?.role.permission,
+            roleTitle: info?.role?.title,
+            roleId: info?.role?.roleId,
+            permissions: info?.role?.permission,
           }}
         >
           {!pathname.startsWith("/admin/auth/login") && <Sider />}

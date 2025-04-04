@@ -84,6 +84,7 @@ export default function CreateProductAdminPage() {
         const skinIssues = event.target.skinIssues.value;
         const featured = event.target.featured.value === "true";
         const status = event.target.status.value;
+        const stock = event.target.stock.value;
 
         if (!title) {
             setAlertMessage("Tên sản phẩm không được để trống.");
@@ -117,8 +118,8 @@ export default function CreateProductAdminPage() {
             return;
         }
 
-        if (images.length < 5) {
-            setAlertMessage("Phải chọn tối thiểu 5 ảnh.");
+        if (images.length != 5) {
+            setAlertMessage("Phải chọn 5 ảnh cho sản phẩm.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
             setLoading(false);
@@ -159,6 +160,14 @@ export default function CreateProductAdminPage() {
 
         if (!discountPercent) {
             setAlertMessage("Phần trăm giảm giá không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if(stock > 0){
+            setAlertMessage("Số lượng sản phẩm phải lớn hơn 0.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
             setLoading(false);
@@ -241,6 +250,7 @@ export default function CreateProductAdminPage() {
             usageInstructions: usageInstructions,
             benefits: benefits,
             skinIssues: skinIssues,
+            stock: stock,
             featured: featured,
             status: status,
         };
@@ -402,6 +412,14 @@ export default function CreateProductAdminPage() {
                             <TextField
                                 label="% Giảm giá"
                                 name='discount'
+                                variant="outlined"
+                                fullWidth
+                                type="number"
+                                sx={{ marginBottom: 2 }}
+                            />
+                            <TextField
+                                label="Số lượng"
+                                name='stock'
                                 variant="outlined"
                                 fullWidth
                                 type="number"

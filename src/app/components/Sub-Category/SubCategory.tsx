@@ -6,7 +6,7 @@ export default function SubCategory(props: any) {
     const [inputChecked, setInputChecked] = useState<number[]>([]);
 
     useEffect(() => {
-        setInputChecked(defaultCheckedIds);
+        setInputChecked(defaultCheckedIds || []);
     }, [defaultCheckedIds]);
 
     const handleInputChecked = (event: any, id: number) => {
@@ -28,7 +28,7 @@ export default function SubCategory(props: any) {
                                 {item.title} 
                                 {item.child.length <= 0 && (
                                     <Checkbox 
-                                        checked={inputChecked.includes(item.id)} 
+                                        checked={inputChecked?.includes(item.id)} 
                                         onChange={(event) => handleInputChecked(event, item.id)} 
                                     />
                                 )}
