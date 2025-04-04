@@ -19,7 +19,7 @@ export default function LoginAdminPage() {
     const handleSubmit = async (event: any) => {
         event.preventDefault();
 
-        const response = await fetch('https://freshskinweb.onrender.com/auth/login', {
+        const response = await fetch('https://freshskinweb.onrender.com/auth/login-admin', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
