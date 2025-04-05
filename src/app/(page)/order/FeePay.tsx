@@ -7,7 +7,6 @@ export default function FeePay() {
     const priceVoucher = useSelector((state: any) => state.cartReducer.priceVoucher);
     const provinceChoosen = useSelector((state: any) => state.orderReducer.provinceChoosen);
     const feeShip = useSelector((state: any) => state.orderReducer.feeShip);
-
     
     return (
         <>
@@ -25,6 +24,14 @@ export default function FeePay() {
                     {provinceChoosen ? (
                         <span>{feeShip.toLocaleString("en-US")}<sup className="underline">đ</sup></span>
                     ) : (
+                        <span>-</span>
+                    )}
+                </div>
+                <div className="flex items-center justify-between text-[#737373] text-[14px] mt-[15px]">
+                    <span>Khuyến mại</span>
+                    {priceVoucher > 0 ? (
+                        <span>- {(totalPrice - priceVoucher).toLocaleString("en-US")}<sup className="underline">đ</sup></span>
+                    ): (
                         <span>-</span>
                     )}
                 </div>

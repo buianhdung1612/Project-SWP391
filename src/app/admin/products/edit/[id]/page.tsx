@@ -214,8 +214,8 @@ export default function EditProductAdminPage() {
             return;
         }
 
-        if ((images.length + productInfo.thumbnail.length) != 5) {
-            setAlertMessage("Phải chọn 5 ảnh cho sản phẩm.");
+        if ((images.length + productInfo.thumbnail.length) < 5) {
+            setAlertMessage("Phải chọn tối thiểu 5 ảnh cho sản phẩm.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
             setLoading(false);
@@ -254,24 +254,8 @@ export default function EditProductAdminPage() {
             }
         }
 
-        if (!discountPercent) {
-            setAlertMessage("Phần trăm giảm giá không được để trống.");
-            setAlertSeverity("error");
-            setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false);
-            return;
-        }
-
         if (discountPercent >= 100) {
             setAlertMessage("Phần trăm giảm giá không được vượt quá 100%.");
-            setAlertSeverity("error");
-            setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false);
-            return;
-        }
-
-        if(stock <= 0){
-            setAlertMessage("Số lượng sản phẩm phải lớn hơn 0.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
             setLoading(false);

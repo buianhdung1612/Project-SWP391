@@ -144,30 +144,32 @@ export default function OrderPage() {
                 voucherName: voucherName
             }
 
-            const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
+            console.log(data);
 
-            const dataResponse = await response.json();
+            // const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
+            //     method: "POST",
+            //     headers: {
+            //         "Content-Type": "application/json"
+            //     },
+            //     body: JSON.stringify(data)
+            // });
 
-            if (dataResponse.code == 200) {
-                dispatchCart(cartReset());
-                dispatchOrder(sumShip(0))
-                if (event.target.method.value == "QR") {
-                    const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
-                    const dataResponseVNPAY = await responseVNPAY.json();
-                    if (dataResponseVNPAY.code === 200) {
-                        window.location.href = dataResponseVNPAY.data;
-                    }
-                }
-                else {
-                    router.push(`/order/success/${dataResponse.data.orderId}`)
-                }
-            }
+            // const dataResponse = await response.json();
+
+            // if (dataResponse.code == 200) {
+            //     dispatchCart(cartReset());
+            //     dispatchOrder(sumShip(0))
+            //     if (event.target.method.value == "QR") {
+            //         const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
+            //         const dataResponseVNPAY = await responseVNPAY.json();
+            //         if (dataResponseVNPAY.code === 200) {
+            //             window.location.href = dataResponseVNPAY.data;
+            //         }
+            //     }
+            //     else {
+            //         router.push(`/order/success/${dataResponse.data.orderId}`)
+            //     }
+            // }
         }
         else {
             const data: DataSubmit = {

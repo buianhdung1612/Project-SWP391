@@ -49,8 +49,6 @@ export default function ProductsTrashAdminPage() {
   >("info");
   const linkApi = "https://freshskinweb.onrender.com/admin/products/trash";
 
-
-
   // Hiển thị lựa chọn mặc định
   const [filterStatus, setFilterStatus] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -154,39 +152,6 @@ export default function ProductsTrashAdminPage() {
     location.href = url.href;
   };
   // Hết Tìm kiếm sản phẩm
-
-  // Thay đổi trạng thái 1 sản phẩm
-  const handleChangeStatusOneProduct = async (
-    status: string,
-    dataPath: string
-  ) => {
-    const statusChange = status;
-    const path = `${linkApi}${dataPath}`;
-
-    const data = {
-      status: statusChange,
-    };
-
-    const response = await fetch(path, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const dataResponse = await response.json();
-
-    if (dataResponse.code === 200) {
-      setAlertMessage(dataResponse.message);
-      setAlertSeverity("success");
-      setTimeout(() => location.reload(), 2000);
-    } else {
-      setAlertMessage(dataResponse.message);
-      setAlertSeverity("error");
-    }
-  };
-  // Hết Thay đổi trạng thái 1 sản phẩm
 
   // Thay đổi trạng thái nhiều sản phẩm
   const handleChangeMulti = async (event: any) => {
@@ -555,12 +520,6 @@ export default function ProductsTrashAdminPage() {
                               color="success"
                               size="small"
                               variant="outlined"
-                              onClick={() =>
-                                handleChangeStatusOneProduct(
-                                  "inactive",
-                                  `/edit/${product.id}`
-                                )
-                              }
                             />
                           )}
                           {product.status === "INACTIVE" && (
@@ -568,13 +527,7 @@ export default function ProductsTrashAdminPage() {
                               label="Dừng hoạt động"
                               color="error"
                               size="small"
-                              variant="outlined"
-                              onClick={() =>
-                                handleChangeStatusOneProduct(
-                                  "active",
-                                  `/edit/${product.id}`
-                                )
-                              }
+                              variant="outlined"                             
                             />
                           )}
                         </TableCell>

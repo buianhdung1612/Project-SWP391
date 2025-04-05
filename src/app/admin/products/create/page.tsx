@@ -118,8 +118,8 @@ export default function CreateProductAdminPage() {
             return;
         }
 
-        if (images.length != 5) {
-            setAlertMessage("Phải chọn 5 ảnh cho sản phẩm.");
+        if (images.length < 5) {
+            setAlertMessage("Phải chọn tối thiểu 5 ảnh cho sản phẩm.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
             setLoading(false);
