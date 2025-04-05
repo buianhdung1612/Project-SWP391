@@ -4,8 +4,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { MdNavigateNext } from "react-icons/md";
 import ProfileLeft from "@/app/components/ProfileUser/ProfileLeft";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import Cookies from "js-cookie";
+import { Alert } from "@mui/material";
 
 export default function DetailOrderUserPage() {
     const { id } = useParams();
@@ -20,13 +21,23 @@ export default function DetailOrderUserPage() {
         orderDate: "",
         orderItems: [],
         orderStatus: "",
+        orderId: ""
     });
-    
+
+    const router = useRouter();
+
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<
+        "success" | "error" | "info" | "warning"
+    >("info");
+
     const tokenUser = Cookies.get("tokenUser");
 
-    if(!tokenUser){
-        location.href = "/user/login"
-    }
+    useEffect(() => {
+        if (!tokenUser) {
+            router.push("/user/login");
+        }
+    }, [tokenUser]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -39,14 +50,48 @@ export default function DetailOrderUserPage() {
     }, [])
 
     let totalProductPrice = 0;
-    for(const item of data.orderItems){
+    for (const item of data.orderItems) {
         totalProductPrice += item.subtotal;
     }
     const feeShip = data.totalPrice - totalProductPrice;
-    console.log(feeShip);
+
+    const handleCancel = async (id: number) => {
+        const isConfirm = confirm("Bạn có chắc muốn hủy đơn hàng?");
+        if (isConfirm) {
+            const path = `https://freshskinweb.onrender.com/admin/orders/edit/${id}`;
+
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    orderStatus: "CANCELED"
+                })
+            });
+
+            const dataResponse = await response.json();
+
+            if (dataResponse.code === 200) {
+                setAlertMessage("Đã hủy đơn hàng thành công!");
+                setAlertSeverity("success");
+                setTimeout(() => {
+                    router.push("/user/orders");
+                }, 2000)
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
+        }
+    }
 
     return (
         <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             <ul className="flex items-center container mx-auto px-3">
                 <li>
                     <Link href="/" className="flex items-center">
@@ -71,9 +116,8 @@ export default function DetailOrderUserPage() {
                     {data.orderStatus == "PENDING" && (
                         <div className="flex items-center justify-between">
                             <div className="text-[14px] text-textColor">Trạng thái thanh toán: <span className="font-[600] text-[#E49C06]">Đang xử lý</span></div>
-                            <div className="text-[14px] text-textColor">Bạn có muốn: <span className="font-[600] text-[#DD153C] cursor-pointer">Hủy đơn hàng</span></div>
+                            <div className="text-[14px] text-textColor">Bạn có muốn: <span onClick={() => handleCancel(parseInt(data.orderId))} className="font-[600] text-[#DD153C] cursor-pointer">Hủy đơn hàng</span></div>
                         </div>
-
                     )}
                     {data.orderStatus == "CANCELED" && (
                         <div className="text-[14px] text-textColor">Trạng thái thanh toán: <span className="font-[600] text-[#DD153C]">Đã hủy</span></div>
@@ -124,15 +168,15 @@ export default function DetailOrderUserPage() {
                                     </tr>
                                 ))}
                                 <tr>
-                                    <td colSpan={2}  className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Khuyến mại</td>
+                                    <td colSpan={2} className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Khuyến mại</td>
                                     <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">0<sup className="underline">đ</sup></td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={2}  className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Phí vận chuyển</td>
+                                    <td colSpan={2} className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Phí vận chuyển</td>
                                     <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">{feeShip.toLocaleString("en-US")}<sup className="underline">đ</sup></td>
                                 </tr>
                                 <tr>
-                                    <td colSpan={2}  className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Tổng tiền</td>
+                                    <td colSpan={2} className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Tổng tiền</td>
                                     <td colSpan={2} className="flex-1 p-[15px] text-[19px] font-[600] text-[#CA170E] text-right">{data.totalPrice.toLocaleString("en-US")}<sup className="underline">đ</sup></td>
                                 </tr>
                             </tbody>

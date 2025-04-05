@@ -6,6 +6,8 @@ import { MdCancel, MdNavigateNext } from "react-icons/md";
 import { SettingProfileContext } from "../../layout";
 import ProfileLeft from "@/app/components/ProfileUser/ProfileLeft";
 import { Alert, Tooltip } from "@mui/material";
+import Cookies from "js-cookie";
+import { useRouter } from "next/navigation";
 
 export default function OrdersHistoryPage() {
     const [alertMessage, setAlertMessage] = useState<string>("");
@@ -13,6 +15,15 @@ export default function OrdersHistoryPage() {
         "success" | "error" | "info" | "warning"
     >("info");
     const [data, setData] = useState([]);
+    const router = useRouter();
+    const tokenUser = Cookies.get("tokenUser");
+
+    useEffect(() => {
+        if (!tokenUser) {
+            router.push("/user/login");
+        }
+    }, [tokenUser]);
+
     const settingProfile = useContext(SettingProfileContext);
 
     if (!settingProfile) {
@@ -22,14 +33,17 @@ export default function OrdersHistoryPage() {
     const { profile } = settingProfile;
 
     useEffect(() => {
-        const fetchData = async () => {
-            const response = await fetch(`https://freshskinweb.onrender.com/home/orders/user/${profile.userID}`);
-            const dataResponse = await response.json();
-            setData(dataResponse.data.orders)
-        };
+        if (profile.userID != 0) {
+            const fetchData = async () => {
+                const response = await fetch(`https://freshskinweb.onrender.com/home/orders/user/${profile.userID}`);
+                const dataResponse = await response.json();
+                setData(dataResponse.data.orders);
+            };
 
-        fetchData();
-    }, []);
+            fetchData();
+        }
+
+    }, [profile]);
 
     const handleCancel = async (id: number) => {
         const isConfirm = confirm("Bạn có chắc muốn hủy đơn hàng?");
@@ -49,8 +63,11 @@ export default function OrdersHistoryPage() {
             const dataResponse = await response.json();
 
             if (dataResponse.code === 200) {
-                setAlertMessage(dataResponse.message);
+                setAlertMessage("Đã hủy đơn hàng thành công!");
                 setAlertSeverity("success");
+                setTimeout(() => {
+                    location.reload();
+                }, 2000)
             } else {
                 setAlertMessage(dataResponse.message);
                 setAlertSeverity("error");
