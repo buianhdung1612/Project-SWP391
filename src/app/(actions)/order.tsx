@@ -4,3 +4,10 @@ export const provinceChoosen = (provinceChoosen: boolean) => {
         provinceChoosen: provinceChoosen
     }
 }
+
+export const sumShip = (feeShip: number) => {
+    return {
+        type: "FEE_SHIP",
+        feeShip: feeShip,
+    }
+}

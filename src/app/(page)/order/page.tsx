@@ -10,6 +10,7 @@ import { SettingProfileContext } from "../layout";
 import { useRouter } from "next/navigation";
 import { Alert } from "@mui/material";
 import Cookies from "js-cookie";
+import { sumShip } from "@/app/(actions)/order";
 
 interface DataSubmit {
     userId?: number,
@@ -27,6 +28,7 @@ interface DataSubmit {
 
 export default function OrderPage() {
     const router = useRouter();
+    const dispatchCart = useDispatch();
     const dispatchOrder = useDispatch();
     const [loading, setLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
@@ -36,6 +38,7 @@ export default function OrderPage() {
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
     const voucherName = useSelector((state: any) => (state.cartReducer.voucherTitle));
     const products = useSelector((state: any) => (state.cartReducer.products));
+    const feeShip = useSelector((state: any) => (state.orderReducer.feeShip));
 
     const settingProfile = useContext(SettingProfileContext);
 
@@ -135,7 +138,7 @@ export default function OrderPage() {
                 address: dataAddress,
                 phoneNumber: event.target.phone.value,
                 totalAmount: quantity,
-                totalPrice: totalPrice,
+                totalPrice: totalPrice + feeShip,
                 paymentMethod: event.target.method.value,
                 orderItems: dataProducts,
                 voucherName: voucherName
@@ -152,7 +155,8 @@ export default function OrderPage() {
             const dataResponse = await response.json();
 
             if (dataResponse.code == 200) {
-                dispatchOrder(cartReset());
+                dispatchCart(cartReset());
+                dispatchOrder(sumShip(0))
                 if (event.target.method.value == "QR") {
                     const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
                     const dataResponseVNPAY = await responseVNPAY.json();
@@ -173,7 +177,7 @@ export default function OrderPage() {
                 address: dataAddress,
                 phoneNumber: event.target.phone.value,
                 totalAmount: quantity,
-                totalPrice: totalPrice,
+                totalPrice: totalPrice + feeShip,
                 paymentMethod: event.target.method.value,
                 orderItems: dataProducts,
                 voucherName: voucherName
@@ -191,7 +195,8 @@ export default function OrderPage() {
 
             const dataResponse = await response.json();
             if (dataResponse.code == 200) {
-                dispatchOrder(cartReset());
+                dispatchCart(cartReset());
+                dispatchOrder(sumShip(0))
                 if (event.target.method.value == "QR") {
                     const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
                     const dataResponseVNPAY = await responseVNPAY.json();

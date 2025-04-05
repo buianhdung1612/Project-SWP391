@@ -103,7 +103,7 @@ export default function DetailOrderAdmin() {
                                             <TableCell>{item.productVariant.product.title}</TableCell>
                                             <TableCell>{(item.productVariant.price * (1 - item.productVariant.product.discountPercent / 100)).toLocaleString("en-US")}<sup>đ</sup></TableCell>
                                             <TableCell>{item.quantity}</TableCell>
-                                            <TableCell>{(item.subtotal * (1 - item.productVariant.product.discountPercent / 100)).toLocaleString("en-US")}<sup>đ</sup></TableCell>
+                                            <TableCell>{(item.subtotal).toLocaleString("en-US")}<sup>đ</sup></TableCell>
                                         </TableRow>
                                     ))}
                                 </TableBody>

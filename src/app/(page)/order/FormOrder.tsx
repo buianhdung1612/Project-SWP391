@@ -5,50 +5,111 @@ import { FaCaretDown } from "react-icons/fa6";
 import FormInputCheckout from "@/app/components/Form/FormInputCheckout";
 import TitleCheckout from "@/app/components/title/TitleCheckout";
 import { FaMoneyBillAlt } from "react-icons/fa";
-import { useDispatch } from "react-redux";
-import { provinceChoosen } from "../../(actions)/order";
+import { useDispatch, useSelector } from "react-redux";
+import { sumShip, provinceChoosen } from "../../(actions)/order";
 import { SettingProfileContext } from "../layout";
 
 export default function FormOrder() {
     const [dataProvince, setDataProvince] = useState([]);
+    const [districtId, setDistrictId] = useState(0);
+    const [wardCode, setWardCode] = useState("");
+    const [meeting, setMeeting] = useState(false);
+    const [bank, setBank] = useState(false);
+    const [dataDistrict, setDataDistrict] = useState([]);
+    const [dataWard, setDataWard] = useState([]);
+    const products = useSelector((state: any) => state.cartReducer.products);
+    const feeShip = useSelector((state: any) => state.orderReducer.feeShip);
     const dispatchOrder = useDispatch();
-
+    
     useEffect(() => {
         const fetchProvince = async () => {
-            const response = await fetch('https://provinces.open-api.vn/api/');
-            const data = await response.json();
-            setDataProvince(data);
+            const response = await fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/province', {
+                headers: {
+                    "token": `c35280e3-11de-11f0-8fb0-9ee8abfecd65`
+                }
+            });
+            const data = await response.json()
+            setDataProvince(data.data);
         };
 
         fetchProvince();
     }, []);
 
-    const [meeting, setMeeting] = useState(false);
-    const [bank, setBank] = useState(false);
-    const [dataDistrict, setDataDistrict] = useState([]);
-    const [dataWard, setDataWard] = useState([]);
-
     const settingProfile = useContext(SettingProfileContext);
-        
-        if (!settingProfile) {
-            return null;
-        }
-    
+
+    if (!settingProfile) {
+        return null;
+    }
+
     const { profile } = settingProfile;
 
     const handleChangeProvince = async (event: any) => {
-        const url = (event.target.value.split('+'))[0];
-        const response = await fetch(`https://provinces.open-api.vn/api/p/${url}?depth=2`);
+        const provinceId = (event.target.value.split('+'))[2];
+        const response = await fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/district', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                "token": `c35280e3-11de-11f0-8fb0-9ee8abfecd65`
+            },
+            body: JSON.stringify({
+                "province_id": parseInt(provinceId)
+            })
+        });
         const data = await response.json();
-        setDataDistrict(data.districts);
         dispatchOrder(provinceChoosen(true));
+        setDataDistrict(data.data);
     }
 
     const handleChangeDistrict = async (event: any) => {
-        const url = (event.target.value.split('+'))[0];
-        const response = await fetch(`https://provinces.open-api.vn/api/d/${url}?depth=2`);
+        setDistrictId(parseInt((event.target.value.split('+'))[2]));
+        const response = await fetch('https://online-gateway.ghn.vn/shiip/public-api/master-data/ward', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                "token": `c35280e3-11de-11f0-8fb0-9ee8abfecd65`
+            },
+            body: JSON.stringify({
+                "district_id": parseInt((event.target.value.split('+'))[2])
+            })
+        });
         const data = await response.json();
-        setDataWard(data.wards);
+        setDataWard(data.data);
+    }
+
+    const handleChangeWard = async (event: any) => {
+        setWardCode((event.target.value.split('+'))[0]);
+
+        const items: any = [];
+        let weight: number = 0;
+        for (const item of products){
+            weight += item.volume
+            const data = {
+                name: item.title,
+                quantity: item.quantity,
+                weight: item.volume
+            };
+            items.push(data);
+        }
+
+        const response = await fetch('https://online-gateway.ghn.vn/shiip/public-api/v2/shipping-order/fee', {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json',
+                'Token': 'c35280e3-11de-11f0-8fb0-9ee8abfecd65',
+                'ShopId': '5718994'
+            },
+            body: JSON.stringify({
+                service_type_id: 2,
+                from_district_id: 1542,
+                from_ward_code: "21211",
+                to_district_id: districtId,
+                to_ward_code: wardCode,
+                weight: weight,
+                items: items
+            })
+        });
+        const dataResponse = await response.json();
+        dispatchOrder(sumShip(parseInt(dataResponse.data.total)))
     }
 
     const handleRadioMeetingChange = (event: any) => {
@@ -81,29 +142,29 @@ export default function FormOrder() {
                 <div className="">
                     <TitleCheckout text="Thông tin nhận hàng" />
                     {profile.email !== "" ? (
-                        <FormInputCheckout label="Email" type="email" name="email" id="email" value={profile.email}/>
+                        <FormInputCheckout label="Email" type="email" name="email" id="email" value={profile.email} />
                     ) : (
-                        <FormInputCheckout label="Email" type="email" name="email" id="email"/>
+                        <FormInputCheckout label="Email" type="email" name="email" id="email" />
                     )}
                     {profile.firstName !== "" ? (
-                        <FormInputCheckout label="Họ" name="firstName" id="firstName" value={profile.firstName}/>
+                        <FormInputCheckout label="Họ" name="firstName" id="firstName" value={profile.firstName} />
                     ) : (
-                        <FormInputCheckout label="Họ" name="firstName" id="firstName"/>
+                        <FormInputCheckout label="Họ" name="firstName" id="firstName" />
                     )}
                     {profile.lastName !== "" ? (
-                        <FormInputCheckout label="Tên" name="lastName" id="lastName" value={profile.lastName}/>
+                        <FormInputCheckout label="Tên" name="lastName" id="lastName" value={profile.lastName} />
                     ) : (
-                        <FormInputCheckout label="Tên" name="lastName" id="lastName"/>
+                        <FormInputCheckout label="Tên" name="lastName" id="lastName" />
                     )}
                     {profile.phone !== "" ? (
-                        <FormInputCheckout label="Số điện thoại" name="phone" id="phone" value={profile.phone}/>
+                        <FormInputCheckout label="Số điện thoại" name="phone" id="phone" value={profile.phone} />
                     ) : (
-                        <FormInputCheckout label="Số điện thoại" name="phone" id="phone"/>
+                        <FormInputCheckout label="Số điện thoại" name="phone" id="phone" />
                     )}
                     {profile.address !== "" ? (
-                        <FormInputCheckout label="Địa chỉ" name="address" id="address" value={profile.address}/>
+                        <FormInputCheckout label="Địa chỉ" name="address" id="address" value={profile.address} />
                     ) : (
-                        <FormInputCheckout label="Địa chỉ" name="address" id="address"/>
+                        <FormInputCheckout label="Địa chỉ" name="address" id="address" />
                     )}
                     <div className="relative">
                         <label htmlFor="province" className="text-[13px] font-[300] text-[#999] absolute top-[5px] left-[11px]">Tỉnh thành</label>
@@ -114,8 +175,8 @@ export default function FormOrder() {
                             onChange={handleChangeProvince}
                         >
                             <option value="">---</option>
-                            {dataProvince.length > 0 && dataProvince.map((item: any, index: number) => (
-                                <option key={index} value={`${item.code}+${item.name}`}>{item.name}</option>
+                            {dataProvince && dataProvince.length > 0 && dataProvince.map((item: any, index: number) => (
+                                <option key={index} value={`${item.Code}+${item.ProvinceName}+${item.ProvinceID}`}>{item.ProvinceName}</option>
                             ))}
                         </select>
                         <label htmlFor="province">
@@ -127,13 +188,13 @@ export default function FormOrder() {
                         <select
                             name="district"
                             id="district"
-                            className={"pt-[16px] pb-[2px] px-[11px] w-full h-[44px] text-[#333] rounded-[4px] border border-solid border-[#d9d9d9] focus:border-[#72a834] outline-none input-checkout mb-[10px] text-[14px] font-[450] cursor-pointer appearance-none " + (dataDistrict.length > 0 ? "bg-white" : "bg-[#EEEEEE]")}
+                            className={"pt-[16px] pb-[2px] px-[11px] w-full h-[44px] text-[#333] rounded-[4px] border border-solid border-[#d9d9d9] focus:border-[#72a834] outline-none input-checkout mb-[10px] text-[14px] font-[450] cursor-pointer appearance-none " + (dataDistrict?.length > 0 ? "bg-white" : "bg-[#EEEEEE]")}
                             onChange={handleChangeDistrict}
-                            disabled={(dataDistrict.length > 0 ? false : true)}
+                            disabled={(dataDistrict?.length > 0 ? false : true)}
                         >
                             <option value="">---</option>
-                            {dataDistrict.length > 0 && dataDistrict.map((item: any, index: number) => (
-                                <option key={index} value={`${item.code}+${item.name}`}>{item.name}</option>
+                            {dataDistrict && dataDistrict.length > 0 && dataDistrict.map((item: any, index: number) => (
+                                <option key={index} value={`${item.Code}+${item.DistrictName}+${item.DistrictID}`}>{item.DistrictName}</option>
                             ))}
                         </select>
                         <label htmlFor="district">
@@ -145,12 +206,13 @@ export default function FormOrder() {
                         <select
                             name="ward"
                             id="ward"
-                            className={"pt-[16px] pb-[2px] px-[11px] w-full h-[44px] text-[#333] rounded-[4px] border border-solid border-[#d9d9d9] focus:border-[#72a834] outline-none input-checkout mb-[10px] text-[14px] font-[450] cursor-pointer appearance-none " + (dataWard.length > 0 ? "bg-white" : "bg-[#EEEEEE]")}
-                            disabled={(dataWard.length > 0 ? false : true)}
+                            onChange={handleChangeWard}
+                            className={"pt-[16px] pb-[2px] px-[11px] w-full h-[44px] text-[#333] rounded-[4px] border border-solid border-[#d9d9d9] focus:border-[#72a834] outline-none input-checkout mb-[10px] text-[14px] font-[450] cursor-pointer appearance-none " + (dataWard?.length > 0 ? "bg-white" : "bg-[#EEEEEE]")}
+                            disabled={(dataWard?.length > 0 ? false : true)}
                         >
                             <option value="">---</option>
-                            {dataWard.map((item: any, index: number) => (
-                                <option key={index} value={`${item.code}+${item.name}`}>{item.name}</option>
+                            {dataWard && dataWard.map((item: any, index: number) => (
+                                <option key={index} value={`${item.WardCode}+${item.WardName}`}>{item.WardName}</option>
                             ))}
                         </select>
                         <label htmlFor="ward">
@@ -160,7 +222,7 @@ export default function FormOrder() {
                 </div>
                 <div>
                     <TitleCheckout text="Vận chuyển" />
-                    {dataDistrict.length <= 0 ? (
+                    {dataDistrict?.length <= 0 ? (
                         <input
                             readOnly
                             placeholder="Vui lòng nhập thông tin giao hàng"
@@ -174,7 +236,7 @@ export default function FormOrder() {
                                 className="py-[10px] px-[45px] w-full h-[44px] bg-white rounded-[4px] border border-solid outline-none mb-[30px] text-[14px] placeholder:text-[#545454] font-[450] cursor-pointer"
                             />
                             <span className="cursor-pointer absolute left-[15px] top-[12px] w-[18px] aspect-square rounded-[50%] bg-[#3072AC]"></span>
-                            <span className="text-[14px] font-[450] text-[#545454] absolute top-[10px] right-[15px]">0<sup className="underline">đ</sup></span>
+                            <span className="text-[14px] font-[450] text-[#545454] absolute top-[10px] right-[15px]">{feeShip.toLocaleString("en-US")}<sup className="underline">đ</sup></span>
                         </div>
                     )}
                     <TitleCheckout text="Thanh toán" />

@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 import { IoIosArrowBack } from "react-icons/io";
 import { useSelector } from "react-redux";
@@ -5,6 +7,7 @@ import { useSelector } from "react-redux";
 export default function TotalPrice() {
     const totalPrice = useSelector((state: any) => (state.cartReducer.totalPriceInit));
     const priceVoucher = useSelector((state: any) => (state.cartReducer.priceVoucher));
+    const feeShip = useSelector((state: any) => (state.orderReducer.feeShip));
 
     return (
         <>
@@ -12,9 +15,9 @@ export default function TotalPrice() {
                 <div className="flex items-center justify-between mt-[15px]">
                     <span className="text-[16px] text-[#737373]">Tổng cộng</span>
                     {priceVoucher > 0 ? (
-                        <span className="text-[20px] text-[#2a9dcc]">{priceVoucher.toLocaleString("en-US")}<sup className="underline">đ</sup></span>
+                        <span className="text-[20px] text-[#2a9dcc]">{(priceVoucher + feeShip).toLocaleString("en-US")}<sup className="underline">đ</sup></span>
                     ) : (
-                        <span className="text-[20px] text-[#2a9dcc]">{totalPrice.toLocaleString("en-US")}<sup className="underline">đ</sup></span>
+                        <span className="text-[20px] text-[#2a9dcc]">{(totalPrice + feeShip).toLocaleString("en-US")}<sup className="underline">đ</sup></span>
                     )}
                 </div>
                 <div className="mt-[15px] flex justify-between items-center">
