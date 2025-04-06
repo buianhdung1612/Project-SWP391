@@ -18,63 +18,79 @@ export default function EditRouteSkinAdminPage() {
 
     const [routineTitle, setRoutineTitle] = useState<string>("");
     const [routineDescription, setRoutineDescription] = useState<string>("");
-    const [rountines, setRountines] = useState([
-        {
-            step: "",
-            content: "",
-        },
-    ]);
+    const [rountines, setRountines] = useState<any>([]);
 
+    const [loading, setLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
 
-    const [listSkinType, setListSkinType] = useState([]);
-
     useEffect(() => {
-        const fetchSkintypes = async () => {
-            const response = await fetch("https://freshskinweb.onrender.com/admin/skintypes/show");
-            const data = await response.json();
-            setListSkinType(data.data);
-        };
-
         const fetchData = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/admin/skin-care-routines/${id}`);
             const data = await response.json();
             setRountines(data.data.rountineStep);
             setRoutineTitle(data.data.title);
-            setRoutineTitle(data.data.description);
+            setRoutineDescription(data.data.description);
         }
 
-        fetchSkintypes();
         fetchData();
     }, []);
 
-    console.log(rountines);
+    for(const item of rountines){
+        delete item["id"];
+        delete item["product"];
+    }
 
-    // const handleClick = async () => {
-    //     console.log(rountine);
-    //     const response = await fetch(`https://freshskinweb.onrender.com/admin/skin-care-routines/edit/${id}`, {
-    //         method: "PATCH",
-    //         headers: {
-    //             "Content-Type": "application/json"
-    //         },
-    //         body: JSON.stringify(rountine)
-    //     });
+    const handleSubmit = async () => {
+        setLoading(true);
+        if (!routineTitle) {
+            setAlertMessage("Tiêu đề lộ trình không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+        }
 
-    //     const dataResponse = await response.json();
+        if (!routineDescription) {
+            setAlertMessage("Mô tả lộ trình không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+        }
 
-    //     if (dataResponse.code === 200) {
-    //         setAlertMessage(dataResponse.message);
-    //         setAlertSeverity("success");
-    //         setTimeout(() => location.reload(), 2000);
-    //     } else {
-    //         setAlertMessage(dataResponse.message);
-    //         setAlertSeverity("error");
-    //     }
-    // }
+        if (rountines.length < 1) {
+            setAlertMessage("Các bước lộ trình không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+        }
 
-    console.log(rountines);
+        const data = {
+            title: routineTitle,
+            description: routineDescription,
+            rountineStep: rountines
+        };
 
+        console.log(data);
+
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/skin-care-routines/update/${id}`, {
+            method: "PATCH",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(data)
+        });
+
+        const dataResponse = await response.json();
+
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
+        }
+    }
 
 
     const handleAddRountine = () => {
@@ -98,37 +114,19 @@ export default function EditRouteSkinAdminPage() {
         setRountines(newRountines);
     };
 
-    const [selectedSkinType, setSelectedSkinType] = useState<number | null>(null);
-
-    const handleChangeSkinType = (event: React.ChangeEvent<HTMLInputElement>) => {
-        setSelectedSkinType(parseInt(event.target.value));
-    };
-
-
     return (
         <>
-            {
-                alertMessage && (
-                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                        {alertMessage}
-                    </Alert>
-                )
-            }
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
+
             {permissions?.includes("rountine_edit") && (
                 <div>
                     <Typography variant="h5" sx={{ mb: 1, pt: 2 }}>
-                        Chọn loại da
+                        Chỉnh sửa ....
                     </Typography>
-                    <RadioGroup row value={selectedSkinType?.toString() ?? ""} onChange={handleChangeSkinType}>
-                        {listSkinType.map((item: any, index: number) => (
-                            <FormControlLabel
-                                key={index}
-                                value={item.id.toString()}
-                                control={<Radio />}
-                                label={item.type}
-                            />
-                        ))}
-                    </RadioGroup>
 
                     <TextField
                         label="Tiêu đề lộ trình"
@@ -139,16 +137,7 @@ export default function EditRouteSkinAdminPage() {
                         sx={{ mb: 2, mt: 2 }}
                     />
 
-                    <TextField
-                        label="Mô tả lộ trình"
-                        variant="outlined"
-                        fullWidth
-                        multiline
-                        minRows={3}
-                        value={routineDescription}
-                        onChange={(e) => setRoutineDescription(e.target.value)}
-                        sx={{ mb: 3 }}
-                    />
+                    <TinyEditor value={routineDescription} onEditorChange={(content: string) => setRoutineDescription(content)} />
 
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 3 }}>
                         {rountines.map((item: any, index: number) => (
@@ -161,7 +150,7 @@ export default function EditRouteSkinAdminPage() {
                                     <TextField
                                         label="Tiêu đề mỗi bước"
                                         variant="outlined"
-                                        value={item.title}
+                                        value={item.step}
                                         onChange={(e) => handleChangeRountine(index, "step", e.target.value)}
                                         sx={{ width: { xs: "100%", md: "25%" } }}
                                     />
@@ -191,8 +180,15 @@ export default function EditRouteSkinAdminPage() {
                     </Box>
 
                     <Box sx={{ py: 4 }}>
-                        <Button variant="contained" color="primary" size="large" sx={{ marginLeft: "85%" }}>
-                            Tạo mới lộ trình
+                        <Button
+                            type='submit'
+                            variant="contained"
+                            color="primary"
+                            sx={{ width: '100%' }}
+                            disabled={loading}
+                            onClick={handleSubmit}
+                        >
+                            {loading ? "Đang cập nhật lộ trình..." : "Chỉnh sửa lộ trình"}
                         </Button>
                     </Box>
                 </div>

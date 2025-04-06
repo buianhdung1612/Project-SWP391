@@ -133,6 +133,7 @@ export default function OrdersAdminPage() {
         }
 
         console.log(data);
+        console.log(path);
         const response = await fetch(path, {
             method: "PATCH",
             headers: {
@@ -210,6 +211,8 @@ export default function OrdersAdminPage() {
         location.href = url.href;
     }
     // Hết phân trang
+
+    console.log(data.orders)
 
     return (
         <>
@@ -320,6 +323,14 @@ export default function OrdersAdminPage() {
                                                     <Chip
                                                         label="Đang giao hàng"
                                                         color="warning"
+                                                        size="small"
+                                                        variant="outlined"
+                                                    />
+                                                )}
+                                                {order.orderStatus === "COMPLETED" && (
+                                                    <Chip
+                                                        label="Thành công"
+                                                        color="success"
                                                         size="small"
                                                         variant="outlined"
                                                     />

@@ -33,6 +33,7 @@ export default function EditRouteSkinAdminPage() {
         fetchSkintypes();
     }, []);
 
+    const [loading, setLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
 
@@ -74,6 +75,36 @@ export default function EditRouteSkinAdminPage() {
     };
 
     const handleSubmit = async () => {
+        setLoading(true);
+
+        if (!selectedSkinType) {
+            setAlertMessage("Địa chỉ tài khoản không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+        }
+
+        if (!routineTitle) {
+            setAlertMessage("Tiêu đề lộ trình không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+        }
+
+        if (!routineDescription) {
+            setAlertMessage("Mô tả lộ trình không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+        }
+
+        if (rountines.length < 1) {
+            setAlertMessage("Các bước lộ trình không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+        }
+
         const data = {
             skinType: selectedSkinType,
             title: routineTitle,
@@ -103,7 +134,7 @@ export default function EditRouteSkinAdminPage() {
     return (
         <>
             {alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
                     {alertMessage}
                 </Alert>
             )}
@@ -134,17 +165,6 @@ export default function EditRouteSkinAdminPage() {
                     />
 
                     <TinyEditor value={routineDescription} onEditorChange={(content: string) => setRoutineDescription(content)} />
-
-                    <TextField
-                        label="Mô tả lộ trình"
-                        variant="outlined"
-                        fullWidth
-                        multiline
-                        minRows={3}
-                        value={routineDescription}
-                        onChange={(e) => setRoutineDescription(e.target.value)}
-                        sx={{ mb: 3 }}
-                    />
 
                     <Box sx={{ display: "flex", flexDirection: "column", gap: 3, mt: 3 }}>
                         {rountines.map((item: any, index: number) => (
@@ -187,8 +207,15 @@ export default function EditRouteSkinAdminPage() {
                     </Box>
 
                     <Box sx={{ py: 4 }}>
-                        <Button variant="contained" color="primary" size="large" onClick={handleSubmit} sx={{ marginLeft: "85%" }}>
-                            Tạo mới lộ trình
+                        <Button
+                            type='submit'
+                            variant="contained"
+                            color="primary"
+                            sx={{ width: '100%' }}
+                            disabled={loading}
+                            onClick={handleSubmit}
+                        >
+                            {loading ? "Đang tạo mới lộ trình..." : "Tạo mới lộ trình"}
                         </Button>
                     </Box>
                 </div>
