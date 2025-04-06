@@ -21,10 +21,11 @@ import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
 import { Alert } from "@mui/material";
 
 interface PriceByVolume {
-    id: number,
-    volume: number,
-    price: number,
-    unit: string
+    id: number;
+    volume: number;
+    price: number;
+    unit: string;
+    stock: number;
 }
 
 interface CartItem {
@@ -36,7 +37,6 @@ interface CartItem {
     volume: number,
     unit: string,
     quantity: number,
-    stock: number
 }
 
 export default function CardItem(props: {
@@ -49,25 +49,24 @@ export default function CardItem(props: {
     link: string,
     priceByVolume: PriceByVolume[],
     discount: number,
-    stock: number
 }) {
-    const { image = [], brand = "", title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0, stock = 0 } = props;
+    const { image = [], brand = "", title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0 } = props;
 
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const dispatchCart = useDispatch();
 
     const products = useSelector((state: any) => state.cartReducer.products);
-    const [currentVolume, setCurrentVolume] = useState(priceByVolume.length > 0 ? priceByVolume[0] : { id: 0, price: 0, volume: 0, unit: "" });
+    const [currentVolume, setCurrentVolume] = useState(priceByVolume.length > 0 ? priceByVolume[0] : { id: 0, price: 0, volume: 0, unit: "", stock: 0 });
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [quantity, setQuantity] = useState(1);
 
     const handleChange = (event: any): void => {
         const value = parseInt(event.target.value);
-        if (value >= 1 && value <= stock) {
+        if (value >= 1 && value <= currentVolume.stock) {
             setQuantity(value);
-        } else if (value > stock) {
-            setQuantity(stock);
+        } else if (value > currentVolume.stock) {
+            setQuantity(currentVolume.stock);
         } else {
             setQuantity(1);
         }
@@ -80,7 +79,7 @@ export default function CardItem(props: {
     }
 
     const handleClickIncrease = (): void => {
-        if (quantity < stock) {
+        if (quantity < currentVolume.stock) {
             setQuantity(quantity + 1);
         }
     };
@@ -95,13 +94,12 @@ export default function CardItem(props: {
             volume: currentVolume.volume,
             unit: currentVolume.unit,
             quantity: quantity,
-            stock: stock
         };
 
         const existProductInCart = products.find((item: CartItem) => item.title == data.title && item.volume == data.volume);
 
         if (existProductInCart) {
-            if (existProductInCart.quantity + data.quantity > stock) {
+            if (existProductInCart.quantity + data.quantity > currentVolume.stock) {
                 setAlertMessage("Sản phẩm không đủ số lượng.");
                 setAlertSeverity("error");
                 setTimeout(() => setAlertMessage(""), 3000);
@@ -110,7 +108,7 @@ export default function CardItem(props: {
             existProductInCart.quantity += data.quantity;
         }
         else {
-            if (data.quantity > stock) {
+            if (data.quantity > currentVolume.stock) {
                 setAlertMessage("Sản phẩm không đủ số lượng.");
                 setAlertSeverity("error");
                 setTimeout(() => setAlertMessage(""), 3000);

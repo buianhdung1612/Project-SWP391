@@ -24,7 +24,6 @@ export default function Cart() {
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const products = useSelector((state: any) => state.cartReducer.products);
-    console.log(products);
     const totalPriceInit = useSelector((state: any) => state.cartReducer.totalPriceInit);
     const totalQuantityInit = useSelector((state: any) => state.cartReducer.totalQuantityInit);
     const dispatchCart = useDispatch();

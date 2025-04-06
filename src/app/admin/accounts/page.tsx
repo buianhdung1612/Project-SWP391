@@ -11,7 +11,7 @@ import Alert from '@mui/material/Alert';
 export default function AccountAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
-    
+
     const [data, setData] = useState([]);
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/account';
@@ -20,8 +20,8 @@ export default function AccountAdminPage() {
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
     const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity ] = useState<"success" | "error" | "info" | "warning">("info");
-    
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+
     useEffect(() => {
         const urlCurrent = new URL(location.href);
         const api = new URL(linkApi);
@@ -59,21 +59,6 @@ export default function AccountAdminPage() {
         fetchAccounts();
     }, []);
 
-    // Lọc theo trạng thái
-    const handleChangeFilterStatus = async (event: any) => {
-        const value = event.target.value;
-        const url = new URL(location.href);
-
-        if (value) {
-            url.searchParams.set("status", value);
-        }
-        else {
-            url.searchParams.delete("status");
-        }
-
-        location.href = url.href;
-    }
-    // Hết Lọc theo trạng thái
 
     // Tìm kiếm tài khoản
     const handleSumbitSearch = async (event: any) => {
@@ -91,72 +76,48 @@ export default function AccountAdminPage() {
 
         location.href = url.href;
     }
+
     // Hết Tìm kiếm sản phẩm
 
-    // Thay đổi trạng thái 1 tài khoản
-    const handleChangeStatusOneAccount = async (status: string, dataPath: string) => {
-        const statusChange = status;
-        const path = `${linkApi}${dataPath}`;
-
-        const data = {
-            status: statusChange
-        }
-
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code === 200) {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("error");
-        }
-    }
 
 
     // Xóa vĩnh viễn một tài khoản
     const handleDeleteOneAccount = async (id: number) => {
-        const path = `${linkApi}/delete/${id}`;
+        const isConfirm = confirm("Bạn có chắc muốn xóa tài khoản?");
+        if (isConfirm) {
+            const path = `${linkApi}/deleteT/${id}`;
 
-        const response = await fetch(path, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json"
-            },
-        });
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+            });
 
-        const dataResponse = await response.json();
+            const dataResponse = await response.json();
 
-        if (dataResponse.code === 200) {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("error");
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
         }
     }
     // Hết Xóa một tài khoản
 
     return (
         <>
-        {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
-            {permissions?.includes("accounts_view") && permissions?.includes("accounts_edit")  && (
+            {
+                alertMessage && (
+                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                        {alertMessage}
+                    </Alert>
+                )
+            }
+            {permissions?.includes("accounts_view") && permissions?.includes("accounts_edit") && (
                 <Box p={3}>
                     {/* Header */}
                     <Typography variant="h5" gutterBottom>
@@ -166,21 +127,13 @@ export default function AccountAdminPage() {
                     {/* Bộ lọc và Tìm kiếm */}
                     <Paper elevation={1} sx={{ p: 2, mb: 2, bgcolor: "white" }} >
                         <Typography variant="subtitle1" fontWeight="bold" marginBottom={2} gutterBottom>
-                            Bộ lọc và Tìm kiếm
+                            Tìm kiếm
                         </Typography>
                         <Box display="flex" flexWrap="wrap">
-                            <FormControl sx={{ width: '30%', marginRight: '20px' }} >
-                                <InputLabel id="filter-label" shrink={true}>Bộ lọc</InputLabel>
-                                <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
-                                    <MenuItem value="">Tất cả</MenuItem>
-                                    <MenuItem value="active">Hoạt động</MenuItem>
-                                    <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                </Select>
-                            </FormControl>
                             <form onSubmit={handleSumbitSearch} style={{ flex: 1, gap: "8px" }}>
                                 <Box display="flex">
                                     <TextField
-                                        label="Nhập từ khóa..."
+                                        label="Nhập họ / tên..."
                                         variant="outlined"
                                         fullWidth
                                         name="keyword"
@@ -223,7 +176,6 @@ export default function AccountAdminPage() {
                                         <TableCell>Tên</TableCell>
                                         <TableCell>Nhóm quyền</TableCell>
                                         <TableCell>Email</TableCell>
-                                        <TableCell>Trạng thái</TableCell>
                                         <TableCell>Hành động</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -241,26 +193,6 @@ export default function AccountAdminPage() {
                                             <TableCell>{account.lastName}</TableCell>
                                             <TableCell>{account.role?.title || ""}</TableCell>
                                             <TableCell>{account.email}</TableCell>
-                                            <TableCell>
-                                                {account.status === "ACTIVE" && (
-                                                    <Chip
-                                                        label="Hoạt động"
-                                                        color="success"
-                                                        size="small"
-                                                        variant="outlined"
-                                                        onClick={() => handleChangeStatusOneAccount("INACTIVE", `/edit/${account.userID}`)}
-                                                    />
-                                                )}
-                                                {account.status === "INACTIVE" && (
-                                                    <Chip
-                                                        label="Dừng hoạt động"
-                                                        color="error"
-                                                        size="small"
-                                                        variant="outlined"
-                                                        onClick={() => handleChangeStatusOneAccount("ACTIVE", `/edit/${account.userID}`)}
-                                                    />
-                                                )}
-                                            </TableCell>
                                             <TableCell>
                                                 <div className="flex">
                                                     <Tooltip title="Chi tiết" placement="top">

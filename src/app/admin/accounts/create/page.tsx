@@ -37,18 +37,90 @@ export default function CreateAccountAdmin() {
   }, []);
 
   const [images, setImages] = useState<File[]>([]);
+  const [loading, setLoading] = useState(false);
   const [alertMessage, setAlertMessage] = useState<string>("");
-  const [alertSeverity, setAlertSeverity] = useState<
-    "success" | "error" | "info" | "warning"
-  >("info");
+  const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
   const handleImageChange = (newImages: File[]) => {
     setImages(newImages);
   };
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setLoading(true);
 
     const formData = new FormData(event.currentTarget);
+
+    if (!formData.get("username")) {
+      setAlertMessage("Tên tài khoản không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.get("password")) {
+      setAlertMessage("Mật khẩu tài khoản không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!roleCurrent) {
+      setAlertMessage("Phân quyền tài khoản không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.get("firstname")) {
+      setAlertMessage("Họ người dùng không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.get("lastname")) {
+      setAlertMessage("Tên người dùng không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.get("email")) {
+      setAlertMessage("Email tài khoản không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.get("phone")) {
+      setAlertMessage("Số điện thoại tài khoản không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (!formData.get("address")) {
+      setAlertMessage("Địa chỉ tài khoản không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if (images.length != 1) {
+      setAlertMessage("Phải chọn 1 ảnh đại diện.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
 
     const request = {
       username: formData.get("username"),
@@ -59,7 +131,6 @@ export default function CreateAccountAdmin() {
       email: formData.get("email"),
       phone: formData.get("phone"),
       address: formData.get("address"),
-      status: formData.get("status"),
     };
 
     formData.append("request", JSON.stringify(request));
@@ -93,7 +164,7 @@ export default function CreateAccountAdmin() {
   return (
     <>
       {alertMessage && (
-        <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+        <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
           {alertMessage}
         </Alert>
       )}
@@ -131,7 +202,6 @@ export default function CreateAccountAdmin() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
               />
               <TextField
                 label="Tên"
@@ -139,7 +209,6 @@ export default function CreateAccountAdmin() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
               />
               <TextField
                 label="Tên đăng nhập"
@@ -147,7 +216,6 @@ export default function CreateAccountAdmin() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
               />
               <TextField
                 label="Mật khẩu"
@@ -155,7 +223,6 @@ export default function CreateAccountAdmin() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
                 type="password"
               />
               <TextField
@@ -164,7 +231,6 @@ export default function CreateAccountAdmin() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
               />
               <TextField
                 label="Email"
@@ -172,7 +238,6 @@ export default function CreateAccountAdmin() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
                 type="email"
               />
               <TextField
@@ -181,35 +246,21 @@ export default function CreateAccountAdmin() {
                 variant="outlined"
                 fullWidth
                 sx={{ marginBottom: 3 }}
-                required
               />
               <UploadImage
                 label="Ảnh đại diện"
                 id="images"
                 name="images"
                 onImageChange={handleImageChange}
-              />
-              <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                <RadioGroup defaultValue="ACTIVE" name="status" row>
-                  <FormControlLabel
-                    value="ACTIVE"
-                    control={<Radio />}
-                    label="Hoạt động"
-                  />
-                  <FormControlLabel
-                    value="INACTIVE"
-                    control={<Radio />}
-                    label="Dừng hoạt động"
-                  />
-                </RadioGroup>
-              </FormControl>
+              />              
               <Button
-                type="submit"
+                type='submit'
                 variant="contained"
                 color="primary"
-                sx={{ width: "100%" }}
+                sx={{ width: '100%' }}
+                disabled={loading}
               >
-                Tạo tài khoản
+                {loading ? "Đang tạo tài khoản..." : "Tạo tài khoản"}
               </Button>
             </form>
           </Paper>

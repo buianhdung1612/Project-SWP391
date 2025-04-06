@@ -14,7 +14,8 @@ import Alert from '@mui/material/Alert';
 interface InputField {
     price: number;
     volume: number;
-    unit: string
+    unit: string;
+    stock: number;
 }
 
 export default function CreateProductAdminPage() {
@@ -84,7 +85,6 @@ export default function CreateProductAdminPage() {
         const skinIssues = event.target.skinIssues.value;
         const featured = event.target.featured.value === "true";
         const status = event.target.status.value;
-        const stock = event.target.stock.value;
 
         if (!title) {
             setAlertMessage("Tên sản phẩm không được để trống.");
@@ -166,14 +166,6 @@ export default function CreateProductAdminPage() {
             return;
         }
 
-        if(stock <= 0){
-            setAlertMessage("Số lượng sản phẩm phải lớn hơn 0.");
-            setAlertSeverity("error");
-            setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false);
-            return;
-        }
-
         if (discountPercent >= 100) {
             setAlertMessage("Phần trăm giảm giá không được vượt quá 100%.");
             setAlertSeverity("error");
@@ -240,7 +232,8 @@ export default function CreateProductAdminPage() {
             variants: inputs.map(input => ({
                 price: Number(input.price),
                 volume: input.volume ? Number(input.volume) : 0,
-                unit: input.unit
+                unit: input.unit,
+                stock: input.stock ? Number(input.stock) : 0
             })),
             skinTypes: checkedSkinType,
             discountPercent: discountPercent,
@@ -250,7 +243,6 @@ export default function CreateProductAdminPage() {
             usageInstructions: usageInstructions,
             benefits: benefits,
             skinIssues: skinIssues,
-            stock: stock,
             featured: featured,
             status: status,
         };
@@ -277,18 +269,20 @@ export default function CreateProductAdminPage() {
         setLoading(false); 
     }
 
+
     // Variants
     const [inputs, setInputs] = useState<InputField[]>([
-        { price: 0, volume: 0, unit: "ML" }
+        { price: 0, volume: 0, unit: "ML", stock: 0 }
     ]);
     const handleAddInput = () => {
-        setInputs([...inputs, { price: 0, volume: 0, unit: "ML" }]);
+        setInputs([...inputs, { price: 0, volume: 0, unit: "ML", stock: 0 }]);
     };
     const handleRemoveInput = (indexRemove: number) => {
         const newInputs = inputs.filter((_, index) => index !== indexRemove);
         setInputs(newInputs);
     };
-    const handleInputChange = (index: number, field: 'volume' | 'price' | 'unit', value: string) => {
+
+    const handleInputChange = (index: number, field: 'volume' | 'price' | 'unit' | 'stock', value: string) => {
         const newInputs = [...inputs];
         if (field === "unit") {
             newInputs[index][field] = value ? value : "ML";
@@ -375,7 +369,7 @@ export default function CreateProductAdminPage() {
                                 {inputs.map((input, index: number) => (
                                     <Box key={index} sx={{ display: 'flex', alignItems: 'center', mb: 2 }}>
                                         <TextField
-                                            label="Dung tích / Số lượng"
+                                            label="Dung tích"
                                             type='number'
                                             variant="outlined"
                                             size="small"
@@ -391,6 +385,15 @@ export default function CreateProductAdminPage() {
                                             size="small"
                                             value={input.price}
                                             onChange={(e) => handleInputChange(index, 'price', e.target.value)}
+                                            sx={{ ml: 1, width: "150px" }}
+                                        />
+                                        <TextField
+                                            label="Số lượng"
+                                            type='number'
+                                            variant="outlined"
+                                            size="small"
+                                            value={input.stock}
+                                            onChange={(e) => handleInputChange(index, 'stock', e.target.value)}
                                             sx={{ ml: 1, width: "150px" }}
                                         />
                                         <Select
@@ -412,14 +415,6 @@ export default function CreateProductAdminPage() {
                             <TextField
                                 label="% Giảm giá"
                                 name='discount'
-                                variant="outlined"
-                                fullWidth
-                                type="number"
-                                sx={{ marginBottom: 2 }}
-                            />
-                            <TextField
-                                label="Số lượng"
-                                name='stock'
                                 variant="outlined"
                                 fullWidth
                                 type="number"

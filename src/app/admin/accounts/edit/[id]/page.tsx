@@ -17,9 +17,11 @@ export default function EditAccountAdmin() {
         email: "",
         phone: "",
         username: "",
+        address: "",
         avatar: []
     })
     const [roleCurrent, setRoleCurrent] = useState(0);
+    const [loading, setLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
 
@@ -62,17 +64,72 @@ export default function EditAccountAdmin() {
 
     const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
         event.preventDefault();
+        setLoading(true);
 
         const formData = new FormData(event.currentTarget);
+        if (!roleCurrent) {
+            setAlertMessage("Phân quyền tài khoản không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!formData.get("firstname")) {
+            setAlertMessage("Họ người dùng không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!formData.get("lastname")) {
+            setAlertMessage("Tên người dùng không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!formData.get("email")) {
+            setAlertMessage("Email tài khoản không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!formData.get("phone")) {
+            setAlertMessage("Số điện thoại tài khoản không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!formData.get("address")) {
+            setAlertMessage("Địa chỉ tài khoản không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (images.length != 1) {
+            setAlertMessage("Phải chọn 1 ảnh đại diện.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
         const request = {
             role: roleCurrent,
-            firstname: formData.get("firstname"),
-            lastname: formData.get("lastname"),
-            // email: formData.get("email"),
-            password: formData.get("password"),
+            firstName: formData.get("firstname"),
+            lastName: formData.get("lastname"),
+            email: formData.get("email"),
             phone: formData.get("phone"),
-            status: formData.get("status"),
+            address: formData.get("address")
         };
 
         formData.append("request", JSON.stringify(request));
@@ -83,8 +140,8 @@ export default function EditAccountAdmin() {
             }
         });
 
-        const response = await fetch('https://freshskinweb.onrender.com/admin/blogs/create', {
-            method: "POST",
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/account/edit/${id}`, {
+            method: "PATCH",
             body: formData
         });
 
@@ -102,17 +159,15 @@ export default function EditAccountAdmin() {
 
     return (
         <>
-            {
-                alertMessage && (
-                    <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                        {alertMessage}
-                    </Alert>
-                )
-            }
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             {permissions?.includes("accounts_edit") && (
                 <Box sx={{ padding: 3, backgroundColor: "#e3f2fd" }}>
                     <Typography variant="h5" gutterBottom>
-                        Trang tạo mới tài khoản quản trị
+                        Trang chỉnh sửa tài khoản quản trị
                     </Typography>
 
                     <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
@@ -137,7 +192,6 @@ export default function EditAccountAdmin() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={data.firstName}
                                 onChange={(e) =>
                                     setData({ ...data, firstName: e.target.value })
@@ -149,20 +203,10 @@ export default function EditAccountAdmin() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={data.lastName}
                                 onChange={(e) =>
                                     setData({ ...data, lastName: e.target.value })
                                 }
-                            />
-                            <TextField
-                                label="Tài khoản người dùng"
-                                name="username"
-                                variant="outlined"
-                                fullWidth
-                                sx={{ marginBottom: 3 }}
-                                aria-readonly
-                                value={data.username}
                             />
                             <TextField
                                 label="Email"
@@ -170,9 +214,10 @@ export default function EditAccountAdmin() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                aria-readonly
-                                type="email"
                                 value={data.email}
+                                onChange={(e) =>
+                                    setData({ ...data, email: e.target.value })
+                                }
                             />
                             <TextField
                                 label="Số điện thoại"
@@ -180,10 +225,20 @@ export default function EditAccountAdmin() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={data.phone}
                                 onChange={(e) =>
                                     setData({ ...data, phone: e.target.value })
+                                }
+                            />
+                            <TextField
+                                label="Địa chỉ"
+                                name="address"
+                                variant="outlined"
+                                fullWidth
+                                sx={{ marginBottom: 3 }}
+                                value={data.address}
+                                onChange={(e) =>
+                                    setData({ ...data, address: e.target.value })
                                 }
                             />
                             <UploadImage
@@ -195,12 +250,13 @@ export default function EditAccountAdmin() {
                                 onRemoveDefaultImage={handleRemoveDefaultImage}
                             />
                             <Button
-                                type="submit"
+                                type='submit'
                                 variant="contained"
                                 color="primary"
-                                sx={{ width: "100%" }}
+                                sx={{ width: '100%' }}
+                                disabled={loading}
                             >
-                                Cập nhật thông tin
+                                {loading ? "Cập nhật tài khoản..." : "Chỉnh sửa tài khoản"}
                             </Button>
                         </form>
                     </Paper>

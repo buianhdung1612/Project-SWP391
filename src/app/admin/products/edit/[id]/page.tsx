@@ -15,6 +15,7 @@ import Alert from '@mui/material/Alert';
 interface InputField {
     volume: number;
     price: number;
+    stock: number;
 }
 
 interface InputField {
@@ -50,7 +51,6 @@ export default function EditProductAdminPage() {
         description: "",
         variants: [],
         discountPercent: 0,
-        stock: 0,
         origin: "",
         thumbnail: [],
         ingredients: "",
@@ -95,6 +95,7 @@ export default function EditProductAdminPage() {
                 price: variant.price,
                 volume: variant.volume,
                 unit: variant.unit,
+                stock: variant.stock
             }));
             setInputs(productVariants);
             const skinTypeIds = data.data.skinTypes.map((type: any) => type.id);
@@ -125,13 +126,13 @@ export default function EditProductAdminPage() {
 
     /// Variants
     const handleAddInput = () => {
-        setInputs([...inputs, { price: 0, volume: 0, unit: "ML" }]);
+        setInputs([...inputs, { price: 0, volume: 0, unit: "ML", stock: 0 }]);
     };
     const handleRemoveInput = (indexRemove: number) => {
         const newInputs = inputs.filter((_, index) => index !== indexRemove);
         setInputs(newInputs);
     };
-    const handleInputChange = (index: number, field: 'volume' | 'price' | 'unit', value: string) => {
+    const handleInputChange = (index: number, field: 'volume' | 'price' | 'unit' | 'stock', value: string) => {
         const newInputs = [...inputs];
         if (field === "unit") {
             newInputs[index][field] = value ? value : "ML";
@@ -180,7 +181,6 @@ export default function EditProductAdminPage() {
         const benefits = event.target.benefits.value;
         const skinIssues = event.target.skinIssues.value;
         const featured = event.target.featured.value === "true";
-        const stock = event.target.stock.value;
 
         if (!title) {
             setAlertMessage("Tên sản phẩm không được để trống.");
@@ -262,14 +262,6 @@ export default function EditProductAdminPage() {
             return;
         }
 
-        if(stock <= 0){
-            setAlertMessage("Số lượng sản phẩm phải lớn hơn 0.");
-            setAlertSeverity("error");
-            setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false);
-            return;
-        }
-
         if (checkedSkinType.length === 0) {
             setAlertMessage("Sản phẩm dành cho loại da không được để trống");
             setAlertSeverity("error");
@@ -329,7 +321,8 @@ export default function EditProductAdminPage() {
             variants: inputs.map(input => ({
                 price: Number(input.price),
                 volume: input.volume ? Number(input.volume) : 0,
-                unit: input.unit
+                unit: input.unit,
+                stock: input.stock ? Number(input.stock) : 0,
             })),
             skinTypeId: checkedSkinType,
             discountPercent: discountPercent,
@@ -345,52 +338,22 @@ export default function EditProductAdminPage() {
 
         images.forEach((image) => formData.append("newImg", image));
 
-        console.log("=== REQUEST DATA ===");
-for (const key in request) {
-    if (Object.hasOwn(request, key)) {
-        const value = request[key as keyof typeof request];
+        const response = await fetch(`https://freshskinweb.onrender.com/admin/products/edit/${id}`, {
+            method: "PATCH",
+            body: formData,
+        });
 
-        // Nếu là mảng variants
-        if (key === "variants" && Array.isArray(value)) {
-            console.log(`> ${key}:`);
-            value.forEach((variant, index) => {
-                console.log(`   - Variant ${index + 1}:`);
-                for (const vKey in variant) {
-                    console.log(`     • ${vKey}: ${variant[vKey as keyof typeof variant]}`);
-                }
-            });
-        }
-        // Nếu là mảng (ví dụ skinIssues,...)
-        else if (Array.isArray(value)) {
-            console.log(`> ${key}: [${value.join(", ")}]`);
-        }
-        // Nếu là boolean
-        else if (typeof value === "boolean") {
-            console.log(`> ${key}: ${value ? "true" : "false"}`);
-        }
-        // Các kiểu khác
-        else {
-            console.log(`> ${key}: ${value}`);
-        }
-    }
-}
+        const dataResponse = await response.json();
 
-        // const response = await fetch(`https://freshskinweb.onrender.com/admin/products/edit/${id}`, {
-        //     method: "PATCH",
-        //     body: formData,
-        // });
-
-        // const dataResponse = await response.json();
-
-        // if (dataResponse.code === 200) {
-        //     setAlertMessage(dataResponse.message);
-        //     setAlertSeverity("success");
-        //     setTimeout(() => location.reload(), 2000);
-        // } else {
-        //     setAlertMessage(dataResponse.message);
-        //     setAlertSeverity("error");
-        //     setTimeout(() => location.reload(), 2000);
-        // }
+        if (dataResponse.code === 200) {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => location.reload(), 2000);
+        } else {
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("error");
+            setTimeout(() => location.reload(), 2000);
+        }
     };
 
     return (
@@ -422,7 +385,7 @@ for (const key in request) {
                                 <SubCategory
                                     items={listCategory}
                                     onCheckedChange={handleCheckedChange}
-                                    defaultCheckedIds={inputCheckedCategory} 
+                                    defaultCheckedIds={inputCheckedCategory}
                                 />
                             </div>
                             <FormControl fullWidth variant="outlined" sx={{ marginBottom: 3 }}>
@@ -484,6 +447,15 @@ for (const key in request) {
                                             onChange={(e) => handleInputChange(index, 'price', e.target.value)}
                                             sx={{ ml: 1, width: "150px" }}
                                         />
+                                        <TextField
+                                            label="Số lượng"
+                                            type='number'
+                                            variant="outlined"
+                                            size="small"
+                                            value={input.stock}
+                                            onChange={(e) => handleInputChange(index, 'stock', e.target.value)}
+                                            sx={{ ml: 1, width: "150px" }}
+                                        />
                                         <Select
                                             value={input.unit}
                                             onChange={(e) => handleInputChange(index, "unit", e.target.value)}
@@ -509,16 +481,6 @@ for (const key in request) {
                                 sx={{ marginBottom: 2 }}
                                 value={productInfo.discountPercent}
                                 onChange={(e) => setProductInfo({ ...productInfo, discountPercent: parseFloat(e.target.value) })}
-                            />
-                            <TextField
-                                label="Số lượng"
-                                name='stock'
-                                variant="outlined"
-                                fullWidth
-                                type="number"
-                                sx={{ marginBottom: 2 }}
-                                value={productInfo.stock}
-                                onChange={(e) => setProductInfo({ ...productInfo, stock: parseFloat(e.target.value) })}
                             />
                             <FormGroup row>
                                 {listSkinType.map((item: any, index: number) => (
