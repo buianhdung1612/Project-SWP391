@@ -1,6 +1,6 @@
 "use client"
 
-import { Box, Button, FormControlLabel, Paper, Radio, RadioGroup, TextField, Typography } from "@mui/material";
+import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import { useParams } from "next/navigation";
 import { useContext, useEffect, useState } from "react";
 import Alert from '@mui/material/Alert';
@@ -70,8 +70,6 @@ export default function EditRouteSkinAdminPage() {
             rountineStep: rountines
         };
 
-        console.log(data);
-
         const response = await fetch(`https://freshskinweb.onrender.com/admin/skin-care-routines/update/${id}`, {
             method: "PATCH",
             headers: {
@@ -104,7 +102,7 @@ export default function EditRouteSkinAdminPage() {
     };
 
     const handleDeleteRountine = (indexRountine: number) => {
-        const newRountines = rountines.filter((_, index: number) => index !== indexRountine);
+        const newRountines = rountines.filter((_: any, index: number) => index !== indexRountine);
         setRountines(newRountines);
     };
 
