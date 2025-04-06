@@ -30,6 +30,17 @@ export default function RouteSkinAdminPage() {
                 </Typography>
                 {permissions?.includes("rountine_view") && (
                     <Paper sx={{ backgroundColor: "white", p: 2 }}>
+                        <Box display="flex" gap={20} flexWrap="wrap">
+                            <Button
+                                variant="outlined"
+                                color="success"
+                                sx={{ borderColor: '#374785', color: '#374785' }}
+                            >
+                                <Link href="/admin/route-skin/create">
+                                    + Thêm mới
+                                </Link>
+                            </Button>
+                        </Box>
                         <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
                             <Table>
                                 <TableHead>

@@ -16,6 +16,8 @@ export default function EditRouteSkinAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
 
+    console.log(permissions);
+
     const [data, setData] = useState({
         skinTypeEntity: {
             type: ""
@@ -78,14 +80,9 @@ export default function EditRouteSkinAdminPage() {
     }
 
 
-    const handleChangeRountine = (indexRountine: number, field: 'content' | 'title' | 'products', value: any) => {
+    const handleChangeRountine = (indexRountine: number, field: 'content' | 'title', value: any) => {
         const newRountines = [...rountines];
-        if (field == "products") {
-
-        }
-        else {
-            newRountines[indexRountine][field] = value;
-        }
+        newRountines[indexRountine][field] = value;
         setRountines(newRountines);
     }
 
@@ -99,47 +96,56 @@ export default function EditRouteSkinAdminPage() {
                     </Alert>
                 )
             }
-            <Box sx={{ padding: 3, backgroundColor: '#e3f2fd' }}>
-                <Typography variant="h5" gutterBottom>
-                    Trang chỉnh sửa lộ trình chăm sóc da <span style={{ color: "#1976d2", fontWeight: "bold" }}>
-                        {data.skinTypeEntity?.type}
-                    </span>
-                </Typography>
+            {permissions?.includes("rountine_edit") && (
+                <Box sx={{ display: 'flex', flexDirection: 'column', gap: 3 }}>
+                    {rountines.map((item: any, index: number) => (
+                        <Paper key={index} elevation={2} sx={{ padding: 2, backgroundColor: '#fdfdfd' }}>
+                            <Typography variant="subtitle1" fontWeight="bold" gutterBottom>
+                                Bước {index + 1}
+                            </Typography>
 
-                {permissions?.includes("rountine_edit") && (
-                    <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
-                        <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
-                            {rountines.map((item: any, index: number) => (
-                                <div key={index}>
-                                    <div className="flex">
-                                        <TextField
-                                            label="Tiêu đề mỗi bước"
-                                            name='title'
-                                            variant="outlined"
-                                            sx={{ marginBottom: 3, width: "18%", marginRight: "20px" }}
-                                            required
-                                            value={item.title}
-                                        />
-                                        <TextField
-                                            label="Nội dung"
-                                            name='content'
-                                            variant="outlined"
-                                            sx={{ marginBottom: 3, flex: "1" }}
-                                            required
-                                            value={item.content}
-                                        />
-                                    </div>
-                                </div>
-                            ))}
-                        </Box>
+                            <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, gap: 2 }}>
+                                <TextField
+                                    label="Tiêu đề mỗi bước"
+                                    variant="outlined"
+                                    value={item.title}
+                                    onChange={(e) => handleChangeRountine(index, "title", e.target.value)}
+                                    sx={{ width: { xs: '100%', md: '25%' } }}
+                                />
 
+                                <TextField
+                                    label="Nội dung"
+                                    variant="outlined"
+                                    multiline
+                                    minRows={2}
+                                    value={item.content}
+                                    onChange={(e) => handleChangeRountine(index, "content", e.target.value)}
+                                    sx={{ flex: 1 }}
+                                />
+                            </Box>
 
-                        {/* <Button onClick={handleClick} variant="contained" color="primary" sx={{ width: '100%' }}>
-                            Chỉnh sửa lộ trình chăm sóc da
-                        </Button> */}
-                    </Paper>
-                )}
-            </Box>
+                            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2 }}>
+                                <Button
+                                    variant="outlined"
+                                    color="error"
+                                    onClick={() => handleDeleteRountine(index)}
+                                >
+                                    Xoá bước
+                                </Button>
+                            </Box>
+                        </Paper>
+                    ))}
+
+                    <Button
+                        onClick={handleAddRountine}
+                        variant="contained"
+                        color="secondary"
+                        sx={{ alignSelf: 'flex-start' }}
+                    >
+                        + Thêm bước
+                    </Button>
+                </Box>
+            )}
         </>
     )
 }

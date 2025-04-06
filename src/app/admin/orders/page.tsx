@@ -238,6 +238,7 @@ export default function OrdersAdminPage() {
                                 <Select labelId="filter-label" label="Bộ lọc" value={filterStatus} displayEmpty onChange={handleChangeFilterStatus} >
                                     <MenuItem value="">Tất cả</MenuItem>
                                     <MenuItem value="PENDING">Chờ duyệt</MenuItem>
+                                    <MenuItem value="DELIVERING">Đang giao</MenuItem>
                                     <MenuItem value="COMPLETED">Thành công</MenuItem>
                                     <MenuItem value="CANCELED">Hủy</MenuItem>
                                 </Select>
@@ -272,7 +273,7 @@ export default function OrdersAdminPage() {
                                 <Box display="flex" >
                                     <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                         <MenuItem value="PENDING">Chờ duyệt</MenuItem>
-                                        <MenuItem value="COMPLETED">Thành công</MenuItem>
+                                        <MenuItem value="DELIVERING">Đang giao</MenuItem>
                                         <MenuItem value="CANCELED">Hủy</MenuItem>
                                     </Select>
                                     <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor: '#374785', color: '#ffffff' }}>
@@ -315,10 +316,10 @@ export default function OrdersAdminPage() {
                                                         variant="outlined"
                                                     />
                                                 )}
-                                                {order.orderStatus === "COMPLETED" && (
+                                                {order.orderStatus === "DELIVERING" && (
                                                     <Chip
-                                                        label="Thành công"
-                                                        color="success"
+                                                        label="Đang giao hàng"
+                                                        color="warning"
                                                         size="small"
                                                         variant="outlined"
                                                     />
@@ -341,8 +342,8 @@ export default function OrdersAdminPage() {
                                                         </Link>
                                                     </Tooltip>
                                                     {order.orderStatus === "PENDING" && (
-                                                        <Tooltip title="Xác nhận" placement="top">
-                                                            <TiTick onClick={() => handleChangeStatusOneOrder("COMPLETED", `/edit/${order.orderId}`)} className="text-[25px] text-green-500 mr-2 cursor-pointer" />
+                                                        <Tooltip title="Xác nhận giao hàng" placement="top">
+                                                            <TiTick onClick={() => handleChangeStatusOneOrder("DELIVERING", `/edit/${order.orderId}`)} className="text-[25px] text-green-500 mr-2 cursor-pointer" />
                                                         </Tooltip>
                                                     )}
                                                     {order.orderStatus === "PENDING" && (

@@ -108,6 +108,7 @@ export default function CardItem(props: {
     };
 
     const handleClosePopup = () => {
+        setThumbsSwiper(null);
         setIsPopupOpen(false);
     };
 

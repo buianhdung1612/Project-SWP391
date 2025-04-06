@@ -345,22 +345,52 @@ export default function EditProductAdminPage() {
 
         images.forEach((image) => formData.append("newImg", image));
 
-        const response = await fetch(`https://freshskinweb.onrender.com/admin/products/edit/${id}`, {
-            method: "PATCH",
-            body: formData,
-        });
+        console.log("=== REQUEST DATA ===");
+for (const key in request) {
+    if (Object.hasOwn(request, key)) {
+        const value = request[key as keyof typeof request];
 
-        const dataResponse = await response.json();
-
-        if (dataResponse.code === 200) {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("error");
-            setTimeout(() => location.reload(), 2000);
+        // Nếu là mảng variants
+        if (key === "variants" && Array.isArray(value)) {
+            console.log(`> ${key}:`);
+            value.forEach((variant, index) => {
+                console.log(`   - Variant ${index + 1}:`);
+                for (const vKey in variant) {
+                    console.log(`     • ${vKey}: ${variant[vKey as keyof typeof variant]}`);
+                }
+            });
         }
+        // Nếu là mảng (ví dụ skinIssues,...)
+        else if (Array.isArray(value)) {
+            console.log(`> ${key}: [${value.join(", ")}]`);
+        }
+        // Nếu là boolean
+        else if (typeof value === "boolean") {
+            console.log(`> ${key}: ${value ? "true" : "false"}`);
+        }
+        // Các kiểu khác
+        else {
+            console.log(`> ${key}: ${value}`);
+        }
+    }
+}
+
+        // const response = await fetch(`https://freshskinweb.onrender.com/admin/products/edit/${id}`, {
+        //     method: "PATCH",
+        //     body: formData,
+        // });
+
+        // const dataResponse = await response.json();
+
+        // if (dataResponse.code === 200) {
+        //     setAlertMessage(dataResponse.message);
+        //     setAlertSeverity("success");
+        //     setTimeout(() => location.reload(), 2000);
+        // } else {
+        //     setAlertMessage(dataResponse.message);
+        //     setAlertSeverity("error");
+        //     setTimeout(() => location.reload(), 2000);
+        // }
     };
 
     return (

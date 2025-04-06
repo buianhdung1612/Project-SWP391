@@ -66,20 +66,20 @@ export default function EditAccountAdmin() {
         const formData = new FormData(event.currentTarget);
 
         const request = {
+            role: roleCurrent,
             firstname: formData.get("firstname"),
             lastname: formData.get("lastname"),
-            email: formData.get("email"),
+            // email: formData.get("email"),
             password: formData.get("password"),
             phone: formData.get("phone"),
             status: formData.get("status"),
-            roleId: roleCurrent
         };
 
         formData.append("request", JSON.stringify(request));
 
         images.forEach((image) => {
             if (image instanceof File) {
-                formData.append("thumbnail", image);
+                formData.append("newImg", image);
             }
         });
 

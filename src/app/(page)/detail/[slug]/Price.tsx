@@ -50,7 +50,8 @@ export default function Price() {
 
     const handleChange = (event: any): void => {
         const value = parseInt(event.target.value);
-        if (!isNaN(value) && value >= 1 && value <= 30) {
+
+        if (!isNaN(value) && value >= 1 && value <= productDetail.stock) {
             setQuantity(value);
         }
     };
@@ -85,20 +86,31 @@ export default function Price() {
         );
 
         if (existProductInCart) {
-            if (existProductInCart.quantity + data.quantity > 30) {
+            if (existProductInCart.quantity + data.quantity > productDetail.stock) {
                 setAlert({
                     severity: "error",
-                    content: "Bạn chỉ có thể mua tối đa 30 sản phẩm."
+                    content: "Sản phẩm không đủ số lượng."
                 });
+                setTimeout(() => {
+                    setAlert({
+                        severity: "",
+                        content: ""
+                    })
+                }, 3000)
                 return;
             }
             existProductInCart.quantity += data.quantity;
         } else {
-            if (data.quantity > 30) {
+            if (data.quantity > productDetail.stock) {
                 setAlert({
                     severity: "error",
-                    content: "Bạn chỉ có thể mua tối đa 30 sản phẩm."
+                    content: "Sản phẩm không đủ số lượng."
                 });
+                setTimeout(() => {
+                    setAlert({
+                        content: ""
+                    })
+                }, 3000)
                 return;
             }
             newCart.push(data);
@@ -126,11 +138,16 @@ export default function Price() {
         );
 
         if (existProductInCart) {
-            if (existProductInCart.quantity + data.quantity > 30) {
+            if (existProductInCart.quantity + data.quantity > productDetail.stock) {
                 setAlert({
                     severity: "error",
-                    content: "Bạn chỉ có thể mua tối đa 30 sản phẩm."
+                    content: "Sản phẩm không đủ số lượng."
                 });
+                setTimeout(() => {
+                    setAlert({
+                        content: ""
+                    })
+                }, 3000)
                 return;
             }
             existProductInCart.quantity += data.quantity;
@@ -138,12 +155,18 @@ export default function Price() {
             if (data.quantity > 30) {
                 setAlert({
                     severity: "error",
-                    content: "Bạn chỉ có thể mua tối đa 30 sản phẩm."
+                    content: "Sản phẩm không đủ số lượng."
                 });
+                setTimeout(() => {
+                    setAlert({
+                        content: ""
+                    })
+                }, 3000)
                 return;
             }
-            newCart.push(data);
         }
+
+        newCart.push(data);
 
         dispatchCart(cartAddNewProduct(newCart));
         router.push("/order");

@@ -23,7 +23,8 @@ interface DataSubmit {
     totalPrice: number,
     paymentMethod: string,
     orderItems: any,
-    voucherName: string
+    voucherName: string,
+    priceShipping: number
 }
 
 export default function OrderPage() {
@@ -141,35 +142,36 @@ export default function OrderPage() {
                 totalPrice: totalPrice + feeShip,
                 paymentMethod: event.target.method.value,
                 orderItems: dataProducts,
-                voucherName: voucherName
+                voucherName: voucherName,
+                priceShipping: feeShip
             }
 
             console.log(data);
 
-            // const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
-            //     method: "POST",
-            //     headers: {
-            //         "Content-Type": "application/json"
-            //     },
-            //     body: JSON.stringify(data)
-            // });
+            const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
 
-            // const dataResponse = await response.json();
+            const dataResponse = await response.json();
 
-            // if (dataResponse.code == 200) {
-            //     dispatchCart(cartReset());
-            //     dispatchOrder(sumShip(0))
-            //     if (event.target.method.value == "QR") {
-            //         const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
-            //         const dataResponseVNPAY = await responseVNPAY.json();
-            //         if (dataResponseVNPAY.code === 200) {
-            //             window.location.href = dataResponseVNPAY.data;
-            //         }
-            //     }
-            //     else {
-            //         router.push(`/order/success/${dataResponse.data.orderId}`)
-            //     }
-            // }
+            if (dataResponse.code == 200) {
+                dispatchCart(cartReset());
+                dispatchOrder(sumShip(0))
+                if (event.target.method.value == "QR") {
+                    const responseVNPAY = await fetch(`https://freshskinweb.onrender.com/api/vnpay/create?orderId=${dataResponse.data.orderId}`);
+                    const dataResponseVNPAY = await responseVNPAY.json();
+                    if (dataResponseVNPAY.code === 200) {
+                        window.location.href = dataResponseVNPAY.data;
+                    }
+                }
+                else {
+                    router.push(`/order/success/${dataResponse.data.orderId}`)
+                }
+            }
         }
         else {
             const data: DataSubmit = {
@@ -182,7 +184,8 @@ export default function OrderPage() {
                 totalPrice: totalPrice + feeShip,
                 paymentMethod: event.target.method.value,
                 orderItems: dataProducts,
-                voucherName: voucherName
+                voucherName: voucherName,
+                priceShipping: feeShip
             }
 
             console.log(data);

@@ -560,6 +560,7 @@ export default function PermissionPage() {
                 }))}
                 permissions={[
                   { dataName: "rountine_view", dataContent: "Xem" },
+                  { dataName: "rountine_create", dataContent: "Tạo mới" },
                   { dataName: "rountine_edit", dataContent: "Chỉnh sửa" },
                 ]}
                 onCheckboxChange={handleCheckboxChange}

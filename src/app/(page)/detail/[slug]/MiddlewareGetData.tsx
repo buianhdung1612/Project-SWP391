@@ -42,6 +42,7 @@ interface ProductDetail {
     description: string;
     origin: string;
     skinIssues: string;
+    stock: number;
 }
 
 interface Context {
@@ -73,7 +74,8 @@ export const Context = createContext<Context>({
         discountPercent: 0,
         description: "",
         origin: "",
-        skinIssues: ""
+        skinIssues: "",
+        stock: 0
     }
 });
 
@@ -82,13 +84,6 @@ interface MiddlewareGetDataProps {
 }
 
 export default function MiddlewareGetData({ data }: MiddlewareGetDataProps) {
-    const dataSale = [
-        { percent: "10", code: "DINOS10", minimum: "500" },
-        { percent: "10", code: "DINOS10", minimum: "500" },
-        { percent: "10", code: "DINOS10", minimum: "500" },
-        { percent: "10", code: "DINOS10", minimum: "500" },
-    ];
-
     return (
         <Context.Provider value={{
             productsRelated: data.productsRelated,

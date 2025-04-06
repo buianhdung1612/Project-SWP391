@@ -9,7 +9,9 @@ interface Data {
     totalPrice: number;
     method: string;
     date: string;
-    products: any
+    products: any,
+    discountAmount: number,
+    priceShipping: number
 }
 
 export const SuccessOrderContext = createContext<Data>({
@@ -21,5 +23,7 @@ export const SuccessOrderContext = createContext<Data>({
     totalPrice: 0,
     method: "",
     date: "",
-    products: []
+    products: [],
+    discountAmount: 0,
+    priceShipping: 0
 });

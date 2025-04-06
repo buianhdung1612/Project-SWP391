@@ -20,7 +20,9 @@ export default function SuccessPage() {
         totalPrice: 0,
         paymentMethod: "",
         orderDate: "",
-        orderItems: []
+        orderItems: [],
+        discountAmount: 0,
+        priceShipping: 0
     });
     const [isLoading, setIsLoading] = useState(true);
     const settingProfile = useContext(SettingProfileContext);
@@ -64,7 +66,9 @@ export default function SuccessPage() {
                         totalPrice: data.totalPrice,
                         method: data.paymentMethod,
                         date: data.orderDate,
-                        products: data.orderItems
+                        products: data.orderItems,
+                        discountAmount: data.discountAmount,
+                        priceShipping: data.priceShipping
                     }}
                 >
                     <Section1 />

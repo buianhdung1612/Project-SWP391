@@ -21,7 +21,9 @@ export default function DetailOrderUserPage() {
         orderDate: "",
         orderItems: [],
         orderStatus: "",
-        orderId: ""
+        orderId: "",
+        discountAmount: 0,
+        priceShipping: 0
     });
 
     const router = useRouter();
@@ -48,12 +50,6 @@ export default function DetailOrderUserPage() {
 
         fetchData();
     }, [])
-
-    let totalProductPrice = 0;
-    for (const item of data.orderItems) {
-        totalProductPrice += item.subtotal;
-    }
-    const feeShip = data.totalPrice - totalProductPrice;
 
     const handleCancel = async (id: number) => {
         const isConfirm = confirm("Bạn có chắc muốn hủy đơn hàng?");
@@ -142,7 +138,7 @@ export default function DetailOrderUserPage() {
                         </div>
                     </div>
                     <div className="ml-[15px] px-[20px] border border-solid border-[#e0e0e0] mt-[24px] rounded-[5px]">
-                        <table>
+                        <table className="w-full">
                             <thead>
                                 <tr>
                                     <td className="text-textColor text-left py-[25px] text-[16px] font-[350] border-b border-solid border-[#e0e0e0]">Sản phẩm</td>
@@ -169,11 +165,15 @@ export default function DetailOrderUserPage() {
                                 ))}
                                 <tr>
                                     <td colSpan={2} className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Khuyến mại</td>
-                                    <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">0<sup className="underline">đ</sup></td>
+                                    {data.discountAmount > 0 ? (
+                                        <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">- {data.discountAmount.toLocaleString("en-US")}<sup className="underline">đ</sup></td>
+                                    ) : (
+                                        <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">- 0<sup className="underline">đ</sup></td>
+                                    )}
                                 </tr>
                                 <tr>
                                     <td colSpan={2} className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Phí vận chuyển</td>
-                                    <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">{feeShip.toLocaleString("en-US")}<sup className="underline">đ</sup></td>
+                                    <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">{data.priceShipping.toLocaleString("en-US")}<sup className="underline">đ</sup></td>
                                 </tr>
                                 <tr>
                                     <td colSpan={2} className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Tổng tiền</td>

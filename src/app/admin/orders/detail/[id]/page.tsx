@@ -16,11 +16,11 @@ import {
 import { ProfileAdminContext } from "@/app/admin/layout";
 
 export default function DetailOrderAdmin() {
-    
+
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
     const { id } = useParams();
-    const [data, setData] = useState({
+    const [data, setData] = useState<any>({
         firstName: "",
         lastName: "",
         email: "",
@@ -30,7 +30,9 @@ export default function DetailOrderAdmin() {
         paymentMethod: "",
         orderItems: [],
         address: "",
-        orderId: ""
+        orderId: "",
+        discountAmout: 0,
+        priceShipping: 0
     });
 
     useEffect(() => {
@@ -42,7 +44,7 @@ export default function DetailOrderAdmin() {
 
         fetchDetailOrder();
     }, [id]);
-   
+
 
     return (
         <>
@@ -109,6 +111,18 @@ export default function DetailOrderAdmin() {
                                 </TableBody>
                             </Table>
                         </TableContainer>
+                        {data.discountAmount > 0 ? (
+                            <Typography variant="h6" sx={{ marginTop: 3, textAlign: "right" }}>
+                                Khuyến mại: -{data.discountAmount.toLocaleString("en-US")}<sup>đ</sup>
+                            </Typography>
+                        ) : (
+                            <Typography variant="h6" sx={{ marginTop: 3, textAlign: "right" }}>
+                                Khuyến mại: -0<sup>đ</sup>
+                            </Typography>
+                        )}
+                        <Typography variant="h6" sx={{ marginTop: 3, textAlign: "right" }}>
+                            Phí vận chuyển: {data.priceShipping.toLocaleString("en-US")}<sup>đ</sup>
+                        </Typography>
                         <Typography variant="h5" sx={{ marginTop: 3, textAlign: "right" }}>
                             Tổng đơn hàng: {data.totalPrice.toLocaleString("en-US")}<sup>đ</sup>
                         </Typography>
