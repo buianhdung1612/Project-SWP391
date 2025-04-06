@@ -18,6 +18,7 @@ import '../../(page)/swiper.css';
 
 // import required modules
 import { FreeMode, Navigation, Thumbs } from 'swiper/modules';
+import { Alert } from "@mui/material";
 
 interface PriceByVolume {
     id: number,
@@ -34,7 +35,8 @@ interface CartItem {
     variantId: number,
     volume: number,
     unit: string,
-    quantity: number
+    quantity: number,
+    stock: number
 }
 
 export default function CardItem(props: {
@@ -46,25 +48,26 @@ export default function CardItem(props: {
     className?: string,
     link: string,
     priceByVolume: PriceByVolume[],
-    discount: number
+    discount: number,
+    stock: number
 }) {
-    const { image = [], brand = "", title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0 } = props;
+    const { image = [], brand = "", title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0, stock = 0 } = props;
 
     const [thumbsSwiper, setThumbsSwiper] = useState<SwiperType | null>(null);
     const dispatchCart = useDispatch();
 
     const products = useSelector((state: any) => state.cartReducer.products);
-
     const [currentVolume, setCurrentVolume] = useState(priceByVolume.length > 0 ? priceByVolume[0] : { id: 0, price: 0, volume: 0, unit: "" });
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [quantity, setQuantity] = useState(1);
 
     const handleChange = (event: any): void => {
         const value = parseInt(event.target.value);
-        if (value >= 1 && value <= 30) {
+        if (value >= 1 && value <= stock) {
             setQuantity(value);
-        } else if (value > 30) {
-            setQuantity(30);
+        } else if (value > stock) {
+            setQuantity(stock);
         } else {
             setQuantity(1);
         }
@@ -76,6 +79,12 @@ export default function CardItem(props: {
         }
     }
 
+    const handleClickIncrease = (): void => {
+        if (quantity < stock) {
+            setQuantity(quantity + 1);
+        }
+    };
+
     const handleAddNewProductToCart = () => {
         const data: CartItem = {
             image: image[0],
@@ -85,15 +94,29 @@ export default function CardItem(props: {
             variantId: currentVolume.id,
             volume: currentVolume.volume,
             unit: currentVolume.unit,
-            quantity: quantity
+            quantity: quantity,
+            stock: stock
         };
 
         const existProductInCart = products.find((item: CartItem) => item.title == data.title && item.volume == data.volume);
 
         if (existProductInCart) {
-            existProductInCart.quantity = existProductInCart.quantity + data.quantity;
+            if (existProductInCart.quantity + data.quantity > stock) {
+                setAlertMessage("Sản phẩm không đủ số lượng.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 3000);
+                return;
+            }
+            existProductInCart.quantity += data.quantity;
         }
         else {
+            if (data.quantity > stock) {
+                setAlertMessage("Sản phẩm không đủ số lượng.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 3000);
+                setTimeout(() => setAlertMessage(""), 3000);
+                return;
+            } 
             products.push(data);
         }
 
@@ -114,6 +137,11 @@ export default function CardItem(props: {
 
     return (
         <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             <div className="bg-white rounded-[10px] w-[226px]">
                 <div className="w-[226px] aspect-square relative group">
                     <Link href={link}>
@@ -237,7 +265,7 @@ export default function CardItem(props: {
                                         />
                                         <button
                                             className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tr-[5px] rounded-br-[5px] border border-solid border-[#ddd]"
-                                            onClick={() => setQuantity((prev) => (prev < 30 ? prev + 1 : prev))}
+                                            onClick={handleClickIncrease}
                                         >
                                             +
                                         </button>
@@ -250,7 +278,7 @@ export default function CardItem(props: {
                         </div>
                     </div>
                 </div>,
-                document.body 
+                document.body
             )}
         </>
     )

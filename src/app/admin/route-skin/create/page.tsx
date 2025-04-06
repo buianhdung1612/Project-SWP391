@@ -81,8 +81,6 @@ export default function EditRouteSkinAdminPage() {
             rountineStep: rountines
         };
 
-        console.log(data);
-
         const responese = await fetch('https://freshskinweb.onrender.com/admin/skin-care-routines/create', {
             method: "POST",
             headers: {

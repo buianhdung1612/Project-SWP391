@@ -17,7 +17,8 @@ interface CartItem {
     variantId: number,
     volume: number,
     unit: string,
-    quantity: number
+    quantity: number,
+    // stock: number
 }
 
 export default function ComparePage() {
@@ -124,7 +125,6 @@ export default function ComparePage() {
             }, 3000);
         }
     }
-
 
     return (
         <>

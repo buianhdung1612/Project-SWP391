@@ -11,6 +11,7 @@ interface CartItem {
     volume: number;
     unit: string;
     quantity: number;
+    stock: number;
 }
 
 let dataInit: any = undefined;

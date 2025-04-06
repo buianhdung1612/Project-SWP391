@@ -132,6 +132,7 @@ export default function Section2() {
                                 link={`/detail/${item.slug}`}
                                 priceByVolume={item.variants}
                                 discount={item.discountPercent}
+                                stock={item.stock}
                             />
                         ))}
                     </div>

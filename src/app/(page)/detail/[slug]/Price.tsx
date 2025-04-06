@@ -23,7 +23,8 @@ interface CartItem {
     variantId: number,
     volume: number,
     unit: string,
-    quantity: number
+    quantity: number,
+    stock: number
 }
 
 export default function Price() {
@@ -31,7 +32,8 @@ export default function Price() {
 
     const router = useRouter();
     const products = useSelector((state: any) => state.cartReducer.products);
-
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const { productDetail } = useContext(Context);
 
     const [currentVolume, setCurrentVolume] = useState(productDetail.variants[0]);
@@ -50,8 +52,7 @@ export default function Price() {
 
     const handleChange = (event: any): void => {
         const value = parseInt(event.target.value);
-
-        if (!isNaN(value) && value >= 1 && value <= productDetail.stock) {
+        if(value <= productDetail.stock){
             setQuantity(value);
         }
     };
@@ -63,7 +64,7 @@ export default function Price() {
     }
 
     const handleClickIncrease = (): void => {
-        if (quantity < 30) {
+        if (quantity < productDetail.stock) {
             setQuantity(quantity + 1);
         }
     };
@@ -78,7 +79,8 @@ export default function Price() {
             variantId: currentVolume.id,
             volume: currentVolume.volume,
             unit: currentVolume.unit,
-            quantity: quantity
+            quantity: quantity,
+            stock: productDetail.stock
         };
 
         const existProductInCart = newCart.find(
@@ -87,35 +89,22 @@ export default function Price() {
 
         if (existProductInCart) {
             if (existProductInCart.quantity + data.quantity > productDetail.stock) {
-                setAlert({
-                    severity: "error",
-                    content: "Sản phẩm không đủ số lượng."
-                });
-                setTimeout(() => {
-                    setAlert({
-                        severity: "",
-                        content: ""
-                    })
-                }, 3000)
+                setAlertMessage("Sản phẩm không đủ số lượng.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 3000);
                 return;
             }
             existProductInCart.quantity += data.quantity;
         } else {
             if (data.quantity > productDetail.stock) {
-                setAlert({
-                    severity: "error",
-                    content: "Sản phẩm không đủ số lượng."
-                });
-                setTimeout(() => {
-                    setAlert({
-                        content: ""
-                    })
-                }, 3000)
+                setAlertMessage("Sản phẩm không đủ số lượng.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 3000);
                 return;
-            }
-            newCart.push(data);
+            }        
+            newCart.push(data);   
         }
-
+        
         dispatchCart(cartAddNewProduct(newCart));
     };
 
@@ -128,7 +117,8 @@ export default function Price() {
             variantId: currentVolume.id,
             volume: currentVolume.volume,
             unit: currentVolume.unit,
-            quantity: quantity
+            quantity: quantity,
+            stock: productDetail.stock
         };
 
         const newCart = [...products];
@@ -139,34 +129,22 @@ export default function Price() {
 
         if (existProductInCart) {
             if (existProductInCart.quantity + data.quantity > productDetail.stock) {
-                setAlert({
-                    severity: "error",
-                    content: "Sản phẩm không đủ số lượng."
-                });
-                setTimeout(() => {
-                    setAlert({
-                        content: ""
-                    })
-                }, 3000)
+                setAlertMessage("Sản phẩm không đủ số lượng.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 3000);
                 return;
             }
             existProductInCart.quantity += data.quantity;
         } else {
-            if (data.quantity > 30) {
-                setAlert({
-                    severity: "error",
-                    content: "Sản phẩm không đủ số lượng."
-                });
-                setTimeout(() => {
-                    setAlert({
-                        content: ""
-                    })
-                }, 3000)
+            if (data.quantity > productDetail.stock) {
+                setAlertMessage("Sản phẩm không đủ số lượng.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 3000);
                 return;
             }
+            newCart.push(data);
         }
 
-        newCart.push(data);
 
         dispatchCart(cartAddNewProduct(newCart));
         router.push("/order");
@@ -201,7 +179,7 @@ export default function Price() {
             };
             return;
         }
-        
+
         if (profile.productComparisonId?.products.length <= 2) {
             const response = await fetch(`https://freshskinweb.onrender.com/home/products/comparison/save`, {
                 method: "POST",
@@ -380,9 +358,10 @@ export default function Price() {
 
     return (
         <>
-            {/* Alert */}
-            {alert && (
-                <Alert style={{ position: "absolute", zIndex: "99999999", top: "0%", right: "0%", width: "100%" }} severity={alert.severity}>{alert.content}</Alert>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
             )}
             <div className="flex items-center">
                 <div className="text-[32px] font-[500] text-[#cc2020] mr-[20px]">{(currentVolume.price * (1 - productDetail.discountPercent / 100)).toLocaleString('en-US')}<sup className="underline">đ</sup></div>

@@ -51,6 +51,7 @@ export default function Section2(props: any) {
                                 link={`/detail/${item.slug}`}
                                 priceByVolume={item.variants}
                                 discount={item.discountPercent}
+                                stock={item.stock}
                             />
                         </SwiperSlide>
                     ))}

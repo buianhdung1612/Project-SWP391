@@ -12,13 +12,13 @@ export default function RouteSkinAdminPage() {
     const permissions = dataProfile?.permissions;
 
     useEffect(() => {
-        const fetchSkintypes = async () => {
+        const fetchRountines = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/admin/skin-care-routines`);
             const data = await response.json();
             setData(data.data.content);
         }
 
-        fetchSkintypes();
+        fetchRountines();
     }, []);
 
     return (
@@ -47,7 +47,7 @@ export default function RouteSkinAdminPage() {
                                     <TableRow>
                                         <TableCell>STT</TableCell>
                                         <TableCell>Loại da</TableCell>
-                                        <TableCell>Lộ trình</TableCell>
+                                        <TableCell>Mô tả</TableCell>
                                         <TableCell>Hành động</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -55,8 +55,8 @@ export default function RouteSkinAdminPage() {
                                     {data.map((item: any, index: number) => (
                                         <TableRow key={item.id}>
                                             <TableCell>{index + 1}</TableCell>
-                                            <TableCell>{item.skinTypeEntity.type}</TableCell>
-                                            <TableCell><span className="line-clamp-2" dangerouslySetInnerHTML={{ __html: item.rountine }} ></span></TableCell>
+                                            <TableCell>{item.title}</TableCell>
+                                            <TableCell><span className="line-clamp-2" dangerouslySetInnerHTML={{ __html: item.description }} ></span></TableCell>
                                             <TableCell>
                                                 <div className="flex">
                                                     <Tooltip title="Chi tiết" placement="top">
