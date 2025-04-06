@@ -133,6 +133,8 @@ export default function EditRouteSkinAdminPage() {
                         sx={{ mb: 2, mt: 2 }}
                     />
 
+                    <TinyEditor value={routineDescription} onEditorChange={(content: string) => setRoutineDescription(content)} />
+
                     <TextField
                         label="Mô tả lộ trình"
                         variant="outlined"

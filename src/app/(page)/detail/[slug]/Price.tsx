@@ -36,7 +36,7 @@ export default function Price() {
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const { productDetail } = useContext(Context);
 
-    const [currentVolume, setCurrentVolume] = useState(productDetail.variants[0]);
+    const [currentVolume, setCurrentVolume] = useState<any>(productDetail.variants[0]);
 
     const [quantity, setQuantity] = useState(1);
 
@@ -52,7 +52,7 @@ export default function Price() {
 
     const handleChange = (event: any): void => {
         const value = parseInt(event.target.value);
-        if(value <= productDetail.stock){
+        if(value <= currentVolume.stock){
             setQuantity(value);
         }
     };
@@ -64,7 +64,7 @@ export default function Price() {
     }
 
     const handleClickIncrease = (): void => {
-        if (quantity < productDetail.stock) {
+        if (quantity < currentVolume.stock) {
             setQuantity(quantity + 1);
         }
     };
@@ -80,7 +80,7 @@ export default function Price() {
             volume: currentVolume.volume,
             unit: currentVolume.unit,
             quantity: quantity,
-            stock: productDetail.stock
+            stock: currentVolume.stock
         };
 
         const existProductInCart = newCart.find(
@@ -88,7 +88,7 @@ export default function Price() {
         );
 
         if (existProductInCart) {
-            if (existProductInCart.quantity + data.quantity > productDetail.stock) {
+            if (existProductInCart.quantity + data.quantity > currentVolume.stock) {
                 setAlertMessage("Sản phẩm không đủ số lượng.");
                 setAlertSeverity("error");
                 setTimeout(() => setAlertMessage(""), 3000);
@@ -96,7 +96,7 @@ export default function Price() {
             }
             existProductInCart.quantity += data.quantity;
         } else {
-            if (data.quantity > productDetail.stock) {
+            if (data.quantity > currentVolume.stock) {
                 setAlertMessage("Sản phẩm không đủ số lượng.");
                 setAlertSeverity("error");
                 setTimeout(() => setAlertMessage(""), 3000);
@@ -118,7 +118,7 @@ export default function Price() {
             volume: currentVolume.volume,
             unit: currentVolume.unit,
             quantity: quantity,
-            stock: productDetail.stock
+            stock: currentVolume.stock
         };
 
         const newCart = [...products];
@@ -128,7 +128,7 @@ export default function Price() {
         );
 
         if (existProductInCart) {
-            if (existProductInCart.quantity + data.quantity > productDetail.stock) {
+            if (existProductInCart.quantity + data.quantity > currentVolume.stock) {
                 setAlertMessage("Sản phẩm không đủ số lượng.");
                 setAlertSeverity("error");
                 setTimeout(() => setAlertMessage(""), 3000);
@@ -136,7 +136,7 @@ export default function Price() {
             }
             existProductInCart.quantity += data.quantity;
         } else {
-            if (data.quantity > productDetail.stock) {
+            if (data.quantity > currentVolume.stock) {
                 setAlertMessage("Sản phẩm không đủ số lượng.");
                 setAlertSeverity("error");
                 setTimeout(() => setAlertMessage(""), 3000);
@@ -363,6 +363,19 @@ export default function Price() {
                     {alertMessage}
                 </Alert>
             )}
+            <div className="text-[22px] mb-[15px] font-[600] ">
+                {productDetail.title}
+            </div>
+            <div className="flex items-center pb-[5px] mb-[10px] border-b border-solid border-[#e4e4e4]">
+                <div className="text-[14px] text-[#00090f]">Thương hiệu: <span className="text-primary">{productDetail.brand.title}</span></div>
+                <div className="text-[14px] text-[#00090f] mx-[10px]">|</div>
+                {currentVolume.stock > 0 ? (
+                    <div className="text-[14px] text-[#00090f]">Tình trạng: <span className="text-primary">Còn hàng</span></div>
+
+                ) : (
+                    <div className="text-[14px] text-[#00090f]">Tình trạng: <span className="text-[#C5332D]">Hết hàng</span></div>
+                )}
+            </div> 
             <div className="flex items-center">
                 <div className="text-[32px] font-[500] text-[#cc2020] mr-[20px]">{(currentVolume.price * (1 - productDetail.discountPercent / 100)).toLocaleString('en-US')}<sup className="underline">đ</sup></div>
                 {productDetail.discountPercent > 0 && (

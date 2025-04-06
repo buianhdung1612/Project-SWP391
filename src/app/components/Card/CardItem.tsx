@@ -37,6 +37,7 @@ interface CartItem {
     volume: number,
     unit: string,
     quantity: number,
+    stock: number
 }
 
 export default function CardItem(props: {
@@ -94,6 +95,7 @@ export default function CardItem(props: {
             volume: currentVolume.volume,
             unit: currentVolume.unit,
             quantity: quantity,
+            stock: currentVolume.stock
         };
 
         const existProductInCart = products.find((item: CartItem) => item.title == data.title && item.volume == data.volume);

@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useDispatch, useSelector } from "react-redux";
 import { cartChangeQuantity, cartDecreaseQuantity, cartDelete, cartIncreaseQuantity, } from "../../(actions)/cart";
 import { MdNavigateNext } from "react-icons/md";
+import { useState } from "react";
+import { Alert } from "@mui/material";
 
 interface CartItem {
     image: string,
@@ -18,12 +20,22 @@ interface CartItem {
 }
 
 export default function CartPage() {
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const products = useSelector((state: any) => state.cartReducer.products);
     const totalPriceInit = useSelector((state: any) => state.cartReducer.totalPriceInit);
     const dispatchCart = useDispatch();
 
     const handleChange = (event: any, index: number): void => {
-        dispatchCart(cartChangeQuantity(event, index))
+        const product = products[index];
+        if(event.target.value > product.stock){
+            setAlertMessage("Sản phẩm không đủ số lượng.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 3000);
+        }
+        else{
+            dispatchCart(cartChangeQuantity(event, index))
+        }
     }
 
     const handleClickDecrease = (event: any, index: number): void => {
@@ -31,7 +43,17 @@ export default function CartPage() {
     }
 
     const handleClickIncrease = (event: any, index: number): void => {
-        dispatchCart(cartIncreaseQuantity(event, index))
+        event.preventDefault();
+        const product = products[index];
+
+        if (product.quantity >= product.stock) {
+            setAlertMessage("Sản phẩm không đủ số lượng.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 3000);
+        }
+        else {
+            dispatchCart(cartIncreaseQuantity(event, index))
+        }
     }
 
     const handleDeleteItem = (index: number): void => {
@@ -40,6 +62,11 @@ export default function CartPage() {
 
     return (
         <>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
             <ul className="flex items-center container mx-auto mb-[30px]">
                 <li>
                     <Link href="/" className="flex items-center">

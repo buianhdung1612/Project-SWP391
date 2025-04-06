@@ -47,7 +47,7 @@ export default function Section11(props: any) {
     return (
         <>
             <div className="container mx-auto">
-                <Title title="Blog làm đẹp" link="/blogs" />
+                <Title title="Blog làm đẹp" link="/blogs/tin-tuc" />
 
                 <div className="text-center mb-[20px]">
                     {dataButton.map((item, index) => (
@@ -74,7 +74,6 @@ export default function Section11(props: any) {
                         />
                     ))}
                 </div>
-
                 <ButtonSeeAll link="/blogs/tin-tuc" />
             </div>
         </>

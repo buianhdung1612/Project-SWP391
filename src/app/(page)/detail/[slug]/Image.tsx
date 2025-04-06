@@ -37,7 +37,7 @@ export default function Image() {
             <Swiper
                 onSwiper={setThumbsSwiper}
                 loop={true}
-                spaceBetween={20}
+                spaceBetween={10}
                 slidesPerView={4}
                 freeMode={true}
                 watchSlidesProgress={true}
@@ -46,7 +46,7 @@ export default function Image() {
             >
                 {productDetail.thumbnail.map((item: any, index: number) => (
                     <SwiperSlide key={index}>
-                        <div className="w-[110px] h-[90px] hover:border hover:border-solid hover:border-secondary cursor-pointer">
+                        <div className="w-[103px] h-[90px] hover:border hover:border-solid hover:border-secondary cursor-pointer">
                             <img src={item} className="w-full h-full object-cover" />
                         </div>
                     </SwiperSlide>

@@ -41,7 +41,6 @@ interface ProductDetail {
     description: string;
     origin: string;
     skinIssues: string;
-    stock: number;
 }
 interface Context {
     productsRelated: ProductRelated[],
@@ -75,8 +74,7 @@ export default function DetailProductPage() {
             discountPercent: 0,
             description: "",
             origin: "",
-            skinIssues: "",
-            stock: 0
+            skinIssues: ""
         }
     });
 

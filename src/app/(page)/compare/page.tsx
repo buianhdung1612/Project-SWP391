@@ -18,11 +18,12 @@ interface CartItem {
     volume: number,
     unit: string,
     quantity: number,
-    // stock: number
+    stock: number
 }
 
 export default function ComparePage() {
-    const [alert, setAlert] = useState<any>();
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [isDeleteAlert, setIsDeleteAlert] = useState(false);
     const [productIdDelete, setProductIdDelete] = useState(0);
     const [data, setData] = useState<any>();
@@ -72,13 +73,20 @@ export default function ComparePage() {
             variantId: item.id,
             volume: item.variants[0].volume,
             unit: item.variants[0].unit,
-            quantity: 1
+            quantity: 1,
+            stock: item.variants[0].stock
         };
 
         const existProductInCart = products.find((item: CartItem) => item.title == data.title && item.volume == data.volume);
 
         if (existProductInCart) {
-            existProductInCart.quantity = existProductInCart.quantity + data.quantity;
+            if (existProductInCart.quantity + data.quantity > existProductInCart.stock) {
+                setAlertMessage("Sản phẩm không đủ số lượng.");
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 3000);
+                return;
+            }
+            existProductInCart.quantity += data.quantity;
         }
         else {
             products.push(data);
@@ -111,18 +119,9 @@ export default function ComparePage() {
         const dataResponse = await response.json();
 
         if (dataResponse.code == 200) {
-            setAlert({
-                severity: "success",
-                content: dataResponse.message
-            });
-
-            setTimeout(() => {
-                setAlert({
-                    severity: "",
-                    content: ""
-                });
-                location.reload();
-            }, 3000);
+            setAlertMessage(dataResponse.message);
+            setAlertSeverity("success");
+            setTimeout(() => setAlertMessage(""), 3000);
         }
     }
 
@@ -139,9 +138,10 @@ export default function ComparePage() {
                     So sánh sản phẩm
                 </li>
             </ul>
-            {/* Alert */}
-            {alert && (
-                <Alert style={{ position: "absolute", zIndex: "99999999", top: "31%", right: "18%", width: "480px" }} severity={alert.severity}>{alert.content}</Alert>
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
             )}
             <h1 className="uppercase my-[28px] container mx-auto text-[20px] font-[600]">So sánh sản phẩm</h1>
             {data && data.length > 0 ? (
