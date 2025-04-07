@@ -71,7 +71,7 @@ export default function RountinePage() {
                                 <SwiperSlide key={index}>
                                     <CardItem
                                         image={product.thumbnail}
-                                        brand={product.title}
+                                        brand={product.brand.title}
                                         title={product.title}
                                         link={`/detail/${product.slug}`}
                                         priceByVolume={product.variants}

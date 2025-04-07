@@ -2,7 +2,7 @@
 
 import { Box, Typography, TextField, Select, MenuItem, InputLabel, FormControl, Button, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Tooltip, Stack, Pagination, Chip } from "@mui/material";
 import { BiDetail } from "react-icons/bi";
-
+import { GiConfirmed } from "react-icons/gi";
 import { useContext, useEffect, useState } from "react";
 import Link from "next/link";
 import { MdOutlineCancel } from "react-icons/md";
@@ -126,31 +126,33 @@ export default function OrdersAdminPage() {
 
     // Thay đổi trạng thái 1 đơn hàng
     const handleChangeStatusOneOrder = async (status: string, dataPath: string) => {
-        const statusChange = status;
-        const path = `${linkApi}${dataPath}`;
-        const data = {
-            orderStatus: statusChange
-        }
+        const isConfirm = confirm("Bạn có chắc thay đổi trạng thái đơn hàng?");
+        if (isConfirm) {
+            const statusChange = status;
+            const path = `${linkApi}${dataPath}`;
+            const data = {
+                orderStatus: statusChange
+            }
 
-        console.log(data);
-        console.log(path);
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
 
-        const dataResponse = await response.json();
+            const dataResponse = await response.json();
 
-        if (dataResponse.code === 200) {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("error");
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 2000);
+            }
         }
     }
     // Hết Thay đổi trạng thái 1 đơn hàng
@@ -159,32 +161,36 @@ export default function OrdersAdminPage() {
     const handleChangeMulti = async (event: any) => {
         event.preventDefault();
 
-        const statusChange = changeMulti;
+        const isConfrim = confirm("Bạn có chắc muốn thay đổi trạng thái các đơn hàng?");
+        if (isConfrim) {
+            const statusChange = changeMulti;
 
-        const path = `${linkApi}/change-multi`;
+            const path = `${linkApi}/change-multi`;
 
-        const data: any = {
-            id: inputChecked,
-            orderStatus: statusChange
-        }
+            const data: any = {
+                id: inputChecked,
+                orderStatus: statusChange
+            }
 
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(data)
+            });
 
-        const dataResponse = await response.json();
+            const dataResponse = await response.json();
 
-        if (dataResponse.code === 200) {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("error");
+            if (dataResponse.code === 200) {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("success");
+                setTimeout(() => location.reload(), 2000);
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 2000);
+            }
         }
     }
 
@@ -211,8 +217,6 @@ export default function OrdersAdminPage() {
         location.href = url.href;
     }
     // Hết phân trang
-
-    console.log(data.orders)
 
     return (
         <>
@@ -276,8 +280,9 @@ export default function OrdersAdminPage() {
                                 <Box display="flex" >
                                     <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
                                         <MenuItem value="PENDING">Chờ duyệt</MenuItem>
-                                        <MenuItem value="DELIVERING">Đang giao</MenuItem>
+                                        <MenuItem value="DELIVERING">Xác nhận giao hàng</MenuItem>
                                         <MenuItem value="CANCELED">Hủy</MenuItem>
+                                        <MenuItem value="COMPLETED">Xác nhận đơn hàng thành công</MenuItem>
                                     </Select>
                                     <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor: '#374785', color: '#ffffff' }}>
                                         Áp dụng
@@ -296,15 +301,19 @@ export default function OrdersAdminPage() {
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Điện thoại</TableCell>
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Địa chỉ giao hàng</TableCell>
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Tình trạng</TableCell>
-                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Chi tiết </TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Hành động </TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
                                     {data.orders.map((order: any, index: number) => (
                                         <TableRow key={index}>
-                                            <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, order.orderId)}>
-                                                <Checkbox />
-                                            </TableCell>
+                                            {order.orderStatus == "COMPLETED" || order.orderStatus == "CANCELED" ? (
+                                                <TableCell></TableCell>
+                                            ) : (
+                                                <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, order.orderId)}>
+                                                    <Checkbox />
+                                                </TableCell>
+                                            )}
                                             <TableCell>#{order.orderId}</TableCell>
                                             <TableCell>{order.orderDate}</TableCell>
                                             <TableCell>{order.firstName} {order.lastName}</TableCell>
@@ -360,6 +369,11 @@ export default function OrdersAdminPage() {
                                                     {order.orderStatus === "PENDING" && (
                                                         <Tooltip title="Hủy" placement="top">
                                                             <MdOutlineCancel onClick={() => handleChangeStatusOneOrder("CANCELED", `/edit/${order.orderId}`)} className="text-[25px] text-red-500 mr-2 cursor-pointer" />
+                                                        </Tooltip>
+                                                    )}
+                                                    {order.orderStatus === "PENDING" || order.orderStatus === "DELIVERING" && (
+                                                        <Tooltip title="Xác nhận đơn hàng thành công" placement="top">
+                                                            <GiConfirmed onClick={() => handleChangeStatusOneOrder("COMPLETED", `/edit/${order.orderId}`)} className="text-[23px] text-green-700 mr-2 cursor-pointer" />
                                                         </Tooltip>
                                                     )}
                                                 </div>

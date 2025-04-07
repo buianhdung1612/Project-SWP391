@@ -146,8 +146,6 @@ export default function OrderPage() {
                 priceShipping: feeShip
             }
 
-            console.log(data);
-
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
                 method: "POST",
                 headers: {
@@ -187,8 +185,6 @@ export default function OrderPage() {
                 voucherName: voucherName,
                 priceShipping: feeShip
             }
-
-            console.log(data);
 
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
                 method: "POST",

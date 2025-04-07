@@ -8,6 +8,7 @@ import ProfileLeft from "@/app/components/ProfileUser/ProfileLeft";
 import { Alert, Tooltip } from "@mui/material";
 import Cookies from "js-cookie";
 import { useRouter } from "next/navigation";
+import { TiTick } from "react-icons/ti";
 
 export default function OrdersHistoryPage() {
     const [alertMessage, setAlertMessage] = useState<string>("");
@@ -37,13 +38,43 @@ export default function OrdersHistoryPage() {
             const fetchData = async () => {
                 const response = await fetch(`https://freshskinweb.onrender.com/home/orders/user/${profile.userID}`);
                 const dataResponse = await response.json();
-                setData(dataResponse.data.orders);
+                setData(dataResponse.data);
             };
 
             fetchData();
         }
 
     }, [profile]);
+
+    const handleConfirm = async (id: number) => {
+        const isConfirm = confirm("Bạn có chắc đã nhận được đơn đơn hàng?");
+        if (isConfirm) {
+            const path = `https://freshskinweb.onrender.com/admin/orders/edit/${id}`;
+
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    orderStatus: "COMPLETED"
+                })
+            });
+
+            const dataResponse = await response.json();
+
+            if (dataResponse.code === 200) {
+                setAlertMessage("Đã xác nhận đơn hàng thành công!");
+                setAlertSeverity("success");
+                setTimeout(() => {
+                    location.reload();
+                }, 2000)
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
+        }
+    }
 
     const handleCancel = async (id: number) => {
         const isConfirm = confirm("Bạn có chắc muốn hủy đơn hàng?");
@@ -71,6 +102,9 @@ export default function OrdersHistoryPage() {
             } else {
                 setAlertMessage(dataResponse.message);
                 setAlertSeverity("error");
+                setTimeout(() => {
+                    setAlertMessage("");
+                }, 2000)
             }
         }
     }
@@ -140,8 +174,13 @@ export default function OrdersHistoryPage() {
                                                 {item.orderStatus == "CANCELED" && (
                                                     <td className="w-[18%] text-[#1C1C1C] py-[20px] px-[5px] text-[14px] border border-solid border-[#ebebeb] text-center">Đã hủy</td>
                                                 )}
+                                                {item.orderStatus == "DELIVERING" && (
+                                                    <td className="w-[18%] text-[#1C1C1C] py-[20px] px-[5px] text-[14px] border border-solid border-[#ebebeb] text-center">
+                                                        <span>Đang giao</span> <Tooltip title="Xác nhận đã nhận đơn hàng"><TiTick onClick={() => { handleConfirm(item.orderId) }} className="text-green-500 text-[20px] ml-[41%] mt-[5px] cursor-pointer" /></Tooltip >
+                                                    </td>
+                                                )}
                                                 {item.orderStatus == "COMPLETED" && (
-                                                    <td className="w-[18%] text-[#1C1C1C] py-[20px] px-[5px] text-[14px] border border-solid border-[#ebebeb] text-center">Đã xác nhận</td>
+                                                    <td className="w-[18%] text-[#1C1C1C] py-[20px] px-[5px] text-[14px] border border-solid border-[#ebebeb] text-center">Đã hoàn thành</td>
                                                 )}
                                             </tr>
                                         ))
