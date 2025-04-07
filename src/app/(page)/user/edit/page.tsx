@@ -77,6 +77,11 @@ export default function EditProfileUser() {
                         <label htmlFor="phoneNumber" className="text-[14px] font-[400] text-[#333] cursor-pointer">Số điện thoại *</label>
                         <input defaultValue={profile.phone} id="phoneNumber" name="phoneNumber" className="w-[466px] block h-[45px] px-[20px] text-[#333] outline-none border border-solid border-[#e1e1e1] bg-white mb-[15px] rounded-[4px]" />
                     </div>
+                    <div>
+                        <label htmlFor="phoneNumber" className="text-[14px] font-[400] text-[#333] cursor-pointer">Địa chỉ *</label>
+                        <input defaultValue={profile.address} id="phoneNumber" name="phoneNumber" className="w-[466px] block h-[45px] px-[20px] text-[#333] outline-none border border-solid border-[#e1e1e1] bg-white mb-[15px] rounded-[4px]" />
+                    </div>
+                    <div className="bg-secondary w-[300px] border border-solid border-secondary cursor-pointer hover:bg-white hover:text-secondary text-white px-[10px] py-[5px] text-[14px] text-center rounded-[5px]">Cập nhật thông tin cá nhân</div>
                 </div>
             </div>
         </>

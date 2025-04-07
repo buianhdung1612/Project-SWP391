@@ -52,7 +52,7 @@ export default function Price() {
 
     const handleChange = (event: any): void => {
         const value = parseInt(event.target.value);
-        if(value <= currentVolume.stock){
+        if (value <= currentVolume.stock) {
             setQuantity(value);
         }
     };
@@ -101,10 +101,10 @@ export default function Price() {
                 setAlertSeverity("error");
                 setTimeout(() => setAlertMessage(""), 3000);
                 return;
-            }        
-            newCart.push(data);   
+            }
+            newCart.push(data);
         }
-        
+
         dispatchCart(cartAddNewProduct(newCart));
     };
 
@@ -375,7 +375,7 @@ export default function Price() {
                 ) : (
                     <div className="text-[14px] text-[#00090f]">Tình trạng: <span className="text-[#C5332D]">Hết hàng</span></div>
                 )}
-            </div> 
+            </div>
             <div className="flex items-center">
                 <div className="text-[32px] font-[500] text-[#cc2020] mr-[20px]">{(currentVolume.price * (1 - productDetail.discountPercent / 100)).toLocaleString('en-US')}<sup className="underline">đ</sup></div>
                 {productDetail.discountPercent > 0 && (
@@ -411,55 +411,59 @@ export default function Price() {
                 <div className="text-[14px] mb-[10px] text-textColor">Dành cho: <span className="text-secondary font-[600]">{productDetail.skinIssues}</span></div>
             </div>
 
-            <div className="text-[14px] font-[500] text-[#00090f] my-[10px]">Số lượng:</div>
-            <div className="flex items-center">
-                <div className="mb-[10px] flex">
+            {currentVolume.stock > 0 && (
+                <div className="text-[14px] font-[500] text-[#00090f] my-[10px]">Số lượng:</div>
+            )}
+            {currentVolume.stock > 0 && (
+                <div className="flex items-center">
+                    <div className="mb-[10px] flex">
+                        <button
+                            className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tl-[40px] rounded-bl-[40px] border border-solid border-[#ddd]"
+                            onClick={handleClickDecrease}
+                        >
+                            -
+                        </button>
+                        <input
+                            type="number"
+                            name="quantity"
+                            id="quantity"
+                            value={quantity}
+                            onChange={() => handleChange(event)}
+                            className="text-[#00090f] text-[16px] block w-[60px] h-[40px] outline-none text-center border-y border-solid border-[#ddd]"
+                        />
+                        <button
+                            className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tr-[40px] rounded-br-[40px] border border-solid border-[#ddd]"
+                            onClick={handleClickIncrease}>
+                            +
+                        </button>
+                    </div>
                     <button
-                        className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tl-[40px] rounded-bl-[40px] border border-solid border-[#ddd]"
-                        onClick={handleClickDecrease}
+                        className="px-[40px] flex items-center bg-[#000] hover:bg-secondary rounded-[40px] mb-[10px] ml-[15px]"
+                        onClick={handleAddNewProductToCart}
                     >
-                        -
+                        <CiShoppingCart className="text-white text-[24px]" />
+                        <span className="ml-[5px] text-[12px] uppercase text-white font-[400] h-[40px] w-auto flex items-center">Thêm vào giỏ hàng</span>
                     </button>
-                    <input
-                        type="number"
-                        name="quantity"
-                        id="quantity"
-                        value={quantity}
-                        onChange={() => handleChange(event)}
-                        className="text-[#00090f] text-[16px] block w-[60px] h-[40px] outline-none text-center border-y border-solid border-[#ddd]"
-                    />
-                    <button
-                        className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tr-[40px] rounded-br-[40px] border border-solid border-[#ddd]"
-                        onClick={handleClickIncrease}>
-                        +
-                    </button>
+                    <button onClick={handleBuyNow} className="buy-now uppercase text-[12px] text-white font-[400] h-[40px] w-auto rounded-[40px] mb-[10px] ml-[15px] px-[30px]">Mua ngay</button>
+
+                    {isCompared == undefined && profile.firstName !== "" && (
+                        <div onClick={() => handleAddCompare(productDetail.id)} className="cursor-pointer rounded-full border border-solid hover:border-primary hover:text-primary border-black p-[5px] mb-[10px] ml-[15px]">
+                            <IoIosGitCompare className="w-[28px] h-[28px]" />
+                        </div>
+                    )}
+                    {isCompared != undefined && profile.firstName !== "" && (
+                        <div onClick={() => handleDelete(productDetail.id)} className="cursor-pointer text-white rounded-full bg-primary border border-solid hover:border-primary hover:bg-white hover:text-primary border-primary p-[5px] mb-[10px] ml-[15px]">
+                            <IoIosGitCompare className="w-[28px] h-[28px]" />
+                        </div>
+                    )}
+                    {profile.firstName == "" && (
+                        <div onClick={() => { handleOpenPopup() }} className="cursor-pointer rounded-full border border-solid hover:border-primary hover:text-primary border-black p-[5px] mb-[10px] ml-[15px]">
+                            <IoIosGitCompare className="w-[28px] h-[28px]" />
+                        </div>
+                    )}
+
                 </div>
-                <button
-                    className="px-[40px] flex items-center bg-[#000] hover:bg-secondary rounded-[40px] mb-[10px] ml-[15px]"
-                    onClick={handleAddNewProductToCart}
-                >
-                    <CiShoppingCart className="text-white text-[24px]" />
-                    <span className="ml-[5px] text-[12px] uppercase text-white font-[400] h-[40px] w-auto flex items-center">Thêm vào giỏ hàng</span>
-                </button>
-                <button onClick={handleBuyNow} className="buy-now uppercase text-[12px] text-white font-[400] h-[40px] w-auto rounded-[40px] mb-[10px] ml-[15px] px-[30px]">Mua ngay</button>
-
-                {isCompared == undefined && profile.firstName !== "" && (
-                    <div onClick={() => handleAddCompare(productDetail.id)} className="cursor-pointer rounded-full border border-solid hover:border-primary hover:text-primary border-black p-[5px] mb-[10px] ml-[15px]">
-                        <IoIosGitCompare className="w-[28px] h-[28px]" />
-                    </div>
-                )}
-                {isCompared != undefined && profile.firstName !== "" && (
-                    <div onClick={() => handleDelete(productDetail.id)} className="cursor-pointer text-white rounded-full bg-primary border border-solid hover:border-primary hover:bg-white hover:text-primary border-primary p-[5px] mb-[10px] ml-[15px]">
-                        <IoIosGitCompare className="w-[28px] h-[28px]" />
-                    </div>
-                )}
-                {profile.firstName == "" && (
-                    <div onClick={() => { handleOpenPopup() }} className="cursor-pointer rounded-full border border-solid hover:border-primary hover:text-primary border-black p-[5px] mb-[10px] ml-[15px]">
-                        <IoIosGitCompare className="w-[28px] h-[28px]" />
-                    </div>
-                )}
-
-            </div>
+            )}
 
             {isPopupLoginOpen && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 z-[99999999] flex justify-center items-start pt-[8%]" onClick={handleClosePopup}>

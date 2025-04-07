@@ -440,8 +440,6 @@ export default function ProductsTrashAdminPage() {
                         displayEmpty
                         onChange={(e) => setChangeMulti(e.target.value)}
                       >
-                        <MenuItem value="ACTIVE">Hoạt động</MenuItem>
-                        <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
                         <MenuItem value="restored">Khôi phục</MenuItem> 
                         <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
                       </Select>

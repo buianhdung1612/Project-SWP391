@@ -1,3 +1,5 @@
+"use client"
+
 export default function InforOderText(props: { info: string }) {
     const { info } = props;
 

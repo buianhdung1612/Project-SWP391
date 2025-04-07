@@ -1,3 +1,5 @@
+"use client"
+
 import { useContext, useState } from "react";
 import { Context } from "./MiddlewareGetData";
 import { Swiper, SwiperSlide } from 'swiper/react';

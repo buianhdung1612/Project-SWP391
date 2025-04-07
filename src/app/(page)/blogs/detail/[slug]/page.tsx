@@ -54,8 +54,6 @@ export default function BlogDetail() {
         return `${dayName}, ${day}/${month}/${year}`;
     };
 
-    console.log(data);
-
     return (
         <>
             <ul className="flex items-center mt-[17px] container mx-auto px-3">

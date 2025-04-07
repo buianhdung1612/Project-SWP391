@@ -1,3 +1,5 @@
+"use client"
+
 export default function InforOrderTitle(props: { title: string }) {
     const { title } = props;
 

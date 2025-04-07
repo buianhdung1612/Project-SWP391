@@ -11,12 +11,6 @@ export default function OtpPage() {
         event.preventDefault();
         const tokenUser = Cookies.get("tokenUser");
 
-        console.log({
-            token: tokenUser,
-            newPassword: event.target.newPassword.value,
-            confirmPassword: event.target.confirmPassword.value
-        })
-
         const response = await fetch('https://freshskinweb.onrender.com/admin/users/update-password-by-token', {
             method: "PATCH",
             headers: {

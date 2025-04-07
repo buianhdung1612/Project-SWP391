@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState } from "react";
 import CardItem from "@/app/components/Card/CardItem";
 import Pagination from "@/app/components/Pagination/Pagination";

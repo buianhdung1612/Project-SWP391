@@ -54,7 +54,7 @@ export default function ProductsAdminPage() {
   const [keyword, setKeyword] = useState("");
   const [sort, setSort] = useState("position-desc");
   const [page, setPage] = useState(1);
-  const [changeMulti, setChangeMulti] = useState("active");
+  const [changeMulti, setChangeMulti] = useState("ACTIVE");
 
   useEffect(() => {
     const urlCurrent = new URL(location.href);
@@ -414,6 +414,8 @@ export default function ProductsAdminPage() {
                   >
                     <MenuItem value="position-desc">Vị trí giảm dần</MenuItem>
                     <MenuItem value="position-asc">Vị trí tăng dần</MenuItem>
+                    <MenuItem value="price-desc">Giá giảm dần</MenuItem>
+                    <MenuItem value="price-asc">Giá tăng dần</MenuItem>
                     <MenuItem value="title-desc">Tiêu đề từ Z đến A</MenuItem>
                     <MenuItem value="title-asc">Tiêu đề từ A đến Z</MenuItem>
                   </Select>

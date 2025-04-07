@@ -24,12 +24,6 @@ export default function UserChangePassword() {
         const password = event.target.newPassword.value;
         const confirmPassword = event.target.confirmPassword.value;
 
-        console.log({
-            oldPassword: oldPassword,
-            password: password,
-            confirmPassword: confirmPassword
-        })
-
         const response = await fetch(`https://freshskinweb.onrender.com/admin/account/change-password/${profile.userID}`, {
             method: "PATCH",
             headers: {

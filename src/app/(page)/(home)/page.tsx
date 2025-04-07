@@ -38,25 +38,8 @@ export default function HomePage() {
   }, [token]);
 
   const fetchData = async () => {
-    const cachedData = sessionStorage.getItem('homeData');
-    if (cachedData) {
-      const data = JSON.parse(cachedData);
-      setDataFeaturedBlogCategory(data.featuredBlogCategory);
-      setDataFeaturedProductCategory(data.featuredProductCategory);
-      setDataTop7ProductFlashSale(data.Top7ProductFlashSale);
-      setDataFreshSkinSlogan(data.FreshSkinSlogan);
-      setDataTop_moisturizing_products(data.Top_moisturizing_products);
-      setDataBeautyTrends(data.BeautyTrends);
-      setDataTop3ProductFeature(data.Top3ProductFeature);
-      setAllCategory(data.AllCategory);
-      setTop10ProductSeller(data.Top10ProductSeller);
-      setIsLoading(false);
-      return;
-    }
-
     const response = await fetch(`https://freshskinweb.onrender.com/home`);
     const data = await response.json();
-    sessionStorage.setItem('homeData', JSON.stringify(data));
 
     setDataFeaturedBlogCategory(data.featuredBlogCategory);
     setDataFeaturedProductCategory(data.featuredProductCategory);

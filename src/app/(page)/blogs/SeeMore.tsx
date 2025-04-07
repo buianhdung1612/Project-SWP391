@@ -20,21 +20,15 @@ export default function SeeMore(props: {
     const [isLoading, setIsLoading] = useState(true);
 
     useEffect(() => {
-        const cachedData = sessionStorage.getItem("categories");
-        if (cachedData) {
-            setCategories(JSON.parse(cachedData));
+        const fetchCategories = async () => {
+            const response = await fetch("https://freshskinweb.onrender.com/home");
+            const data = await response.json();
+            setCategories(data.featuredBlogCategory);
+            sessionStorage.setItem("categories", JSON.stringify(data.featuredBlogCategory));
             setIsLoading(false);
-        } else {
-            const fetchCategories = async () => {
-                const response = await fetch("https://freshskinweb.onrender.com/home");
-                const data = await response.json();
-                setCategories(data.featuredBlogCategory);
-                sessionStorage.setItem("categories", JSON.stringify(data.featuredBlogCategory));
-                setIsLoading(false);
-            };
+        };
 
-            fetchCategories();
-        }
+        fetchCategories();
     }, []);
 
     if (isLoading) {

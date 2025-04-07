@@ -1,3 +1,5 @@
+"use client"
+
 import InforOrder from "./InforOrder";
 import Thanks from "./Thanks";
 import ButtonContinue from "./ButtonContinue";

@@ -36,8 +36,7 @@ interface CartItem {
     variantId: number,
     volume: number,
     unit: string,
-    quantity: number,
-    stock: number
+    quantity: number
 }
 
 export default function CardItem(props: {
@@ -95,7 +94,6 @@ export default function CardItem(props: {
             volume: currentVolume.volume,
             unit: currentVolume.unit,
             quantity: quantity,
-            stock: currentVolume.stock
         };
 
         const existProductInCart = products.find((item: CartItem) => item.title == data.title && item.volume == data.volume);
@@ -227,7 +225,9 @@ export default function CardItem(props: {
                                 <div className="text-[23px] font-[600] text-[#333]">{title}</div>
                                 <div className="flex mt-[10px] items-center mb-[10px]">
                                     <div className="text-[20px] font-[600] text-primary">{(currentVolume.price * (1 - discount / 100)).toLocaleString("en-US")}<sup className="underline">đ</sup></div>
-                                    <div className="text-[16px] font-[600] text-[#a5a5a5] ml-[10px] line-through">{currentVolume.price.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
+                                    {discount !== 0 && (
+                                        <div className="text-[16px] font-[600] text-[#a5a5a5] ml-[10px] line-through">{currentVolume.price.toLocaleString("en-US")}<sup className="underline">đ</sup></div>
+                                    )}
                                 </div>
                                 <div>
                                     <div className="text-[14px] text-[#0090F] mb-[10px]">Dung Tích: <span className="text-secondary font-[600]">{currentVolume.volume}{currentVolume.unit.toLowerCase()}</span></div>
