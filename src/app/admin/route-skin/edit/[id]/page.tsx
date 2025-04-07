@@ -38,7 +38,7 @@ export default function EditRouteSkinAdminPage() {
         fetchData();
     }, []);
 
-    for(const item of rountines){
+    for (const item of rountines) {
         delete item["id"];
         delete item["product"];
     }
@@ -89,6 +89,10 @@ export default function EditRouteSkinAdminPage() {
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
+            setLoading(false);
+            setTimeout(() => {
+                setAlertMessage(""); 
+            }, 2000);
         }
     }
 

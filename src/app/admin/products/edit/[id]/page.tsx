@@ -352,7 +352,10 @@ export default function EditProductAdminPage() {
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
-            setTimeout(() => location.reload(), 2000);
+            setLoading(false);
+            setTimeout(() => {
+                setAlertMessage(""); 
+            }, 2000);
         }
     };
 

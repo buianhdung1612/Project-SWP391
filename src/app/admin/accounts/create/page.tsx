@@ -48,6 +48,22 @@ export default function CreateAccountAdmin() {
     event.preventDefault();
     setLoading(true);
 
+    if ((event.currentTarget.phone.value[0]) !== '0') {
+      setAlertMessage("Số điện thoại không hợp lệ.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
+    if ((event.currentTarget.phone.value).length !== 10) {
+      setAlertMessage("Số điện thoại không hợp lệ.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+      return;
+    }
+
     const formData = new FormData(event.currentTarget);
 
     if (!formData.get("username")) {
@@ -158,6 +174,9 @@ export default function CreateAccountAdmin() {
     } else {
       setAlertMessage(dataResponse.message);
       setAlertSeverity("error");
+      setTimeout(() => {
+        setAlertMessage("");
+      }, 2000);
     }
   };
 
@@ -252,7 +271,7 @@ export default function CreateAccountAdmin() {
                 id="images"
                 name="images"
                 onImageChange={handleImageChange}
-              />              
+              />
               <Button
                 type='submit'
                 variant="contained"

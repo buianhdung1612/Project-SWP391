@@ -264,9 +264,11 @@ export default function CreateProductAdminPage() {
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
-        }
-        
-        setLoading(false); 
+            setLoading(false);
+            setTimeout(() => {
+                setAlertMessage(""); 
+            }, 2000);
+        }        
     }
 
 
@@ -333,7 +335,6 @@ export default function CreateProductAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <div className='mb-6 sub-menu'>
                                 <Typography className='border border-solid border-[#BFBFBF] rounded-[5px] p-[10px]'>Chọn danh mục sản phẩm</Typography>

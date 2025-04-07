@@ -76,6 +76,7 @@ export default function EditQuizAdminPage() {
       setAlertSeverity("error");
       setTimeout(() => setAlertMessage(""), 5000);
       setLoading(false);
+      return;
     }
 
     if (!data.description) {
@@ -83,6 +84,7 @@ export default function EditQuizAdminPage() {
       setAlertSeverity("error");
       setTimeout(() => setAlertMessage(""), 5000);
       setLoading(false);
+      return;
     }
 
     if (questions.length < 1) {
@@ -90,6 +92,7 @@ export default function EditQuizAdminPage() {
       setAlertSeverity("error");
       setTimeout(() => setAlertMessage(""), 5000);
       setLoading(false);
+      return;
     }
 
     const dataSubmit = {

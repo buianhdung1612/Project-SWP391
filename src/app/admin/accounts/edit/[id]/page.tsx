@@ -66,6 +66,22 @@ export default function EditAccountAdmin() {
         event.preventDefault();
         setLoading(true);
 
+        if((event.currentTarget.phone.value[0]) !== '0'){
+            setAlertMessage("Số điện thoại không hợp lệ.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if((event.currentTarget.phone.value).length !== 10){
+            setAlertMessage("Số điện thoại không hợp lệ.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
         const formData = new FormData(event.currentTarget);
         if (!roleCurrent) {
             setAlertMessage("Phân quyền tài khoản không được để trống.");
@@ -107,6 +123,14 @@ export default function EditAccountAdmin() {
             return;
         }
 
+        if (!formData.get("phone")) {
+            setAlertMessage("Số điện thoại tài khoản không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
         if (!formData.get("address")) {
             setAlertMessage("Địa chỉ tài khoản không được để trống.");
             setAlertSeverity("error");
@@ -115,7 +139,7 @@ export default function EditAccountAdmin() {
             return;
         }
 
-        if (images.length != 1) {
+        if ((images.length + data.avatar.length) < 1) {
             setAlertMessage("Phải chọn 1 ảnh đại diện.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
@@ -129,6 +153,7 @@ export default function EditAccountAdmin() {
             lastName: formData.get("lastname"),
             email: formData.get("email"),
             phone: formData.get("phone"),
+            avatar: data.avatar,
             address: formData.get("address")
         };
 
@@ -154,6 +179,10 @@ export default function EditAccountAdmin() {
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
+            setLoading(false);
+            setTimeout(() => {
+                setAlertMessage(""); 
+            }, 2000);
         }
     }
 

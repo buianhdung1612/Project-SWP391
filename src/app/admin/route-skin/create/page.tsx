@@ -128,6 +128,10 @@ export default function EditRouteSkinAdminPage() {
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
+            setLoading(false);
+            setTimeout(() => {
+                setAlertMessage(""); 
+            }, 2000);
         }
     };
 
