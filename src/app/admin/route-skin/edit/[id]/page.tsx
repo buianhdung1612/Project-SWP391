@@ -16,6 +16,7 @@ export default function EditRouteSkinAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
 
+    const [skinType, setSkinType] = useState<string>("");
     const [routineTitle, setRoutineTitle] = useState<string>("");
     const [routineDescription, setRoutineDescription] = useState<string>("");
     const [rountines, setRountines] = useState<any>([]);
@@ -31,6 +32,7 @@ export default function EditRouteSkinAdminPage() {
             setRountines(data.data.rountineStep);
             setRoutineTitle(data.data.title);
             setRoutineDescription(data.data.description);
+            setSkinType(data.data.skinType.type);
         }
 
         fetchData();
@@ -123,7 +125,7 @@ export default function EditRouteSkinAdminPage() {
             {permissions?.includes("rountine_edit") && (
                 <div>
                     <Typography variant="h5" sx={{ mb: 1, pt: 2 }}>
-                        Chỉnh sửa ....
+                        Chỉnh sửa {skinType}
                     </Typography>
 
                     <TextField
@@ -132,7 +134,7 @@ export default function EditRouteSkinAdminPage() {
                         fullWidth
                         value={routineTitle}
                         onChange={(e) => setRoutineTitle(e.target.value)}
-                        sx={{ mb: 2, mt: 2 }}
+                        sx={{ mb: 2, mt: 2, bgcolor: "white" }}
                     />
 
                     <TinyEditor value={routineDescription} onEditorChange={(content: string) => setRoutineDescription(content)} />

@@ -58,13 +58,7 @@ export default function RouteSkinAdminPage() {
                                             <TableCell>{item.title}</TableCell>
                                             <TableCell><span className="line-clamp-2" dangerouslySetInnerHTML={{ __html: item.description }} ></span></TableCell>
                                             <TableCell>
-                                                <div className="flex">
-                                                    <Tooltip title="Chi tiết" placement="top">
-                                                        <Link href={`/admin/route-skin/detail/${item.id}`}>
-                                                            <BiDetail className="text-[25px] text-[#138496] mr-2" />
-                                                        </Link>
-
-                                                    </Tooltip>
+                                                <div className="flex">                                                  
                                                     <Tooltip title="Sửa" placement="top">
                                                         <Link href={`/admin/route-skin/edit/${item.id}`}>
                                                             <MdEditNote className="text-[25px] text-[#E0A800]" />

@@ -21,6 +21,7 @@ export default function EditQuizAdminPage() {
   const dataProfile = useContext(ProfileAdminContext);
   const permissions = dataProfile?.permissions;
   const [data, setData] = useState<any>(null);
+  const [loading, setLoading] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
@@ -47,7 +48,6 @@ export default function EditQuizAdminPage() {
     fetchInfo();
   }, [id]);
 
-  // Hàm tối ưu hóa để xử lý thay đổi input
   const handleInputChange = useCallback(
     (index: number, field: "question" | "answeroption" | "answerscore", value: string | number, answerIndex?: number) => {
       setQuestions((prevQuestions) => {
@@ -69,6 +69,28 @@ export default function EditQuizAdminPage() {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault();
+    setLoading(true);
+
+    if (!data.title) {
+      setAlertMessage("Tiêu đề bộ đề không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+    }
+
+    if (!data.description) {
+      setAlertMessage("Mô tả bộ đề không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+    }
+
+    if (questions.length < 1) {
+      setAlertMessage("Câu hỏi bộ đề không được để trống.");
+      setAlertSeverity("error");
+      setTimeout(() => setAlertMessage(""), 5000);
+      setLoading(false);
+    }
 
     const dataSubmit = {
       title: data.title,
@@ -142,18 +164,17 @@ export default function EditQuizAdminPage() {
 
   return (
     <>
+      {alertMessage && (
+        <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+          {alertMessage}
+        </Alert>
+      )}
+
       {permissions?.includes("quiz_edit") && (
         <Box sx={{ padding: 3, backgroundColor: "#ffffff" }}>
           <Typography variant="h5" gutterBottom>
             Trang chỉnh sửa bộ câu hỏi
           </Typography>
-          {
-            alertMessage && (
-              <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-              </Alert>
-            )
-          }
 
           {data && (
             <Paper elevation={3} sx={{ padding: 3, marginBottom: 2 }}>
@@ -171,7 +192,6 @@ export default function EditQuizAdminPage() {
                       title: e.target.value,
                     }))
                   }
-                  required
                 />
                 <TextField
                   label="Mô tả bộ đề"
@@ -186,7 +206,6 @@ export default function EditQuizAdminPage() {
                       description: e.target.value,
                     }))
                   }
-                  required
                 />
                 <Box sx={{ marginTop: "20px", marginBottom: "20px" }}>
                   {questions.map((question, questionIndex) => (
@@ -268,9 +287,18 @@ export default function EditQuizAdminPage() {
                     </Box>
                   ))}
                 </Box>
-                <Button type="submit" variant="contained" color="primary" sx={{ width: "100%" }}>
-                  Chỉnh sửa bộ đề
-                </Button>
+                <Box sx={{ py: 4 }}>
+                  <Button
+                    type='submit'
+                    variant="contained"
+                    color="primary"
+                    sx={{ width: '100%' }}
+                    disabled={loading}
+                    onClick={handleSubmit}
+                  >
+                    {loading ? "Đang chỉnh sửa bộ câu hỏi..." : "Chỉnh sựa bộ câu hỏi"}
+                  </Button>
+                </Box>
               </form>
             </Paper>
           )}

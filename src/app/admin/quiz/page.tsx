@@ -132,7 +132,7 @@ export default function QuizAdminPage() {
 
     // Xóa vĩnh viễn 1 bộ đề
     const handleDeleteOneQuiz = async (id: number) => {
-        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn bài viết này không?");
+        const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn bộ đề này không?");
         if (confirm) {
             const path = `${linkApi}/delete/${id}`;
 

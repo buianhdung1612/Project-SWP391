@@ -161,7 +161,7 @@ export default function EditRouteSkinAdminPage() {
                         fullWidth
                         value={routineTitle}
                         onChange={(e) => setRoutineTitle(e.target.value)}
-                        sx={{ mb: 2, mt: 2 }}
+                        sx={{ mb: 2, mt: 2, bgcolor: "white" }}
                     />
 
                     <TinyEditor value={routineDescription} onEditorChange={(content: string) => setRoutineDescription(content)} />
