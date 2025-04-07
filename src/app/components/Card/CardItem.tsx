@@ -116,7 +116,7 @@ export default function CardItem(props: {
                 setTimeout(() => setAlertMessage(""), 3000);
                 setTimeout(() => setAlertMessage(""), 3000);
                 return;
-            } 
+            }
             products.push(data);
         }
 
@@ -137,12 +137,12 @@ export default function CardItem(props: {
 
     return (
         <>
-            {alertMessage && (
-                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
-                    {alertMessage}
-                </Alert>
-            )}
             <div className="bg-white rounded-[10px] w-[226px]">
+                {alertMessage && (
+                    <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                        {alertMessage}
+                    </Alert>
+                )}
                 <div className="w-[226px] aspect-square relative group">
                     <Link href={link}>
                         <img src={image[0]} alt="Image" className="w-full h-full object-cover rounded-[10px]" />

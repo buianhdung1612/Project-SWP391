@@ -5,7 +5,7 @@ import Link from "next/link";
 import { MdNavigateNext } from "react-icons/md";
 
 interface Section2Props {
-    data: any;  
+    data: any;
 }
 
 export default function Section2({ data }: Section2Props) {
@@ -21,7 +21,7 @@ export default function Section2({ data }: Section2Props) {
         setTotalPages(data.page?.totalPages || 0);
         setCurrentPage(data.page?.page || 1);
         setIsLoading(false);
-    }, [data]); 
+    }, [data]);
 
     if (isLoading) {
         return <div>Loading...</div>;
@@ -40,27 +40,34 @@ export default function Section2({ data }: Section2Props) {
                     Tìm kiếm: {title}
                 </li>
             </ul>
-            <div className="text-[24px] my-[15px] text-[#00090f] font-[450]">Có {data.page.totalItems} kết quả tìm kiếm phù hợp</div>
-            <div className="flex items-start">
-                <div className="flex-1 ml-[40px] mt-[15px]">
-                    <div className="grid grid-cols-4 gap-[20px] mt-[20px]">
-                        {products.map((item: any, index: number) => (
-                            <CardItem
-                                key={index}
-                                image={item.thumbnail}
-                                brand={item.brand.title}
-                                title={item.title}
-                                banner={item.banner}
-                                deal={item.deal}
-                                link={`/detail/${item.slug}`}
-                                priceByVolume={item.variants}
-                                discount={item.discountPercent}
-                            />
-                        ))}
+            {products.length > 0 ? (
+                <div>
+                    <div className="text-[24px] my-[15px] text-[#00090f] font-[450]">Có {data.page.totalItems} kết quả tìm kiếm phù hợp</div>
+                    <div className="flex items-start">
+                        <div className="flex-1 ml-[40px] mt-[15px]">
+                            <div className="grid grid-cols-4 gap-[20px] mt-[20px]">
+                                {products.map((item: any, index: number) => (
+                                    <CardItem
+                                        key={index}
+                                        image={item.thumbnail}
+                                        brand={item.brand.title}
+                                        title={item.title}
+                                        banner={item.banner}
+                                        deal={item.deal}
+                                        link={`/detail/${item.slug}`}
+                                        priceByVolume={item.variants}
+                                        discount={item.discountPercent}
+                                    />
+                                ))}
+                            </div>
+                            <Pagination totalPages={totalPages} currentPage={currentPage} />
+                        </div>
                     </div>
-                    <Pagination totalPages={totalPages} currentPage={currentPage} />
                 </div>
-            </div>
+            ) : (
+                <div className="text-[17px] text-textColor mt-[20px]">Không tìm thấy bất kỳ kết quả nào với từ khóa trên.</div>
+            )}
+
         </div>
     );
 }

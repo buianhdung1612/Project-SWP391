@@ -12,6 +12,7 @@ export default function ProductsSearchPage() {
     useEffect(() => {
         const fetchData = async () => {
             const keyword = searchParams.get("keyword") || "";
+            console.log(keyword);
             const page = searchParams.get("page");
 
             const linkApi = `https://freshskinweb.onrender.com/home/search?keyword=${keyword}`;
