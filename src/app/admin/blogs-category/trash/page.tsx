@@ -342,7 +342,7 @@ export default function BrandsTrashAdminPage() {
 
                     {/* Header */}
                     <Typography variant="h5" gutterBottom>
-                        Trang thùng rác thương hiệu sản phẩm
+                        Trang thùng rác danh mục bài viết 
                     </Typography>
 
                     {/* Bộ lọc và Tìm kiếm */}
