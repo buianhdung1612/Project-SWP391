@@ -56,7 +56,7 @@ export default function CreateBlogCategoryAdminPage() {
             description: description,
             position: formData.get("position"),
             featured: formData.get("featured") === "true",
-            status: formData.get("status")
+            // status: formData.get("status")
         };
 
 
