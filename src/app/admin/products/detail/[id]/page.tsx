@@ -205,8 +205,11 @@ export default function DetailProductAdminPage() {
                                                 <Typography variant="h6" sx={{ fontWeight: 'bold', color: '#4caf50' }}>
                                                     {item.volume}{item.unit}
                                                 </Typography>
-                                                <Typography variant="body1" sx={{ color: '#555', marginBottom: 2 }}>
+                                                <Typography variant="body1" sx={{ color: '#555'  }}>
                                                     Giá: {item.price.toLocaleString()} VND
+                                                </Typography>
+                                                <Typography variant="body1" sx={{ color: '#555', marginBottom: 2 }}>
+                                                    Số lượng: {item.stock}
                                                 </Typography>
                                             </Card>
                                         </Grid>

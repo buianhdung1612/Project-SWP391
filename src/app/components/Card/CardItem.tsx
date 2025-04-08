@@ -2,7 +2,7 @@
 
 import { cartAddNewProduct } from "@/app/(actions)/cart";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactDOM from 'react-dom';
 import { useDispatch, useSelector } from "react-redux";
 import { Swiper, SwiperSlide } from 'swiper/react';
@@ -58,10 +58,15 @@ export default function CardItem(props: {
 
     const products = useSelector((state: any) => state.cartReducer.products);
     const [currentVolume, setCurrentVolume] = useState<any>(priceByVolume[0]);
+
+    useEffect(() => {
+        setCurrentVolume(priceByVolume[0]);
+    }, [priceByVolume]);
+    
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [quantity, setQuantity] = useState(1);
-    
+
     const handleChange = (event: any): void => {
         const value = parseInt(event.target.value);
         if (value >= 1 && value <= currentVolume.stock) {

@@ -18,7 +18,8 @@ export default function SaleCode() {
         type: "",
         discountValue: 0,
         maxDiscount: 0,
-        minOrderValue: 0
+        minOrderValue: 0,
+        showCondition: false
     }]);
 
     const [value, setValue] = useState("");
@@ -35,11 +36,25 @@ export default function SaleCode() {
         const fetchData = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/admin/vouchers/valid`);
             const dataResponse = await response.json();
-            setData(dataResponse.data);
+            setData(dataResponse.data.map((item: any) => ({
+                ...item,
+                showCondition: false
+            })));
         };
 
         fetchData();
     }, []);
+
+    const toggleCondition = (index: number) => {
+        setData(prevData => {
+            const newData = [...prevData];
+            newData[index] = {
+                ...newData[index],
+                showCondition: !newData[index].showCondition,
+            };
+            return newData;
+        });
+    }
 
     //Popup
     const [isPopupOpen, setIsPopupOpen] = useState(false);
@@ -144,25 +159,33 @@ export default function SaleCode() {
                     <div className="container mx-auto w-[650px] max-h-[80%] bg-[#fff] py-[10px] px-[15px] rounded-[10px] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
                         <div className="uppercase text-[16px] text-textColor font-[550] mb-[10px]">Mã khuyến mãi</div>
                         {data && data.length > 0 && data.map((item: any, index: number) => (
-                            <div key={index} className="border border-dashed border-primary rounded-[5px] h-[85px] flex items-center mb-[15px]">
-                                {item.type === "PERCENTAGE" ? (
-                                    <div className="bg-primary w-[110px] text-[30px] py-[10px] text-[#fff] font-[500] h-full flex justify-center items-center">{item.discountValue}%</div>
-                                ) : (
-                                    <div className="bg-primary w-[110px] text-[30px] py-[10px] text-[#fff] font-[500] h-full flex justify-center items-center">{(item.discountValue / 1000)}k</div>
-                                )}
-                                <div className="px-[10px] h-full flex-1 flex items-center bg-[#E4EDD5]">
-                                    <div className="w-[70%]">
-                                        <div className="text-[14px] text-textColor font-[450] mb-[3px]">Mã khuyến mãi <span className="text-primary font-[600]">{item.name}</span></div>
-                                        {item.type === "PERCENTAGE" ? (
-                                            <div className="text-[14px] text-textColor font-[450]">Mã giảm {item.discountValue}% cho đơn hàng tối thiểu {item.minOrderValue / 1000}k.</div>
-                                        ) : (
-                                            <div className="text-[14px] text-textColor font-[450]">Mã giảm {item.discountValue / 1000}k cho đơn hàng tối thiểu {item.minOrderValue / 1000}k.</div>
-                                        )}
-                                    </div>
-                                    <div className="flex-1">
-                                        <div onClick={() => handleCopy(item.name)} className="bg-primary hover:bg-[#F4AE05] flex justify-center items-center text-white px-[15px] cursor-pointer h-[32px] font-[500] text-[16px] rounded-[5px]">Sao chép mã</div>
+                            <div key={index} className="mb-[15px]">
+                                <div className="border border-dashed border-primary rounded-[5px] h-[85px] flex items-center">
+                                    {item.type === "PERCENTAGE" ? (
+                                        <div className="bg-primary w-[110px] text-[30px] py-[10px] text-[#fff] font-[500] h-full flex justify-center items-center">{item.discountValue}%</div>
+                                    ) : (
+                                        <div className="bg-primary w-[110px] text-[30px] py-[10px] text-[#fff] font-[500] h-full flex justify-center items-center">{((item.discountValue / 1000)).toFixed(0)}k</div>
+                                    )}
+                                    <div className="px-[10px] h-full flex-1 flex items-center bg-[#E4EDD5]">
+                                        <div className="w-[70%]">
+                                            <div className="text-[14px] text-textColor font-[450] mb-[3px]">Mã khuyến mãi <span className="text-primary font-[600]">{item.name}</span></div>
+                                            {item.type === "PERCENTAGE" ? (
+                                                <div className="text-[14px] text-textColor font-[450]">Mã giảm {item.discountValue}% cho đơn hàng tối thiểu {item.minOrderValue / 1000}k.</div>
+                                            ) : (
+                                                <div className="text-[14px] text-textColor font-[450]">Mã giảm {item.discountValue / 1000}k cho đơn hàng tối thiểu {item.minOrderValue / 1000}k.</div>
+                                            )}
+                                        </div>
+                                        <div className="flex-1">
+                                            <div onClick={() => handleCopy(item.name)} className="bg-primary hover:bg-[#F4AE05] flex justify-center items-center text-white px-[15px] cursor-pointer h-[32px] font-[500] text-[16px] rounded-[5px]">Sao chép mã</div>
+                                            <div onClick={() => toggleCondition(index)} className="text-[#2E72D2] hover:text-[#F4AE05] cursor-pointer text-[14px] text-center underline mt-[5px]">Điều kiện</div>
+                                        </div>
                                     </div>
                                 </div>
+                                {item.showCondition && (
+                                    <div className="bg-[#fff4db] p-[5px] text-[#000] text-[14px] rounded-[5px]">
+                                        Áp dụng cho đơn hàng từ {(item.minOrderValue / 1000).toFixed(0)}k với khuyến mãi tối đa {(item.maxDiscount / 1000).toFixed(0)}k
+                                    </div>
+                                )}
                             </div>
                         ))}
                     </div>
