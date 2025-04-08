@@ -62,7 +62,7 @@ export default function CardItem(props: {
     useEffect(() => {
         setCurrentVolume(priceByVolume[0]);
     }, [priceByVolume]);
-    
+
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [quantity, setQuantity] = useState(1);
@@ -238,6 +238,11 @@ export default function CardItem(props: {
                                 </div>
                                 <div>
                                     <div className="text-[14px] text-[#0090F] mb-[10px]">Dung Tích: <span className="text-secondary font-[600]">{currentVolume.volume}{currentVolume.unit.toLowerCase()}</span></div>
+                                    {currentVolume.stock > 0 ? (
+                                        <div className="text-[14px] text-[#0090F] mb-[10px]">Tình trạng: <span className="text-primary font-[600]">Còn hàng</span></div>
+                                    ) : (
+                                        <div className="text-[14px] text-[#0090F] mb-[10px]">Tình trạng: <span className="text-[#C5332D] font-[600]">Hết hàng</span></div>
+                                    )}
                                     <div className="flex items-center mb-[10px]">
                                         {priceByVolume.map((item: any, index: number) => (
                                             <button
@@ -255,31 +260,35 @@ export default function CardItem(props: {
                                     </div>
                                 </div>
                                 <div className="flex items-center">
-                                    <div className="mb-[10px] flex">
-                                        <button
-                                            className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tl-[5px] rounded-bl-[5px] border border-solid border-[#ddd]"
-                                            onClick={handleClickDecrease}
-                                        >
-                                            -
+                                    {currentVolume.stock > 0 && (
+                                        <div className="mb-[10px] flex">
+                                            <button
+                                                className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tl-[5px] rounded-bl-[5px] border border-solid border-[#ddd]"
+                                                onClick={handleClickDecrease}
+                                            >
+                                                -
+                                            </button>
+                                            <input
+                                                type="number"
+                                                name="quantity"
+                                                id="quantity"
+                                                value={quantity}
+                                                onChange={() => handleChange(event)}
+                                                className="text-[#00090f] text-[16px] block w-[60px] h-[40px] outline-none text-center border-y border-solid border-[#ddd]"
+                                            />
+                                            <button
+                                                className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tr-[5px] rounded-br-[5px] border border-solid border-[#ddd]"
+                                                onClick={handleClickIncrease}
+                                            >
+                                                +
+                                            </button>
+                                        </div>
+                                    )}
+                                    {currentVolume.stock > 0 && (
+                                        <button className="mb-[10px] px-[25px] h-[40px] flex items-center bg-secondary hover:bg-white text-[12px] uppercase text-white hover:text-secondary rounded-[5px] ml-[15px] border borde-solid border-secondary" onClick={handleAddNewProductToCart}>
+                                            Thêm vào giỏ hàng
                                         </button>
-                                        <input
-                                            type="number"
-                                            name="quantity"
-                                            id="quantity"
-                                            value={quantity}
-                                            onChange={() => handleChange(event)}
-                                            className="text-[#00090f] text-[16px] block w-[60px] h-[40px] outline-none text-center border-y border-solid border-[#ddd]"
-                                        />
-                                        <button
-                                            className="hover:bg-primary hover:text-white text-[18px] w-[40px] h-[40px] text-[#333] flex justify-center items-center rounded-tr-[5px] rounded-br-[5px] border border-solid border-[#ddd]"
-                                            onClick={handleClickIncrease}
-                                        >
-                                            +
-                                        </button>
-                                    </div>
-                                    <button className="mb-[10px] px-[25px] h-[40px] flex items-center bg-secondary hover:bg-white text-[12px] uppercase text-white hover:text-secondary rounded-[5px] ml-[15px] border borde-solid border-secondary" onClick={handleAddNewProductToCart}>
-                                        Thêm vào giỏ hàng
-                                    </button>
+                                    )}
                                 </div>
                             </div>
                         </div>
