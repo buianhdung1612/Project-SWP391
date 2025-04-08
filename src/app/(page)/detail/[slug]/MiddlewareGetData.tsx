@@ -16,7 +16,7 @@ interface Brand {
     title: string;
 }
 interface Category {
-    slug: string, 
+    slug: string,
     title: string,
     parent?: Category
 }
@@ -42,6 +42,8 @@ interface ProductDetail {
     description: string;
     origin: string;
     skinIssues: string;
+    ingredients: string;
+    usageInstructions: string;
 }
 
 interface Context {
@@ -57,7 +59,7 @@ export const Context = createContext<Context>({
             description: "",
             thumbnail: [],
             variants: [{ id: 0, volume: 0, price: 0, unit: "" }],
-            discountPercent: 0
+            discountPercent: 0,
         }
     ],
     productDetail: {
@@ -73,7 +75,9 @@ export const Context = createContext<Context>({
         discountPercent: 0,
         description: "",
         origin: "",
-        skinIssues: ""
+        skinIssues: "",
+        ingredients: "",
+        usageInstructions: ""
     }
 });
 
@@ -90,7 +94,7 @@ export default function MiddlewareGetData({ data }: MiddlewareGetDataProps) {
             <Section1 />
             <SaleCode />
             <Section2 />
-            <Rating/>
+            <Rating />
         </Context.Provider>
     );
 }

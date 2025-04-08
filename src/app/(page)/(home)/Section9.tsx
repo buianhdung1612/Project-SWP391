@@ -15,20 +15,25 @@ import { Navigation } from 'swiper/modules';
 export default function Section9(props: any) {
     const { dataInit = [] } = props;
 
-    const dataButton: any = dataInit.map((item: any) => (
-        {
-            data: item.products,
-            currentStatus: item.slug,
-            content: item.title
-        }
-    ));
+    // console.log(dataInit);
 
-    const [data, setData] = useState(dataInit[0].products);
-    const [currentButton, setCurrentButton] = useState(dataInit[0].slug);
+    const [data, setData] = useState(dataInit[0]);
 
-    const handleClick: any = (data: any, currentButton: string) => {
+    console.log(data);
+    console.log(dataInit);
+
+    // const dataButton: any = dataInit.map((item: any) => (
+    //     {
+    //         data: item.products,
+    //         currentStatus: item.slug,
+    //         content: item.title
+    //     }
+    // ));
+
+    // const [currentButton, setCurrentButton] = useState(dataInit[0].slug);
+
+    const handleClick: any = (data: any) => {
         setData(data);
-        setCurrentButton(currentButton);
     }
 
     return (
@@ -37,15 +42,15 @@ export default function Section9(props: any) {
                 <Title title="Tóc khỏe tóc đẹp" link="/products" />
 
                 <div className="text-center mb-[20px]">
-                    {dataButton.map((item: any, index: number) => (
+                    {dataInit.map((item: any, index: number) => (
                         <button
                             key={index}
-                            onClick={() => handleClick(item.data, item.currentStatus)}
+                            onClick={() => handleClick(item)}
                             className={"text-[16px] hover:text-primary font-[500] px-[25px] py-[2px] " +
-                                (currentButton == item.currentStatus ? "text-primary" : "text-[#333]")
+                                (data.title == item.title ? "text-primary" : "text-[#333]")
                             }
                         >
-                            {item.content}
+                            {item.title}
                         </button>
                     ))}
                 </div>
@@ -56,7 +61,7 @@ export default function Section9(props: any) {
                     modules={[Navigation]}
                     className="mySwiper"
                 >
-                    {data.map((item: any, index: number) => (
+                    {data.products.map((item: any, index: number) => (
                         <SwiperSlide key={index}>
                             <CardItem
                                 key={index}
@@ -70,7 +75,7 @@ export default function Section9(props: any) {
                         </SwiperSlide>
                     ))}
                 </Swiper>
-                <ButtonSeeAll link={`/product-category/${currentButton}`} />
+                {/* <ButtonSeeAll link={`/product-category/${currentButton}`} /> */}
             </div>
         </>
     )

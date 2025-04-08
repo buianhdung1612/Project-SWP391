@@ -28,7 +28,6 @@ if (!tokenUser) {
     dataInit = getCartFromCookie();
 }
 else {
-    // Data Init
     const productsInit: CartItem[] = [];
     const totalPriceInit: number = productsInit.reduce((sum: number, item: CartItem) => {
         return sum + item.price * item.quantity

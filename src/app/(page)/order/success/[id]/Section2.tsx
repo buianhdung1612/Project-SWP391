@@ -11,7 +11,7 @@ export default function Section2() {
 
     return (
         <>
-            <div className="flex-1 ml-[100px] bg-[#E6E8EA]">
+            <div className="flex-1 ml-[80px] bg-[#E6E8EA]">
                 <div className="text-[16px] font-[550] px-[20px] py-[7px] border-b-2 border-solid border-white">Đơn hàng #{id}</div>
                 <Products />
                 <div className="px-[20px] py-[15px] border-t-2 border-b-2 border-solid border-white">

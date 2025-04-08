@@ -17,7 +17,8 @@ interface CartItem {
     variantId: number,
     volume: number,
     unit: string,
-    quantity: number
+    quantity: number,
+    stock: number
 }
 
 export default function Cart() {
@@ -38,6 +39,8 @@ export default function Cart() {
 
     const handleMouseEnter = () => setIsHover(true);
     const handleMouseLeave = () => setIsHover(false);
+
+    console.log(products);
 
     const handleChange = (event: any, index: number): void => {
         const newQuantity = Number(event.target.value);

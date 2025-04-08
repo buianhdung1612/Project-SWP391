@@ -122,6 +122,7 @@ export default function OrderPage() {
         const wardData = event.target.ward.value.split('+')[1];
         const dataAddress = `${event.target.address.value}, ${provinceData}, ${districtData}, ${wardData}`;
 
+        console.log(products);
         const dataProducts: any = [];
         products.map((item: any) => (
             dataProducts.push({
@@ -145,6 +146,8 @@ export default function OrderPage() {
                 voucherName: voucherName,
                 priceShipping: feeShip
             }
+
+            console.log(data);
 
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
                 method: "POST",

@@ -36,7 +36,8 @@ interface CartItem {
     variantId: number,
     volume: number,
     unit: string,
-    quantity: number
+    quantity: number,
+    stock: number
 }
 
 export default function CardItem(props: {
@@ -48,7 +49,7 @@ export default function CardItem(props: {
     className?: string,
     link: string,
     priceByVolume: PriceByVolume[],
-    discount: number,
+    discount: number
 }) {
     const { image = [], brand = "", title = "", banner = "", deal = "", className = "", link = "", priceByVolume = [], discount = 0 } = props;
 
@@ -56,11 +57,11 @@ export default function CardItem(props: {
     const dispatchCart = useDispatch();
 
     const products = useSelector((state: any) => state.cartReducer.products);
-    const [currentVolume, setCurrentVolume] = useState(priceByVolume.length > 0 ? priceByVolume[0] : { id: 0, price: 0, volume: 0, unit: "", stock: 0 });
+    const [currentVolume, setCurrentVolume] = useState<any>(priceByVolume[0]);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
     const [quantity, setQuantity] = useState(1);
-
+    
     const handleChange = (event: any): void => {
         const value = parseInt(event.target.value);
         if (value >= 1 && value <= currentVolume.stock) {
@@ -94,6 +95,7 @@ export default function CardItem(props: {
             volume: currentVolume.volume,
             unit: currentVolume.unit,
             quantity: quantity,
+            stock: currentVolume.stock
         };
 
         const existProductInCart = products.find((item: CartItem) => item.title == data.title && item.volume == data.volume);

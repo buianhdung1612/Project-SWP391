@@ -1,20 +1,33 @@
 "use client"
 
-import { useContext } from "react";
+import { useContext, useState } from "react";
 import { Context } from "./MiddlewareGetData";
 import Link from "next/link";
 
 export default function Section2() {
     const { productDetail, productsRelated } = useContext(Context);
 
+    const [dataCurrent, setDataCurrent] = useState("Mô tả sản phẩm")
+
     return (
         <>
             <div className="container mt-[50px] mx-auto flex">
                 <div className="px-[10px] w-[75%]">
-                    <div className="text-primary text-[15px] font-[600] border-b border-solid border-[#dee2e6] py-[8px]">
-                        Mô tả sản phẩm
-                    </div>
-                    <div className="py-[10px] text-[14px]" dangerouslySetInnerHTML={{ __html: productDetail.description }}></div>
+                    <ul className="text-[16px] flex font-[600] border-b border-solid border-[#dee2e6]">
+                        <li onClick={() => setDataCurrent("Mô tả sản phẩm")} className={`cursor-pointer pb-[8px] ` + (dataCurrent == "Mô tả sản phẩm" ? "text-primary border-b-2 border-solid border-primary" : "text-textColor")}>Mô tả sản phẩm</li>
+                        <li onClick={() => setDataCurrent("Thành phần sản phẩm")} className={`ml-[35px] cursor-pointer ` + (dataCurrent == "Thành phần sản phẩm" ? "text-primary border-b-2 border-solid border-primary" : "text-textColor")}>Thành phần sản phẩm</li>
+                        <li onClick={() => setDataCurrent("Hướng dẫn sử dụng")} className={`ml-[35px] cursor-pointer ` + (dataCurrent == "Hướng dẫn sử dụng" ? "text-primary border-b-2 border-solid border-primary" : "text-textColor")}>Hướng dẫn sử dụng</li>
+                    </ul>
+
+                    {dataCurrent == "Thành phần sản phẩm" && (
+                        <div className="py-[10px] text-[14px]" dangerouslySetInnerHTML={{ __html: productDetail.ingredients }}></div>
+                    )}
+                    {dataCurrent == "Mô tả sản phẩm" && (
+                        <div className="py-[10px] text-[14px]" dangerouslySetInnerHTML={{ __html: productDetail.description }}></div>
+                    )}
+                    {dataCurrent == "Hướng dẫn sử dụng" && (
+                        <div className="py-[10px] text-[14px]" dangerouslySetInnerHTML={{ __html: productDetail.usageInstructions }}></div>
+                    )}
                 </div>
                 <div className="px-[10px] flex-1">
                     <div className="uppercase text-[15px] font-[600] border-b border-solid border-[#dee2e6] py-[8px]">Sản phẩm liên quan</div>

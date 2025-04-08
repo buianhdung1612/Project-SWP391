@@ -54,7 +54,7 @@ export default function ProductsTrashAdminPage() {
   const [keyword, setKeyword] = useState("");
   const [sort, setSort] = useState("position-desc");
   const [page, setPage] = useState(1);
-  const [changeMulti, setChangeMulti] = useState("active");
+  const [changeMulti, setChangeMulti] = useState("RESTORED");
 
   useEffect(() => {
     const urlCurrent = new URL(location.href);
@@ -159,7 +159,7 @@ export default function ProductsTrashAdminPage() {
 
     const statusChange = changeMulti;
 
-    if (statusChange == "delete-destroy") {
+    if (statusChange == "DELETE-DESTROY") {
       const confirm: boolean = window.confirm(
         "Bạn có chắc muốn xóa vĩnh viễn những sản phẩm này không?"
       );
@@ -440,8 +440,8 @@ export default function ProductsTrashAdminPage() {
                         displayEmpty
                         onChange={(e) => setChangeMulti(e.target.value)}
                       >
-                        <MenuItem value="restored">Khôi phục</MenuItem> 
-                        <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
+                        <MenuItem value="RESTORED">Khôi phục</MenuItem> 
+                        <MenuItem value="DELETE-DESTROY">Xóa vĩnh viễn</MenuItem>
                       </Select>
                       <Button
                         variant="contained"
