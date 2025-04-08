@@ -157,52 +157,6 @@ export default function OrdersAdminPage() {
     }
     // Hết Thay đổi trạng thái 1 đơn hàng
 
-    // Thay đổi trạng thái nhiều đơn hàng
-    const handleChangeMulti = async (event: any) => {
-        event.preventDefault();
-
-        const isConfrim = confirm("Bạn có chắc muốn thay đổi trạng thái các đơn hàng?");
-        if (isConfrim) {
-            const statusChange = changeMulti;
-
-            const path = `${linkApi}/change-multi`;
-
-            const data: any = {
-                id: inputChecked,
-                orderStatus: statusChange
-            }
-
-            const response = await fetch(path, {
-                method: "PATCH",
-                headers: {
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify(data)
-            });
-
-            const dataResponse = await response.json();
-
-            if (dataResponse.code === 200) {
-                setAlertMessage(dataResponse.message);
-                setAlertSeverity("success");
-                setTimeout(() => location.reload(), 2000);
-            } else {
-                setAlertMessage(dataResponse.message);
-                setAlertSeverity("error");
-                setTimeout(() => setAlertMessage(""), 2000);
-            }
-        }
-    }
-
-    const handleInputChecked = (event: any, id: number) => {
-        if (event.target.checked) {
-            setInputChecked(prev => [...prev, id]);
-        } else {
-            setInputChecked(prev => prev.filter(id => id !== id));
-        }
-    }
-    // Hết Thay đổi trạng thái nhiều đơn hàng
-
     // Phân trang
     const handlePagination = (event: any, page: number) => {
         const url = new URL(location.href);
@@ -274,27 +228,11 @@ export default function OrdersAdminPage() {
                     <Paper sx={{ backgroundColor: "white", p: 2 }}>
                         <Typography variant="h6" gutterBottom sx={{ marginLeft: "20px" }}>
                             Danh sách
-                        </Typography>
-                        <Box display="flex" gap={20} flexWrap="wrap">
-                            <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
-                                <Box display="flex" >
-                                    <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                        <MenuItem value="PENDING">Chờ duyệt</MenuItem>
-                                        <MenuItem value="DELIVERING">Xác nhận giao hàng</MenuItem>
-                                        <MenuItem value="CANCELED">Hủy</MenuItem>
-                                        <MenuItem value="COMPLETED">Xác nhận đơn hàng thành công</MenuItem>
-                                    </Select>
-                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor: '#374785', color: '#ffffff' }}>
-                                        Áp dụng
-                                    </Button>
-                                </Box>
-                            </form>
-                        </Box>
+                        </Typography>                      
                         <TableContainer sx={{ marginTop: "40px" }} component={Paper}>
                             <Table>
                                 <TableHead>
                                     <TableRow>
-                                        <TableCell ></TableCell>
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Mã đơn hàng</TableCell>
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Ngày đặt</TableCell>
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Khách hàng</TableCell>
@@ -306,14 +244,7 @@ export default function OrdersAdminPage() {
                                 </TableHead>
                                 <TableBody>
                                     {data.orders.map((order: any, index: number) => (
-                                        <TableRow key={index}>
-                                            {order.orderStatus == "COMPLETED" || order.orderStatus == "CANCELED" ? (
-                                                <TableCell></TableCell>
-                                            ) : (
-                                                <TableCell padding="checkbox" onClick={(event) => handleInputChecked(event, order.orderId)}>
-                                                    <Checkbox />
-                                                </TableCell>
-                                            )}
+                                        <TableRow key={index}>                                          
                                             <TableCell>#{order.orderId}</TableCell>
                                             <TableCell>{order.orderDate}</TableCell>
                                             <TableCell>{order.firstName} {order.lastName}</TableCell>

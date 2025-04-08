@@ -51,7 +51,7 @@ export default function BrandsAdminPage() {
   const [keyword, setKeyword] = useState("");
   const [sort, setSort] = useState("position-desc");
   const [page, setPage] = useState(1);
-  const [changeMulti, setChangeMulti] = useState("active");
+  const [changeMulti, setChangeMulti] = useState("ACTIVE");
 
   useEffect(() => {
     const urlCurrent = new URL(location.href);

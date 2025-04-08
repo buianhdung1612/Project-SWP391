@@ -1,4 +1,5 @@
 "use client";
+
 import React, { useContext, useEffect, useState } from "react";
 import Alert from "@mui/material/Alert";
 import {
@@ -12,53 +13,125 @@ import {
     FormControlLabel,
     Radio,
 } from "@mui/material";
-
-import { ProfileAdminContext } from "../../../layout";
 import { useParams } from "next/navigation";
+import { ProfileAdminContext } from "../../../layout";
 
 export default function EditVoucherAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
     const permissions = dataProfile?.permissions;
+    const { id } = useParams();
+
+    const [loading, setLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<
-        "success" | "error" | "info" | "warning"
-    >("info");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+
     const [data, setData] = useState({
+        name: "",
+        type: "FIXED_AMOUNT",
         discountValue: 0,
-        endDate: "",
         maxDiscount: 0,
         minOrderValue: 0,
-        name: "",
-        startDate: "",
-        type: "",
         usageLimit: 0,
-        voucherId: ""
+        startDate: "",
+        endDate: ""
     });
-
-    const { id } = useParams();
 
     useEffect(() => {
         const fetchData = async () => {
             const response = await fetch(`https://freshskinweb.onrender.com/admin/vouchers/${id}`);
             const dataResponse = await response.json();
-            setData(dataResponse.data);
+            if (dataResponse.code === 200) {
+                setData(dataResponse.data);
+            }
         };
 
         fetchData();
-    }, [])
+    }, [id]);
+
+    console.log(data);
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
+        setLoading(true);
 
-        const data: any = {
-            name: event.target.name.value,
-            type: event.target.type.value,
-            discountValue: event.target.discountValue.value,
-            maxDiscount: event.target.maxDiscount.value,
-            minOrderValue: event.target.minOrderValue.value,
-            usageLimit: event.target.usageLimit.value,
-            startDate: event.target.startDate.value,
-            endDate: event.target.endDate.value,
+        const {
+            name, type, discountValue, maxDiscount, minOrderValue, usageLimit, startDate, endDate
+        } = data;
+
+        if (!name) {
+            setAlertMessage("Tiêu đề mã giảm giá không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!discountValue) {
+            setAlertMessage("Giá trị giảm không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (type === "PERCENTAGE" && discountValue > 100) {
+            setAlertMessage("Giá trị giảm không được quá 100%.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!maxDiscount) {
+            setAlertMessage("Giá trị tối đa được giảm không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!minOrderValue) {
+            setAlertMessage("Giá trị tối thiểu đơn hàng áp dụng không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!usageLimit) {
+            setAlertMessage("Số lượt sử dụng không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        const start = new Date(startDate);
+        const end = new Date(endDate);
+        const now = new Date();
+
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+            setAlertMessage("Ngày bắt đầu và kết thúc phải hợp lệ.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (start < new Date(now.toDateString())) {
+            setAlertMessage("Ngày bắt đầu phải từ hôm nay trở đi.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (end <= start) {
+            setAlertMessage("Ngày kết thúc phải sau ngày bắt đầu.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
         }
 
         const response = await fetch(`https://freshskinweb.onrender.com/admin/vouchers/update/${id}`, {
@@ -78,12 +151,14 @@ export default function EditVoucherAdminPage() {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
         }
+
+        setLoading(false);
     };
 
     return (
         <>
             {alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
                     {alertMessage}
                 </Alert>
             )}
@@ -100,12 +175,13 @@ export default function EditVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={data.name}
                                 onChange={(e) => setData({ ...data, name: e.target.value })}
                             />
                             <FormControl fullWidth sx={{ marginBottom: 3 }}>
-                                <RadioGroup value={data.type} onChange={(e) => setData({ ...data, type: e.target.value })} name="type" row>
+                                <RadioGroup value={data.type} name="type" row
+                                    onChange={(e) => setData({ ...data, type: e.target.value })}
+                                >
                                     <FormControlLabel
                                         value="FIXED_AMOUNT"
                                         control={<Radio />}
@@ -125,7 +201,6 @@ export default function EditVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={data.discountValue}
                                 onChange={(e) => setData({ ...data, discountValue: parseInt(e.target.value) })}
                             />
@@ -136,7 +211,6 @@ export default function EditVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={data.maxDiscount}
                                 onChange={(e) => setData({ ...data, maxDiscount: parseInt(e.target.value) })}
                             />
@@ -147,7 +221,6 @@ export default function EditVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={data.minOrderValue}
                                 onChange={(e) => setData({ ...data, minOrderValue: parseInt(e.target.value) })}
                             />
@@ -158,7 +231,6 @@ export default function EditVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                                 value={data.usageLimit}
                                 onChange={(e) => setData({ ...data, usageLimit: parseInt(e.target.value) })}
                             />
@@ -171,7 +243,6 @@ export default function EditVoucherAdminPage() {
                                 value={data.startDate}
                                 onChange={(e) => setData({ ...data, startDate: e.target.value })}
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <TextField
                                 label="Ngày kết thúc"
@@ -182,15 +253,15 @@ export default function EditVoucherAdminPage() {
                                 value={data.endDate}
                                 onChange={(e) => setData({ ...data, endDate: e.target.value })}
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <Button
                                 type="submit"
                                 variant="contained"
                                 color="primary"
                                 sx={{ width: "100%" }}
+                                disabled={loading}
                             >
-                                Cập nhật mã giảm giá
+                                {loading ? "Đang cập nhật mã giảm giá..." : "Cập nhật mã giảm giá"}
                             </Button>
                         </form>
                     </Paper>

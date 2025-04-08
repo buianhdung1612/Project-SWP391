@@ -55,7 +55,7 @@ export default function BrandsTrashAdminPage() {
   const [keyword, setKeyword] = useState("");
   const [sort, setSort] = useState("position-desc");
   const [page, setPage] = useState(1);
-  const [changeMulti, setChangeMulti] = useState("active");
+  const [changeMulti, setChangeMulti] = useState("RESTORED");
 
   useEffect(() => {
     const urlCurrent = new URL(location.href);
@@ -154,46 +154,13 @@ export default function BrandsTrashAdminPage() {
   };
   // Hết Tìm kiếm sản phẩm
 
-  // Thay đổi trạng thái 1 sản phẩm
-  const handleChangeStatusOnebrand = async (
-    status: string,
-    dataPath: string
-  ) => {
-    const statusChange = status;
-    const path = `${linkApi}${dataPath}`;
-
-    const data = {
-      status: statusChange,
-    };
-
-    const response = await fetch(path, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const dataResponse = await response.json();
-
-    if (dataResponse.code === 200) {
-      setAlertMessage(dataResponse.message);
-      setAlertSeverity("success");
-      setTimeout(() => location.reload(), 2000);
-    } else {
-      setAlertMessage(dataResponse.message);
-      setAlertSeverity("error");
-    }
-  };
-  // Hết Thay đổi trạng thái 1 sản phẩm
-
   // Thay đổi trạng thái nhiều sản phẩm
   const handleChangeMulti = async (event: any) => {
     event.preventDefault();
 
     const statusChange = changeMulti;
 
-    if (statusChange == "delete-destroy") {
+    if (statusChange == "DELETE-DESTROY") {
       const confirm: boolean = window.confirm(
         "Bạn có chắc muốn xóa vĩnh viễn những thương hiệu này không?"
       );
@@ -464,10 +431,8 @@ export default function BrandsTrashAdminPage() {
                         displayEmpty
                         onChange={(e) => setChangeMulti(e.target.value)}
                       >
-                        <MenuItem value="ACTIVE">Hoạt động</MenuItem>
-                        <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
-                        <MenuItem value="restored">Khôi phục</MenuItem> 
-                        <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
+                        <MenuItem value="RESTORED">Khôi phục</MenuItem> 
+                        <MenuItem value="DELETE-DESTROY">Xóa vĩnh viễn</MenuItem>
                       </Select>
                       <Button
                         variant="contained"
@@ -505,8 +470,6 @@ export default function BrandsTrashAdminPage() {
                       <TableCell>Tiêu đề</TableCell>
                       <TableCell>Trạng thái</TableCell>
                       <TableCell>Vị trí</TableCell>
-                      {/* <TableCell>Tạo bởi</TableCell> */}
-                      {/* <TableCell>Cập nhật bởi</TableCell> */}
                       <TableCell>Hành động</TableCell>
                     </TableRow>
                   </TableHead>
@@ -539,13 +502,7 @@ export default function BrandsTrashAdminPage() {
                               label="Hoạt động"
                               color="success"
                               size="small"
-                              variant="outlined"
-                              onClick={() =>
-                                handleChangeStatusOnebrand(
-                                  "INACTIVE",
-                                  `/edit/${brand.id}`
-                                )
-                              }
+                              variant="outlined"                             
                             />
                           )}
                           {brand.status === "INACTIVE" && (
@@ -553,13 +510,7 @@ export default function BrandsTrashAdminPage() {
                               label="Dừng hoạt động"
                               color="error"
                               size="small"
-                              variant="outlined"
-                              onClick={() =>
-                                handleChangeStatusOnebrand(
-                                  "ACTIVE",
-                                  `/edit/${brand.id}`
-                                )
-                              }
+                              variant="outlined"                            
                             />
                           )}
                         </TableCell>
@@ -568,16 +519,6 @@ export default function BrandsTrashAdminPage() {
                             {brand.position}
                           </Typography>
                         </TableCell>
-                        {/* <TableCell>
-                         {brand.createdBy}
-                         <br />
-                         {brand.createdAt}
-                     </TableCell>
-                     <TableCell>
-                         {brand.updatedBy}
-                         <br />
-                         {brand.updatedAt}
-                     </TableCell> */}
                         <TableCell>
                           <div className="flex">
                             <Tooltip title="Khôi phục" placement="top">

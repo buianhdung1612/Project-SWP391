@@ -132,7 +132,7 @@ export default function RegisterPage() {
         if (dataResponse.code == 200) {
             setAlert({
                 severity: "success",
-                content: dataResponse.message
+                content: "Đăng ký tài khoản thành công"
             });
             router.push("/user/login");
         }

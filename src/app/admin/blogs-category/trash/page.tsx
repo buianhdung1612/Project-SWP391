@@ -29,7 +29,7 @@ export default function BrandsTrashAdminPage() {
     const [keyword, setKeyword] = useState("");
     const [sort, setSort] = useState("position-desc");
     const [page, setPage] = useState(1);
-    const [changeMulti, setChangeMulti] = useState("active");
+    const [changeMulti, setChangeMulti] = useState("RESTORED");
 
 
     useEffect(() => {
@@ -135,51 +135,21 @@ export default function BrandsTrashAdminPage() {
     }
     // Hết Tìm kiếm sản phẩm
 
-    // Thay đổi trạng thái 1 sản phẩm
-    const handleChangeStatusOnebrand = async (status: string, dataPath: string) => {
-        const statusChange = status;
-        const path = `${linkApi}${dataPath}`;
-
-        const data = {
-            status: statusChange
-        }
-
-        const response = await fetch(path, {
-            method: "PATCH",
-            headers: {
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify(data)
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code === 200) {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("success");
-            setTimeout(() => location.reload(), 2000);
-        } else {
-            setAlertMessage(dataResponse.message);
-            setAlertSeverity("error");
-        }
-    }
-    // Hết Thay đổi trạng thái 1 sản phẩm
-
     // Thay đổi trạng thái nhiều sản phẩm
     const handleChangeMulti = async (event: any) => {
         event.preventDefault();
 
         const statusChange = changeMulti;
 
-        if (statusChange == "delete-destroy") {
+        if (statusChange == "DELETE-DESTROY") {
             const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn những danh mục bài viết này không?");
-            if(confirm){
+            if (confirm) {
                 const path = `${linkApi}/delete`;
 
                 const data: any = {
                     id: inputChecked
                 }
-    
+
                 const response = await fetch(path, {
                     method: "DELETE",
                     headers: {
@@ -187,9 +157,9 @@ export default function BrandsTrashAdminPage() {
                     },
                     body: JSON.stringify(data)
                 });
-    
+
                 const dataResponse = await response.json();
-    
+
                 if (dataResponse.code === 200) {
                     setAlertMessage(dataResponse.message);
                     setAlertSeverity("success");
@@ -198,9 +168,9 @@ export default function BrandsTrashAdminPage() {
                     setAlertMessage(dataResponse.message);
                     setAlertSeverity("error");
                 }
-    
+
             }
-            
+
             return;
         }
 
@@ -243,7 +213,7 @@ export default function BrandsTrashAdminPage() {
     // Xóa vĩnh viễn một sản phẩm
     const handleDeleteOnebrand = async (id: number) => {
         const confirm: boolean = window.confirm("Bạn có chắc muốn xóa vĩnh viễn danh mục bài viết này không?");
-        if(confirm){
+        if (confirm) {
             const path = `${linkApi}/delete/${id}`;
 
             const response = await fetch(path, {
@@ -252,9 +222,9 @@ export default function BrandsTrashAdminPage() {
                     "Content-Type": "application/json"
                 },
             });
-    
+
             const dataResponse = await response.json();
-    
+
             if (dataResponse.code === 200) {
                 setAlertMessage(dataResponse.message);
                 setAlertSeverity("success");
@@ -264,14 +234,14 @@ export default function BrandsTrashAdminPage() {
                 setAlertSeverity("error");
             }
         }
-       
+
     }
     // Hết Xóa một sản phẩm
 
     // Khôi phục một sản phẩm
     const handleRestoreOnebrand = async (id: number) => {
         const confirm: boolean = window.confirm("Bạn có chắc muốn khôi phục danh mục bài viết này không?");
-        if(confirm){
+        if (confirm) {
             const path = `${linkApi}/restore/${id}`;
 
             const response = await fetch(path, {
@@ -280,9 +250,9 @@ export default function BrandsTrashAdminPage() {
                     "Content-Type": "application/json"
                 },
             });
-    
+
             const dataResponse = await response.json();
-    
+
             if (dataResponse.code === 200) {
                 setAlertMessage(dataResponse.message);
                 setAlertSeverity("success");
@@ -292,7 +262,7 @@ export default function BrandsTrashAdminPage() {
                 setAlertSeverity("error");
             }
         }
-       
+
     }
     // Hết Xóa một sản phẩm
 
@@ -332,17 +302,17 @@ export default function BrandsTrashAdminPage() {
 
     return (
         <>
-        {alertMessage && (
-                        <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                            {alertMessage}
-                        </Alert>
-                    )}
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                    {alertMessage}
+                </Alert>
+            )}
             {permissions?.includes("blogs-category_view") && permissions.includes("blogs-category_edit") && (
                 <Box p={3}>
 
                     {/* Header */}
                     <Typography variant="h5" gutterBottom>
-                        Trang thùng rác danh mục bài viết 
+                        Trang thùng rác danh mục bài viết
                     </Typography>
 
                     {/* Bộ lọc và Tìm kiếm */}
@@ -405,12 +375,10 @@ export default function BrandsTrashAdminPage() {
                             <form onSubmit={handleChangeMulti} style={{ flex: 1, gap: "8px" }}>
                                 <Box display="flex" >
                                     <Select fullWidth name="status" value={changeMulti} displayEmpty onChange={(e) => setChangeMulti(e.target.value)} >
-                                        <MenuItem value="active">Hoạt động</MenuItem>
-                                        <MenuItem value="inactive">Dừng hoạt động</MenuItem>
-                                        <MenuItem value="restored">Khôi phục</MenuItem>
-                                        <MenuItem value="delete-destroy">Xóa vĩnh viễn</MenuItem>
+                                        <MenuItem value="RESTORED">Khôi phục</MenuItem>
+                                        <MenuItem value="DELETE-DESTROY">Xóa vĩnh viễn</MenuItem>
                                     </Select>
-                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor:"#374485" }}>
+                                    <Button variant="contained" color="success" type="submit" sx={{ width: "120px", backgroundColor: "#374485" }}>
                                         Áp dụng
                                     </Button>
                                 </Box>
@@ -436,8 +404,6 @@ export default function BrandsTrashAdminPage() {
                                         <TableCell>Tiêu đề</TableCell>
                                         <TableCell>Trạng thái</TableCell>
                                         <TableCell>Vị trí</TableCell>
-                                        {/* <TableCell>Tạo bởi</TableCell> */}
-                                        {/* <TableCell>Cập nhật bởi</TableCell> */}
                                         <TableCell>Hành động</TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -463,7 +429,6 @@ export default function BrandsTrashAdminPage() {
                                                         color="success"
                                                         size="small"
                                                         variant="outlined"
-                                                        onClick={() => handleChangeStatusOnebrand("INACTIVE", `/edit/${category.id}`)}
                                                     />
                                                 )}
                                                 {category.status === "INACTIVE" && (
@@ -472,7 +437,6 @@ export default function BrandsTrashAdminPage() {
                                                         color="error"
                                                         size="small"
                                                         variant="outlined"
-                                                        onClick={() => handleChangeStatusOnebrand("ACTIVE", `/edit/${category.id}`)}
                                                     />
                                                 )}
                                             </TableCell>
@@ -480,17 +444,7 @@ export default function BrandsTrashAdminPage() {
                                                 <Typography variant="body2">
                                                     {category.position}
                                                 </Typography>
-                                            </TableCell>
-                                            {/* <TableCell>
-                                    {brand.createdBy}
-                                    <br />
-                                    {brand.createdAt}
-                                </TableCell>
-                                <TableCell>
-                                    {brand.updatedBy}
-                                    <br />
-                                    {brand.updatedAt}
-                                </TableCell> */}
+                                            </TableCell>                                          
                                             <TableCell>
                                                 <div className="flex">
                                                     <Tooltip title="Khôi phục" placement="top">

@@ -2,17 +2,36 @@
 
 import { Box, Button, Paper, TextField, Typography } from "@mui/material";
 import Alert from '@mui/material/Alert';
-import {useState} from "react";
+import { useState } from "react";
 interface SkinType {
     type: string,
     description: string
 }
 
 export default function CreateTypeSkinAdminPage() {
+    const [loading, setLoading] = useState(false);
     const [alertMessage, setAlertMessage] = useState<string>("");
     const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+
     const handleSubmit = async (event: any) => {
         event.preventDefault();
+        setLoading(true);
+
+        if (!event.target.type.value) {
+            setAlertMessage("Thể loại da không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!event.target.description.value) {
+            setAlertMessage("Mô tả thể loại da không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
         const data: SkinType = {
             type: event.target.type.value,
@@ -36,18 +55,21 @@ export default function CreateTypeSkinAdminPage() {
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
+            setLoading(false);
+            setTimeout(() => {
+                setAlertMessage("");
+            }, 2000);
         }
     }
-    
+
     return (
         <>
-        {
-        alertMessage && (
-            <Alert severity={alertSeverity} sx={{ mb: 2 }}>
-                {alertMessage}
-            </Alert>
-        )
-    }
+            {alertMessage && (
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                    {alertMessage}
+                </Alert>
+            )}
+
             <Box sx={{ padding: 3, backgroundColor: '#ffffff' }}>
                 <Typography variant="h5" gutterBottom>
                     Trang tạo mới thể loại da
@@ -61,7 +83,6 @@ export default function CreateTypeSkinAdminPage() {
                             variant="outlined"
                             fullWidth
                             sx={{ marginBottom: 3 }}
-                            required
                         />
                         <TextField
                             label="Mô tả thể loại da"
@@ -69,10 +90,15 @@ export default function CreateTypeSkinAdminPage() {
                             variant="outlined"
                             fullWidth
                             sx={{ marginBottom: 3 }}
-                            required
                         />
-                        <Button type='submit' variant="contained" color="primary" sx={{ width: '100%' }}>
-                            Tạo mới thể loại da
+                        <Button
+                            type="submit"
+                            variant="contained"
+                            color="primary"
+                            sx={{ width: "100%" }}
+                            disabled={loading}
+                        >
+                            {loading ? "Đang tạo mới thể loại loại da..." : "Tạo mới thể loại loại da"}
                         </Button>
                     </form>
                 </Paper>

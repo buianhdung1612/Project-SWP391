@@ -17,32 +17,113 @@ import { ProfileAdminContext } from "../../layout";
 
 export default function CreateVoucherAdminPage() {
     const dataProfile = useContext(ProfileAdminContext);
-    const today = new Date().toISOString().split("T")[0];
+    const [loading, setLoading] = useState(false);
+    const [alertMessage, setAlertMessage] = useState<string>("");
+    const [alertSeverity, setAlertSeverity] = useState<"success" | "error" | "info" | "warning">("info");
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    const tomorrowStr = tomorrow.toISOString().split("T")[0];
+
     const tenDaysLater = new Date();
-    tenDaysLater.setDate(tenDaysLater.getDate() + 10);
+    tenDaysLater.setDate(tomorrow.getDate() + 10);
     const tenDaysLaterStr = tenDaysLater.toISOString().split("T")[0];
 
-    const [startDate, setStartDate] = useState(today);
+    const [startDate, setStartDate] = useState(tomorrowStr);
     const [endDate, setEndDate] = useState(tenDaysLaterStr);
     const permissions = dataProfile?.permissions;
-    const [alertMessage, setAlertMessage] = useState<string>("");
-    const [alertSeverity, setAlertSeverity] = useState<
-        "success" | "error" | "info" | "warning"
-    >("info");
 
     const handleSubmit = async (event: any) => {
         event.preventDefault();
+        setLoading(true);
+
+        if (!event.target.name.value) {
+            setAlertMessage("Tiêu đề mã giảm giá không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!event.target.discountValue.value) {
+            setAlertMessage("Giá trị giảm không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (event.target.type.value == "PERCENTAGE" && event.target.discountValue.value > 100) {
+            setAlertMessage("Giá trị giảm không được quá 100%.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!event.target.maxDiscount.value) {
+            setAlertMessage("Giá trị tối đa được giảm không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!event.target.minOrderValue.value) {
+            setAlertMessage("Giá trị tối thiểu đơn hàng áp dụng không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (!event.target.usageLimit.value) {
+            setAlertMessage("Số lượt sử dụng không được để trống.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        const start = new Date(event.target.startDate.value);
+        const end = new Date(event.target.endDate.value);
+        const now = new Date();
+
+        if (isNaN(start.getTime()) || isNaN(end.getTime())) {
+            setAlertMessage("Ngày bắt đầu và kết thúc phải hợp lệ.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (start < new Date(now.toDateString())) {
+            setAlertMessage("Ngày bắt đầu phải từ hôm nay trở đi.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
+
+        if (end <= start) {
+            setAlertMessage("Ngày kết thúc phải sau ngày bắt đầu.");
+            setAlertSeverity("error");
+            setTimeout(() => setAlertMessage(""), 5000);
+            setLoading(false);
+            return;
+        }
 
         const data: any = {
             name: event.target.name.value,
             type: event.target.type.value,
-            discountValue: event.target.discountValue.value,
-            maxDiscount: event.target.maxDiscount.value,
-            minOrderValue: event.target.minOrderValue.value,
-            usageLimit: event.target.usageLimit.value,
+            discountValue: parseInt(event.target.discountValue.value),
+            maxDiscount: parseInt(event.target.maxDiscount.value),
+            minOrderValue: parseInt(event.target.minOrderValue.value),
+            usageLimit: parseInt(event.target.usageLimit.value),
             startDate: event.target.startDate.value,
             endDate: event.target.endDate.value,
         }
+
+        console.log(data);
 
         const response = await fetch(`https://freshskinweb.onrender.com/admin/vouchers/create`, {
             method: "POST",
@@ -52,6 +133,8 @@ export default function CreateVoucherAdminPage() {
             body: JSON.stringify(data)
         });
         const dataResponse = await response.json();
+
+        console.log(dataResponse);
 
         if (dataResponse.code === 200) {
             setAlertMessage(dataResponse.message);
@@ -66,7 +149,7 @@ export default function CreateVoucherAdminPage() {
     return (
         <>
             {alertMessage && (
-                <Alert severity={alertSeverity} sx={{ mb: 2 }}>
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
                     {alertMessage}
                 </Alert>
             )}
@@ -84,7 +167,6 @@ export default function CreateVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <FormControl fullWidth sx={{ marginBottom: 3 }}>
                                 <RadioGroup defaultValue="FIXED_AMOUNT" name="type" row>
@@ -107,7 +189,6 @@ export default function CreateVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <TextField
                                 label="Giá giảm tối đa"
@@ -116,7 +197,6 @@ export default function CreateVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <TextField
                                 label="Giá trị đơn hàng tối thiểu"
@@ -125,7 +205,6 @@ export default function CreateVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <TextField
                                 label="Lượt sử dụng"
@@ -134,7 +213,6 @@ export default function CreateVoucherAdminPage() {
                                 variant="outlined"
                                 fullWidth
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <TextField
                                 label="Ngày bắt đầu"
@@ -145,7 +223,6 @@ export default function CreateVoucherAdminPage() {
                                 value={startDate}
                                 onChange={(e) => setStartDate(e.target.value)}
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <TextField
                                 label="Ngày kết thúc"
@@ -156,15 +233,15 @@ export default function CreateVoucherAdminPage() {
                                 value={endDate}
                                 onChange={(e) => setEndDate(e.target.value)}
                                 sx={{ marginBottom: 3 }}
-                                required
                             />
                             <Button
-                                type="submit"
+                                type='submit'
                                 variant="contained"
                                 color="primary"
-                                sx={{ width: "100%" }}
+                                sx={{ width: '100%' }}
+                                disabled={loading}
                             >
-                                Tạo mã giảm giá
+                                {loading ? "Đang tạo mã giảm giá..." : "Tạo mã giảm giá"}
                             </Button>
                         </form>
                     </Paper>

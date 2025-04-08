@@ -25,6 +25,7 @@ interface Profile {
   roleId: number;
   roleTitle: string;
   permissions: string[];
+  userID: number;
 }
 
 export const ProfileAdminContext = createContext<Profile | undefined>(undefined);
@@ -49,6 +50,7 @@ export default function RootLayout({
       title: "",
       permission: [],
     },
+    userID: 0
   });
 
   useEffect(() => {
@@ -71,6 +73,7 @@ export default function RootLayout({
           );
 
           const data = await response.json();
+          console.log(data);
           setInfo(data.data);
         }
         else{
@@ -98,6 +101,7 @@ export default function RootLayout({
             roleTitle: info?.role?.title,
             roleId: info?.role?.roleId,
             permissions: info?.role?.permission,
+            userID: info?.userID
           }}
         >
           {!pathname.startsWith("/admin/auth/login") && <Sider />}

@@ -79,6 +79,7 @@ export default function CreateBlogAdminPage() {
 
             const request = {
                 title: formData.get("title"),
+                user: dataProfile?.userID,
                 content: content,
                 position: formData.get("position"),
                 status: formData.get("status"),

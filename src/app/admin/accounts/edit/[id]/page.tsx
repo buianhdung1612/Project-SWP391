@@ -139,7 +139,7 @@ export default function EditAccountAdmin() {
             return;
         }
 
-        if ((images.length + data.avatar.length) < 1) {
+        if ((images.length + data.avatar.length) != 1) {
             setAlertMessage("Phải chọn 1 ảnh đại diện.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);

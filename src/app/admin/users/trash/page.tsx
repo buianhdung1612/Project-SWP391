@@ -41,7 +41,7 @@ export default function UserAdminPage() {
   // Hiển thị lựa chọn mặc định
   const [filterStatus, setFilterStatus] = useState("");
   const [keyword, setKeyword] = useState("");
-  const [changeMulti, setChangeMulti] = useState("ACTIVE");
+  const [changeMulti, setChangeMulti] = useState("RESTORED");
   const [alertMessage, setAlertMessage] = useState<string>("");
   const [alertSeverity, setAlertSeverity] = useState<
     "success" | "error" | "info" | "warning"
@@ -120,38 +120,6 @@ export default function UserAdminPage() {
 
     const statusChange = changeMulti;
 
-    if (statusChange == "DELETE-DESTROY") {
-      const confirm: boolean = window.confirm(
-        "Bạn có chắc muốn xóa vĩnh viễn những tài khoản người dùng này không?"
-      );
-      if (confirm) {
-        const path = `${linkApi}/delete`;
-
-        const data: any = {
-          id: inputChecked,
-        };
-
-        const response = await fetch(path, {
-          method: "DELETE",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data),
-        });
-
-        const dataResponse = await response.json();
-
-        if (dataResponse.code === 200) {
-          setAlertMessage(dataResponse.message);
-          setAlertSeverity("success");
-          setTimeout(() => location.reload(), 2000);
-        } else {
-          setAlertMessage(dataResponse.message);
-          setAlertSeverity("error");
-        }
-      }
-      return;
-    }
     const path = `${linkApi}/change-multi`;
 
     const data: any = {
@@ -187,37 +155,6 @@ export default function UserAdminPage() {
     }
   };
   // Hết Thay đổi trạng thái nhiều tài khoản
-
-  // Thay đổi trạng thái 1 tài khoản
-  const handleChangeStatusOneAccount = async (
-    status: string,
-    dataPath: string
-  ) => {
-    const statusChange = status;
-    const path = `${linkApi}${dataPath}`;
-
-    const data = {
-      status: statusChange,
-    };
-
-    const response = await fetch(path, {
-      method: "PATCH",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
-
-    const dataResponse = await response.json();
-    if (dataResponse.code === 200) {
-      setAlertMessage(dataResponse.message);
-      setAlertSeverity("success");
-      setTimeout(() => location.reload(), 2000);
-    } else {
-      setAlertMessage(dataResponse.message);
-      setAlertSeverity("error");
-    }
-  };
 
   // Xóa vĩnh viễn một sản phẩm
   const handleDeleteOneUser = async (id: number) => {
@@ -363,10 +300,7 @@ export default function UserAdminPage() {
                       displayEmpty
                       onChange={(e) => setChangeMulti(e.target.value)}
                     >
-                      <MenuItem value="ACTIVE">Hoạt động</MenuItem>
-                      <MenuItem value="INACTIVE">Dừng hoạt động</MenuItem>
                       <MenuItem value="RESTORED">Khôi phục</MenuItem>
-                      <MenuItem value="DELETE-DESTROY">Xóa vĩnh viễn</MenuItem>
                     </Select>
                     <Button
                       variant="contained"
@@ -405,7 +339,7 @@ export default function UserAdminPage() {
                       <TableCell>Tên tài khoản</TableCell>
                       <TableCell>Số điện thoại</TableCell>
                       <TableCell>Trạng thái</TableCell>
-                      <TableCell>Hành động</TableCell>
+                      <TableCell>Khôi phục</TableCell>
                     </TableRow>
                   </TableHead>
                   <TableBody>
@@ -440,13 +374,7 @@ export default function UserAdminPage() {
                               label="Hoạt động"
                               color="success"
                               size="small"
-                              variant="outlined"
-                              onClick={() =>
-                                handleChangeStatusOneAccount(
-                                  "INACTIVE",
-                                  `/edit/${account.userID}`
-                                )
-                              }
+                              variant="outlined"                             
                             />
                           )}
                           {account.status === "INACTIVE" && (
@@ -454,13 +382,7 @@ export default function UserAdminPage() {
                               label="Dừng hoạt động"
                               color="error"
                               size="small"
-                              variant="outlined"
-                              onClick={() =>
-                                handleChangeStatusOneAccount(
-                                  "ACTIVE",
-                                  `/edit/${account.userID}`
-                                )
-                              }
+                              variant="outlined"                            
                             />
                           )}
                         </TableCell>
@@ -473,17 +395,7 @@ export default function UserAdminPage() {
                                   handleRestoreOneUser(account.userID)
                                 }
                               />
-                            </Tooltip>
-                            <Tooltip
-                              title="Xóa vĩnh viễn"
-                              placement="top"
-                              className="cursor-pointer"
-                              onClick={() =>
-                                handleDeleteOneUser(account.userID)
-                              }
-                            >
-                              <MdDeleteOutline className="text-[25px] text-[#C62828] ml-1" />
-                            </Tooltip>
+                            </Tooltip>                       
                           </div>
                         </TableCell>
                       </TableRow>
