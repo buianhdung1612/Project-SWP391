@@ -37,7 +37,7 @@ export default function LoginAdminPage() {
             Cookies.set('token', token);
             setAlertMessage(dataResponse.message);
             setAlertSeverity("success");
-            router.push(`/admin/dashboard`);
+            location.href = `/admin/dashboard`;
         } else {
             setAlertMessage(dataResponse.message);
             setAlertSeverity("error");
