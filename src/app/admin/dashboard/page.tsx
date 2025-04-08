@@ -6,7 +6,6 @@ import { Chart, registerables } from "chart.js";
 import Link from "next/link";
 Chart.register(...registerables);
 
-
 import {
   ShoppingCart,
   Boxes,
@@ -31,6 +30,7 @@ export default function DashboardAdminPage() {
     totalUsers: "0",
     totalFeedbacks: "0",
     totalBlogs: "0",
+    totalOrderShipping:"0",
   });
   interface RevenueData {
     category: string;
@@ -43,7 +43,7 @@ export default function DashboardAdminPage() {
       data: RevenueData[];
     };
   }
-  
+
   const [top10ProductSelling, setTop10ProductSelling] = useState([]);
   const [chartData, setChartData] = useState<{
     labels: string[];
@@ -76,11 +76,11 @@ export default function DashboardAdminPage() {
   const [voucherChartData, setVoucherChartData] = useState<{
     labels: string[];
     values: number[];
-    values1:number[];
+    values1: number[];
   }>({
     labels: [],
     values: [],
-    values1:[],
+    values1: [],
   });
   const StackedChartRef = useRef<HTMLCanvasElement | null>(null);
   const chartInstanceRef = useRef<Chart | null>(null);
@@ -131,7 +131,6 @@ export default function DashboardAdminPage() {
       );
 
       wsRef.current.onopen = () => {
-        console.log(" WebSocket đã kết nối!");
         if (reconnectTimeoutRef.current)
           clearTimeout(reconnectTimeoutRef.current);
       };
@@ -139,7 +138,7 @@ export default function DashboardAdminPage() {
       wsRef.current.onmessage = (event) => {
         const data = JSON.parse(event.data);
         setWsData(data);
-        console.log(" Dữ liệu nhận:", data);
+       
 
         // Cập nhật thống kê
         setStats((prevStats) => ({
@@ -156,6 +155,7 @@ export default function DashboardAdminPage() {
           totalUsers: data.totalUsers || prevStats.totalUsers,
           totalFeedbacks: data.totalFeedbacks || prevStats.totalFeedbacks,
           totalBlogs: data.totalBlogs || prevStats.totalBlogs,
+          totalOrderShipping:data.totalOrderShipping || prevStats.totalOrderShipping,
         }));
 
         // Cập nhật danh sách sản phẩm bán chạy
@@ -172,10 +172,9 @@ export default function DashboardAdminPage() {
           setVoucherChartData({
             labels: data.discountDetail.map((item: any) => item.name),
             values: data.discountDetail.map((item: any) => item.usageLimit),
-            values1:data.discountDetail.map((item:any)=> item.used)
+            values1: data.discountDetail.map((item: any) => item.used),
           });
         }
-
 
         // Cập nhật dữ liệu cho PieChart
         if (data?.Top5CategoryHaveTopProduct?.data) {
@@ -195,12 +194,13 @@ export default function DashboardAdminPage() {
           });
         }
         //cập nhật dữ liệu rating
-        
+
         if (data?.ratingStartsByDate) {
           const sortedData = data.ratingStartsByDate.sort(
-            (a: any, b: any) => new Date(a.date).getTime() - new Date(b.date).getTime()
+            (a: any, b: any) =>
+              new Date(a.date).getTime() - new Date(b.date).getTime()
           );
-        
+
           setRatingChartData({
             labels: sortedData.map((item: any) => item.date),
             values: sortedData.map(
@@ -214,7 +214,6 @@ export default function DashboardAdminPage() {
             values: data.revenueByDate.map((item: any) => item.totalAmount),
           });
         }
-        
       };
 
       wsRef.current.onclose = () => {
@@ -231,8 +230,6 @@ export default function DashboardAdminPage() {
         clearTimeout(reconnectTimeoutRef.current);
     };
   }, []);
-  
-
 
   useEffect(() => {
     if (!chartRef.current || chartData.labels.length === 0) return;
@@ -327,7 +324,6 @@ export default function DashboardAdminPage() {
     const existingChart = Chart.getChart(ctx);
     if (existingChart) existingChart.destroy();
 
-    
     const gradient = ctx.createLinearGradient(0, 0, 0, 400);
     gradient.addColorStop(0, "rgba(0, 123, 255, 0.4)");
     gradient.addColorStop(1, "rgba(0, 123, 255, 0)");
@@ -381,7 +377,17 @@ export default function DashboardAdminPage() {
   }, [ratingChartData]);
   useEffect(() => {
     const warmColors = [
-      "#b91d47","#c76c01","#c7d110","#588e28","#288e6c","#28528e","#8f409c","#ff6c82","#5e1e0d","#a086a5","#183e21",
+      "#b91d47",
+      "#c76c01",
+      "#c7d110",
+      "#588e28",
+      "#288e6c",
+      "#28528e",
+      "#8f409c",
+      "#ff6c82",
+      "#5e1e0d",
+      "#a086a5",
+      "#183e21",
     ];
     const categoryColors: { [key: string]: string } = {};
 
@@ -454,7 +460,7 @@ export default function DashboardAdminPage() {
   }, [stackedChartData]);
 
   useEffect(() => {
-    if (!revenueChartRef.current || revenueChartData.labels.length ===0)
+    if (!revenueChartRef.current || revenueChartData.labels.length === 0)
       return;
 
     const ctx = revenueChartRef.current.getContext("2d");
@@ -496,7 +502,7 @@ export default function DashboardAdminPage() {
     });
   }, [revenueChartData]);
   useEffect(() => {
-    if (!voucherChartRef.current || voucherChartData.labels.length ===0)
+    if (!voucherChartRef.current || voucherChartData.labels.length === 0)
       return;
 
     const ctx = voucherChartRef.current.getContext("2d");
@@ -544,7 +550,6 @@ export default function DashboardAdminPage() {
       },
     });
   }, [voucherChartData]);
-
 
   useEffect(() => {
     if (!chartPieRef.current || chartData.labels.length === 0) return;
@@ -612,7 +617,7 @@ export default function DashboardAdminPage() {
 
               ci.options.plugins.legend.labels.generateLabels(ci);
 
-              ci.update(); 
+              ci.update();
             },
           },
           title: {
@@ -628,7 +633,6 @@ export default function DashboardAdminPage() {
 
     return () => myChart.destroy();
   }, [chartPieData]);
-  
 
   return (
     <div className="p-4 md:p-6 bg-gray-100 max-w-screen-xl mx-auto">
@@ -690,9 +694,9 @@ export default function DashboardAdminPage() {
                 icon={<Clock className="text-orange-500" />}
               />
             </Link>
-            <Link href="/admin/orders?status=COMPLETED" className="block">
+            <Link href="/admin/orders?status=DELIVERING" className="block">
               <StatCard
-                value={stats.totalOrderCompleted}
+                value={stats.totalOrderShipping}
                 label="Đơn đã duyệt"
                 icon={<CheckSquare className="text-orange-500" />}
               />
@@ -719,12 +723,11 @@ export default function DashboardAdminPage() {
               <canvas ref={chartRef} />
             </div>
             <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
-            <canvas ref={revenueChartRef} />
-             
+            <canvas ref={StackedChartRef} />
             </div>
           </div>
-          <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-80">
-          <canvas ref={StackedChartRef} />
+          <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-80">           
+            <canvas ref={revenueChartRef} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white shadow-md rounded-lg p-4 mt-4 mb-4 h-120">
@@ -759,13 +762,13 @@ export default function DashboardAdminPage() {
                 </table>
               </div>
             </div>
-          </div>         
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
-            <canvas ref={chartPieRef} />
+              <canvas ref={chartPieRef} />
             </div>
             <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
-            <canvas ref={voucherChartRef} />
+              <canvas ref={voucherChartRef} />
             </div>
           </div>
         </>

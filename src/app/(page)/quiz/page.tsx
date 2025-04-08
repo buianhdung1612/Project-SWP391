@@ -12,7 +12,7 @@ export default function QuizPage() {
                     <div className="w-[60%]">
                         <h1 className="text-[40px] text-[#9acba4] font-[700] mb-[24px]">Kiểm tra sức khỏe da của bạn ngay!</h1>
                         <SiTicktick className="text-[#818282] mb-[10px]" />
-                        <p className="text-[11px] text-[#ABACAD] mb-[25px]">Tham vấn y khoa: <Link href="https://www.facebook.com/huy.nguyenminh.71271" className="cursor-pointer underline">Thạc sĩ - Bác sĩ Nguyễn Minh Huy</Link> ngày 27 tháng 9, 2024</p>
+                        <p className="text-[11px] text-[#ABACAD] mb-[25px]">Tham vấn y khoa: <Link href="https://vnexpress.net/suc-khoe/cac-benh/da-lieu/chuyen-gia/79140" className="cursor-pointer underline">Thạc sĩ - Bác sĩ Vũ Thị trang </Link> ngày 27 tháng 9, 2024</p>
                         <button className="uppercase text-white bg-[#9acba4] hover:bg-[#aed8d3] border border-solid border-transparent px-[22px] rounded-[8px] text-[16px] font-[600] h-[48px]">
                             <Link href="/quiz/test">
                                 Kiểm tra ngay thôi
