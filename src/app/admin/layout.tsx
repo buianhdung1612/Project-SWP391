@@ -84,7 +84,7 @@ export default function RootLayout({
 
       fetchProfile();
     }
-  }, [pathname]);
+  }, []);
 
   return (
     <html lang="en">

@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 
 export default function ButtonCategory(props: { text: string, slug: string }) {

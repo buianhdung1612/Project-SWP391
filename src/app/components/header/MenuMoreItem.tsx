@@ -1,3 +1,5 @@
+"use client"
+
 import { Url } from "next/dist/shared/lib/router/router";
 import Link from "next/link";
 

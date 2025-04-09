@@ -65,6 +65,7 @@ export default function DetailOrderAdmin() {
                                         <TableCell>Địa chỉ</TableCell>
                                         <TableCell>SĐT</TableCell>
                                         <TableCell>Email</TableCell>
+                                        <TableCell>Phương thức thanh toán</TableCell>
                                     </TableRow>
                                 </TableHead>
                                 <TableBody>
@@ -73,6 +74,7 @@ export default function DetailOrderAdmin() {
                                         <TableCell>{data.address}</TableCell>
                                         <TableCell>{data.phoneNumber}</TableCell>
                                         <TableCell>{data.email}</TableCell>
+                                        <TableCell>{data.paymentMethod == "CASH" ? "Thanh toán khi nhận hàng" : "Chuyển khoản"}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>

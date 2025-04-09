@@ -1,3 +1,5 @@
+"use client"
+
 import Link from "next/link";
 import { FaSquare } from "react-icons/fa6";
 

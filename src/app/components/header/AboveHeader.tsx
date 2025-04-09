@@ -1,3 +1,5 @@
+"use client"
+
 import { LuDot } from "react-icons/lu";
 
 export default function AboveHeader() {

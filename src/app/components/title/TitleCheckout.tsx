@@ -1,3 +1,5 @@
+"use client"
+
 export default function TitleCheckout(props: { text: string }) {
     const { text = "" } = props;
     return(

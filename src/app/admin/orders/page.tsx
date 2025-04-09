@@ -32,14 +32,10 @@ export default function OrdersAdminPage() {
 
     const linkApi = 'https://freshskinweb.onrender.com/admin/orders';
 
-    const [inputChecked, setInputChecked] = useState<number[]>([]);
-
     // Hiển thị lựa chọn mặc định
     const [filterStatus, setFilterStatus] = useState("");
     const [keyword, setKeyword] = useState("");
     const [page, setPage] = useState(1);
-    const [changeMulti, setChangeMulti] = useState("PENDING");
-
 
     useEffect(() => {
         const urlCurrent = new URL(location.href);
@@ -238,7 +234,8 @@ export default function OrdersAdminPage() {
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Khách hàng</TableCell>
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Điện thoại</TableCell>
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Địa chỉ giao hàng</TableCell>
-                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Tình trạng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Tình trạng đơn hàng</TableCell>
+                                        <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Trạng thái thanh toán</TableCell>
                                         <TableCell sx={{ color: "#374785", fontWeight: "bold" }} >Hành động </TableCell>
                                     </TableRow>
                                 </TableHead>
@@ -281,7 +278,48 @@ export default function OrdersAdminPage() {
                                                         color="error"
                                                         size="small"
                                                         variant="outlined"
-                                                        onClick={() => handleChangeStatusOneOrder("INACTIVE", `/edit/${order.orderId}`)}
+                                                    />
+                                                )}
+                                            </TableCell>
+                                            <TableCell>
+                                                {order.paymentStatus === "PENDING" && (
+                                                    <Chip
+                                                        label="Chờ thành toán"
+                                                        color="secondary"
+                                                        size="small"
+                                                        variant="outlined"
+                                                    />
+                                                )}
+                                                {order.paymentStatus === "REFUNDED" && (
+                                                    <Chip
+                                                        label="Hoàn tiền"
+                                                        color="warning"
+                                                        size="small"
+                                                        variant="outlined"
+                                                    />
+                                                )}
+                                                {order.paymentStatus === "PAID" && (
+                                                    <Chip
+                                                        label="Đã thanh toán"
+                                                        color="success"
+                                                        size="small"
+                                                        variant="outlined"
+                                                    />
+                                                )}
+                                                {order.paymentStatus === "CANCELED" && (
+                                                    <Chip
+                                                        label="Thanh toán bị hủy"
+                                                        color="error"
+                                                        size="small"
+                                                        variant="outlined"
+                                                    />
+                                                )}
+                                                {order.paymentStatus === "FAILED" && (
+                                                    <Chip
+                                                        label="Thanh toán thất bại"
+                                                        color="error"
+                                                        size="small"
+                                                        variant="outlined"
                                                     />
                                                 )}
                                             </TableCell>

@@ -1,3 +1,5 @@
+"use client"
+
 export default function FormInput(props: any) {
     const { type = "text", name = "", placeholder = "", className = "w-[412px]", id = "", readonly = false, value = "" } = props;
     return (

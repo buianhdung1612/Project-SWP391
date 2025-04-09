@@ -1,4 +1,5 @@
-import { Url } from "next/dist/shared/lib/router/router";
+"use client"
+
 import Link from "next/link";
 
 export default function MenuUnShow(props: { text: string, image?: string, link?: string }) {

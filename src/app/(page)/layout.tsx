@@ -143,7 +143,6 @@ export default function RootLayout({
           );
 
           const data = await response.json();
-          console.log(data);
           setProfile(data.data);
         }
       };

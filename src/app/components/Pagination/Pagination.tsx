@@ -1,3 +1,5 @@
+"use client"
+
 import { TbPlayerTrackNextFilled, TbPlayerTrackPrevFilled } from "react-icons/tb";
 
 export default function Pagination(props: {
