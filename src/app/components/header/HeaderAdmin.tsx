@@ -36,27 +36,35 @@ export default function HeaderAdmin() {
   const router = useRouter();
   // 🚀 Fetch danh sách thông báo từ API
   const fetchNotifications = async () => {
-    if (!dataProfile || !dataProfile.roleId) {
-      return;
-    }
-
+    if (!dataProfile || !dataProfile.roleId) return;
+  
     const roleId = dataProfile.roleId;
+  
+    try {
+      const res = await fetch(`https://freshskinweb.onrender.com/admin/notify/${roleId}`);
 
-    const res = await fetch(
-      `https://freshskinweb.onrender.com/admin/notify/${roleId}`
-    );
-    console.log(dataProfile?.roleId);
-    if (!res.ok) {
-      const errorData = await res.json();
-      console.error(` HTTP Error ${res.status}:`, errorData);
-      return;
+      let data: Notification[] = [];
+      try {
+        data = await res.json();
+      } catch (err) {
+        console.error("Lỗi parse JSON:", err);
+        return;
+      }
+
+      if (!Array.isArray(data)) {
+        console.warn("Dữ liệu trả về không phải là danh sách:", data);
+        return;
+      }
+
+      setNotifications(data);
+      setUnreadCount(data.filter((n) => !n.isRead).length);
+    } catch (error) {
+      console.error("Lỗi khi fetch thông báo:", error);
     }
-
-    const data: Notification[] = await res.json();
-    setNotifications(data);
-    setUnreadCount(data.filter((n) => !n.isRead).length);
+  
   };
 
+  
   useEffect(() => {
     if (dataProfile?.roleId) {
       fetchNotifications();

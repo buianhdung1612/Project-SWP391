@@ -138,6 +138,7 @@ export default function DashboardAdminPage() {
       wsRef.current.onmessage = (event) => {
         const data = JSON.parse(event.data);
         setWsData(data);
+        console.log(data)
        
 
         // Cập nhật thống kê
@@ -623,7 +624,7 @@ export default function DashboardAdminPage() {
           title: {
             display: true,
             position: "top",
-            text: "Tệp khách hàng tiềm năng thuộc...",
+            text: "Biểu đồ phân loại làm quiz",
             font: { size: 16, weight: "bold" },
             color: "#333",
           },
