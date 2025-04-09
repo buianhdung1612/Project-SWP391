@@ -146,7 +146,7 @@ export default function OrdersHistoryPage() {
                                         <th className="w-[18%] text-white p-[5px] text-[14px] border border-solid border-[#ebebeb] bg-secondary">Ngày</th>
                                         <th className="w-[28%] text-white p-[5px] text-[14px] border border-solid border-[#ebebeb] bg-secondary">Địa chỉ</th>
                                         <th className="w-[18%] text-white p-[5px] text-[14px] border border-solid border-[#ebebeb] bg-secondary">Giá trị đơn hàng</th>
-                                        <th className="w-[18%] text-white p-[5px] text-[14px] border border-solid border-[#ebebeb] bg-secondary">TT thanh toán</th>
+                                        <th className="w-[18%] text-white p-[5px] text-[14px] border border-solid border-[#ebebeb] bg-secondary">TT đơn hàng</th>
                                     </tr>
                                 </thead>
                                 <tbody>

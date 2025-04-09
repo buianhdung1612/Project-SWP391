@@ -111,7 +111,7 @@ export default function EditBlogAdminPage() {
         const request = {
             title: formData.get("title"),
             content: content,
-            user: 8,
+            user: dataProfile?.userID,
             thumbnail: data.thumbnail,
             featured: formData.get("featured") === "true",
             categoryID: categoryCurrent

@@ -49,8 +49,6 @@ export default function BlogTrashAdminPage() {
 
   const linkApi = "https://freshskinweb.onrender.com/admin/blogs/trash";
 
-  
-
   // Hiển thị lựa chọn mặc định
   const [filterStatus, setFilterStatus] = useState("");
   const [keyword, setKeyword] = useState("");
@@ -478,7 +476,6 @@ export default function BlogTrashAdminPage() {
                       <TableCell>Tiêu đề</TableCell>
                       <TableCell>Trạng thái</TableCell>
                       <TableCell>Vị trí</TableCell>
-                      <TableCell>Tác giả</TableCell>
                       <TableCell>Hành động</TableCell>
                     </TableRow>
                   </TableHead>
@@ -495,7 +492,7 @@ export default function BlogTrashAdminPage() {
                         </TableCell>
                         <TableCell>
                           <img
-                            src={blog.thumbnail}
+                            src={blog.thumbnail[0]}
                             alt={blog.title}
                             style={{
                               width: 100,
@@ -528,7 +525,6 @@ export default function BlogTrashAdminPage() {
                             {blog.position}
                           </Typography>
                         </TableCell>
-                        <TableCell>{blog.author}</TableCell>
                         <TableCell>
                           <div className="flex">
                             <Tooltip title="Khôi phục" placement="top">

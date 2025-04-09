@@ -51,6 +51,8 @@ export default function DetailOrderUserPage() {
         fetchData();
     }, [])
 
+    console.log(data);
+
     const handleCancel = async (id: number) => {
         const isConfirm = confirm("Bạn có chắc muốn hủy đơn hàng?");
         if (isConfirm) {
@@ -80,6 +82,38 @@ export default function DetailOrderUserPage() {
             }
         }
     }
+
+    const handleConfirm = async (id: number) => {
+        const isConfirm = confirm("Bạn có chắc đã nhận được đơn đơn hàng?");
+        if (isConfirm) {
+            const path = `https://freshskinweb.onrender.com/admin/orders/edit/${id}`;
+
+            const response = await fetch(path, {
+                method: "PATCH",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    orderStatus: "COMPLETED"
+                })
+            });
+
+            const dataResponse = await response.json();
+
+            if (dataResponse.code === 200) {
+                setAlertMessage("Đã xác nhận đơn hàng thành công!");
+                setAlertSeverity("success");
+                setTimeout(() => {
+                    location.reload();
+                }, 2000)
+            } else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+            }
+        }
+    }
+
+    console.log(data);
 
     return (
         <>
@@ -111,15 +145,36 @@ export default function DetailOrderUserPage() {
                     <div className="text-[19px] font-[400] text-[#212B25] mb-[27px]">Chi tiết đơn hàng #{id}</div>
                     {data.orderStatus == "PENDING" && (
                         <div className="flex items-center justify-between">
-                            <div className="text-[14px] text-textColor">Trạng thái thanh toán: <span className="font-[600] text-[#E49C06]">Đang xử lý</span></div>
+                            <div className="text-[14px] text-textColor">Trạng thái đơn hàng: <span className="font-[600] text-[#E49C06]">Đang xử lý</span></div>
                             <div className="text-[14px] text-textColor">Bạn có muốn: <span onClick={() => handleCancel(parseInt(data.orderId))} className="font-[600] text-[#DD153C] cursor-pointer">Hủy đơn hàng</span></div>
                         </div>
                     )}
+                    {data.orderStatus == "DELIVERING" && (
+                        <div className="flex items-center justify-between">
+                            <div className="text-[14px] text-textColor">Trạng thái đơn hàng: <span className="font-[600] text-[#E49C06]">Đang xử lý</span></div>
+                            <div onClick={() => { handleConfirm(data.orderId) }} className="text-[14px] text-primary">Xác nhận đã nhận đơn hàng</div>
+                        </div>
+                    )}
                     {data.orderStatus == "CANCELED" && (
-                        <div className="text-[14px] text-textColor">Trạng thái thanh toán: <span className="font-[600] text-[#DD153C]">Đã hủy</span></div>
+                        <div className="text-[14px] text-textColor">Trạng thái đơn hàng: <span className="font-[600] text-[#DD153C]">Đã hủy</span></div>
                     )}
                     {data.orderStatus == "COMPLETED" && (
-                        <div className="text-[14px] text-textColor">Trạng thái thanh toán: <span className="font-[600] text-[#33A140]">Đã xác nhận</span></div>
+                        <div className="text-[14px] text-textColor">Trạng thái đơn hàng: <span className="font-[600] text-[#33A140]">Đã xác nhận</span></div>
+                    )}
+                    {data.paymentStatus == "PENDING" && (
+                        <div className="text-[14px] text-textColor mt-[5px]">Trạng thái thanh toán: <span className="font-[600] text-[#E49C06]">Chờ thanh toán</span></div>
+                    )}
+                    {data.paymentStatus == "PAID" && (
+                        <div className="text-[14px] text-textColor mt-[5px]">Trạng thái thanh toán: <span className="font-[600] text-[#33A140]">Đã thanh toán</span></div>
+                    )}
+                    {data.paymentStatus == "FAILED" && (
+                        <div className="text-[14px] text-textColor mt-[5px]">Trạng thái thanh toán: <span className="font-[600] text-[#DD153C]">Thanh toán thất bại</span></div>
+                    )}
+                    {data.paymentStatus == "CANCELED" && (
+                        <div className="text-[14px] text-textColor mt-[5px]">Trạng thái thanh toán: <span className="font-[600] text-[#DD153C]">Thanh toán bị hủy</span></div>
+                    )}
+                    {data.paymentStatus == "REFUNDED" && (
+                        <div className="text-[14px] text-textColor mt-[5px]">Trạng thái thanh toán: <span className="font-[600] text-[#E49C06]">Hoàn tiền</span></div>
                     )}
                     <div className="pl-[15px] mt-[30px] flex">
                         <div className="w-[60%] pr-[10px]">
@@ -173,7 +228,11 @@ export default function DetailOrderUserPage() {
                                 </tr>
                                 <tr>
                                     <td colSpan={2} className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Phí vận chuyển</td>
-                                    <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">{data.priceShipping.toLocaleString("en-US")}<sup className="underline">đ</sup></td>
+                                    {data.priceShipping ? (
+                                        <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">{data.priceShipping.toLocaleString("en-US")}<sup className="underline">đ</sup></td>
+                                    ) : (
+                                        <td colSpan={2} className="flex-1 p-[15px] text-[16px] text-[#1c1c1c] text-right">0<sup className="underline">đ</sup></td>
+                                    )}
                                 </tr>
                                 <tr>
                                     <td colSpan={2} className="p-[15px] pt-[25px] text-[16px] text-[#1c1c1c] text-right">Tổng tiền</td>
