@@ -14,6 +14,7 @@ interface Product {
 
 export default function Products() {
     const products = useSelector((state: any) => state.cartReducer.products);
+    console.log(products);
 
     return (
         <>  

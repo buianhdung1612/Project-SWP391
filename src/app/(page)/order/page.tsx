@@ -57,7 +57,7 @@ export default function OrderPage() {
             setAlertMessage("Họ không được để trống.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false); 
+            setLoading(false);
             return;
         }
 
@@ -65,7 +65,7 @@ export default function OrderPage() {
             setAlertMessage("Tên không được để trống.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false); 
+            setLoading(false);
             return;
         }
 
@@ -73,7 +73,7 @@ export default function OrderPage() {
             setAlertMessage("Số điện thoại không được để trống.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false); 
+            setLoading(false);
             return;
         }
 
@@ -81,7 +81,7 @@ export default function OrderPage() {
             setAlertMessage("Địa chỉ không được để trống.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false); 
+            setLoading(false);
             return;
         }
 
@@ -89,7 +89,7 @@ export default function OrderPage() {
             setAlertMessage("Tỉnh thành không được để trống.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false); 
+            setLoading(false);
             return;
         }
 
@@ -97,7 +97,7 @@ export default function OrderPage() {
             setAlertMessage("Quận huyện không được để trống.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false); 
+            setLoading(false);
             return;
         }
 
@@ -105,7 +105,7 @@ export default function OrderPage() {
             setAlertMessage("Phường xã không được để trống.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false); 
+            setLoading(false);
             return;
         }
 
@@ -113,7 +113,7 @@ export default function OrderPage() {
             setAlertMessage("Phương thức thanh toán không được để trống.");
             setAlertSeverity("error");
             setTimeout(() => setAlertMessage(""), 5000);
-            setLoading(false); 
+            setLoading(false);
             return;
         }
 
@@ -122,7 +122,6 @@ export default function OrderPage() {
         const wardData = event.target.ward.value.split('+')[1];
         const dataAddress = `${event.target.address.value}, ${provinceData}, ${districtData}, ${wardData}`;
 
-        console.log(products);
         const dataProducts: any = [];
         products.map((item: any) => (
             dataProducts.push({
@@ -158,6 +157,7 @@ export default function OrderPage() {
             });
 
             const dataResponse = await response.json();
+            console.log(dataResponse);
 
             if (dataResponse.code == 200) {
                 dispatchCart(cartReset());
@@ -172,6 +172,11 @@ export default function OrderPage() {
                 else {
                     router.push(`/order/success/${dataResponse.data.orderId}`)
                 }
+            }
+            else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 5000);
             }
         }
         else {
@@ -189,6 +194,8 @@ export default function OrderPage() {
                 priceShipping: feeShip
             }
 
+            console.log(data);
+
             const response = await fetch('https://freshskinweb.onrender.com/home/orders/create', {
                 method: "POST",
                 headers: {
@@ -198,6 +205,7 @@ export default function OrderPage() {
             });
 
             const dataResponse = await response.json();
+            console.log(dataResponse);
             if (dataResponse.code == 200) {
                 dispatchCart(cartReset());
                 dispatchOrder(sumShip(0))
@@ -212,13 +220,18 @@ export default function OrderPage() {
                     router.push(`/order/success/${dataResponse.data.orderId}`)
                 }
             }
+            else {
+                setAlertMessage(dataResponse.message);
+                setAlertSeverity("error");
+                setTimeout(() => setAlertMessage(""), 5000);
+            }
         }
     }
 
     return (
         <>
             {alertMessage && (
-                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "60px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
+                <Alert severity={alertSeverity} sx={{ position: "fixed", width: "600px", height: "80px", right: "5%", top: "5%", fontSize: "16px", zIndex: "999999" }}>
                     {alertMessage}
                 </Alert>
             )}

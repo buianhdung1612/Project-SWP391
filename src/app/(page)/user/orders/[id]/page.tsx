@@ -113,8 +113,6 @@ export default function DetailOrderUserPage() {
         }
     }
 
-    console.log(data);
-
     return (
         <>
             {alertMessage && (
