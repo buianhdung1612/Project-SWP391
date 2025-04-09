@@ -30,7 +30,7 @@ export default function DashboardAdminPage() {
     totalUsers: "0",
     totalFeedbacks: "0",
     totalBlogs: "0",
-    totalOrderShipping:"0",
+    totalOrderShipping: "0",
   });
   interface RevenueData {
     category: string;
@@ -138,8 +138,7 @@ export default function DashboardAdminPage() {
       wsRef.current.onmessage = (event) => {
         const data = JSON.parse(event.data);
         setWsData(data);
-        console.log(data)
-       
+        console.log(data);
 
         // Cập nhật thống kê
         setStats((prevStats) => ({
@@ -156,7 +155,8 @@ export default function DashboardAdminPage() {
           totalUsers: data.totalUsers || prevStats.totalUsers,
           totalFeedbacks: data.totalFeedbacks || prevStats.totalFeedbacks,
           totalBlogs: data.totalBlogs || prevStats.totalBlogs,
-          totalOrderShipping:data.totalOrderShipping || prevStats.totalOrderShipping,
+          totalOrderShipping:
+            data.totalOrderShipping || prevStats.totalOrderShipping,
         }));
 
         // Cập nhật danh sách sản phẩm bán chạy
@@ -423,19 +423,24 @@ export default function DashboardAdminPage() {
 
   useEffect(() => {
     if (!StackedChartRef.current || stackedChartData.labels.length === 0)
-      return;
-
-    // Hủy biểu đồ cũ nếu có
+      return; 
+    const last7Labels = stackedChartData.labels.slice(-7);
+    const trimmedDatasets = stackedChartData.datasets.map((dataset) => ({
+      ...dataset,
+      data: dataset.data.slice(-7),
+    }));  
     if (chartInstanceRef.current) {
       chartInstanceRef.current.destroy();
     }
-
     const ctx = StackedChartRef.current.getContext("2d");
     if (!ctx) return;
 
     chartInstanceRef.current = new Chart(ctx, {
       type: "bar",
-      data: stackedChartData,
+      data: {
+        labels: last7Labels,
+        datasets: trimmedDatasets,
+      },
       options: {
         responsive: true,
         maintainAspectRatio: false,
@@ -452,14 +457,12 @@ export default function DashboardAdminPage() {
         scales: { x: { stacked: true }, y: { stacked: true } },
       },
     });
-
     return () => {
       if (chartInstanceRef.current) {
         chartInstanceRef.current.destroy();
       }
     };
   }, [stackedChartData]);
-
   useEffect(() => {
     if (!revenueChartRef.current || revenueChartData.labels.length === 0)
       return;
@@ -724,10 +727,10 @@ export default function DashboardAdminPage() {
               <canvas ref={chartRef} />
             </div>
             <div className="bg-white shadow-md rounded-lg p-4 h-80 flex items-center justify-center w-full">
-            <canvas ref={StackedChartRef} />
+              <canvas ref={StackedChartRef} />
             </div>
           </div>
-          <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-80">           
+          <div className="bg-white shadow-md rounded-lg p-4 mt-4 h-80">
             <canvas ref={revenueChartRef} />
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
