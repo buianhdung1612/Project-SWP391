@@ -1,11 +1,13 @@
+"use client"
+
 import { ReactNode } from "react";
 
 interface StatCardProps {
   value: string | number;
   label: string;
   icon: ReactNode;
-  onClick?: () => void;  // Thêm onClick
-  style?: React.CSSProperties;  // Thêm style
+  onClick?: () => void;  
+  style?: React.CSSProperties;  
 }
 
 export function StatCard({ value, label, icon, onClick, style }: StatCardProps) {

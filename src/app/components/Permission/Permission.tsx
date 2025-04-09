@@ -1,3 +1,5 @@
+"use client"
+
 export default function Permission(props: any) {
     const { permissions, roles } = props;
 

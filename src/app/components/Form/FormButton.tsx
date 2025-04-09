@@ -1,3 +1,5 @@
+"use client"
+
 export default function FormButton(props: { text: string }) {
     const { text = "" } = props;
 

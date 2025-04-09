@@ -1,3 +1,5 @@
+"use client"
+
 import { useEffect, useState, useContext, useRef } from "react";
 import { FaBell } from "react-icons/fa";
 import { IoSearch } from "react-icons/io5";
